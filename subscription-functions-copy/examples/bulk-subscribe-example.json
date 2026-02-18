@@ -1,0 +1,52 @@
+{
+  "description": "Example bulk subscription requests",
+  
+  "example1_simple": {
+    "emails": [
+      "user1@example.com",
+      "user2@example.com",
+      "user3@example.com"
+    ],
+    "brands": "thepicklereport"
+  },
+  
+  "example2_multiple_brands": {
+    "emails": [
+      "user1@example.com",
+      "user2@example.com"
+    ],
+    "brands": ["thepicklereport", "themixedhome"]
+  },
+  
+  "example3_per_email_brands": {
+    "subscriptions": [
+      {
+        "email": "user1@example.com",
+        "brands": ["thepicklereport"]
+      },
+      {
+        "email": "user2@example.com",
+        "brands": ["thepicklereport", "themixedhome"]
+      },
+      {
+        "email": "user3@example.com",
+        "brands": ["zitsandcake"]
+      }
+    ]
+  },
+  
+  "example4_with_options": {
+    "emails": [
+      "user1@example.com",
+      "user2@example.com"
+    ],
+    "brands": "thepicklereport",
+    "options": {
+      "batchSize": 5,
+      "delayBetweenBatches": 2000,
+      "dryRun": true
+    }
+  }
+}
+
+

@@ -1,0 +1,42 @@
+{
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/api/magic-link"
+    },
+    {
+      "source": "/unsubscribe",
+      "destination": "/api/magic-link"
+    },
+    {
+      "source": "/snooze",
+      "destination": "/api/magic-link"
+    },
+    {
+      "source": "/execute",
+      "destination": "/api/magic-link"
+    },
+    {
+      "source": "/request",
+      "destination": "/api/magic-link"
+    },
+    {
+      "source": "/retention",
+      "destination": "/api/retention-webhook"
+    }
+  ],
+  "crons": [
+    {
+      "path": "/api/retention-batch-suppression",
+      "schedule": "0 9,21 * * *"
+    },
+    {
+      "path": "/api/process-clicks-queue",
+      "schedule": "*/2 * * * *"
+    },
+    {
+      "path": "/api/process-validation-retry",
+      "schedule": "0 */6 * * *"
+    }
+  ]
+}
