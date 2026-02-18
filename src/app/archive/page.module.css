@@ -1,0 +1,94 @@
+.page {
+  padding: 72px 0;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.header h1 {
+  font-size: clamp(2.2rem, 3vw, 3rem);
+  margin-bottom: 12px;
+}
+
+.header p {
+  color: var(--text-secondary);
+  line-height: 1.35;
+  max-width: 620px;
+}
+
+.kicker {
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+.filters {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.filterChip {
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-secondary);
+  padding: 8px 14px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.filterChip:hover {
+  color: var(--text-primary);
+  background: var(--surface-muted);
+}
+
+.issueList {
+  display: grid;
+  gap: 20px;
+}
+
+.issueCard {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 24px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.issueCard h3 {
+  margin: 8px 0 10px;
+}
+
+.issueCard p {
+  color: var(--text-secondary);
+  line-height: 1.35;
+}
+
+.issueDate {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--text-muted);
+}
+
+.readLink {
+  align-self: center;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+@media (max-width: 720px) {
+  .issueCard {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

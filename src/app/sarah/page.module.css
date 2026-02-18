@@ -1,0 +1,140 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  padding-bottom: 64px;
+}
+
+.hero {
+  padding: 64px 0 40px;
+}
+
+.heroTop {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.backLink {
+  margin-bottom: 16px;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.backLink a {
+  text-decoration: underline;
+}
+
+.kicker {
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.meta {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.heroImage {
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  margin-bottom: 24px;
+}
+
+.heroImage img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.intro {
+  color: var(--text-secondary);
+  line-height: 1.7;
+  font-size: 17px;
+}
+
+.entries {
+  padding: 0 0 32px;
+}
+
+.entryList {
+  display: grid;
+  gap: 32px;
+}
+
+.entry h2 {
+  margin: 8px 0 12px;
+  font-size: 26px;
+}
+
+.entry p {
+  color: var(--text-secondary);
+  line-height: 1.35;
+}
+
+.age {
+  color: var(--text-muted);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+}
+
+.disclaimer {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-top: 12px;
+}
+
+.subscribe {
+  padding: 24px 0 48px;
+}
+
+.subscribeCard {
+  border-top: 1px solid var(--border);
+  padding-top: 24px;
+  display: grid;
+  gap: 12px;
+}
+
+.subscribeForm {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.subscribeForm input {
+  flex: 1;
+  min-width: 220px;
+  padding: 12px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  font-size: 15px;
+  background: transparent;
+  color: var(--text-primary);
+}
+
+.subscribeForm input::placeholder {
+  color: var(--text-muted);
+}
+
+.formNote {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.formNote a {
+  text-decoration: underline;
+}
+
+@media (max-width: 640px) {
+  .subscribeForm {
+    flex-direction: column;
+  }
+}
