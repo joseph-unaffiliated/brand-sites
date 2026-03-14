@@ -6,7 +6,15 @@ let credentials;
 if (process.env.GCP_SERVICE_ACCOUNT_KEY) {
   try {
     const raw = process.env.GCP_SERVICE_ACCOUNT_KEY.trim();
-    credentials = typeof raw === "string" ? JSON.parse(raw.replace(/\\n/g, "\n")) : raw;
+    let jsonStr = raw;
+    if (/^[A-Za-z0-9+/]+=*$/.test(raw) && raw.length > 100) {
+      try {
+        jsonStr = Buffer.from(raw, "base64").toString("utf8");
+      } catch (_) {
+        /* use raw as JSON */
+      }
+    }
+    credentials = JSON.parse(jsonStr.replace(/\\n/g, "\n"));
   } catch (e) {
     console.error("[api/subscriptions] Invalid GCP_SERVICE_ACCOUNT_KEY:", e.message);
   }

@@ -4,18 +4,20 @@ import { createImageUrlBuilder } from "@sanity/image-url";
 const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
 const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET ?? "production";
 
-export const client = createClient({
-  projectId,
-  dataset,
-  apiVersion: "2024-01-01",
-  useCdn: process.env.NODE_ENV === "production",
-});
+export const client = projectId
+  ? createClient({
+      projectId,
+      dataset,
+      apiVersion: "2024-01-01",
+      useCdn: process.env.NODE_ENV === "production",
+    })
+  : null;
 
-const builder = createImageUrlBuilder(client);
+const builder = client ? createImageUrlBuilder(client) : null;
 
 /** Returns a Sanity image builder for the source, or null if source has no asset ref. */
 export function urlFor(source) {
-  if (!source) return null;
+  if (!builder || !source) return null;
   const hasRef = source.asset?._ref ?? source._ref;
   if (!hasRef) return null;
   return builder.image(source);

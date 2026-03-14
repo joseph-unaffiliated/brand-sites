@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 const BRAND = "hookuplists";
 
-export default function DevMarkSubscribedPage() {
+function DevMarkSubscribedInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -32,5 +32,13 @@ export default function DevMarkSubscribedPage() {
     <p style={{ padding: 24, fontFamily: "system-ui" }}>
       Marking you as subscribed and redirecting…
     </p>
+  );
+}
+
+export default function DevMarkSubscribedPage() {
+  return (
+    <Suspense fallback={<p style={{ padding: 24, fontFamily: "system-ui" }}>Loading…</p>}>
+      <DevMarkSubscribedInner />
+    </Suspense>
   );
 }
