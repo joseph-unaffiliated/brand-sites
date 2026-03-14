@@ -173,6 +173,12 @@ a {
   color: var(--text-primary);
 }
 
+/* Subscribe / Log in button: match Contact (13px, 0.02em) */
+.site-header .header-nav-desktop .button {
+  font-size: 13px;
+  letter-spacing: 0.02em;
+}
+
 .site-nav-left {
   justify-content: flex-start;
 }
@@ -281,6 +287,11 @@ a {
   background: var(--footer-bg);
   padding: 28px 0 32px;
   color: #e6ddf2;
+}
+
+/* When sticky bottom ad is visible, reserve space so footer stays above it */
+.site-main:has(.article-ad-sticky-bottom) + .site-footer {
+  margin-bottom: 60px;
 }
 
 .footer-grid {
@@ -535,7 +546,8 @@ a {
   left: 0;
   right: 0;
   z-index: 100;
-  background: var(--surface, #fff);
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(8px);
   border-top: 1px solid var(--border);
   padding: 8px 16px;
   display: flex;
@@ -565,6 +577,9 @@ a {
     grid-column: 3;
     justify-self: end;
     padding-top: 8px;
+    font-size: 12px;
+    letter-spacing: 0.02em;
+    padding: 6px 12px;
   }
 
   .brand-logo-img {

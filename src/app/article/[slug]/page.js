@@ -82,7 +82,6 @@ export default async function ArticlePage({ params, searchParams: searchParamsPr
                 priority
                 className={styles.mainImage}
               />
-              <div className="photocredit-text">{article.photoCredit}</div>
             </div>
           </div>
         </div>
