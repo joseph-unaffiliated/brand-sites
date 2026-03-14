@@ -291,7 +291,7 @@ a {
 
 /* When sticky bottom ad is visible, reserve space so footer stays above it */
 .site-main:has(.article-ad-sticky-bottom) + .site-footer {
-  margin-bottom: 60px;
+  margin-bottom: 72px;
 }
 
 .footer-grid {
@@ -403,6 +403,12 @@ a {
   margin: 0;
   padding-left: 1.5rem;
   padding-right: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .articlebody-section .headline-text {
+    font-size: clamp(2.5rem, 12vw, 4rem);
+  }
 }
 
 .articlebody-section .subtitle-container {

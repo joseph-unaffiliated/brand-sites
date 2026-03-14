@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 
-const UNFILLED_COLLAPSE_DELAY_MS = 4000;
+const UNFILLED_COLLAPSE_DELAY_MS = 5000;
+const MIN_FILLED_HEIGHT = 20;
 
 /**
  * Renders a single AdSense ad unit. Collapses the wrapper when the ad doesn't fill,
@@ -37,19 +38,26 @@ export default function AdUnit({ slotId, format = "auto", className, onCollapse 
     if (!ins) return;
 
     let timeoutId;
+    const checkFilled = () => {
+      if (!ins.isConnected) return false;
+      const iframe = ins.querySelector("iframe");
+      if (iframe && iframe.offsetHeight >= MIN_FILLED_HEIGHT) return true;
+      if (ins.offsetHeight >= MIN_FILLED_HEIGHT) return true;
+      return false;
+    };
+
     const observer = new MutationObserver(() => {
-      if (ins.querySelector("iframe")) {
-        // Ad filled; don't collapse
-        if (timeoutId) clearTimeout(timeoutId);
-      }
+      if (checkFilled() && timeoutId) clearTimeout(timeoutId);
     });
 
-    observer.observe(ins, { childList: true, subtree: true });
+    observer.observe(ins, { childList: true, subtree: true, attributes: true, attributeFilter: ["style"] });
 
     timeoutId = setTimeout(() => {
-      if (!ins.isConnected) return;
-      const hasIframe = ins.querySelector("iframe");
-      if (!hasIframe) {
+      if (!ins.isConnected) {
+        observer.disconnect();
+        return;
+      }
+      if (!checkFilled()) {
         setIsCollapsed(true);
         onCollapse?.();
       }
