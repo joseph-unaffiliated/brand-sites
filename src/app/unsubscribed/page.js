@@ -39,7 +39,7 @@ function UnsubscribedContent() {
   function handleFeedback() {
     const subject = `Unsubscribe Feedback - ${BRAND}`;
     const body = email ? `User email: ${email}\n\nFeedback:\n` : 'Feedback:\n';
-    window.location.href = `mailto:contact@unaffiliated.co?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = `mailto:contact@hookuplists.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   }
 
   return (

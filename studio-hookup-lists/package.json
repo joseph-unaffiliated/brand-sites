@@ -1,0 +1,25 @@
+{
+  "name": "studio-hookup-lists",
+  "private": true,
+  "version": "1.0.0",
+  "main": "package.json",
+  "scripts": {
+    "predev": "rm -rf node_modules/.sanity node_modules/.cache .sanity 2>/dev/null || true",
+    "dev": "NODE_OPTIONS='-r ./react-global.cjs' ./node_modules/.bin/sanity dev",
+    "start": "NODE_OPTIONS='-r ./react-global.cjs' ./node_modules/.bin/sanity start",
+    "build": "NODE_OPTIONS='-r ./react-global.cjs' ./node_modules/.bin/sanity build",
+    "deploy": "NODE_OPTIONS='-r ./react-global.cjs' ./node_modules/.bin/sanity deploy",
+    "deploy-graphql": "sanity graphql deploy"
+  },
+  "keywords": ["sanity"],
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "sanity": "3.48.0",
+    "styled-components": "^6.1.0"
+  },
+  "devDependencies": {
+    "@sanity/vision": "3.48.0",
+    "typescript": "^5.0.0"
+  }
+}

@@ -1,24 +1,11 @@
+import Link from "next/link";
+import { getArticles, ensureDescriptionOnly } from "@/lib/articles";
+import HideWhenSubscribed from "@/components/HideWhenSubscribed";
 import styles from "./page.module.css";
 
-const sampleIssues = [
-  {
-    title: "The Hustle-Friendly Hookup List",
-    date: "Jan 8, 2026",
-    summary: "Doers, operators, and connectors worth knowing this month.",
-  },
-  {
-    title: "The Tastemakers Issue",
-    date: "Dec 18, 2025",
-    summary: "Editors, hosts, and curators shaping culture right now.",
-  },
-  {
-    title: "LA Power List",
-    date: "Dec 2, 2025",
-    summary: "Where to go, who to meet, and what’s quietly taking off in LA.",
-  },
-];
+export default async function ArchivePage() {
+  const articles = await getArticles();
 
-export default function ArchivePage() {
   return (
     <div className={styles.page}>
       <div className="container">
@@ -27,31 +14,44 @@ export default function ArchivePage() {
             <p className={styles.kicker}>Archive</p>
             <h1>Past issues</h1>
             <p>
-              Browse the full library of Hookup Lists issues. Each entry includes
-              a summary, themes, and links.
+              Browse the full library of Hookup Lists issues. Each entry
+              includes a summary, themes, and links.
             </p>
-          </div>
-          <div className={styles.filters}>
-            <button className={styles.filterChip}>All</button>
-            <button className={styles.filterChip}>Business</button>
-            <button className={styles.filterChip}>Culture</button>
-            <button className={styles.filterChip}>Local</button>
           </div>
         </header>
 
         <div className={styles.issueList}>
-          {sampleIssues.map((issue) => (
-            <article className={styles.issueCard} key={issue.title}>
+          {articles.map((article) => (
+            <article className={styles.issueCard} key={article.slug}>
               <div>
-                <p className={styles.issueDate}>{issue.date}</p>
-                <h3>{issue.title}</h3>
-                <p>{issue.summary}</p>
+                <p className={styles.issueDate}>
+                  {article.publishedDate
+                    ? new Date(article.publishedDate).toLocaleDateString(
+                        "en-US",
+                        { month: "short", day: "numeric", year: "numeric" }
+                      )
+                    : "—"}
+                </p>
+                <h3>{article.title}</h3>
+                <p>{ensureDescriptionOnly(article.summary || article.subtitle) || article.summary || article.subtitle}</p>
               </div>
-              <a className={styles.readLink} href="/archive">
+              <Link className={styles.readLink} href={`/article/${article.slug}`}>
                 Read issue →
-              </a>
+              </Link>
             </article>
           ))}
+          <HideWhenSubscribed>
+            <article className={styles.issueCard}>
+              <div>
+                <p className={styles.issueDate}>—</p>
+                <h3>More issues coming soon</h3>
+                <p>New lists drop weekly. Subscribe to get them in your inbox.</p>
+              </div>
+              <a className={styles.readLink} href="/#subscribe">
+                Subscribe →
+              </a>
+            </article>
+          </HideWhenSubscribed>
         </div>
       </div>
     </div>

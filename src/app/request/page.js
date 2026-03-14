@@ -14,15 +14,22 @@ function RequestContent() {
   }, []);
 
   const email = searchParams.get('email') ? decodeURIComponent(searchParams.get('email')) : null;
+  const isExisting = searchParams.get('existing') === 'true' || searchParams.get('login_sent') === 'true';
 
   return (
     <div className={styles.wrap}>
       <div className={styles.card}>
         <h1 className={styles.heading}>Check your inbox.</h1>
         <p className={styles.body}>
-          We sent a magic link to{' '}
-          {email ? <strong>{email}</strong> : 'your email address'}.
-          {' '}Click it to confirm your subscription.
+          {isExisting ? (
+            <>Check your email and follow the link to log in.</>
+          ) : (
+            <>
+              We sent a magic link to{' '}
+              {email ? <strong>{email}</strong> : 'your email address'}.
+              {' '}Click it to confirm your subscription.
+            </>
+          )}
         </p>
       </div>
     </div>

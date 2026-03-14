@@ -36,8 +36,10 @@ function PollContent() {
           </p>
         )}
 
-        <h1 className={styles.heading}>Quick question for you.</h1>
-        <p className={styles.body}>Poll content coming soon.</p>
+        <h1 className={styles.heading}>You&apos;re all set.</h1>
+        <p className={styles.body}>
+          Thanks for participating. We&apos;ll be in touch when we have more for you.
+        </p>
       </div>
     </div>
   );

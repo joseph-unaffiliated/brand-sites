@@ -3,11 +3,13 @@
 import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { BRAND, executeAction, isRealBrowser } from '@/lib/subscription';
+import { useSubscriber } from '@/context/SubscriberContext';
 import styles from './page.module.css';
 
 function SubscribedContent() {
   const searchParams = useSearchParams();
   const [status, setStatus] = useState('confirming');
+  const { refresh } = useSubscriber();
 
   useEffect(() => {
     const encodedEmail = searchParams.get('email');
@@ -18,6 +20,8 @@ function SubscribedContent() {
 
     localStorage.setItem(`subscribed_${BRAND}`, 'true');
     localStorage.setItem(`email_${BRAND}`, encodedEmail);
+    localStorage.setItem(`subscribed_at_${BRAND}`, new Date().toISOString());
+    refresh();
 
     if (typeof gtag !== 'undefined') {
       gtag('event', 'conversion', { send_to: 'AW-17856709988/yAjBCImA9tObP05K38JC' });
@@ -53,7 +57,7 @@ function SubscribedContent() {
           <p className={styles.body}>Confirming your subscription to Hookup Lists&hellip;</p>
         )}
         {status === 'success' && (
-          <p className={styles.body}>You&apos;re now subscribed to Hookup Lists. Check your inbox for the next issue.</p>
+          <p className={styles.body}>Thanks for subscribing, check your inbox for our welcome email.</p>
         )}
         {status === 'error' && (
           <p className={styles.body}>
