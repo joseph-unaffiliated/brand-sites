@@ -52,9 +52,10 @@ export default async function ArticlePage({ params, searchParams: searchParamsPr
       <RecordArticleView slug={slug} />
       <ArticleAdStickyBottom />
       <section className="articlebody-section">
-        <div className={styles.articleLayout}>
-          <div className={styles.articleMain}>
-            <div className={`container container-720 ${styles.articleContainer}`}>
+        {/* Centered hero block: headline + image (no rail beside) */}
+        <div className={styles.articleHeroBlock}>
+          <div className={styles.articleHero}>
+            <div className={styles.articleHeroContent}>
               <div className={styles.backLink}>
                 <Link href="/archive">← Back to archive</Link>
               </div>
@@ -69,19 +70,27 @@ export default async function ArticlePage({ params, searchParams: searchParamsPr
                 </div>
               </div>
               <div className="spacer-4rem" />
-              <div className="mainimage-block">
-                <Image
-                  src={article.mainImage}
-                  alt=""
-                  width={article.mainImageWidth || 900}
-                  height={article.mainImageHeight || 600}
-                  priority
-                  className={styles.mainImage}
-                />
-                <div className="photocredit-text">{article.photoCredit}</div>
-              </div>
-              <div className="spacer-4rem" />
-              <div className="articlecopy-wrapper">
+            </div>
+          </div>
+          <div className={styles.articleHeroImage}>
+            <div className="mainimage-block">
+              <Image
+                src={article.mainImage}
+                alt=""
+                width={article.mainImageWidth || 900}
+                height={article.mainImageHeight || 600}
+                priority
+                className={styles.mainImage}
+              />
+              <div className="photocredit-text">{article.photoCredit}</div>
+            </div>
+          </div>
+        </div>
+        {/* Grid: copy left, rail right (rail only here, not beside hero) */}
+        <div className={styles.articleBodyGrid}>
+        <div className={styles.articleMain}>
+          <div className={styles.articleContainerNoPadding}>
+            <div className="articlecopy-wrapper">
                 <div className="articlecopy-richtext">
                   {entries.slice(0, midIndex).map((entry) => (
                     <article key={entry.title} className={styles.entry}>
@@ -158,13 +167,13 @@ export default async function ArticlePage({ params, searchParams: searchParamsPr
               </div>
             </section>
           )}
-            </div>
           </div>
-          {SLOT_RAIL && (
-            <div className={styles.articleRail}>
-              <AdUnit slotId={SLOT_RAIL} format="vertical" />
-            </div>
-          )}
+        </div>
+        {SLOT_RAIL && (
+          <div className={styles.articleRail}>
+            <AdUnit slotId={SLOT_RAIL} format="vertical" />
+          </div>
+        )}
         </div>
       </section>
     </div>

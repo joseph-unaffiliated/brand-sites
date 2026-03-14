@@ -9,30 +9,81 @@
   padding-bottom: 70px;
 }
 
-.articleLayout {
+/* Centered hero block: headline + image, no rail beside */
+.articleHeroBlock {
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 1.5rem;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+.articleHeroContent {
+  padding-bottom: 0;
+}
+
+.articleHeroImage {
+  margin-bottom: 0;
+}
+
+/* Grid: copy left, rail right — tight and centered, 40px gap */
+.articleBodyGrid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 2rem;
+  gap: 0 2rem;
   max-width: 1200px;
   margin: 0 auto;
+  padding-top: 48px;
   padding-left: 24px;
   padding-right: 24px;
 }
 
 @media (min-width: 1024px) {
-  .articleLayout {
-    grid-template-columns: minmax(0, 720px) 300px;
+  .articleBodyGrid {
+    grid-template-columns: minmax(0, 540px) 300px;
+    gap: 0 40px;
+    max-width: 880px;
+    padding-left: 0;
+    padding-right: 0;
     align-items: start;
   }
 }
 
+.articleHeroImage .mainimage-block {
+  width: 100%;
+}
+
+.articleHeroImage .mainImage {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Article copy — column 1, no side padding */
 .articleMain {
+  grid-column: 1;
   min-width: 0;
+}
+
+.articleContainerNoPadding {
+  padding-top: 24px;
+  padding-bottom: 64px;
+  padding-left: 1rem;
+  padding-right: 0;
 }
 
 .articleRail {
   position: sticky;
   top: 24px;
+  margin-top: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .articleRail {
+    grid-column: 2;
+  }
 }
 
 .articleRail :global(.adsbygoogle) {

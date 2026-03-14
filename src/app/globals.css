@@ -371,6 +371,8 @@ a {
   max-width: 720px;
   margin-left: auto;
   margin-right: auto;
+  padding-top: 24px;
+  padding-bottom: 64px;
   padding-left: 24px;
   padding-right: 24px;
 }
@@ -438,14 +440,16 @@ a {
 .articlebody-section .articlecopy-wrapper {
   display: flex;
   flex-flow: column;
-  align-items: center;
+  align-items: flex-start;
   font-size: 1.2rem;
   line-height: 1.5;
+  padding: 0;
 }
 
 .articlebody-section .articlecopy-richtext {
   max-width: 506px;
   width: 100%;
+  margin: 0;
 }
 
 .articlebody-section .articlecopy-richtext h2 {
@@ -461,7 +465,7 @@ a {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 2rem 1rem;
+  padding: 0;
 }
 
 .articlebody-section .newslettercta-block {
