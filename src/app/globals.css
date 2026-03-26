@@ -475,7 +475,7 @@ a {
 }
 
 .articlebody-section .articlecopy-richtext p {
-  
+  margin: 0;
 }
 
 .articlebody-section .newslettercta-section {
@@ -560,6 +560,13 @@ a {
   justify-content: center;
   align-items: center;
   min-height: 50px;
+}
+
+.ad-placeholder {
+  width: 100%;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 /* Mobile: Atlantic-style row = [hamburger | logo | subscribe], wordmark below */
