@@ -54,13 +54,17 @@ export const articleSlugsQuery = `*[_type == "article"].slug.current`;
 export function createSanityLayer(opts) {
   const projectId = opts.projectId ?? null;
   const dataset = opts.dataset ?? "production";
+  /** Server-only. Required for documents whose _id contains `.` (sub-path / "private" IDs in Content Lake); see https://www.sanity.io/docs/ids */
+  const token = process.env.SANITY_API_TOKEN;
+  const useCdn = token ? false : process.env.NODE_ENV === "production";
 
   const client = projectId
     ? createClient({
         projectId,
         dataset,
         apiVersion: "2024-01-01",
-        useCdn: process.env.NODE_ENV === "production",
+        useCdn,
+        ...(token ? { token } : {}),
       })
     : null;
 
