@@ -4,8 +4,8 @@
  *
  * 1. Create an API token at https://sanity.io/manage → Project (16jtlwpq) → API → Tokens.
  *    Grant "Editor" or "Admin".
- * 2. Add to .env.local: SANITY_API_TOKEN=your-token
- * 3. From project root: node scripts/import-david-article.mjs
+ * 2. Add to apps/hookuplists/.env.local: SANITY_API_TOKEN=your-token
+ * 3. From repo root: node scripts/import-david-article.mjs
  */
 
 import { readFileSync, existsSync } from "fs";
@@ -17,7 +17,8 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, "..");
 
 function loadEnvLocal() {
-  const path = join(root, ".env.local");
+  const appPath = join(root, "apps/hookuplists/.env.local");
+  const path = existsSync(appPath) ? appPath : join(root, ".env.local");
   if (!existsSync(path)) return {};
   const content = readFileSync(path, "utf8");
   const env = {};

@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { BigQuery } from '@google-cloud/bigquery';
 import crypto from 'crypto';
 import FormData from 'form-data';
+import { attachReaderToken } from '../lib/reader-token.js';
 
 // Namespace UUID for deterministic userID generation (v5)
 // This ensures the same email always generates the same userID, preventing race condition duplicates
@@ -963,7 +964,7 @@ export async function handleExecute(req, res) {
         eventType: 'unsubscribe'
       });
       
-      return res.status(200).json({ success: true, action: 'unsubscribe' });
+      return res.status(200).json(attachReaderToken({ success: true, action: 'unsubscribe' }, normalizedEmail));
     }
     
     // Handle snooze
@@ -995,7 +996,7 @@ export async function handleExecute(req, res) {
         eventType: 'snooze'
       });
       
-      return res.status(200).json({ success: true, action: 'snooze' });
+      return res.status(200).json(attachReaderToken({ success: true, action: 'snooze' }, normalizedEmail));
     }
     
     // Handle subscribe (default)
@@ -1099,7 +1100,7 @@ export async function handleExecute(req, res) {
       eventType: 'subscribe'
     });
     
-    return res.status(200).json({ success: true, action: 'subscribe' });
+    return res.status(200).json(attachReaderToken({ success: true, action: 'subscribe' }, normalizedEmail));
     
   } catch (error) {
     console.error('❌ Execute endpoint error:', error.message);

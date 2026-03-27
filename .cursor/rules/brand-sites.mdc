@@ -1,0 +1,12 @@
+---
+description: brand-sites monorepo conventions (GitHub repo brand-sites)
+globs: apps/**/*,packages/**/*
+---
+
+# brand-sites
+
+- Git repo name: **brand-sites**. Apps live in `apps/*`; shared code in `packages/*` as **`@publication-websites/*`** (npm scope).
+- Do not import one app from another app.
+- Do not add BigQuery or unauthenticated email-based subscription lookup to marketing Next apps; use magic `/api/reader-subscriptions` with Bearer token.
+- Prefer env-driven brand config in each app’s `src/config/site.js`.
+- See root `AGENTS.md` and `docs/ARCHITECTURE.md`.

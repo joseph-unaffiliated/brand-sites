@@ -1,31 +1,52 @@
-# Hookup Lists
+# brand-sites
 
-Editorial site and newsletter hub for Hookup Lists.
+Monorepo for **publication marketing sites** (Next.js) plus shared packages. This repo is **`brand-sites`** on GitHub. Internal npm packages still use the scope **`@publication-websites/*`** (name in `packages/*/package.json`); that is unrelated to the Git repo name.
 
-## Getting Started
+**New here and not a developer?** Read **[STARTHERE.md](./STARTHERE.md)** first.
 
-Run the development server:
+## Quick start
+
+Requirements: **Node 20+**, **pnpm** (`corepack enable && corepack prepare pnpm@9.15.0 --activate`).
 
 ```bash
-npm run dev
+pnpm install
+pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+By default Turbo runs `dev` for all apps; run one site:
 
-## Sanity CMS
+```bash
+pnpm exec turbo dev --filter=hookuplists
+# or
+pnpm exec turbo dev --filter=thepicklereport
+```
 
-Articles are managed in [Sanity](https://sanity.io). To connect the site:
+**Hookup Lists** local env: copy [`apps/hookuplists/.env.local.example`](apps/hookuplists/.env.local.example) to `apps/hookuplists/.env.local`.
 
-1. **Create a Sanity project** at [sanity.io/manage](https://sanity.io/manage) (or run `npx sanity init` and follow the prompts).
-2. **Add env vars**: copy `.env.local.example` to `.env.local` and set:
-   - `NEXT_PUBLIC_SANITY_PROJECT_ID` — your project ID from the Sanity dashboard
-   - `NEXT_PUBLIC_SANITY_DATASET` — usually `production`
-3. **Run the Studio locally** (optional): install the Sanity CLI and run the studio from this repo:
-   ```bash
-   npm install sanity --save-dev
-   npx sanity dev
-   ```
-   Or use the [hosted Sanity Studio](https://www.sanity.io/docs/deployment) for your project.
-4. **Add content**: create an **Article** document. Set the slug (e.g. `sarah`), title, kicker, subtitle, summary, main image, entries (age / title / body), and optional disclaimer. Publish.
+## Layout
 
-The app reads from Sanity at build/request time. If `NEXT_PUBLIC_SANITY_PROJECT_ID` is missing, article lists and article pages will show no content (home/archive empty; article slugs 404).
+| Path | Purpose |
+|------|---------|
+| `apps/hookuplists` | Hookup Lists production site |
+| `apps/thepicklereport` | Second publication template |
+| `packages/*` | `@publication-websites/*` shared code |
+| `subscription-functions-copy` | Magic / BigQuery / CIO serverless (reference + deploy) |
+| `studio-hookup-lists` | Optional Sanity studio (env-driven project id) |
+| `docs/` | Architecture, env, deployment |
+
+## Docs
+
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — data flow, middleware, profile tokens  
+- [docs/ENVIRONMENT.md](docs/ENVIRONMENT.md) — env vars  
+- [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) — Vercel + Cloudflare  
+- [docs/MAGIC_READER_ENV.md](docs/MAGIC_READER_ENV.md) — magic `READER_TOKEN_SECRET` + `READERS_CORS_ORIGINS`  
+- [docs/THEPICKLEREPORT_LAUNCH_GUIDE.md](docs/THEPICKLEREPORT_LAUNCH_GUIDE.md) — full Pickle setup with copy/paste values  
+- [AGENTS.md](AGENTS.md) — rules for contributors / AI agents  
+
+## Scripts
+
+| Command | Description |
+|---------|-------------|
+| `pnpm dev` | All workspaces `dev` (persistent) |
+| `pnpm build` | `turbo build` all packages that define build |
+| `pnpm lint` | `turbo lint` |

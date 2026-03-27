@@ -1,0 +1,923 @@
+import styles from "../basic-page.module.css";
+
+export const metadata = {
+  title: "Terms of Use | Hookup Lists",
+  description: "Terms of Use for Hookup Lists and Unaffiliated Inc. services.",
+};
+
+export default function TermsPage() {
+  return (
+    <div className={styles.page}>
+      <div className="container">
+        <h1>Terms of Use</h1>
+        <p className={styles.meta}>
+          Last update posted: October 23, 2025
+          <br />
+          Effective: October 23, 2025
+        </p>
+        <p className={styles.notice}>
+          THIS AGREEMENT INCLUDES MANDATORY ARBITRATION, CLASS ACTION WAIVER,
+          AND JURY WAIVER PROVISIONS. BY USING THE SERVICES OR ACCEPTING THESE
+          TERMS IN ANY OTHER WAY, YOU AGREE TO THESE PROVISIONS, WHICH APPEAR IN
+          SECTIONS 11 AND 12 OF THESE TERMS.
+        </p>
+
+        <h2>1. INTRODUCTION</h2>
+        <p>
+          This is a legally binding agreement between Unaffiliated Inc.
+          (&quot;Unaffiliated,&quot; &quot;Company,&quot; &quot;we&quot;, or
+          &quot;us&quot;) and you. Unaffiliated operates newsletters and
+          websites. These Terms of Use (these &quot;Terms&quot;), effective as
+          set forth below, will govern your access and use of our websites that
+          link to these Terms from their footer (&quot;Sites&quot;), our email
+          newsletters, and our newsletter-related services (together with the
+          Sites, the newsletters, and all associated features, applications,
+          widgets, and their respective contents, the &quot;Services&quot;).
+        </p>
+        <p>
+          By using the Services in any manner, (i) you agree to these Terms, and
+          (ii) you authorize the collection, use, disclosure and other handling
+          of information as set forth in our privacy policy located at
+          unaffiliated.co/privacy/network. You must comply with these Terms and
+          any other policies, rules and guidelines that Unaffiliated provides in
+          the Services. If you do not agree, you may not use the Services.
+        </p>
+        <p>
+          (These Terms do not apply to our relationships with individuals and
+          entities acting in their capacity as writers of our newsletters or
+          other Site content pursuant to an employment agreement or intellectual
+          property transfer or license agreement.)
+        </p>
+        <p>
+          From time to time, we may, in our sole discretion, update these Terms
+          by posting the updated version and updating the &quot;Last Update
+          Posted&quot; date at the top of the page. Unless you first reject the
+          updated Terms by discontinuing all use of the Services and sending a
+          notice of termination to legal@unaffiliated.co, you will be deemed to
+          accept the changes and they will take effect at the &quot;Update
+          Effective Time&quot;, which is the earlier of: (a) 11:00 a.m. Eastern
+          time on the 30th day after Unaffiliated posts them (or a later date
+          that we specify in the update, if any); (b) your first ever use of a
+          new or changed feature of the Services that is subject to the updated
+          Terms, or (c) your taking some other action to specifically accept the
+          updated Terms, such as clicking to accept them. (Provisions (a) and
+          (b) of the preceding sentence do not apply to updates to Section 11
+          below.) You must send the termination notice from the email address
+          associated with your account, or if this is not possible, you must
+          promptly cooperate with us to identify your account. Regardless of the
+          email address you use, you must promptly cooperate with any request
+          from us to authenticate that you are the account holder and that you
+          are the actual sender of the termination notice. You agree to review
+          these Terms periodically to ensure that you are familiar with the most
+          recent version. You are prohibited from using the Services after
+          sending a notice of termination, except as may be necessary to follow
+          any instructions we may provide via email for authentication of your
+          identity and request. If you violate this requirement and do use the
+          Services after sending a notice of termination (and before we block
+          your access), your termination notice will be void as if it had never
+          taken effect, and the updated Terms will take effect (or will have
+          taken effect) at the Update Effective Time.
+        </p>
+        <p>
+          Individuals under 18 may not create an Unaffiliated account or
+          interact with any Services.
+        </p>
+        <p>You agree not to use the Services if we have prohibited you from using them.</p>
+
+        <h2>2. COMMUNICATIONS AND NOTICES</h2>
+        <p>
+          <strong>Communication Preferences.</strong> You consent to receive
+          communications by email. We may send you curated content including
+          newsletters, digests or other promotional materials that may be of
+          interest to you. You may stop receiving our promotional emails by
+          clicking the unsubscribe links contained in emails. You can opt out of
+          any direct promotional communications by emailing your request to opt
+          out, along with the contact information to which your request
+          applies, to privacy@unaffiliated.co.
+        </p>
+        <p>
+          You agree that providing you these Terms (including all updates
+          thereto), agreements, notices, disclosures, and other communications
+          electronically (such as by email, through Sites, or through the App)
+          will satisfy any legal requirement that such communications be in
+          writing.
+        </p>
+
+        <h2>3. CONTENT AND LICENSING</h2>
+        <p>
+          All materials on the Services, including the designs, graphics, text,
+          sounds, pictures, videos, software and other files and the selection
+          and arrangement thereof (collectively, &quot;Materials&quot;), are the
+          property of Unaffiliated or its licensors and are protected by
+          intellectual property laws. Subject to your compliance with these
+          Terms, Unaffiliated grants you a limited, non-exclusive,
+          non-sublicensable, revocable, non-transferable license to use the
+          Services solely for your personal, non-commercial use. You will not
+          obtain any ownership interest in the Materials or the Services
+          through these Terms or otherwise. The Posting or display of any
+          Materials does not constitute a waiver of any rights in such
+          Materials. All rights to Materials are reserved to their respective
+          copyright owners. Except as expressly authorized by these Terms, you
+          may not copy, reproduce, distribute, republish, download, perform,
+          display, Post, transmit, exploit, create derivative works or otherwise
+          use any of the Materials in any form or by any means, without the
+          prior written authorization of Unaffiliated or the respective
+          copyright owner. Unaffiliated authorizes you to use only the
+          Materials that we intentionally make available to you, and you may use
+          them only for your own personal, non-commercial use. You must keep
+          intact all copyright and other proprietary notices contained in the
+          Materials. You may not modify or adapt the Materials in any way or
+          otherwise use them (such as for any public or commercial purposes).
+          The trademarks, service marks, trade names, trade dress and logos
+          (collectively, &quot;Marks&quot;) contained or described on the
+          Services (including, without limitation, any marks associated with
+          any products available on the Services) are the sole and exclusive
+          property of Unaffiliated and/or its licensors and may not be copied,
+          imitated, or otherwise used, in whole or in part, without the prior
+          written authorization of Unaffiliated and/or its licensors. In
+          addition, all page headers, custom graphics, button icons and scripts
+          are Marks of Unaffiliated and may not be copied, imitated or used in
+          whole or in part, without our prior written authorization.
+        </p>
+        <p>
+          None of the Materials or Services may be reverse-engineered,
+          disassembled, decompiled, transcribed, stored in a retrieval system,
+          translated into any language or computer language, re-transmitted in
+          any form or by any means (electronic, mechanical, photocopying,
+          recordation, photo-reproduced, or otherwise), or reproduced without
+          the express prior written permission of Unaffiliated or its
+          licensors.
+        </p>
+        <p>
+          You must not hack the Services or perform any other activity that may
+          damage, detrimentally interfere with, intercept or expropriate any
+          system, personal information, or other data. You must not perform any
+          activity to interrupt, destroy, or limit the functionality of any
+          computer software, hardware, or telecommunications equipment. You may
+          not use any &quot;deep-link&quot;, &quot;page-scrape&quot;,
+          &quot;robot&quot;, &quot;spider&quot;, or other automatic device,
+          program, algorithm, or methodology or any similar or equivalent
+          manual process to access, acquire, copy, or monitor any portion of the
+          Services, or in any way reproduce or circumvent any aspect of the
+          Services (such as the navigational structure or presentation of any of
+          the Services), or to obtain or attempt to obtain any materials,
+          documents, or information through any means not purposely made
+          available through the Services. We may use technical means to detect
+          and block any such activity, but our failure to do so is not a waiver
+          of this prohibition. These Terms do not prohibit the normal use of
+          personal accessibility technology (such as a screen reader for
+          individuals with visual impairment) to access Services.
+        </p>
+        <p>
+          You may link to any of our Services from your website, blog,
+          application, platform, or services, provided that (a) the link
+          redirects the user to the respective Services when the user clicks on
+          the link; (b) you do not insert any intermediate page, splash page, or
+          other content between the link and the Services; (c) you do not use
+          the content in a manner that suggests Unaffiliated, the Services, or
+          individuals featured in the Services, promote or endorse your or any
+          third party&apos;s cause, idea(s), product(s), site(s), application(s),
+          platform(s), or service(s); (d) you do not use the Services or any
+          portion thereof for commercial purposes; and (e) you do not use the
+          Services in any way that is unlawful or harmful to any individual or
+          entity.
+        </p>
+        <p>
+          From time to time, you may provide us with comments, suggestions, or
+          ideas for enhancements, improvements, changes, or additions to the
+          Services or our business in general, including ideas for new features,
+          materials, and other content (&quot;Feedback&quot;). By providing us
+          Feedback, you grant to us exclusive ownership of the Feedback and of
+          all intellectual property rights and other rights in it, and you will
+          provide us with reasonable cooperation in documenting this grant.
+          Unaffiliated has no obligation to do anything with Feedback, but we
+          will have the full, worldwide, unencumbered right to use, incorporate,
+          and otherwise fully exercise and exploit any such Feedback via all
+          forms of media, distribution methods, and technology now known or
+          later developed, for any purposes, commercial or otherwise, and to
+          transfer or license our rights in the Feedback, without notice,
+          acknowledgement or compensation to you.
+        </p>
+
+        <h2>4. MEMBER CONTENT</h2>
+        <p>
+          Certain Services may enable you or other users to create, modify,
+          submit, or add (collectively, &quot;Post&quot;) text, images, videos,
+          links, votes, likes, communications with other users or third parties,
+          and other files and information (&quot;Member Content&quot;). Member
+          Content includes saved and unsaved drafts of any such material.
+          Member Content is part of the &quot;Materials&quot; defined in
+          Section 3 of these Terms.
+        </p>
+        <p>
+          You, or your licensors, as applicable, retain ownership of any
+          copyright or other intellectual property rights you may have in your
+          Member Content, subject to the non-exclusive license granted below.
+        </p>
+        <p>
+          By Posting Member Content, you grant Unaffiliated a perpetual,
+          irrevocable, nonexclusive, worldwide, royalty free, fully paid up,
+          transferable, sublicensable (through multiple tiers), license to use,
+          copy, reproduce, process, adapt, modify, create derivative works
+          from, publish, transmit, store, display and distribute, translate,
+          communicate, and otherwise use the Member Content in connection with
+          the operation the Services or other aspects of our business,
+          including to use the Member Content for Unaffiliated&apos;s
+          promotional, advertising or marketing purposes, in each case via all
+          forms of media, distribution methods, and technology now known or
+          later developed. For example, we might include content from a Post in
+          our Support pages. This license includes the right for Unaffiliated to
+          make Member Content available to other companies, organizations,
+          business partners, or individuals (including those who collaborate with
+          Unaffiliated for communication, distribution, or publication) and to
+          make Member Content publicly available. This license also includes
+          the right for us to allow other users of the Services to use Member
+          Content in the manner permitted by the then-current Terms.
+        </p>
+        <p>
+          Although certain parts of the Services have features to delete or
+          modify certain Member Content as it is visible to you or others,
+          Unaffiliated has the right to preserve any version of Member Content
+          despite the use of such features. Unaffiliated may disclose any
+          version of Member Content as described in our Privacy Policy.
+        </p>
+        <p>
+          Unaffiliated may remove or refuse to publish any Member Content, in
+          whole or part, at any time in its sole discretion. You grant
+          Unaffiliated and its authorized agents the permission to view,
+          monitor, edit, delete or otherwise moderate any Member Content,
+          including any unpublished Member Content, at any time, but you agree
+          that Unaffiliated has no obligation to do any of that. The fact any
+          particular Member Content is accessible does not mean that we agree
+          with it, support it, or believe it to be safe or reliable, or that it
+          complies with our Terms, or that we have even reviewed it: it means
+          only that we have not deleted it. Your use of Member Content and
+          anything related to it (such as participation in events it mentions)
+          is at your own risk.
+        </p>
+        <p>
+          You may Post Member Content only if: (1) you own the Member Content or
+          you have obtained all necessary licenses and permissions to Post such
+          Member Content and grant us the rights and licenses described in
+          these Terms, and (2) your Posting of Member Content does not violate
+          any third party&apos;s rights or any legal requirement. You agree to
+          pay all royalties, fees, and any other monies owed to any person by
+          reason of any Member Content you Post.
+        </p>
+
+        <h2>5. RELEASE</h2>
+        <p>
+          To the extent permitted by applicable law, you agree not to hold
+          Unaffiliated or its owners, officers, directors, shareholders, agents,
+          employees, consultants, affiliates, subsidiaries (collectively with
+          Unaffiliated, &quot;Unaffiliated and its Affiliated Parties&quot;)
+          responsible or liable for the acts and omissions of users, content
+          providers, and other third parties, including any such acts or
+          omissions that occur at events advertised or organized through — or
+          otherwise mentioned on — the Services. Each of the Affiliated Parties
+          will have the right (and will be deemed to have accepted the right) to
+          enforce these Terms against you as a third-party beneficiary thereof.
+        </p>
+        <p>
+          To the extent permitted by applicable law, you release and agree to
+          release Unaffiliated and its Affiliated Parties from all claims,
+          demands, and damages (including both direct and consequential) arising
+          out of or in any way connected with such acts and omissions.
+        </p>
+        <p>
+          You acknowledge that some events or interactions advertised on,
+          organized through, or otherwise mentioned on the Services may carry
+          inherent dangers, such as the risk of illness, bodily injury,
+          disability, or death. By participating in any of these events or
+          interactions, you assume these risks.
+        </p>
+
+        <h2>6. COPYRIGHT COMPLAINTS - DIGITAL MILLENNIUM COPYRIGHT ACT</h2>
+        <p>
+          It is our policy to terminate the accounts of repeat infringers in
+          appropriate circumstances. If you believe your intellectual property
+          is being infringed by the Services, please submit a complaint and
+          request for takedown of specific material to legal@unaffiliated.co. Be
+          sure to provide us with the following information:
+        </p>
+        <ul className={styles.list}>
+          <li>an electronic or physical signature of the copyright owner or person authorized to act on behalf of an exclusive right that allegedly is infringed;</li>
+          <li>identification of the copyrighted work that you claim has been infringed or, if there are multiple works, a representative list of such works;</li>
+          <li>identification of the infringing material or activity (or the reference or link to such material) and information reasonably sufficient to permit us to locate the material;</li>
+          <li>contact information for the copyright owner or the owner&apos;s authorized agent, including email address if available;</li>
+          <li>a written statement by you that you have a good faith belief that the disputed use is not authorized by the copyright owner, its agent, or the law; and</li>
+          <li>a statement by you, made under penalty of perjury, that the above information in your notice is accurate and that you are the copyright owner or authorized to act on behalf of the owner of a right that is allegedly infringed.</li>
+        </ul>
+        <p className={styles.notice}>
+          UNDER UNITED STATES FEDERAL LAW, IF YOU KNOWINGLY MISREPRESENT THAT
+          ONLINE MATERIAL IS INFRINGING, YOU MAY BE SUBJECT TO CRIMINAL
+          PROSECUTION FOR PERJURY AND CIVIL PENALTIES, INCLUDING MONETARY
+          DAMAGES, COURT COSTS, AND ATTORNEYS&apos; FEES.
+        </p>
+
+        <h2>7. THIRD PARTY WEBSITES</h2>
+        <p>
+          The Services may contain links to third-party websites. If you use
+          these links, you will leave the Services and your dealings will
+          solely be with the third-party websites. You agree that Unaffiliated
+          is not responsible or liable for any content, goods or services
+          provided on or through these outside websites. You use these links at
+          your own risk and liability. We have no responsibility for the
+          content, legality or accuracy of any third-party information,
+          products or services.
+        </p>
+
+        <h2>8. DISCLAIMER OF WARRANTIES AND LIMITATION OF LIABILITY</h2>
+        <p className={styles.notice}>
+          YOUR USE OF THE SERVICES IS AT YOUR SOLE RISK. UNAFFILIATED IS
+          PROVIDING THE SERVICES ALONG WITH CONTENT AND MATERIALS AND THE
+          OPPORTUNITY TO CONNECT WITH OTHERS ON AN &quot;AS IS&quot; AND &quot;AS
+          AVAILABLE&quot; BASIS. UNAFFILIATED AND ITS AFFILIATED PARTIES EXPRESSLY
+          DISCLAIM ALL WARRANTIES OF ANY KIND, WHETHER EXPRESS OR IMPLIED,
+          INCLUDING, BUT NOT LIMITED TO ALL WARRANTIES OF MERCHANTABILITY, AND
+          IMPLIED WARRANTIES OF FITNESS FOR A PARTICULAR PURPOSE AND
+          NON-INFRINGEMENT.
+        </p>
+        <p>
+          UNAFFILIATED MAKES NO WARRANTIES WITH RESPECT TO, AND EXPRESSLY
+          DISCLAIMS ALL LIABILITY FOR: (i) MEMBER CONTENT; (ii) ANY THIRD PARTY,
+          OR THIRD-PARTY WEBSITE, THIRD-PARTY PRODUCT, OR THIRD-PARTY SERVICE
+          ACCESSIBLE OR MADE AVAILABLE TO YOU THROUGH THE SERVICES; (iii) THE
+          QUALITY OR CONDUCT OF ANY USER OR OTHER THIRD PARTY YOU ENCOUNTER IN
+          CONNECTION WITH YOUR USE OF THE SERVICES, INCLUDING ANY ACTIVITIES,
+          EVENTS, ENGAGEMENT OR INTERACTIONS WITH OTHERS THAT MAY BE FACILITATED
+          THROUGH USE OF THE SERVICES; OR (iv) UNAUTHORIZED ACCESS, USE OR
+          ALTERATION OF MEMBER CONTENT. FURTHER, UNAFFILIATED AND ITS AFFILIATED
+          PARTIES MAKE NO WARRANTY THAT THE SERVICES (INCLUDING ANY INFORMATION
+          OR OTHER MATERIAL YOU OBTAIN THROUGH THE SERVICES) WILL (I) MEET YOUR
+          REQUIREMENTS, (II) BE UNINTERRUPTED, TIMELY, SECURE, OR ERROR-FREE,
+          (III) BE ACCURATE OR RELIABLE, (IV) BE OF SUFFICIENT QUALITY, AND (V)
+          BE CORRECTED OF ANY ERRORS. YOU USE MATERIAL DOWNLOADED OR OTHERWISE
+          OBTAINED THROUGH THE USE OF THE SERVICES AT YOUR OWN RISK, AND YOU
+          WILL BE SOLELY RESPONSIBLE FOR ANY DAMAGE TO YOUR COMPUTER SYSTEM, YOUR
+          MOBILE DEVICE, OR LOSS OF DATA THAT RESULTS FROM THE DOWNLOAD OF ANY
+          SUCH MATERIAL. NO ADVICE OR INFORMATION, WHETHER ORAL OR WRITTEN,
+          OBTAINED BY YOU FROM UNAFFILIATED AND ITS AFFILIATED PARTIES ON OR
+          THROUGH THE SERVICES SHALL CREATE ANY WARRANTY NOT EXPRESSLY STATED IN
+          THESE TERMS.
+        </p>
+        <p>
+          TO THE EXTENT PERMISSIBLE UNDER APPLICABLE LAW, IN NO EVENT SHALL
+          UNAFFILIATED OR ITS AFFILIATED PARTIES BE LIABLE (JOINTLY OR SEVERALLY)
+          TO YOU FOR PERSONAL INJURY OR ANY SPECIAL, INCIDENTAL, INDIRECT OR
+          CONSEQUENTIAL DAMAGES OF ANY KIND, OR ANY DAMAGES WHATSOEVER. THE
+          SERVICES WOULD NOT BE PROVIDED WITHOUT SUCH LIMITATIONS. NOTWITHSTANDING
+          THE FOREGOING, THE SOLE AND AGGREGATE MAXIMUM LIABILITY OF UNAFFILIATED
+          AND ITS AFFILIATED PARTIES FOR ANY REASON AND YOUR SOLE AND EXCLUSIVE
+          REMEDY FOR ANY CAUSE OR CLAIM WHATSOEVER, SHALL BE LIMITED TO THE
+          AMOUNT PAID BY YOU FOR SERVICES IN THE TWELVE MONTHS PRIOR TO THE
+          ACTION GIVING RISE TO THE CLAIM, PROVIDED THAT IF A PROVISION IN THE
+          TERMS ENTITLES YOU TO A REFUND, NOTHING IN THESE TERMS SHALL BE
+          CONSTRUED TO VOID YOUR ENTITLEMENT TO THE FULL AMOUNT OF THAT REFUND.
+          TO THE EXTENT PERMITTED BY APPLICABLE LAW, IF YOU HAVE NOT PAID
+          UNAFFILIATED ANYTHING FOR SERVICES DURING THAT TWELVE-MONTH PERIOD,
+          YOUR SOLE AND EXCLUSIVE REMEDY FOR ANY DISPUTE WITH US IS TO STOP USING
+          THE SERVICES.
+        </p>
+        <p>
+          SOME JURISDICTIONS DO NOT ALLOW THE DISCLAIMER OF CERTAIN WARRANTIES
+          OR THE LIMITATION OR EXCLUSION OF LIABILITY FOR CERTAIN TYPES OF
+          DAMAGES. ACCORDINGLY, SOME OF THE ABOVE DISCLAIMERS AND LIMITATIONS MAY
+          NOT APPLY TO YOU. IN SUCH JURISDICTIONS, THE EXCLUSIONS APPLY, AND
+          LIABILITY IS LIMITED, ONLY TO THE EXTENT PERMITTED BY LAW.
+        </p>
+
+        <h2>9. SERVICE USAGE; TERMINATION OF USAGE</h2>
+        <p>
+          You agree to use the Services only for lawful purposes. You will not
+          share your login credentials or access to the Services with anybody.
+          You are solely responsible for your use of the Services and for all
+          actions that take place using your login credentials, account, or
+          access to the Services.
+        </p>
+        <p>
+          You may not access the Services from any territory where it is illegal
+          to do so. If you reside outside the United States and use the
+          Services, you do so on your own initiative and are responsible for
+          compliance with your local laws.
+        </p>
+        <p>
+          These Terms may be terminated by Unaffiliated at any time. You also
+          agree that Unaffiliated may terminate or suspend your access to the
+          Services, without notice, for any or no reason in its sole discretion.
+          We may do so, for example, for any conduct that Unaffiliated, in its
+          sole discretion, believes violates any applicable law, violates
+          Unaffiliated Terms (such as violations of posted policies), or is
+          otherwise harmful to the interests of another user or Unaffiliated and
+          its Affiliated Parties.
+        </p>
+        <p>
+          Unaffiliated reserves the right at any time to modify or discontinue,
+          temporarily or permanently, the Services (or any part thereof), with
+          or without notice. Except as otherwise expressly stated in these
+          Terms, you agree that Unaffiliated and its Affiliated Parties shall not
+          be liable to you or to any third party for any modification,
+          suspension, or discontinuation of the Services.
+        </p>
+
+        <h2>10. INDEMNIFICATION</h2>
+        <p>
+          You agree to indemnify, defend and hold harmless Unaffiliated and its
+          Affiliated Parties against all liability, causes of action, damages
+          and costs, including any reasonable attorneys&apos; fees, arising from
+          third-party claims relating to (i) your use of the Services, (ii)
+          your breach of these Terms, (iii) your infringement or violation of
+          any rights of another, or (iv) termination of your access to the
+          Services.
+        </p>
+
+        <h2>11. APPLICABLE LAW; JURISDICTION; DISPUTE RESOLUTION</h2>
+        <p>
+          These Terms shall be governed by the laws of the United States and the
+          State of New York, without giving effect to any conflict of laws
+          principles that may provide the application of the law of another
+          jurisdiction.
+        </p>
+        <p>
+          You agree that any claim or dispute relating to the Services or these
+          Terms that is not resolved under the arbitration requirements of
+          these Terms must be resolved exclusively by a court of competent
+          jurisdiction, federal or state, located in New York, New York, and no
+          other court. You agree to submit to the personal jurisdiction of such
+          courts and to accept service of process from them.
+        </p>
+        <p>
+          In no event can any claim or action by you related to the Services be
+          instituted more than one year after the cause of action arose.
+        </p>
+        <h3>Arbitration Agreement</h3>
+        <p>
+          <strong>(A) Informal Dispute Resolution Procedure.</strong> If there
+          is an instance when you have a concern that needs special attention,
+          Unaffiliated is committed to working with you to reach a reasonable
+          resolution. However, we can only do this if we know about it.
+          Therefore, for any concern you may have with the Services, you agree
+          to first send a written description of it to legal@unaffiliated.co so
+          we have an opportunity to address it. You agree to work with
+          Unaffiliated in good faith to resolve the concern. We believe this
+          should lead to resolution. However, if for some reason the concern is
+          not resolved satisfactorily within sixty (60) days after we receive
+          your email, and all necessary information, you agree to the further
+          dispute resolution provisions below.
+        </p>
+        <p>
+          <strong>(B) Mutual Arbitration Agreement.</strong> If the informal
+          dispute resolution procedure does not lead to resolution, then either
+          party may initiate binding arbitration as the sole means to resolve
+          Disputes, (except as provided for herein) subject to the terms set
+          forth below and the National Arbitration and Mediation
+          (&quot;NAM&quot;) rules. If you are initiating arbitration, a copy of
+          the demand shall also be emailed to legal@unaffiliated.co. Any demand
+          initiating arbitration, whether filed by you or Unaffiliated, must
+          include the email address you used to create an account with
+          Unaffiliated.
+        </p>
+        <p>
+          Except as set forth below, you and Unaffiliated agree that by using
+          the Services in any way, you unconditionally consent and agree that
+          any claim, dispute, or controversy (whether in contract, tort, or
+          otherwise) you may have against Unaffiliated arising out of or,
+          relating to, or connected in any way with the Services or these
+          Terms—including but not limited to any claim that all or any part of
+          these Terms are void or voidable, whether a claim is subject to
+          arbitration, and any dispute regarding the payment, non-payment, or the
+          timing of any administrative or arbitrator fees (each a
+          &quot;Dispute&quot;)—will be resolved exclusively by final and binding
+          arbitration in accordance with Subsections 11(A)-(K) of these Terms
+          (the &quot;Arbitration Agreement&quot;). (The portion of this Section
+          11 preceding Subsection 11(A) applies regardless of whether you have
+          opted out of the Arbitration Agreement under Subsection 10(J).)
+        </p>
+        <p>
+          This Arbitration Agreement applies to claims that arose, were
+          asserted, or involve facts occurring before the existence of this
+          Arbitration Agreement or any prior agreement as well as claims that
+          may arise after the termination of this Arbitration Agreement, in
+          accordance with the notice and opt-out provisions set forth herein.
+          This Arbitration Agreement is made pursuant to a transaction involving
+          interstate commerce, and shall be governed by the Federal Arbitration
+          Act (&quot;FAA&quot;), 9 U.S.C. §§ 1-16.
+        </p>
+        <p>
+          The parties understand that an arbitrator and not a judge or jury will
+          decide the Dispute, and that rights to discovery and appeals may be
+          limited in arbitration. The parties further understand that the costs
+          of arbitration could exceed the costs of litigation in some instances.
+        </p>
+        <p>
+          You hereby acknowledge and agree that by agreeing to these Terms,
+          which include this Arbitration Agreement, you and Unaffiliated are
+          each waiving the right to a trial by a jury to the maximum extent
+          permitted by law.
+        </p>
+        <p>
+          Notwithstanding the parties&apos; decision to resolve all Disputes
+          through arbitration, each party retains the right to (i) elect to have
+          any claims resolved in small claims court on an individual basis for
+          disputes and actions within the scope of such court&apos;s
+          jurisdiction, regardless of what forum the filing party initially
+          chose; (ii) bring an action in state or federal court to protect its
+          intellectual property rights (&quot;intellectual property
+          rights&quot; in this context means patents, copyrights, moral rights,
+          trademarks, and trade secrets and other confidential or proprietary
+          information, but not privacy or publicity rights) or for defamation;
+          and (iii) seek a declaratory judgment, injunction, or other equitable
+          relief in a court of competent jurisdiction regarding whether a
+          party&apos;s claims are time-barred or may be brought in small claims
+          court. Seeking such relief shall not waive a party&apos;s right to
+          arbitration under this Arbitration Agreement, and any filed
+          arbitrations related to any action filed pursuant to this paragraph
+          shall automatically be stayed pending the outcome of such action.
+        </p>
+        <p>
+          <strong>(C) Class Arbitration and Collective Relief Waiver.</strong> You
+          and Unaffiliated acknowledge and agree that, to the maximum extent
+          allowed by law, except as set out otherwise in Subsection (6) below,
+          any arbitration shall be conducted in an individual capacity only and
+          not as a class or collective action and the arbitrator may award relief
+          only in favor of the individual party seeking relief and only to the
+          extent necessary to resolve an individual party&apos;s claim;
+          notwithstanding this acknowledgement and agreement, you agree that any
+          arbitration involving you may proceed on a consolidated basis, but it
+          may do so if and only if Unaffiliated provides its consent to
+          consolidate in writing.
+        </p>
+        <p>
+          With the exception of this Subsection (C) and Subsection (F) below,
+          if any part of this Arbitration Agreement is deemed to be invalid,
+          unenforceable or illegal, or otherwise conflicts with the rules of
+          NAM, then the balance of this Arbitration Agreement shall remain in
+          effect and shall be construed in accordance with its terms as if the
+          invalid, unenforceable, illegal, or conflicting provision were not
+          contained herein. If, however, this Subsection (C) or Subsection (F)
+          is found to be invalid, unenforceable, or illegal as applied to your
+          claims, then the entirety of this Arbitration Agreement shall be null
+          and void, and neither you nor Unaffiliated shall be entitled to
+          arbitrate their dispute.
+        </p>
+        <p>
+          <strong>(D) Arbitration Rules.</strong> The arbitration will be
+          administered by NAM and conducted before a sole arbitrator in
+          accordance with the rules of NAM, including, as applicable, NAM
+          Comprehensive Dispute Resolution Rules and Procedures, Fees For
+          Disputes When One of the Parties is a Consumer and the Mass Filing
+          Supplemental Dispute Resolution Rules and Procedures in effect at the
+          time any demand for arbitration is filed with NAM, excluding any
+          rules or procedures governing or permitting class or representative
+          actions. The applicable NAM rules and procedures are available at
+          www.namadr.com or by emailing National Arbitration and Mediation&apos;s
+          Commercial Dept at commercial@namadr.com. If NAM is not available to
+          arbitrate, the parties will select an alternative arbitration
+          provider.
+        </p>
+        <p>
+          <strong>(E) Arbitration Location and Procedure.</strong> For all U.S.
+          residents, where the amount in controversy is over $25,000, the
+          arbitration shall be held (i) at a location determined under the
+          applicable NAM rules and procedures that is reasonably convenient for
+          you and is no more than 100 miles from your home or place of
+          business; or (ii) at another location you and we agree upon. For
+          non-U.S. residents, the arbitration shall be held in New York, New
+          York (unless otherwise agreed by the parties). Where the amount in
+          controversy is under $25,000, the arbitration shall take place
+          solely by submission of written materials, unless the arbitrator
+          determines that a hearing is necessary, and any arbitrator nationwide
+          may be appointed. Where a hearing is necessary in such cases, the
+          parties agree to remote participation by videoconference or
+          teleconference.
+        </p>
+        <p>
+          The arbitrator or arbitration body shall be empowered to grant
+          whatever relief would be available in a court under law or in equity.
+          The arbitrator has the right to impose sanctions in accordance with
+          the NAM rules and procedures for any frivolous claims or submissions
+          the arbitrator determines have not been filed in good faith, as well as
+          for a party&apos;s failure to comply with the Informal Dispute
+          Resolution Procedure contemplated by this Arbitration Agreement.
+        </p>
+        <p>
+          Subject to the applicable NAM rules and procedures, the parties agree
+          that the arbitrator will have the discretion to allow the filing of
+          dispositive motions if they are likely to efficiently resolve or
+          narrow issues in dispute.
+        </p>
+        <p>
+          Unless otherwise prohibited by law, all arbitration proceedings will be
+          confidential and closed to the public and any parties other than you
+          and Unaffiliated (and each of the parties&apos; authorized
+          representatives and agents), and all records relating thereto will be
+          permanently sealed, except as necessary to obtain court confirmation of
+          the arbitration award (provided that the party seeking confirmation
+          shall seek to file such records under seal to the extent permitted by
+          law).
+        </p>
+        <p>
+          <strong>(F) Batch Arbitration.</strong> To increase the efficiency of
+          administration and resolution of arbitrations, in the event 100 or
+          more similar arbitration demands (those asserting the same or
+          substantially similar facts or claims, and seeking the same or
+          substantially similar relief) presented by or with the assistance or
+          coordination of the same law firm(s) or organization(s) are submitted
+          to NAM (&quot;Mass Filing&quot;), the parties agree to administer the
+          Mass Filing in sequential batches of approximately 100 demands per
+          batch (as adjusted to accommodate any arbitrator strikes as described
+          below). To the extent there are fewer than 100 arbitration demands
+          left over after the batching described above, a final batch will
+          consist of the remaining demands). The parties further agree: (i) to
+          designate one arbitrator for each batch; (ii) to accept applicable
+          fees, including any related fee reduction determined by NAM in its
+          discretion; (iii) that 10% of the anticipated total number of batches
+          for the Mass Filing may proceed simultaneously as set forth in this
+          batching provision and Arbitration Agreement, but that no other
+          demands for arbitration that are part of the Mass Filing may be
+          filed, processed, or adjudicated until the prior set of batches are
+          filed, processed, and adjudicated; (iv) that fees associated with a
+          demand for arbitration included in a Mass Filing, including fees owed
+          by Unaffiliated and the claimants, shall only be due after your
+          demand for arbitration is included in a set of batch proceedings and
+          that batch is properly designated for filing, processing, and
+          adjudication; (v) that the staged process of batched proceedings,
+          with each batch including 100 demands, shall continue until each
+          demand (including your demand) is adjudicated or otherwise resolved,
+          and (vi) to make good faith efforts to resolve each batch of claims
+          properly designated for filing, processing, and adjudication within
+          180 days, failing which any of the claimants whose demands have not
+          yet begun arbitration or Unaffiliated may cease arbitration and file
+          in a court of competent jurisdiction.
+        </p>
+        <p>
+          Arbitrator selection for each batch shall be conducted to the
+          greatest extent possible in accordance with the applicable NAM rules
+          and procedures for such selection, and the arbitrator will determine
+          the location where the proceedings will be conducted. Each claimant
+          may strike the arbitrator selected by their counsel and Unaffiliated
+          for the batch and where such strike is exercised, the objecting
+          claimant&apos;s demand will be included in any simultaneously
+          proceeding batch, or the next following batch.
+        </p>
+        <p>
+          You agree to cooperate in good faith with Unaffiliated and the
+          arbitration provider to implement such a &quot;batch approach&quot; or
+          other similar approach to provide for an efficient resolution of
+          claims, including the payment of combined reduced fees, set by NAM in
+          its discretion, for each batch of claims. The parties further agree
+          to cooperate with each other and the arbitration provider or
+          arbitrator to establish any other processes or procedures that the
+          arbitration provider or arbitrator believe will provide for an
+          efficient resolution of claims. Any disagreement between the parties
+          as to whether this provision applies or as to the process or procedure
+          for batching shall be resolved by a procedural arbitrator appointed by
+          NAM. This &quot;Batch Arbitration&quot; provision shall in no way be
+          interpreted as increasing the number of claims necessary to trigger the
+          applicability of NAM&apos;s Mass Filing Supplemental Dispute
+          Resolution Rules and Procedures or authorizing class arbitration of any
+          kind. Unless Unaffiliated otherwise consents in writing, Unaffiliated
+          does not agree or consent to class arbitration, private attorney
+          general arbitration, or arbitration involving joint or consolidated
+          claims under any circumstances, except as set forth in this Subsection
+          (F). If your demand for arbitration is included in the Mass Filing,
+          your claims will remain tolled until your demand for arbitration is
+          decided, withdrawn, or is settled.
+        </p>
+        <p>
+          The parties agree that this batching provision is integral to the
+          Arbitration Agreement insofar as it applies to a Mass Filing. If the
+          batching provision in this Subsection (F) is found to be invalid,
+          unenforceable, or illegal, then the entirety of this Arbitration
+          Agreement shall be null and void, and neither you nor Unaffiliated
+          shall be entitled to arbitrate any claim that is a part of the Mass
+          Filing.
+        </p>
+        <p>
+          <strong>(G) Mediation Following First Batch in a Mass Filing.</strong> The
+          results of the first completely adjudicated batch of demands will be
+          given to a NAM mediator selected from a group of 5 mediators proposed
+          by NAM, with Unaffiliated and the remaining claimants&apos; counsel
+          being able to strike one mediator each and then rank the remaining
+          mediators and the highest collectively ranked mediator being
+          selected. The selected mediator will try to facilitate a resolution of
+          the remaining demands in the Mass Filing. After the results are
+          provided to the mediator, Unaffiliated the remaining claimants and
+          their counsel, and the mediator will have 90 days (the &quot;Mediation
+          Period&quot;) to agree on a resolution or substantive methodology for
+          resolving the outstanding demands. If the parties are unable to
+          resolve the outstanding demands during the Mediation Period, and cannot
+          agree on a methodology for resolving them through further arbitrations,
+          either Unaffiliated or any remaining claimant may opt out of the
+          arbitration process and have the demand(s) proceed in a court of
+          competent jurisdiction. Notice of the opt-out will be provided in
+          writing within 60 days of the close of the Mediation Period. If
+          neither Unaffiliated nor the remaining claimants opt out and they
+          cannot agree to a methodology for resolving the remaining demands
+          through further arbitration, the arbitrations will continue with the
+          batching process. Absent notice of an opt-out, the arbitrations will
+          proceed in the order determined by the sequential numbers assigned to
+          demands in the Mass Filing.
+        </p>
+        <p>
+          <strong>(H) Arbitrator&apos;s Decision.</strong> The arbitrator&apos;s
+          decision shall be controlled by the terms and conditions of these
+          Terms. The arbitrator will render an award within the time frame
+          specified in the applicable NAM rules and procedures. The
+          arbitrator&apos;s decision will include the essential findings and
+          conclusions upon which the arbitrator based the award. Judgment on the
+          arbitration award may be entered in any court having jurisdiction
+          thereof. The arbitrator will have the authority to award monetary
+          damages on an individual basis and to grant, on an individual basis,
+          any non-monetary remedy or relief available to an individual to the
+          extent available under applicable law, the arbitral forum&apos;s rules,
+          and this Arbitration Agreement. The parties agree that the damages
+          and/or other relief must be consistent with the terms of Section 8
+          (&quot;Disclaimer of Warranties and Limitation of Liability&quot;) as
+          to the types and the amounts of damages or other relief for which a
+          party may be held liable. No individual arbitration award or decision
+          will have any preclusive effect as to issues or claims in any dispute
+          with anyone who is not a named party to the arbitration. Attorneys&apos;
+          fees will be available to the prevailing party in the arbitration if
+          authorized under applicable substantive law governing the claims in the
+          arbitration.
+        </p>
+        <p>
+          <strong>(I) Fees.</strong> If you are able to demonstrate that the
+          costs of arbitration will be prohibitive as compared to the costs of
+          litigation, Unaffiliated will pay any filing and hearing fees in excess
+          of the current United States District Court filing fee for the
+          Southern District of New York that the arbitrator deems necessary to
+          prevent the arbitration from being cost-prohibitive regardless of the
+          outcome of the arbitration, unless the arbitrator determines that
+          your claim(s) were frivolous or asserted in bad faith, in which case
+          arbitration fees (including attorneys&apos; fees) may be imposed upon
+          you consistent with the Arbitrator&apos;s Rules and the standard for
+          sanctions set forth in Federal Rule of Civil Procedure 11. You are
+          responsible for your own attorneys&apos; fees unless the arbitration
+          rules and/or applicable law provide otherwise, including as set forth
+          in this Arbitration Agreement.
+        </p>
+        <p>
+          The parties agree that NAM has discretion to reduce the amount or
+          modify the timing of any administrative or arbitration fees due under
+          NAM&apos;s Rules where it deems appropriate (including as specified in
+          Subsection (F)) provided that such modification does not increase the
+          costs to you, and you further agree that you waive any objection to
+          such fee modification. The parties also agree that a good-faith
+          challenge by either party to the fees imposed by NAM does not
+          constitute a default, waiver, or breach of this Arbitration Agreement
+          while such challenge remains pending before NAM, the arbitrator,
+          and/or a court of competent jurisdiction, and that any and all due
+          dates for those fees shall be tolled during the pendency of such
+          challenge.
+        </p>
+        <p>
+          <strong>(J) 30-Day Right to Opt Out.</strong> You have the right to opt
+          out and not be bound by the Arbitration Agreement by sending written
+          notice of your decision to opt out to legal@unaffiliated.co with the
+          subject line, &quot;ARBITRATION OPT-OUT&quot;. You must send this notice
+          from the email address associated with your account (if you have one),
+          or if this is not possible, you must promptly cooperate with us to
+          identify your account if you have one. Regardless of the email address
+          you use, you must promptly cooperate with any request from us to
+          authenticate that you are the accountholder (if you hold an account)
+          and that you are the actual sender of the notice. Your notice must
+          include your name and address, the email address you currently use to
+          access your Unaffiliated account (if you have one), and a clear
+          statement that you want to opt out of this Arbitration Agreement. The
+          notice must be sent within thirty (30) days of first becoming subject to
+          this Arbitration Agreement. You become subject to this Arbitration
+          Agreement at the same time you become subject to the rest of these
+          Terms. Otherwise, you shall be bound to arbitrate disputes in
+          accordance with this Arbitration Agreement. If you opt out of the
+          Arbitration Agreement, you may exercise your right to a trial by jury
+          or judge, as permitted by applicable law, but any prior existing
+          agreement to arbitrate disputes under a prior version of the
+          Arbitration Agreement will not apply to claims not yet filed. If you
+          opt out of the Arbitration Agreement, Unaffiliated also will not be
+          bound by it.
+        </p>
+        <p>
+          <strong>(K) Changes.</strong> Unaffiliated will provide thirty (30)
+          days&apos; notice of any material changes to this Section 11 by posting
+          the update on unaffiliated.co and sending an email to the address it
+          has on file for your Services account, if any. Any such changes will
+          go into effect at 11 a.m. Eastern Time 30 days after Unaffiliated
+          provides this notice and apply to all claims not yet filed regardless
+          of when such claims may have accrued. If Unaffiliated changes this
+          Section 11 after the date you first accepted this Section 11 (or
+          accepted any subsequent changes to this Section 11), you agree that
+          your failure to terminate the Terms as described in Section 1 by the
+          time it takes effect will be deemed acceptance of those changes.
+        </p>
+
+        <h2>12. CLASS ACTION WAIVER</h2>
+        <p>
+          You may only resolve your disputes with Unaffiliated on an individual
+          basis, and may not bring a claim as a plaintiff or a class member in
+          a class, collective, consolidated, or representative action. Except
+          as described in Section 11(C) and (F), class actions, class
+          arbitrations, collective actions, private attorney general actions,
+          and consolidation with other arbitrations are not allowed. By agreeing
+          to these Terms, you agree that you are required to resolve any claim
+          that you may have against Unaffiliated on an individual basis in
+          arbitration as set forth in this Arbitration Agreement, and not as a
+          class, collective, coordinated, consolidated, mass, and/or
+          representative action. You and Unaffiliated are each waiving the
+          right to a trial by jury. This Arbitration Agreement will preclude you
+          from bringing any class, collective, coordinated, consolidated, mass,
+          and/or representative action against Unaffiliated, and also preclude
+          you from participating in or recovering relief in any current or
+          future class, collective, coordinated, consolidated, mass, and/or
+          representative action brought against Unaffiliated by someone else.
+        </p>
+
+        <h2>13. MISCELLANEOUS</h2>
+        <p>
+          <strong>Severability.</strong> If any provision of these Terms is deemed
+          unlawful, void, or for any reason unenforceable by an arbitrator or
+          court of competent jurisdiction, the validity and enforceability of
+          any remaining provisions shall not be affected.
+        </p>
+        <p>
+          <strong>Entire Agreement.</strong> These Terms, the Privacy Policy and
+          any other policies or guidelines referenced within these Terms
+          constitute the entire and only agreement between Unaffiliated and you
+          with respect to the Services. These Terms supersede any prior or
+          contemporaneous agreements, representations, warranties and
+          understandings, written or oral, regarding these Terms or the
+          Services.
+        </p>
+        <p>
+          <strong>No Waiver.</strong> The failure of Unaffiliated and its
+          Affiliated Parties to insist upon strict adherence to any term of
+          these Terms shall not constitute a waiver of such term and shall not
+          be considered a waiver or limit that party&apos;s right thereafter to
+          insist upon strict adherence to that term or any other term of these
+          terms of service.
+        </p>
+        <p>
+          <strong>Assignment.</strong> These Terms, and any rights, licenses or
+          obligations you receive hereunder, cannot be transferred or assigned
+          by you, and you will not attempt to do so. Any attempted transfer or
+          assignment in violation hereof shall be null and void. Unaffiliated
+          may its sole discretion assign these Terms and any rights, licenses or
+          obligations it receives hereunder without restriction.
+        </p>
+
+        <h2>14. TECHNOLOGY AND RESOURCES</h2>
+        <p>
+          The use of the App requires use of a mobile device. Use our App, our
+          Sites, and other Services made available online or that are capable
+          of connecting to the Internet (collectively, &quot;Online
+          Services&quot;) may require an Internet connection (such as wireless
+          mobile data service), which you must obtain at your cost from your
+          wireless carrier or other Internet service provider. You are
+          responsible for obtaining and paying for such additional services and
+          obtaining a suitable device, including without limitation all related
+          usage charges. You may be required to send and receive, at your cost,
+          electronic communications related to the Online Services, including
+          without limitation administrative messages, service announcements,
+          diagnostic data reports, and App updates, from Unaffiliated, your
+          mobile carrier or third-party service provider. If you do not have an
+          unlimited data plan with the provider you use for an Internet
+          connection, you may incur additional charges. The Online Services may
+          cause your device to send and receive data at your cost for those and
+          other reasons over the Internet whether or not you have taken a
+          specific action in the Services. These and other aspects of the
+          Services may involve activity that uses your device&apos;s battery or
+          other resources with or without involvement from or notice to you
+          (including in the background while you have closed and are not
+          actively interacting with the Services), which may shorten the life of
+          your battery or other resources and cause you to incur unexpected
+          energy costs. Unaffiliated will have no liability for any of that.
+        </p>
+        <p>
+          You are solely responsible for obtaining any additional subscription,
+          connectivity, or energy services or equipment necessary to access and
+          use the Online Services, including but not limited to payment of all
+          third-party fees associated therewith, including fees for information
+          sent to or through the Online Services.
+        </p>
+        <p>
+          We do not warrant that the Online Services will be compatible with
+          your network provider or device. You acknowledge and agree that we may
+          release updates to the Online Services and that you may be required to
+          install any such update (and/or, in some cases, an update or
+          replacement to your browser or device) in order for the Online Service
+          to continue functioning properly. You may not export any Services
+          except in compliance with all applicable laws.
+        </p>
+
+        <h2>15. CONTACT INFORMATION</h2>
+        <p>
+          If you have any comments, questions, or concerns regarding these
+          Terms or the Services, please contact us at{" "}
+          <a href="mailto:legal@unaffiliated.co">legal@unaffiliated.co</a>. We
+          would like to promptly address any issue.
+        </p>
+      </div>
+    </div>
+  );
+}

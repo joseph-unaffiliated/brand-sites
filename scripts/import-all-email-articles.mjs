@@ -5,7 +5,8 @@
  *
  * 1. Create an API token at https://sanity.io/manage → Project (16jtlwpq) → API → Tokens (Editor or Admin).
  * 2. Add to .env.local: SANITY_API_TOKEN=your-token
- * 3. From project root: node scripts/import-all-email-articles.mjs
+ * 3. From repo root: node scripts/import-all-email-articles.mjs
+ *    Uses apps/hookuplists/.env.local if present, else root .env.local
  *
  * Main images are not imported; add them in Studio. If you already have an article with slug "sarah", either
  * delete it first or change the slug in email-articles-content.mjs (e.g. sarah-issue9).
@@ -20,7 +21,8 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, "..");
 
 function loadEnvLocal() {
-  const path = join(root, ".env.local");
+  const appPath = join(root, "apps/hookuplists/.env.local");
+  const path = existsSync(appPath) ? appPath : join(root, ".env.local");
   if (!existsSync(path)) return {};
   const content = readFileSync(path, "utf8");
   const env = {};

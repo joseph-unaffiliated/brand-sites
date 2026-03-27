@@ -1,24 +1,14 @@
 {
-  "name": "single-brand-site",
+  "name": "brand-sites",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@9.15.0",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint"
-  },
-  "dependencies": {
-    "@google-cloud/bigquery": "^8.1.1",
-    "@sanity/image-url": "^2.0.3",
-    "next": "16.1.1",
-    "next-sanity": "^12.1.0",
-    "next-turnstile": "^1.0.7",
-    "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint"
   },
   "devDependencies": {
-    "eslint": "^9",
-    "eslint-config-next": "16.1.1"
+    "turbo": "^2.3.3"
   }
 }
