@@ -1,13 +1,18 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { isPartPlaceholderAge } from "@publication-websites/sanity-content";
 import { getArticleBySlug, getArticleSlugs, getArticles, ensureDescriptionOnly } from "@/lib/articles";
 import HideWhenSubscribed from "@/components/HideWhenSubscribed";
 import RecordArticleView from "@/components/RecordArticleView";
 import ArticleSubscribeForm from "@/components/ArticleSubscribeForm";
+import ArticleContentBlocks from "@/components/ArticleContentBlocks";
 import AdUnit from "@/components/AdUnit";
 import ArticleAdStickyBottom from "@/components/ArticleAdStickyBottom";
 import styles from "./page.module.css";
+
+const SANITY_PROJECT_ID = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
+const SANITY_DATASET = process.env.NEXT_PUBLIC_SANITY_DATASET ?? "production";
 
 const SLOT_RAIL = process.env.NEXT_PUBLIC_ADSENSE_SLOT_RAIL;
 const SLOT_MID = process.env.NEXT_PUBLIC_ADSENSE_SLOT_MID;
@@ -91,25 +96,39 @@ export default async function ArticlePage({ params, searchParams: searchParamsPr
           <div className={styles.articleContainerNoPadding}>
             <div className="articlecopy-wrapper">
                 <div className="articlecopy-richtext">
-                  {entries.slice(0, midIndex).map((entry) => (
-                    <article key={entry.title} className={styles.entry}>
-                      <p className={styles.age}>{entry.age}</p>
-                      <h2>{entry.title}</h2>
-                      <p>{entry.body}</p>
-                    </article>
-                  ))}
-                  {SLOT_MID && midIndex > 0 && (
-                    <div className={styles.adMid}>
-                      <AdUnit slotId={SLOT_MID} format="rectangle" />
-                    </div>
+                  {showBlocks && SANITY_PROJECT_ID ? (
+                    <ArticleContentBlocks
+                      blocks={contentBlocks}
+                      projectId={SANITY_PROJECT_ID}
+                      dataset={SANITY_DATASET}
+                    />
+                  ) : (
+                    <>
+                      {entries.slice(0, midIndex).map((entry, i) => (
+                        <article key={entry._key || `e-a-${i}`} className={styles.entry}>
+                          {entry.age && !isPartPlaceholderAge(entry.age) ? (
+                            <p className={styles.age}>{entry.age}</p>
+                          ) : null}
+                          {entry.title ? <h2>{entry.title}</h2> : null}
+                          {entry.body ? <p>{entry.body}</p> : null}
+                        </article>
+                      ))}
+                      {SLOT_MID && midIndex > 0 && (
+                        <div className={styles.adMid}>
+                          <AdUnit slotId={SLOT_MID} format="rectangle" />
+                        </div>
+                      )}
+                      {entries.slice(midIndex).map((entry, i) => (
+                        <article key={entry._key || `e-b-${midIndex + i}`} className={styles.entry}>
+                          {entry.age && !isPartPlaceholderAge(entry.age) ? (
+                            <p className={styles.age}>{entry.age}</p>
+                          ) : null}
+                          {entry.title ? <h2>{entry.title}</h2> : null}
+                          {entry.body ? <p>{entry.body}</p> : null}
+                        </article>
+                      ))}
+                    </>
                   )}
-                  {entries.slice(midIndex).map((entry) => (
-                    <article key={entry.title} className={styles.entry}>
-                      <p className={styles.age}>{entry.age}</p>
-                      <h2>{entry.title}</h2>
-                      <p>{entry.body}</p>
-                    </article>
-                  ))}
                 </div>
                 {article.disclaimer && (
                   <div className="articlecopy-richtext">

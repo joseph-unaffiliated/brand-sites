@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { isPartPlaceholderAge } from "@publication-websites/sanity-content";
 import { getArticles, getDemographicAndDescription } from "@/lib/articles";
 import SubscribeBlock from "@/components/SubscribeBlock";
 import HideWhenSubscribed from "@/components/HideWhenSubscribed";
@@ -119,7 +120,9 @@ export default async function Home({ searchParams: searchParamsProp }) {
                         return (
                           <div key={i} className={styles.featuredEntryBlock}>
                             <div className={styles.featuredEntryLine}>
-                              {entry.age && <span className={styles.featuredEntryAge}>{entry.age}</span>}
+                              {entry.age && !isPartPlaceholderAge(entry.age) && (
+                                <span className={styles.featuredEntryAge}>{entry.age}</span>
+                              )}
                               {entry.title && <span className={styles.featuredEntryTitle}>{entry.title}</span>}
                             </div>
                             {preview && (

@@ -90,10 +90,10 @@ export default function RootLayout({ children }) {
               <div className="footer-brand">
                 <Link href="/" className="footer-logo" aria-label="The Pickle Report">
                   <Image
-                    src="/tpr-logo.svg"
+                    src="/tpr-logo-white.png"
                     alt="The Pickle Report"
-                    width={160}
-                    height={36}
+                    width={131}
+                    height={96}
                   />
                 </Link>
                 <p className="footer-text">

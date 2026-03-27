@@ -103,6 +103,51 @@ function extractSection(content, sectionLabel) {
   return m ? m[1] : ''
 }
 
+function allXImageSrcs(html = '') {
+  const out = []
+  const r = /<x-image[^>]*src="([^"]+)"/gi
+  let m
+  while ((m = r.exec(html)) !== null) {
+    if (m[1]) out.push(m[1])
+  }
+  return out
+}
+
+/** Skip email header wordmarks / footer logos so hero uses real story art. */
+function isLikelyBrandOrHeaderImageUrl(url = '') {
+  if (!url) return true
+  try {
+    const d = decodeURIComponent(url).toLowerCase()
+    if (/wordmark|tpr\s*-\s*logo|tpr\s*-\s*wordmark|logo\s*white|tpr\s*%\s*-\s*wordmark/.test(d)) return true
+  } catch {
+    /* ignore */
+  }
+  return false
+}
+
+function pickMainImageUrlFromFeature(feature) {
+  const urls = allXImageSrcs(feature || '')
+  const best = urls.find((u) => !isLikelyBrandOrHeaderImageUrl(u))
+  return best || urls[0] || ''
+}
+
+/**
+ * Numbered list items with a share image (Pickle Report email layout).
+ * @returns {{ n: number, body: string, imageUrl: string }[]}
+ */
+function extractListicleItemsFromFeature(feature) {
+  if (!feature) return []
+  const items = []
+  const re =
+    /<x-paragraph[^>]*>(\d+)\.\s*([\s\S]*?)<\/x-paragraph>\s*<x-box[^>]*>[\s\S]*?<x-image[^>]*src="([^"]+)"/gi
+  let m
+  while ((m = re.exec(feature)) !== null) {
+    const body = cleanText(m[2])
+    if (body) items.push({n: Number(m[1]), body, imageUrl: m[3]})
+  }
+  return items
+}
+
 function parseXmlIssue(content, fallbackSlug) {
   const title =
     getFirstMatch(content, /<x-heading-1[^>]*>([\s\S]*?)<\/x-heading-1>/i) ||
@@ -122,13 +167,19 @@ function parseXmlIssue(content, fallbackSlug) {
   const photo = extractSection(content, 'Photo Section') || extractSection(content, 'Sexy Pic(kle) Section')
 
   const mainImageUrl =
-    getFirstMatch(feature, /<x-image[^>]*src="([^"]+)"/i) ||
+    pickMainImageUrlFromFeature(feature) ||
+    pickMainImageUrlFromFeature(content) ||
     getFirstMatch(content, /<x-image[^>]*src="([^"]+)"/i)
 
   const byline = getFirstMatch(feature, /By:\s*([^<\n]+)/i)
   const prose = getAllMatches(feature, /<x-paragraph[^>]*>([\s\S]*?)<\/x-paragraph>/gi).filter(
     (p) => !/^By:\s/i.test(p) && !/^Source:\s/i.test(p),
   )
+
+  const listicleItems = extractListicleItemsFromFeature(feature)
+  const firstNumberedIdx = prose.findIndex((p) => /^\d+\.\s/.test(p.trim()))
+  const introProse =
+    listicleItems.length && firstNumberedIdx >= 0 ? prose.slice(0, firstNumberedIdx) : []
 
   const sourceLinks = []
   for (const section of [feature, dyk]) {
@@ -182,7 +233,32 @@ function parseXmlIssue(content, fallbackSlug) {
   const dykImageUrl = getFirstMatch(dyk, /<x-image[^>]*src="([^"]+)"/i)
 
   const contentBlocks = []
-  if (prose.length) {
+  if (listicleItems.length) {
+    if (introProse.length) {
+      contentBlocks.push({
+        _type: 'proseSection',
+        heading: '',
+        body: introProse.map((p) => ({
+          _type: 'block',
+          style: 'normal',
+          children: [{_type: 'span', text: p}],
+        })),
+      })
+    }
+    contentBlocks.push({
+      _type: 'listicleSection',
+      heading: '',
+      items: listicleItems.map((it) => ({
+        _type: 'listicleItem',
+        itemNumber: it.n,
+        title: '',
+        body: it.body,
+        caption: '',
+        credit: '',
+        imageUrl: it.imageUrl,
+      })),
+    })
+  } else if (prose.length) {
     contentBlocks.push({
       _type: 'proseSection',
       heading: '',
@@ -237,10 +313,14 @@ function parseXmlIssue(content, fallbackSlug) {
     contentBlocks,
     dykImageUrl,
     photoImageUrl,
-    // Best effort legacy format for current frontend.
-    entries: prose
-      .slice(0, 8)
-      .map((p, i) => ({_type: 'articleEntry', age: `Part ${i + 1}`, title: '', body: p})),
+    entries: listicleItems.length
+      ? listicleItems.slice(0, 12).map((it) => ({
+          _type: 'articleEntry',
+          age: '',
+          title: '',
+          body: `${it.n}. ${it.body}`,
+        }))
+      : prose.slice(0, 8).map((p) => ({_type: 'articleEntry', age: '', title: '', body: p})),
   }
 }
 
@@ -275,7 +355,7 @@ function parseHtmlIssue(content, fallbackSlug) {
   const imageUrls = getAllMatches(content, /<img[^>]*src="([^"]+)"/gi).filter((u) =>
     /^https?:\/\//.test(u),
   )
-  const mainImageUrl = imageUrls[0] || ''
+  const mainImageUrl = imageUrls.find((u) => !isLikelyBrandOrHeaderImageUrl(u)) || imageUrls[0] || ''
   const photoImageUrl = imageUrls.find((u) => /sexy|pickle|week|photo/i.test(u)) || imageUrls[1] || ''
 
   const contentBlocks = []
@@ -351,9 +431,7 @@ function parseHtmlIssue(content, fallbackSlug) {
     contentBlocks,
     dykImageUrl: '',
     photoImageUrl,
-    entries: prose
-      .slice(0, 8)
-      .map((p, i) => ({_type: 'articleEntry', age: `Part ${i + 1}`, title: '', body: p})),
+    entries: prose.slice(0, 8).map((p) => ({_type: 'articleEntry', age: '', title: '', body: p})),
   }
 }
 
@@ -456,6 +534,7 @@ function toSanityDoc(parsed, filePath) {
         image: item.image || undefined,
         caption: item.caption || '',
         credit: item.credit || '',
+        ...(item.imageUrl && /^https?:\/\//.test(item.imageUrl) ? {imageUrl: item.imageUrl} : {}),
       }))
     }
 
@@ -564,6 +643,16 @@ async function hydrateDocsWithImages({docsWithParsed, projectId, dataset, token}
       if (photoBlockImage) {
         const photoBlock = (doc.contentBlocks || []).find((block) => block?._type === 'photoOfWeekBlock')
         if (photoBlock) photoBlock.image = photoBlockImage
+      }
+    }
+
+    for (const block of doc.contentBlocks || []) {
+      if (block?._type !== 'listicleSection' || !Array.isArray(block.items)) continue
+      for (const li of block.items) {
+        if (!li?.imageUrl || !/^https?:\/\//.test(li.imageUrl)) continue
+        const uploaded = await getOrUpload(li.imageUrl, `${slug}-li-${li.itemNumber ?? 'x'}`)
+        if (uploaded) li.image = uploaded
+        delete li.imageUrl
       }
     }
   }

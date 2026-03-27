@@ -23,8 +23,9 @@ export const articlesQuery = `*[_type == "article"] | order(publishedDate desc, 
   photoCredit,
   brandExplainer,
   publishedDate,
-  entries[] { age, title, body },
-  disclaimer
+  entries[] { _key, age, title, body },
+  disclaimer,
+  contentBlocks
 }`;
 
 /** One article by slug. */
@@ -41,8 +42,9 @@ export const articleBySlugQuery = `*[_type == "article" && slug.current == $slug
   photoCredit,
   brandExplainer,
   publishedDate,
-  entries[] { age, title, body },
-  disclaimer
+  entries[] { _key, age, title, body },
+  disclaimer,
+  contentBlocks
 }`;
 
 /** Slugs only, for generateStaticParams. */
@@ -84,22 +86,105 @@ export function createSanityLayer(opts) {
 const nextOptions = { next: { revalidate: 60 } };
 
 /**
+ * @param {unknown} field Sanity image field `{asset, hotspot?}`
+ * @param {(source: unknown) => unknown} urlFor
+ */
+function imageDimensionsAndUrl(field, urlFor) {
+  if (!field || typeof urlFor !== "function") return null;
+  const b = urlFor(field);
+  if (!b) return null;
+  try {
+    const url = b.width(1200).url();
+    if (!url) return null;
+    const w = field.asset?.metadata?.dimensions?.width;
+    const h = field.asset?.metadata?.dimensions?.height;
+    return {
+      url,
+      width: typeof w === "number" && w > 0 ? w : 1200,
+      height: typeof h === "number" && h > 0 ? h : 800,
+    };
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * First inline image in issue body blocks (preferred over document mainImage for cards when present).
+ * @param {unknown} blocks
+ * @param {(source: unknown) => unknown} urlFor
+ */
+export function firstImageFromContentBlocks(blocks, urlFor) {
+  if (!Array.isArray(blocks) || typeof urlFor !== "function") return null;
+  for (const block of blocks) {
+    if (!block || typeof block !== "object") continue;
+    switch (block._type) {
+      case "imageBlock": {
+        const img = imageDimensionsAndUrl(block.image, urlFor);
+        if (img) return img;
+        break;
+      }
+      case "listicleSection": {
+        for (const item of block.items || []) {
+          const img = imageDimensionsAndUrl(item?.image, urlFor);
+          if (img) return img;
+        }
+        break;
+      }
+      case "didYouKnowBlock": {
+        const img = imageDimensionsAndUrl(block.chartImage, urlFor);
+        if (img) return img;
+        break;
+      }
+      case "photoOfWeekBlock": {
+        const img = imageDimensionsAndUrl(block.image, urlFor);
+        if (img) return img;
+        break;
+      }
+      default:
+        break;
+    }
+  }
+  return null;
+}
+
+/** Hide auto-generated import labels like "Part 1" in list UI. */
+export function isPartPlaceholderAge(age) {
+  if (typeof age !== "string") return false;
+  return /^\s*part\s+\d+\s*$/i.test(age.trim());
+}
+
+/**
  * @param {unknown} raw
  * @param {(source: unknown) => unknown} urlFor
  * @param {string} [fallbackImage]
  */
 export function mapArticle(raw, urlFor, fallbackImage = "/hl-photo.png") {
   if (!raw) return null;
+
+  const fromBlocks = firstImageFromContentBlocks(raw.contentBlocks, urlFor);
+
   const imageBuilder = urlFor(raw.mainImage);
-  let mainImage = fallbackImage;
+  let fromMain = null;
   if (imageBuilder) {
     try {
       const url = imageBuilder.width(1200).url();
-      if (url) mainImage = url;
+      if (url) {
+        fromMain = {
+          url,
+          width: raw.mainImageWidth ?? 900,
+          height: raw.mainImageHeight ?? 600,
+        };
+      }
     } catch {
-      /* use fallback */
+      /* ignore */
     }
   }
+
+  const chosen = fromBlocks ?? fromMain;
+  const mainImage = chosen?.url ?? fallbackImage;
+  const mainImageWidth = chosen?.width ?? 900;
+  const mainImageHeight = chosen?.height ?? 600;
+
   return {
     slug: raw.slug,
     title: raw.title,
@@ -107,13 +192,14 @@ export function mapArticle(raw, urlFor, fallbackImage = "/hl-photo.png") {
     subtitle: raw.subtitle,
     summary: raw.summary,
     mainImage,
-    mainImageWidth: raw.mainImageWidth ?? 900,
-    mainImageHeight: raw.mainImageHeight ?? 600,
+    mainImageWidth,
+    mainImageHeight,
     photoCredit: raw.photoCredit,
     brandExplainer: raw.brandExplainer,
     publishedDate: raw.publishedDate,
     entries: raw.entries ?? [],
     disclaimer: raw.disclaimer,
+    contentBlocks: raw.contentBlocks ?? [],
   };
 }
 

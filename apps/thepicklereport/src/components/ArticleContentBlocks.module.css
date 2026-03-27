@@ -1,0 +1,124 @@
+.blocks {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.block {
+  margin: 0;
+}
+
+.blockHeading {
+  font-size: 1.35rem;
+  font-weight: 600;
+  margin: 0 0 1rem;
+  line-height: 1.25;
+}
+
+.prose {
+  line-height: 1.65;
+}
+
+.prose p {
+  margin: 0 0 1rem;
+}
+
+.prose p:last-child {
+  margin-bottom: 0;
+}
+
+.figure {
+  margin: 0;
+}
+
+.blockImage {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+}
+
+.caption {
+  font-size: 0.85rem;
+  color: var(--muted, #555);
+  margin: 0.5rem 0 0;
+  text-align: center;
+}
+
+.listicle {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.listicleItem {
+  margin: 0;
+}
+
+.listicleImageWrap {
+  margin-bottom: 0.75rem;
+}
+
+.listicleCopy {
+  line-height: 1.55;
+}
+
+.itemNum {
+  font-weight: 600;
+}
+
+.listicleBody {
+  margin: 0.5rem 0 0;
+  white-space: pre-wrap;
+}
+
+.dyk,
+.poll,
+.nibbles {
+  padding: 1.5rem;
+  background: #f6f6f6;
+  border-radius: 8px;
+}
+
+.eyebrow {
+  font-size: 0.85rem;
+  text-transform: none;
+  margin: 0 0 0.5rem;
+  opacity: 0.85;
+}
+
+.nibblesList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.nibblesTitle {
+  font-size: 1.1rem;
+  margin: 0 0 0.35rem;
+  font-weight: 600;
+}
+
+.nibblesLink {
+  font-size: 0.95rem;
+}
+
+.pollOpts {
+  margin: 0.5rem 0 1rem;
+  padding-left: 1.25rem;
+}
+
+.pollTeaser,
+.pollLastQ {
+  font-size: 0.9rem;
+  margin: 0.75rem 0 0;
+}
+
+.pollResults {
+  list-style: none;
+  padding: 0;
+  margin: 0.75rem 0 0;
+  font-size: 0.9rem;
+}
