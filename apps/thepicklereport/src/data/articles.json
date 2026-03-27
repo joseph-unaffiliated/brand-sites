@@ -1,46 +1,46 @@
 [
   {
     "slug": "sarah",
-    "title": "Sarah's List",
-    "kicker": "Hookup Lists",
-    "subtitle": "Age 41. Female. Straight.",
-    "summary": "Age 41. Female. Straight. From the sixth grade romantic to the clumsy writer—fifteen years, two kids, one mortgage.",
-    "mainImage": "/hl-photo.png",
+    "title": "Pickle Priest and the Brine Belt",
+    "kicker": "The Pickle Report",
+    "subtitle": "A field guide to this week's biggest pickle story.",
+    "summary": "From roadside pickle shrines to championship brine debates, here is what mattered this week in pickle culture.",
+    "mainImage": "/next.svg",
     "mainImageWidth": 900,
     "mainImageHeight": 600,
-    "photoCredit": "Hookup Lists",
-    "brandExplainer": "Hookup Lists is a weekly chronicle of the highlights (and lowlights) from one person's actual hookup history.",
+    "photoCredit": "The Pickle Report",
+    "brandExplainer": "The Pickle Report is a weekly briefing on pickle news, culture, and controversy.",
     "publishedDate": null,
     "entries": [
       {
-        "age": "Age 12",
-        "title": "The Sixth Grade Romantic",
-        "body": "First kiss. A Blues Brothers dance at the JCC. He gave me a Presidents of the United States of America CD for Valentine's Day. No tongue. No sparks. But my diary entry was basically fireworks."
+        "age": "Segment 1",
+        "title": "The Pickle Priest Arrives",
+        "body": "A small town in Wisconsin swears its annual pickle blessing boosts crop yields. This year the line wrapped around three blocks and sold out by noon."
       },
       {
-        "age": "Age 16",
-        "title": "The Camp Crush",
-        "body": "We were both counselors at Jewish summer camp. Lean, aloof, smelled like sunscreen and Marlboros. I was obsessed. He came out four years later, which honestly just confirmed his hotness."
+        "age": "Segment 2",
+        "title": "Polish Challenge Favorites",
+        "body": "Three family-run brineries emerged as early favorites in the 2026 Polish pickling challenge, with judges split on garlic-forward versus dill-first profiles."
       },
       {
-        "age": "Age 21",
-        "title": "The Awkward First Time",
-        "body": "Childhood friend turned \"first time\". I confessed my virginity. He said, \"We should fix that.\" We did. It was awkward and oddly bureaucratic."
+        "age": "Segment 3",
+        "title": "Crispness Science",
+        "body": "Food scientists keep arguing over tannins, calcium chloride, and fermentation temperature. The verdict: technique matters more than one magic ingredient."
       },
       {
-        "age": "Age 22",
-        "title": "The Internet Cafe Find",
-        "body": "I met him at an internet cafe in Thailand. On our second night shagging, I bit his shoulder. He ghosted. My sexual experimentation phase lasted exactly one nibble."
+        "age": "Segment 4",
+        "title": "Supermarket Shelf Watch",
+        "body": "New premium jars are landing with louder flavor labels and smaller batch claims, but price-per-ounce is climbing faster than expected."
       },
       {
-        "age": "Age 26",
-        "title": "The Almost Forever",
-        "body": "We moved in together. He was open to converting for me. After a year and a half, we outgrew each other in slow motion. We broke up when he left for grad school and I was so relieved."
+        "age": "Segment 5",
+        "title": "Community Favorite",
+        "body": "Readers crowned spicy half-sours as the best overall pickle for burgers, while bread-and-butter remained the most divisive option by far."
       },
       {
-        "age": "Age 27",
-        "title": "The Clumsy Writer",
-        "body": "A journalist that spilled wine all over himself on our first date. It was a setup. I told him I wasn't looking for anything serious. He said he only did serious. Fifteen years, two kids, and one mortgage later, he was right."
+        "age": "Segment 6",
+        "title": "What To Watch Next Week",
+        "body": "A national pickleball chain is testing a pickle-themed concession menu. We will report back on whether the snacks are novelty or genuinely good."
       }
     ],
     "disclaimer": "Disclaimer: All names and identifiable details have been modified to protect the reputations of our contributors in the eyes of their partners, colleagues, and parents."

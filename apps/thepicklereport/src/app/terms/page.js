@@ -1,8 +1,8 @@
 import styles from "../basic-page.module.css";
 
 export const metadata = {
-  title: "Terms of Use | Hookup Lists",
-  description: "Terms of Use for Hookup Lists and Unaffiliated Inc. services.",
+  title: "Terms of Use | The Pickle Report",
+  description: "Terms of Use for The Pickle Report and Unaffiliated Inc. services.",
 };
 
 export default function TermsPage() {

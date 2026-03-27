@@ -30,7 +30,7 @@ export default async function Home({ searchParams: searchParamsProp }) {
       <section className={styles.hero}>
         <div className="container">
           <p className={styles.heroTagline}>
-            Real hookup histories, one list at a time.
+            The world&apos;s leading pickle news source.
           </p>
           {totalCount > 0 && (
             <p className={styles.heroMeta}>
@@ -65,7 +65,7 @@ export default async function Home({ searchParams: searchParamsProp }) {
                     />
                   </div>
                   <div className={styles.mosaicCardBody}>
-                    {article.kicker && article.kicker.trim().toLowerCase() !== "hookup lists" && (
+                    {article.kicker && article.kicker.trim().toLowerCase() !== "the pickle report" && (
                       <p className={styles.mosaicCardKicker}>{article.kicker}</p>
                     )}
                     <h3 className={styles.mosaicCardHeadline}>{article.title}</h3>

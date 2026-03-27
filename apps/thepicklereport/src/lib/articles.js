@@ -8,7 +8,7 @@ const layer = createSanityLayer({
 
 const queries = createArticleQueries({
   ...layer,
-  fallbackImage: "/hl-photo.png",
+  fallbackImage: process.env.NEXT_PUBLIC_SITE_OG_IMAGE || "/next.svg",
 });
 
 export { ensureDescriptionOnly, getDemographicAndDescription };

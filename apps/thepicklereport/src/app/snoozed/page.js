@@ -41,7 +41,7 @@ function SnoozedContent() {
           <p className={styles.body}>Setting up your snooze&hellip;</p>
         )}
         {status === 'done' && (
-          <p className={styles.body}>You&apos;ve been snoozed from Hookup Lists. We&apos;ll see you again in 3 months.</p>
+          <p className={styles.body}>You&apos;ve been snoozed from The Pickle Report. We&apos;ll see you again in 3 months.</p>
         )}
         {status === 'error' && (
           <p className={styles.body}>

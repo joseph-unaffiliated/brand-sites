@@ -3,7 +3,7 @@
 import { Suspense, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-const BRAND = "hookuplists";
+const BRAND = "thepicklereport";
 
 function DevMarkSubscribedInner() {
   const router = useRouter();

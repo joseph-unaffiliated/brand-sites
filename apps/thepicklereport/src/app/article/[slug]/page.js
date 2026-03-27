@@ -20,9 +20,9 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const article = await getArticleBySlug(slug);
-  if (!article) return { title: "Hookup Lists" };
+  if (!article) return { title: "The Pickle Report" };
   return {
-    title: `${article.title} | Hookup Lists`,
+    title: `${article.title} | The Pickle Report`,
     description: article.summary || article.subtitle,
   };
 }
@@ -61,7 +61,7 @@ export default async function ArticlePage({ params, searchParams: searchParamsPr
               </div>
               <div className="spacer-1-5rem" />
               <div className="headline-block">
-                {article.kicker && article.kicker.trim().toLowerCase() !== "hookup lists" && (
+                {article.kicker && article.kicker.trim().toLowerCase() !== "the pickle report" && (
                   <p className={styles.kicker}>{article.kicker}</p>
                 )}
                 <h1 className="headline-text">{article.title}</h1>
@@ -128,7 +128,7 @@ export default async function ArticlePage({ params, searchParams: searchParamsPr
               <div className="newslettercta-block">
                 <div className="newslettercta-prompt">
                   <span>Subscribe for more from </span>
-                  <span>Hookup Lists</span>
+                  <span>The Pickle Report</span>
                   <span className="italic">, weekly in your inbox</span>
                 </div>
                 <ArticleSubscribeForm initialEmail={initialEmail} />
@@ -154,7 +154,7 @@ export default async function ArticlePage({ params, searchParams: searchParamsPr
                         sizes="(max-width: 640px) 100vw, 280px"
                       />
                     </div>
-                    {rec.kicker && rec.kicker.trim().toLowerCase() !== "hookup lists" && (
+                    {rec.kicker && rec.kicker.trim().toLowerCase() !== "the pickle report" && (
                       <p className={styles.readMoreKicker}>{rec.kicker}</p>
                     )}
                     <h3 className={styles.readMoreHeadline}>{rec.title}</h3>

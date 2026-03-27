@@ -8,12 +8,12 @@ export default function SubscribeBlock({ layout = "stack", initialEmail }) {
     <div className={`${styles.root} ${isBanner ? styles.rootBanner : ""}`}>
       <div className={isBanner ? styles.bannerText : undefined}>
         <p id="subscribe-popup-title" className={styles.title}>
-          Hookup stories, in all their shame and glory
+          The World&apos;s Leading Pickle News Source
         </p>
         <p className={styles.dek}>
-          Each week, one person takes us through some of the wildest moments
-          along their journey of exploring their relationship to sex and
-          connection – delivered straight to your inbox.
+          When the world turns to chaos, we turn to pickles. Salty, crunchy,
+          dilly, and never sweet because we&apos;re not psychopaths. Weekly pickle
+          coverage, delivered to your inbox.
         </p>
       </div>
       <div className={isBanner ? styles.bannerForm : undefined}>

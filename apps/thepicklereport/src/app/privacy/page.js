@@ -2,8 +2,8 @@ import Link from "next/link";
 import styles from "../basic-page.module.css";
 
 export const metadata = {
-  title: "Privacy Policy | Hookup Lists",
-  description: "Privacy Policy for Hookup Lists and Unaffiliated Inc. services.",
+  title: "Privacy Policy | The Pickle Report",
+  description: "Privacy Policy for The Pickle Report and Unaffiliated Inc. services.",
 };
 
 export default function PrivacyPage() {

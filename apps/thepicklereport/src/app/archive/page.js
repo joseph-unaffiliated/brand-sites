@@ -14,7 +14,7 @@ export default async function ArchivePage() {
             <p className={styles.kicker}>Archive</p>
             <h1>Past issues</h1>
             <p>
-              Browse the full library of Hookup Lists issues. Each entry
+              Browse the full library of The Pickle Report issues. Each entry
               includes a summary, themes, and links.
             </p>
           </div>
@@ -45,7 +45,7 @@ export default async function ArchivePage() {
               <div>
                 <p className={styles.issueDate}>—</p>
                 <h3>More issues coming soon</h3>
-                <p>New lists drop weekly. Subscribe to get them in your inbox.</p>
+                <p>New issues drop weekly. Subscribe to get them in your inbox.</p>
               </div>
               <a className={styles.readLink} href="/#subscribe">
                 Subscribe →

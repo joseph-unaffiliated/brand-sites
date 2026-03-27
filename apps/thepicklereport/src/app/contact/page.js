@@ -9,7 +9,7 @@ export default function ContactPage() {
           Have a question, suggestion, or collaboration idea? Reach out and we
           will get back to you.
         </p>
-        <p className={styles.note}>Email: hello@hookuplists.com</p>
+        <p className={styles.note}>Email: contact@thepicklereport.com</p>
       </div>
     </div>
   );

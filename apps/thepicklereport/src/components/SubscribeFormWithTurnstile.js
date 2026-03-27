@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Turnstile } from "next-turnstile";
 import styles from "./SubscribeBlock.module.css";
 
-const MAGIC_BASE = "https://magic.hookuplists.com/";
+const MAGIC_BASE = "https://magic.thepicklereport.com/";
 const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
 function isLocalhost() {
@@ -36,7 +36,7 @@ export default function SubscribeFormWithTurnstile({ initialEmail, layout = "sta
         const v = u.searchParams.get(k);
         if (v) params.set(k, v);
       });
-      if (!params.has("utm_source")) params.set("utm_source", "hookuplists");
+      if (!params.has("utm_source")) params.set("utm_source", "thepicklereport");
       if (!params.has("utm_campaign")) params.set("utm_campaign", "form_submit");
     }
     if (token) params.set("cf-turnstile-response", token);

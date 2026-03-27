@@ -121,7 +121,7 @@ export default function ProfilePage() {
         </p>
         {subscribedAt && (
           <p className={styles.accountLine}>
-            <strong>Subscribed to Hookup Lists since:</strong> {formatDate(subscribedAt) ?? subscribedAt}
+            <strong>Subscribed to The Pickle Report since:</strong> {formatDate(subscribedAt) ?? subscribedAt}
           </p>
         )}
         <p className={styles.accountLine}>
@@ -136,7 +136,7 @@ export default function ProfilePage() {
         {loading ? (
           <p className={styles.loading}>Loading…</p>
         ) : apiError ? (
-          <p className={styles.error}>Could not load subscriptions. You can still manage Hookup Lists below.</p>
+          <p className={styles.error}>Could not load subscriptions. You can still manage The Pickle Report below.</p>
         ) : null}
         {!loading && (
           <ul className={styles.brandList}>

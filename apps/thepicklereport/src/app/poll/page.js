@@ -29,7 +29,7 @@ function PollContent() {
         {isSubscribed && (
           <p className={styles.thanks}>
             {subscribeStatus === 'success'
-              ? "You're now subscribed to Hookup Lists — thanks for voting!"
+              ? "You're now subscribed to The Pickle Report — thanks for voting!"
               : subscribeStatus === 'error'
               ? "We had trouble confirming your subscription, but your vote was counted."
               : "Thanks for subscribing and voting!"}

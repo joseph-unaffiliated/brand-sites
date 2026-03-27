@@ -54,7 +54,7 @@ function SubscribedContent() {
         <h1 className={styles.heading}>You&apos;re in.</h1>
 
         {status === 'confirming' && (
-          <p className={styles.body}>Confirming your subscription to Hookup Lists&hellip;</p>
+          <p className={styles.body}>Confirming your subscription to The Pickle Report&hellip;</p>
         )}
         {status === 'success' && (
           <p className={styles.body}>Thanks for subscribing, check your inbox for our welcome email.</p>

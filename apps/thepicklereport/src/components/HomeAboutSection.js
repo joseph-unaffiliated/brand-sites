@@ -13,17 +13,17 @@ export default function HomeAboutSection({ totalCount = 0 }) {
         <div className={styles.subscribeInner}>
           <div className={styles.subscribeCopy}>
             <h2 className={styles.subscribeHeadline}>
-              More about Hookup Lists
+              More about The Pickle Report
             </h2>
             <p className={styles.lede}>
-              <em>Hookup Lists</em> is a weekly chronicle of one (anonymized)
-              person&apos;s real-life hookup history, from preteen crushes to
-              awkward midlife flings. Each week, someone volunteers as tribute
-              and walks us through their personal highlight (and lowlight) reel.
+              <em>The Pickle Report</em> tracks the stories, trends, and oddities
+              that keep pickle culture thriving. From regional rivalries and
+              brine debates to pickle festivals and pantry staples, each issue
+              delivers a sharp, fun look at the pickle world.
               {totalCount > 0 && (
                 <>
                   {" "}
-                  We&apos;ve published <strong>{totalCount} lists</strong> so
+                  We&apos;ve published <strong>{totalCount} issues</strong> so
                   far
                   {isSubscribed
                     ? " — with a new one in your inbox every week."
