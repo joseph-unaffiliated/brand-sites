@@ -1,5 +1,10 @@
 import { createSanityLayer, createArticleQueries } from "@publication-websites/sanity-content";
-import { ensureDescriptionOnly, getDemographicAndDescription } from "./article-helpers.js";
+import {
+  ensureDescriptionOnly,
+  getDemographicAndDescription,
+  stripLeadingDuplicate,
+  dedupeSubtitleInContentBlocks,
+} from "./article-helpers.js";
 
 const layer = createSanityLayer({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
@@ -11,7 +16,12 @@ const queries = createArticleQueries({
   fallbackImage: process.env.NEXT_PUBLIC_SITE_OG_IMAGE || "/next.svg",
 });
 
-export { ensureDescriptionOnly, getDemographicAndDescription };
+export {
+  ensureDescriptionOnly,
+  getDemographicAndDescription,
+  stripLeadingDuplicate,
+  dedupeSubtitleInContentBlocks,
+};
 
 export async function getArticles() {
   return queries.getArticles();

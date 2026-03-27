@@ -20,7 +20,7 @@
 .body {
   font-size: 1.125rem;
   line-height: 1.6;
-  color: var(--color-text-muted, #555);
+  color: var(--color-text-muted);
 }
 
 .actions {
@@ -46,7 +46,7 @@
   border: none;
   padding: 0;
   margin-top: 1.5rem;
-  color: var(--color-text-muted, #999);
+  color: var(--text-muted-light);
   font-size: 0.875rem;
   text-decoration: underline;
   cursor: pointer;

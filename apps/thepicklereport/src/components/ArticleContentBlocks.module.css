@@ -11,20 +11,185 @@
 .blockHeading {
   font-size: 1.35rem;
   font-weight: 600;
-  margin: 0 0 1rem;
+  margin: 0;
+  padding-bottom: 1.25rem;
   line-height: 1.25;
+}
+
+/* Pickle Economics module (email-style card) */
+.economicsModule {
+  padding: 1.75rem 1.5rem 2rem;
+  background: hsl(66 12% 90%);
+  border-radius: 12px;
+  text-align: center;
+}
+
+.economicsLabelRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  margin: 0 0 0.75rem;
+}
+
+.economicsIcon {
+  font-size: 1.1rem;
+  line-height: 1;
+  filter: saturate(1.2);
+}
+
+.economicsLabelText {
+  font-family: "halyard-display", "Helvetica Neue", Arial, sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.economicsMainTitle {
+  font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
+  font-size: clamp(1.35rem, 3.5vw, 1.65rem);
+  font-weight: 300;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin: 0;
+  padding-bottom: 1.25rem;
+  color: var(--text-primary);
+}
+
+.economicsIntro {
+  font-family: "halyard-display", "Helvetica Neue", Arial, sans-serif;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--text-secondary);
+  margin: 0 auto 1.25rem;
+  max-width: 38em;
+  text-align: center;
+}
+
+/* Did you know / market share chart (split from Portable Text — matches email card) */
+.marketShareModule {
+  margin: 1.75rem 0;
+  text-align: left;
+}
+
+.marketShareModule .economicsLabelRow {
+  justify-content: flex-start;
+}
+
+.marketShareModule .economicsMainTitle {
+  text-align: left;
+  margin-bottom: 0;
+  padding-bottom: 1.15rem;
+}
+
+.marketShareIntro {
+  font-family: "halyard-display", "Helvetica Neue", Arial, sans-serif;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  margin: 0 0 1rem;
+  text-align: left;
+  max-width: none;
+}
+
+.marketShareIntro :global(p) {
+  margin: 0 0 0.5rem;
+  text-align: left;
+}
+
+.marketShareIntro :global(p:last-child) {
+  margin-bottom: 0;
+}
+
+.economicsChartWrap {
+  margin: 0 auto;
+  max-width: 100%;
+}
+
+.economicsChart {
+  border-radius: 12px;
+}
+
+.economicsProse {
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.economicsProse :global(p) {
+  text-align: center;
+}
+
+.economicsProse :global(ul),
+.economicsProse :global(ol) {
+  text-align: left;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 100%;
+}
+
+/* Festival list below map: left-aligned, underlined serif titles */
+.economicsFestivalList {
+  text-align: left;
+}
+
+.economicsFestivalList .blockHeading {
+  text-align: center;
+  font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
+  font-weight: 300;
+  font-size: 1.35rem;
+}
+
+.economicsFestivalList .listicle {
+  margin-top: 0.5rem;
+}
+
+.festivalItemTitle {
+  font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
+  font-weight: 400;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .prose {
   line-height: 1.65;
+  font-size: var(--text-lead);
 }
 
 .prose p {
-  margin: 0 0 1rem;
+  margin: 0 0 1.25rem;
+  color: var(--text-secondary);
 }
 
 .prose p:last-child {
   margin-bottom: 0;
+}
+
+/* Inline images: use padding-top (not margin-top) so space *adds* to the previous <p> margin.
+   Otherwise margin collapses with the paragraph and the gap stays ~1.25rem. */
+.proseFigure {
+  margin-top: 0;
+  padding-top: 2rem;
+  margin-bottom: 1rem;
+  box-sizing: border-box;
+}
+
+/* Explicit gap after body copy before the next image (e.g. "2. Cup O' Noodles…" → donuts) */
+.prose p + .proseFigure {
+  padding-top: 3.25rem;
+}
+
+.prose > .proseFigure:first-child {
+  padding-top: 0;
+}
+
+.proseFigure:has(.caption) {
+  margin-bottom: 0;
+}
+
+.proseFigure .caption {
+  margin-bottom: 1.15rem;
 }
 
 .figure {
@@ -34,14 +199,33 @@
 .blockImage {
   width: 100%;
   height: auto;
-  border-radius: 4px;
+  border-radius: 12px;
 }
 
 .caption {
-  font-size: 0.85rem;
-  color: var(--muted, #555);
-  margin: 0.5rem 0 0;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin: 0.3rem 0 0;
   text-align: center;
+  line-height: 1.35;
+}
+
+.captionSep {
+  opacity: 0.7;
+}
+
+.credit {
+  font-style: normal;
+}
+
+.proseLink {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.proseLink:hover {
+  color: var(--accent-strong);
 }
 
 .listicle {
@@ -55,7 +239,12 @@
 }
 
 .listicleImageWrap {
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.35rem;
+}
+
+.listicleImageWrap .caption {
+  margin-top: 0.3rem;
+  margin-bottom: 1rem;
 }
 
 .listicleCopy {
@@ -75,7 +264,7 @@
 .poll,
 .nibbles {
   padding: 1.5rem;
-  background: #f6f6f6;
+  background: hsl(66 12% 90%);
   border-radius: 8px;
 }
 
@@ -105,9 +294,45 @@
   font-size: 0.95rem;
 }
 
-.pollOpts {
-  margin: 0.5rem 0 1rem;
-  padding-left: 1.25rem;
+.pollOptionList {
+  list-style: none;
+  margin: 0.75rem 0 1rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.pollOptionRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  line-height: 1.4;
+}
+
+.pollLetter {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.75rem;
+  height: 1.75rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  background: hsl(66 30% 97%);
+}
+
+.pollOptionText {
+  flex: 1;
+  min-width: 0;
+  color: var(--text-primary);
 }
 
 .pollTeaser,
@@ -121,4 +346,38 @@
   padding: 0;
   margin: 0.75rem 0 0;
   font-size: 0.9rem;
+}
+
+.photoOfWeekFigure {
+  margin-top: 0.5rem;
+}
+
+.photoOfWeekFigure .caption {
+  margin-top: 0.35rem;
+  margin-bottom: 1.15rem;
+}
+
+.photoOfWeekTitle {
+  font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
+  font-size: 1.35rem;
+  font-weight: 300;
+  text-align: center;
+  margin: 0;
+  padding-bottom: 1.15rem;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+.photoOfWeekPlaceholder {
+  width: 100%;
+  min-height: 140px;
+  border-radius: 12px;
+  border: 1px dashed var(--border);
+  background: hsl(66 8% 97%);
+}
+
+.photoOfWeekFallback {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
 }

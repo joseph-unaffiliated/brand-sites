@@ -90,10 +90,11 @@ export default function RootLayout({ children }) {
               <div className="footer-brand">
                 <Link href="/" className="footer-logo" aria-label="The Pickle Report">
                   <Image
-                    src="/tpr-logo-white.png"
+                    src="/tpr-wordmark-white.png"
                     alt="The Pickle Report"
-                    width={131}
-                    height={96}
+                    width={240}
+                    height={40}
+                    style={{ width: "100%", height: "auto" }}
                   />
                 </Link>
                 <p className="footer-text">

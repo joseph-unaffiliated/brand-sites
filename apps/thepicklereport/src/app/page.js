@@ -1,7 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { isPartPlaceholderAge } from "@publication-websites/sanity-content";
-import { getArticles, getDemographicAndDescription } from "@/lib/articles";
+import {
+  getArticles,
+  getDemographicAndDescription,
+  stripLeadingDuplicate,
+} from "@/lib/articles";
 import SubscribeBlock from "@/components/SubscribeBlock";
 import HideWhenSubscribed from "@/components/HideWhenSubscribed";
 import HomeSnippetsList from "@/components/HomeSnippetsList";
@@ -115,8 +119,14 @@ export default async function Home({ searchParams: searchParamsProp }) {
                   {featured.entries?.length > 0 && (
                     <div className={styles.featuredEntryPreview}>
                       {featured.entries.slice(0, 5).map((entry, i) => {
-                        const snippet = (entry.body || "").trim();
-                        const preview = snippet.length > 100 ? `${snippet.slice(0, 100).trim()}…` : snippet;
+                        const stripPrefix =
+                          featuredDemographic || (featured.subtitle || "").trim();
+                        let snippet = (entry.body || "").trim();
+                        snippet = stripLeadingDuplicate(snippet, stripPrefix);
+                        const preview =
+                          snippet.length > 100
+                            ? `${snippet.slice(0, 100).trim()}…`
+                            : snippet;
                         return (
                           <div key={i} className={styles.featuredEntryBlock}>
                             <div className={styles.featuredEntryLine}>

@@ -9,6 +9,146 @@
 import { createClient } from "next-sanity";
 import { createImageUrlBuilder } from "@sanity/image-url";
 
+/**
+ * Expand nested image references inside content blocks so listicle images,
+ * chart images, and portable-text images resolve in the browser.
+ */
+const articleContentBlocksProjection = `contentBlocks[] {
+  _key,
+  _type,
+  _type == "proseSection" => {
+    _key,
+    _type,
+    heading,
+    body[] {
+      ...,
+      _type == "image" => {
+        _type,
+        _key,
+        caption,
+        credit,
+        asset->{
+          _id,
+          _ref,
+          url,
+          metadata {
+            dimensions { width, height }
+          }
+        },
+        hotspot
+      }
+    }
+  },
+  _type == "imageBlock" => {
+    _key,
+    _type,
+    caption,
+    credit,
+    linkUrl,
+    image {
+      asset->{
+        _id,
+        _ref,
+        url,
+        metadata {
+          dimensions { width, height }
+        }
+      },
+      hotspot
+    }
+  },
+  _type == "listicleSection" => {
+    _key,
+    _type,
+    heading,
+    items[] {
+      _key,
+      itemNumber,
+      title,
+      body,
+      caption,
+      credit,
+      image {
+        asset->{
+          _id,
+          _ref,
+          url,
+          metadata {
+            dimensions { width, height }
+          }
+        },
+        hotspot
+      }
+    }
+  },
+  _type == "didYouKnowBlock" => {
+    _key,
+    _type,
+    eyebrow,
+    title,
+    description,
+    chartImage {
+      asset->{
+        _id,
+        _ref,
+        url,
+        metadata {
+          dimensions { width, height }
+        }
+      },
+      hotspot
+    }
+  },
+  _type == "nibblesBlock" => {
+    _key,
+    _type,
+    heading,
+    items[] {
+      _key,
+      title,
+      url,
+      ctaLabel
+    }
+  },
+  _type == "pollBlock" => {
+    _key,
+    _type,
+    heading,
+    question,
+    answerTeaser,
+    lastWeekQuestion,
+    options[] {
+      _key,
+      code,
+      text
+    },
+    lastWeekResults[] {
+      _key,
+      isCorrect,
+      percent,
+      label
+    }
+  },
+  _type == "photoOfWeekBlock" => {
+    _key,
+    _type,
+    heading,
+    credit,
+    caption,
+    image {
+      asset->{
+        _id,
+        _ref,
+        url,
+        metadata {
+          dimensions { width, height }
+        }
+      },
+      hotspot
+    }
+  }
+}`;
+
 /** All articles, for list/archive. */
 export const articlesQuery = `*[_type == "article"] | order(publishedDate desc, _updatedAt desc) {
   _id,
@@ -25,7 +165,7 @@ export const articlesQuery = `*[_type == "article"] | order(publishedDate desc, 
   publishedDate,
   entries[] { _key, age, title, body },
   disclaimer,
-  contentBlocks
+  ${articleContentBlocksProjection}
 }`;
 
 /** One article by slug. */
@@ -44,7 +184,7 @@ export const articleBySlugQuery = `*[_type == "article" && slug.current == $slug
   publishedDate,
   entries[] { _key, age, title, body },
   disclaimer,
-  contentBlocks
+  ${articleContentBlocksProjection}
 }`;
 
 /** Slugs only, for generateStaticParams. */

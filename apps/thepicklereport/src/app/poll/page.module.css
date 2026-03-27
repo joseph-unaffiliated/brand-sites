@@ -14,7 +14,7 @@
 
 .thanks {
   font-size: 1rem;
-  color: var(--color-text-muted, #555);
+  color: var(--color-text-muted);
   margin-bottom: 2rem;
 }
 
@@ -26,5 +26,5 @@
 .body {
   font-size: 1.125rem;
   line-height: 1.6;
-  color: var(--color-text-muted, #555);
+  color: var(--color-text-muted);
 }

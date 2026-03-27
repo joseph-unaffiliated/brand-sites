@@ -1,8 +1,12 @@
 .root {
   background:
-    linear-gradient(rgba(20, 0, 35, 0.4), rgba(20, 0, 35, 0.4)),
-    linear-gradient(to bottom, #4E00B0, #3C002B);
-  color: #e8eeeb;
+    linear-gradient(var(--subscribe-overlay), var(--subscribe-overlay)),
+    linear-gradient(
+      to bottom,
+      var(--subscribe-grad-top),
+      var(--subscribe-grad-bottom)
+    );
+  color: var(--text-on-dark);
   border-radius: var(--radius);
   padding: 1.25rem 1.25rem;
   display: flex;
@@ -71,7 +75,7 @@
   padding: 0;
   border: none;
   background: transparent;
-  color: #e8eeeb;
+  color: var(--text-on-dark);
   font-size: 18px;
   line-height: 1;
   cursor: pointer;

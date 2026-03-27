@@ -2,7 +2,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { isPartPlaceholderAge } from "@publication-websites/sanity-content";
-import { getArticleBySlug, getArticleSlugs, getArticles, ensureDescriptionOnly } from "@/lib/articles";
+import {
+  getArticleBySlug,
+  getArticleSlugs,
+  getArticles,
+  dedupeSubtitleInContentBlocks,
+} from "@/lib/articles";
 import HideWhenSubscribed from "@/components/HideWhenSubscribed";
 import RecordArticleView from "@/components/RecordArticleView";
 import ArticleSubscribeForm from "@/components/ArticleSubscribeForm";
@@ -51,20 +56,31 @@ export default async function ArticlePage({ params, searchParams: searchParamsPr
 
   const entries = article.entries ?? [];
   const midIndex = Math.floor(entries.length / 2);
+  const contentBlocks = article.contentBlocks ?? [];
+  const showBlocks =
+    Array.isArray(contentBlocks) &&
+    contentBlocks.length > 0 &&
+    Boolean(SANITY_PROJECT_ID);
+
+  const contentBlocksForRender = showBlocks
+    ? dedupeSubtitleInContentBlocks(contentBlocks, article.subtitle)
+    : contentBlocks;
 
   return (
     <div className={styles.page}>
       <RecordArticleView slug={slug} />
       <ArticleAdStickyBottom />
       <section className="articlebody-section">
-        {/* Centered hero block: headline + image (no rail beside) */}
-        <div className={styles.articleHeroBlock}>
+        {/* Centered hero: headline + optional cover image (legacy entries only) */}
+        <div
+          className={`${styles.articleHeroBlock} ${showBlocks ? styles.articleHeroBlockInline : ""}`}
+        >
           <div className={styles.articleHero}>
             <div className={styles.articleHeroContent}>
               <div className={styles.backLink}>
                 <Link href="/archive">← Back to archive</Link>
               </div>
-              <div className="spacer-1-5rem" />
+              <div className="spacer-2-5rem" />
               <div className="headline-block">
                 {article.kicker && article.kicker.trim().toLowerCase() !== "the pickle report" && (
                   <p className={styles.kicker}>{article.kicker}</p>
@@ -74,31 +90,42 @@ export default async function ArticlePage({ params, searchParams: searchParamsPr
                   <p>{article.subtitle}</p>
                 </div>
               </div>
-              <div className="spacer-4rem" />
+              {showBlocks ? (
+                <hr className={styles.articleHeaderRule} aria-hidden />
+              ) : (
+                <div className="spacer-4rem" />
+              )}
             </div>
           </div>
-          <div className={styles.articleHeroImage}>
-            <div className="mainimage-block">
-              <Image
-                src={article.mainImage}
-                alt=""
-                width={article.mainImageWidth || 900}
-                height={article.mainImageHeight || 600}
-                priority
-                className={styles.mainImage}
-              />
+          {!showBlocks && (
+            <div className={styles.articleHeroImage}>
+              <div className="mainimage-block">
+                <Image
+                  src={article.mainImage}
+                  alt=""
+                  width={article.mainImageWidth || 900}
+                  height={article.mainImageHeight || 600}
+                  priority
+                  className={styles.mainImage}
+                />
+                {article.photoCredit ? (
+                  <p className={styles.heroPhotoCredit}>{article.photoCredit}</p>
+                ) : null}
+              </div>
             </div>
-          </div>
+          )}
         </div>
         {/* Grid: copy left, rail right (rail only here, not beside hero) */}
-        <div className={styles.articleBodyGrid}>
+        <div
+          className={`${styles.articleBodyGrid} ${showBlocks ? styles.articleBodyGridBlocksFirst : ""}`}
+        >
         <div className={styles.articleMain}>
           <div className={styles.articleContainerNoPadding}>
             <div className="articlecopy-wrapper">
                 <div className="articlecopy-richtext">
                   {showBlocks && SANITY_PROJECT_ID ? (
                     <ArticleContentBlocks
-                      blocks={contentBlocks}
+                      blocks={contentBlocksForRender}
                       projectId={SANITY_PROJECT_ID}
                       dataset={SANITY_DATASET}
                     />

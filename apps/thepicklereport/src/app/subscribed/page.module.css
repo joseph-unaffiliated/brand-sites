@@ -20,7 +20,7 @@
 .body {
   font-size: 1.125rem;
   line-height: 1.6;
-  color: var(--color-text-muted, #555);
+  color: var(--color-text-muted);
 }
 
 .actions {

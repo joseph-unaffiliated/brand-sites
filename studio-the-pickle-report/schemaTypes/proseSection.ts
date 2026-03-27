@@ -10,7 +10,17 @@ export const proseSectionType = defineType({
       name: 'body',
       title: 'Body',
       type: 'array',
-      of: [defineArrayMember({type: 'block'})],
+      of: [
+        defineArrayMember({type: 'block'}),
+        defineArrayMember({
+          type: 'image',
+          options: {hotspot: true},
+          fields: [
+            defineField({name: 'caption', title: 'Caption', type: 'string'}),
+            defineField({name: 'credit', title: 'Credit / courtesy line', type: 'string'}),
+          ],
+        }),
+      ],
     }),
   ],
   preview: {

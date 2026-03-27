@@ -68,9 +68,9 @@ export default function Header() {
         <div className="brand">
           <Link href="/" className="brand-name" onClick={() => setMenuOpen(false)}>
             <Image
-              src="/tpr-logo.svg"
+              src="/tpr-wordmark-black.png"
               alt="The Pickle Report"
-              width={180}
+              width={240}
               height={40}
               priority
               className="brand-logo-img"

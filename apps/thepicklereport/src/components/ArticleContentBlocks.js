@@ -1,22 +1,37 @@
 import Image from "next/image";
 import Link from "next/link";
 import { PortableText } from "next-sanity";
-import imageUrlBuilder from "@sanity/image-url";
+import { createImageUrlBuilder } from "@sanity/image-url";
 import styles from "./ArticleContentBlocks.module.css";
 
 function urlForImage(projectId, dataset, source) {
-  if (!projectId || !dataset || !source?.asset?._ref) return null;
+  if (!projectId || !dataset || !source?.asset) return null;
+  const a = source.asset;
+  const ref = a._ref || (typeof a._id === "string" ? a._id : null);
+  if (!ref) return null;
   try {
-    return imageUrlBuilder({ projectId, dataset }).image(source).width(1400).url();
+    const normalized = { ...source, asset: { _ref: ref } };
+    return createImageUrlBuilder({ projectId, dataset })
+      .image(normalized)
+      .width(1400)
+      .url();
   } catch {
     return null;
   }
 }
 
 function dims(source) {
-  const w = source?.asset?.metadata?.dimensions?.width;
-  const h = source?.asset?.metadata?.dimensions?.height;
+  const dim = source?.asset?.metadata?.dimensions;
+  const w = dim?.width;
+  const h = dim?.height;
   return { w: w || 900, h: h || 600 };
+}
+
+function orderPhotoOfWeekLast(blocks) {
+  if (!Array.isArray(blocks)) return [];
+  const pow = blocks.filter((b) => b?._type === "photoOfWeekBlock");
+  const rest = blocks.filter((b) => b?._type !== "photoOfWeekBlock");
+  return [...rest, ...pow];
 }
 
 function hidePartHeading(heading) {
@@ -24,24 +39,221 @@ function hidePartHeading(heading) {
   return /^\s*part\s+\d+\s*$/i.test(heading.trim());
 }
 
+function isPickleEconomicsProseHeading(heading) {
+  if (typeof heading !== "string") return false;
+  return /pickle economics|major pickle festivals/i.test(heading.trim());
+}
+
+function isPickleEconomicsLabelOnlyHeading(heading) {
+  if (typeof heading !== "string") return false;
+  return /^pickle economics$/i.test(heading.trim());
+}
+
+function isPickleEconomicsDidYouKnow(block) {
+  const t = `${block?.title || ""} ${block?.eyebrow || ""}`;
+  return /pickle economics/i.test(t);
+}
+
+function isFestivalListicleHeading(heading) {
+  if (typeof heading !== "string") return false;
+  return /festival|picklesburgh|big dill|major pickle|economics/i.test(heading.trim());
+}
+
+function portableTextBlockPlainText(block) {
+  if (!block || block._type !== "block") return "";
+  return (block.children || []).map((c) => c.text || "").join("");
+}
+
+/** Copy duplicated from poll module; keep trivia only in pollBlock. */
+const DROPPED_PROSE_LINE_PATTERNS = [
+  /^\s*the answer will be shared in next week'?s issue\.?\s*$/i,
+  /^\s*last week'?s pickle trivia:?\s*$/i,
+];
+
+function shouldDropPollDuplicateProseBlock(b) {
+  if (b?._type !== "block") return false;
+  const t = portableTextBlockPlainText(b).trim();
+  if (!t) return false;
+  return DROPPED_PROSE_LINE_PATTERNS.some((re) => re.test(t));
+}
+
+function filterPollDuplicateProseLines(body) {
+  if (!Array.isArray(body)) return [];
+  return body.filter((b) => !shouldDropPollDuplicateProseBlock(b));
+}
+
+/** Market share chart in Pickle Addicts: intro paragraph + PT image (not a didYouKnow block). */
+function splitBodyAroundMarketShareChart(body) {
+  if (!Array.isArray(body)) {
+    return { head: [], chartIntro: null, chartImage: null, tail: [] };
+  }
+  const idx = body.findIndex(
+    (b, i) =>
+      b?._type === "block" &&
+      portableTextBlockPlainText(b).includes("Shares based on combined global pickle") &&
+      body[i + 1]?._type === "image",
+  );
+  if (idx < 0) {
+    return { head: body, chartIntro: null, chartImage: null, tail: [] };
+  }
+  return {
+    head: body.slice(0, idx),
+    chartIntro: body[idx],
+    chartImage: body[idx + 1],
+    tail: body.slice(idx + 2),
+  };
+}
+
+function portableTextComponents(projectId, dataset) {
+  return {
+    types: {
+      image: ({ value }) => {
+        const src = urlForImage(projectId, dataset, value);
+        if (!src) return null;
+        const { w, h } = dims(value);
+        return (
+          <figure className={`${styles.figure} ${styles.proseFigure}`}>
+            <Image
+              src={src}
+              alt=""
+              width={w}
+              height={h}
+              className={styles.blockImage}
+              sizes="(max-width: 900px) 100vw, 820px"
+            />
+            {(value?.caption || value?.credit) && (
+              <figcaption className={styles.caption}>
+                {value.caption ? <span>{value.caption}</span> : null}
+                {value.caption && value.credit ? (
+                  <span className={styles.captionSep}> · </span>
+                ) : null}
+                {value.credit ? (
+                  <span className={styles.credit}>{value.credit}</span>
+                ) : null}
+              </figcaption>
+            )}
+          </figure>
+        );
+      },
+    },
+    marks: {
+      link: ({ children, value }) => (
+        <a
+          href={value?.href}
+          rel="noopener noreferrer"
+          target="_blank"
+          className={styles.proseLink}
+        >
+          {children}
+        </a>
+      ),
+    },
+  };
+}
+
+const DEFAULT_PHOTO_OF_WEEK_HEADING = "Sexy Pic(kle) of the Week";
+
 export default function ArticleContentBlocks({ blocks, projectId, dataset }) {
+  const orderedBlocks = orderPhotoOfWeekLast(blocks ?? []);
+  const hasPhotoOfWeekBlock = orderedBlocks.some((b) => b?._type === "photoOfWeekBlock");
+
   if (!Array.isArray(blocks) || blocks.length === 0) return null;
 
   return (
     <div className={styles.blocks}>
-      {blocks.map((block) => {
+      {orderedBlocks.map((block) => {
         if (!block?._type) return null;
         const key = block._key || block._type;
 
         switch (block._type) {
           case "proseSection": {
             const showHeading = block.heading && !hidePartHeading(block.heading);
+            const economics = isPickleEconomicsProseHeading(block.heading);
+            const labelOnly = isPickleEconomicsLabelOnlyHeading(block.heading);
+            const ptComponents = portableTextComponents(projectId, dataset);
+            const body = filterPollDuplicateProseLines(block.body ?? []);
+            if (body.length === 0) {
+              return null;
+            }
+            const { head, chartIntro, chartImage, tail } = splitBodyAroundMarketShareChart(body);
+            const hasMarketShareModule = chartIntro && chartImage;
+            const proseBodyForEconomics = hasMarketShareModule
+              ? [...head, ...tail]
+              : body;
             return (
-              <section key={key} className={styles.block}>
-                {showHeading ? <h2 className={styles.blockHeading}>{block.heading}</h2> : null}
-                {Array.isArray(block.body) && block.body.length > 0 ? (
-                  <div className={styles.prose}>
-                    <PortableText value={block.body} />
+              <section
+                key={key}
+                className={`${styles.block} ${economics ? styles.economicsModule : ""}`}
+              >
+                {economics ? (
+                  <div className={styles.economicsLabelRow}>
+                    <span className={styles.economicsIcon} aria-hidden>
+                      💡
+                    </span>
+                    <span className={styles.economicsLabelText}>Pickle Economics</span>
+                  </div>
+                ) : null}
+                {!economics && showHeading ? (
+                  <h2 className={styles.blockHeading}>{block.heading}</h2>
+                ) : null}
+                {economics && block.heading && !labelOnly ? (
+                  <h2 className={styles.economicsMainTitle}>{block.heading}</h2>
+                ) : null}
+                {hasMarketShareModule ? (
+                  <>
+                    {head.length > 0 ? (
+                      <div className={styles.prose}>
+                        <PortableText value={head} components={ptComponents} />
+                      </div>
+                    ) : null}
+                    <aside
+                      className={`${styles.block} ${styles.economicsModule} ${styles.marketShareModule}`}
+                      aria-label="Did you know"
+                    >
+                      <div className={styles.economicsLabelRow}>
+                        <span className={styles.economicsIcon} aria-hidden>
+                          💡
+                        </span>
+                        <span className={styles.economicsLabelText}>Did you know...</span>
+                      </div>
+                      <h2 className={styles.economicsMainTitle}>
+                        Breakdown of Market Share by Pickle Type
+                      </h2>
+                      <div className={styles.marketShareIntro}>
+                        <PortableText value={[chartIntro]} components={ptComponents} />
+                      </div>
+                      {(() => {
+                        const src = urlForImage(projectId, dataset, chartImage);
+                        if (!src) return null;
+                        const { w, h } = dims(chartImage);
+                        return (
+                          <div className={styles.economicsChartWrap}>
+                            <Image
+                              src={src}
+                              alt=""
+                              width={w}
+                              height={h}
+                              className={`${styles.blockImage} ${styles.economicsChart}`}
+                              sizes="(max-width: 900px) 100vw, 820px"
+                            />
+                          </div>
+                        );
+                      })()}
+                    </aside>
+                    {tail.length > 0 ? (
+                      <div className={styles.prose}>
+                        <PortableText value={tail} components={ptComponents} />
+                      </div>
+                    ) : null}
+                  </>
+                ) : Array.isArray(proseBodyForEconomics) && proseBodyForEconomics.length > 0 ? (
+                  <div
+                    className={`${styles.prose} ${economics ? styles.economicsProse : ""}`}
+                  >
+                    <PortableText
+                      value={proseBodyForEconomics}
+                      components={ptComponents}
+                    />
                   </div>
                 ) : null}
               </section>
@@ -52,13 +264,17 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset }) {
             if (!src) return null;
             const { w, h } = dims(block.image);
             return (
-              <figure key={key} className={styles.figure}>
+              <figure key={key} className={`${styles.figure} ${styles.proseFigure}`}>
                 <Image src={src} alt="" width={w} height={h} className={styles.blockImage} sizes="(max-width: 900px) 100vw, 820px" />
                 {(block.caption || block.credit) && (
                   <figcaption className={styles.caption}>
-                    {block.caption}
-                    {block.caption && block.credit ? " · " : ""}
-                    {block.credit}
+                    {block.caption ? <span>{block.caption}</span> : null}
+                    {block.caption && block.credit ? (
+                      <span className={styles.captionSep}> · </span>
+                    ) : null}
+                    {block.credit ? (
+                      <span className={styles.credit}>{block.credit}</span>
+                    ) : null}
                   </figcaption>
                 )}
               </figure>
@@ -66,8 +282,12 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset }) {
           }
           case "listicleSection": {
             const showHeading = block.heading && !hidePartHeading(block.heading);
+            const festivalList = isFestivalListicleHeading(block.heading);
             return (
-              <section key={key} className={styles.block}>
+              <section
+                key={key}
+                className={`${styles.block} ${festivalList ? styles.economicsFestivalList : ""}`}
+              >
                 {showHeading ? <h2 className={styles.blockHeading}>{block.heading}</h2> : null}
                 <div className={styles.listicle}>
                   {(block.items || []).map((item) => {
@@ -88,9 +308,13 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset }) {
                             />
                             {(item.caption || item.credit) && (
                               <p className={styles.caption}>
-                                {item.caption}
-                                {item.caption && item.credit ? " · " : ""}
-                                {item.credit}
+                                {item.caption ? <span>{item.caption}</span> : null}
+                                {item.caption && item.credit ? (
+                                  <span className={styles.captionSep}> · </span>
+                                ) : null}
+                                {item.credit ? (
+                                  <span className={styles.credit}>{item.credit}</span>
+                                ) : null}
                               </p>
                             )}
                           </div>
@@ -99,7 +323,13 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset }) {
                           {Number.isFinite(item.itemNumber) ? (
                             <span className={styles.itemNum}>{item.itemNumber}. </span>
                           ) : null}
-                          {item.title ? <strong>{item.title}</strong> : null}
+                          {item.title ? (
+                            <strong
+                              className={festivalList ? styles.festivalItemTitle : undefined}
+                            >
+                              {item.title}
+                            </strong>
+                          ) : null}
                           {item.body ? <p className={styles.listicleBody}>{item.body}</p> : null}
                         </div>
                       </article>
@@ -112,13 +342,53 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset }) {
           case "didYouKnowBlock": {
             const src = block.chartImage ? urlForImage(projectId, dataset, block.chartImage) : null;
             const { w, h } = block.chartImage ? dims(block.chartImage) : { w: 900, h: 600 };
+            const economics = isPickleEconomicsDidYouKnow(block);
+            if (economics) {
+              return (
+                <aside key={key} className={`${styles.block} ${styles.economicsModule}`}>
+                  <div className={styles.economicsLabelRow}>
+                    <span className={styles.economicsIcon} aria-hidden>
+                      💡
+                    </span>
+                    <span className={styles.economicsLabelText}>Pickle Economics</span>
+                  </div>
+                  {block.title ? (
+                    <h2 className={styles.economicsMainTitle}>{block.title}</h2>
+                  ) : null}
+                  {block.description ? (
+                    <p className={styles.economicsIntro}>{block.description}</p>
+                  ) : null}
+                  {src ? (
+                    <div className={styles.economicsChartWrap}>
+                      <Image
+                        src={src}
+                        alt=""
+                        width={w}
+                        height={h}
+                        className={`${styles.blockImage} ${styles.economicsChart}`}
+                        sizes="(max-width: 900px) 100vw, 820px"
+                      />
+                    </div>
+                  ) : null}
+                </aside>
+              );
+            }
             return (
               <aside key={key} className={styles.dyk}>
                 {block.eyebrow ? <p className={styles.eyebrow}>{block.eyebrow}</p> : null}
                 {block.title ? <h2 className={styles.blockHeading}>{block.title}</h2> : null}
-                {block.description ? <p>{block.description}</p> : null}
+                {block.description ? (
+                  <p className={styles.dykBody}>{block.description}</p>
+                ) : null}
                 {src ? (
-                  <Image src={src} alt="" width={w} height={h} className={styles.blockImage} sizes="(max-width: 900px) 100vw, 820px" />
+                  <Image
+                    src={src}
+                    alt=""
+                    width={w}
+                    height={h}
+                    className={styles.blockImage}
+                    sizes="(max-width: 900px) 100vw, 820px"
+                  />
                 ) : null}
               </aside>
             );
@@ -147,14 +417,21 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset }) {
               <aside key={key} className={styles.poll}>
                 {block.heading ? <p className={styles.eyebrow}>{block.heading}</p> : null}
                 {block.question ? <h2 className={styles.blockHeading}>{block.question}</h2> : null}
-                <ol className={styles.pollOpts}>
-                  {(block.options || []).map((opt) => (
-                    <li key={opt._key || opt.code}>
-                      {opt.code ? `${opt.code}) ` : ""}
-                      {opt.text}
-                    </li>
-                  ))}
-                </ol>
+                <ul className={styles.pollOptionList}>
+                  {(block.options || []).map((opt, i) => {
+                    const letter =
+                      (opt.code && String(opt.code).trim()) ||
+                      String.fromCharCode(65 + i);
+                    return (
+                      <li key={opt._key || `${letter}-${i}`} className={styles.pollOptionRow}>
+                        <span className={styles.pollLetter} aria-hidden>
+                          {letter.replace(/\)$/, "")}
+                        </span>
+                        <span className={styles.pollOptionText}>{opt.text}</span>
+                      </li>
+                    );
+                  })}
+                </ul>
                 {block.answerTeaser ? <p className={styles.pollTeaser}>{block.answerTeaser}</p> : null}
                 {block.lastWeekQuestion ? <p className={styles.pollLastQ}>{block.lastWeekQuestion}</p> : null}
                 {(block.lastWeekResults || []).length > 0 ? (
@@ -172,16 +449,31 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset }) {
           case "photoOfWeekBlock": {
             const src = block.image ? urlForImage(projectId, dataset, block.image) : null;
             const { w, h } = block.image ? dims(block.image) : { w: 900, h: 600 };
-            if (!src) return null;
+            const headingText = block.heading?.trim() || DEFAULT_PHOTO_OF_WEEK_HEADING;
             return (
-              <figure key={key} className={styles.figure}>
-                {block.heading ? <p className={styles.eyebrow}>{block.heading}</p> : null}
-                <Image src={src} alt="" width={w} height={h} className={styles.blockImage} sizes="(max-width: 900px) 100vw, 820px" />
+              <figure key={key} className={`${styles.figure} ${styles.photoOfWeekFigure}`}>
+                <h2 className={styles.photoOfWeekTitle}>{headingText}</h2>
+                {src ? (
+                  <Image
+                    src={src}
+                    alt=""
+                    width={w}
+                    height={h}
+                    className={styles.blockImage}
+                    sizes="(max-width: 900px) 100vw, 820px"
+                  />
+                ) : (
+                  <div className={styles.photoOfWeekPlaceholder} aria-hidden />
+                )}
                 {(block.caption || block.credit) && (
                   <figcaption className={styles.caption}>
-                    {block.caption}
-                    {block.caption && block.credit ? " · " : ""}
-                    {block.credit}
+                    {block.caption ? <span>{block.caption}</span> : null}
+                    {block.caption && block.credit ? (
+                      <span className={styles.captionSep}> · </span>
+                    ) : null}
+                    {block.credit ? (
+                      <span className={styles.credit}>{block.credit}</span>
+                    ) : null}
                   </figcaption>
                 )}
               </figure>
@@ -191,6 +483,12 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset }) {
             return null;
         }
       })}
+      {!hasPhotoOfWeekBlock ? (
+        <aside className={styles.photoOfWeekFallback} aria-label={DEFAULT_PHOTO_OF_WEEK_HEADING}>
+          <h2 className={styles.photoOfWeekTitle}>{DEFAULT_PHOTO_OF_WEEK_HEADING}</h2>
+          <div className={styles.photoOfWeekPlaceholder} aria-hidden />
+        </aside>
+      ) : null}
     </div>
   );
 }
