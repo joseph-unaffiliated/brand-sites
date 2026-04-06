@@ -8,6 +8,12 @@ export const pollBlockType = defineType({
     defineField({name: 'heading', title: 'Heading', type: 'string', initialValue: "Today's Pickle Trivia"}),
     defineField({name: 'question', title: 'Question', type: 'string'}),
     defineField({
+      name: 'correctCode',
+      title: 'Correct option code',
+      type: 'string',
+      description: 'Must match one option code (e.g. A, B, C) for trivia scoring and reveal.',
+    }),
+    defineField({
       name: 'options',
       title: 'Options',
       type: 'array',

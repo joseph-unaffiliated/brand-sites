@@ -93,6 +93,7 @@
 .articleRail {
   position: sticky;
   top: 24px;
+  align-self: start;
   margin-top: 1.5rem;
 }
 
@@ -194,11 +195,29 @@
   letter-spacing: 0.01em;
 }
 
+/* Full-width band below article + rail; rail sticky does not extend beside this */
+.readMoreOuter {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px 64px;
+  box-sizing: border-box;
+}
+
+@media (min-width: 1024px) {
+  .readMoreOuter {
+    max-width: min(100%, 1200px);
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
+
 /* Read more module */
 .readMore {
-  margin-top: 3rem;
+  margin-top: 2.5rem;
   padding-top: 2.5rem;
   border-top: 1px solid var(--border);
+  max-width: none;
 }
 
 .readMoreTitle {

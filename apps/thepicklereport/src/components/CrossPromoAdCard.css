@@ -1,0 +1,77 @@
+.cross-promo-card {
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.cross-promo-card-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid var(--border, rgba(0, 0, 0, 0.12));
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--bg, #fff);
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.cross-promo-card-link:hover {
+  border-color: rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.cross-promo-card-link:focus-visible {
+  outline: 2px solid var(--text-primary, #111);
+  outline-offset: 2px;
+}
+
+.cross-promo-card-inner {
+  padding: 16px 18px 18px;
+}
+
+.cross-promo-card-logoRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.cross-promo-card-logo {
+  height: auto;
+  width: auto;
+  max-height: 28px;
+  object-fit: contain;
+}
+
+.cross-promo-card-brand {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted, #666);
+}
+
+.cross-promo-card-headline {
+  font-family: var(--font-serif, Georgia, serif);
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.25;
+  margin: 0 0 8px;
+  color: var(--text-primary, #111);
+}
+
+.cross-promo-card-desc {
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--text-secondary, #444);
+  margin: 0 0 12px;
+}
+
+.cross-promo-card-cta {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary, #111);
+}
+
+.cross-promo-card-vertical {
+  max-width: 300px;
+}

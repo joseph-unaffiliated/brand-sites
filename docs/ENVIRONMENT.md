@@ -12,6 +12,13 @@
 | `NEXT_PUBLIC_SANITY_DATASET` | yes | Usually `production`. |
 | `NEXT_PUBLIC_ADSENSE_CLIENT` | yes | AdSense client id. |
 | `NEXT_PUBLIC_ADSENSE_SLOT_*` | yes | Slot ids for ad units (if used). |
+| `NEXT_PUBLIC_ADS_MODE` | yes | `cross_promo` (default in app when unset) or `adsense` for Google AdSense slots. |
+| `NEXT_PUBLIC_CROSS_PROMO_URL` | yes | External URL for the cross-promo card (default `https://hookuplists.com`). |
+| `NEXT_PUBLIC_CROSS_PROMO_HEADLINE` | yes | Card title. |
+| `NEXT_PUBLIC_CROSS_PROMO_DESCRIPTION` | yes | Short body text. |
+| `NEXT_PUBLIC_CROSS_PROMO_BRAND_LABEL` | yes | Small brand line (e.g. `Hookup Lists`). |
+| `NEXT_PUBLIC_CROSS_PROMO_LOGO_PATH` | yes | Path under `public/` (default `/cross-promo-hl.svg`). |
+| `NEXT_PUBLIC_CROSS_PROMO_CTA` | yes | CTA label (default `Read the story`). |
 | `NEXT_PUBLIC_META_PIXEL_ID` | yes | Meta Pixel. |
 | `NEXT_PUBLIC_SITE_DISPLAY_NAME` | yes | Site title / OG name. |
 | `NEXT_PUBLIC_SITE_DESCRIPTION` | yes | Meta description. |

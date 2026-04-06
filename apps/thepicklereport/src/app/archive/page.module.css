@@ -28,68 +28,107 @@
   margin-bottom: 12px;
 }
 
-.filters {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
+/* Three-column masonry: cards stack in columns with no vertical gap between cards */
+.issueMosaic {
+  column-count: 3;
+  column-gap: 12px;
 }
 
-.filterChip {
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background: transparent;
-  color: var(--text-secondary);
-  padding: 8px 14px;
-  font-size: 13px;
-  cursor: pointer;
+@media (max-width: 1024px) {
+  .issueMosaic {
+    column-count: 2;
+  }
 }
 
-.filterChip:hover {
-  color: var(--text-primary);
-  background: var(--surface-muted);
-}
-
-.issueList {
-  display: grid;
-  gap: 20px;
+@media (max-width: 640px) {
+  .issueMosaic {
+    column-count: 1;
+  }
 }
 
 .issueCard {
-  display: flex;
-  justify-content: space-between;
-  gap: 24px;
-  padding: 24px;
+  break-inside: avoid;
+  margin-bottom: 12px;
+}
+
+.issueCardLink {
+  display: block;
+  text-decoration: none;
+  color: inherit;
   border-radius: var(--radius);
   border: 1px solid var(--border);
   background: var(--surface);
+  overflow: hidden;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.issueCard h3 {
-  margin: 8px 0 4px;
-  font-size: 28px;
+.issueCardLink:hover {
+  border-color: var(--accent);
+  box-shadow: 0 4px 16px rgba(2, 30, 21, 0.08);
 }
 
-.issueCard p {
+.issueCardImage {
+  line-height: 0;
+  background: var(--surface-muted);
+}
+
+.issueCardImage img {
+  width: 100%;
+  height: auto;
+  display: block;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+}
+
+.issueCardBody {
+  padding: 16px 18px 18px;
+}
+
+.issueCardBody h3 {
+  margin: 6px 0 8px;
+  font-size: 1.15rem;
+  font-weight: 600;
+  line-height: 1.25;
+  font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
+}
+
+.issueDek {
   color: var(--text-secondary);
-  line-height: 1.35;
+  line-height: 1.4;
+  font-size: 0.95rem;
+  margin: 0 0 12px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .issueDate {
-  font-size: 12px;
+  font-size: 11px;
   text-transform: uppercase;
-  letter-spacing: 0em;
+  letter-spacing: 0.08em;
   color: var(--text-muted);
+  margin: 0;
 }
 
-.readLink {
-  align-self: center;
+.issueCta {
+  font-size: 13px;
   font-weight: 600;
   color: var(--accent);
 }
 
-@media (max-width: 720px) {
-  .issueCard {
-    flex-direction: column;
-    align-items: flex-start;
-  }
+.issueCardPlaceholder {
+  border-radius: var(--radius);
+  border: 1px dashed var(--border);
+  background: var(--surface-muted);
+  padding: 4px;
+}
+
+.issueCardPlaceholder .issueCardBody {
+  padding: 20px;
+}
+
+.issueCardPlaceholder .issueCta {
+  display: inline-block;
+  margin-top: 4px;
 }

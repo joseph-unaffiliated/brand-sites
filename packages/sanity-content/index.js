@@ -115,6 +115,7 @@ const articleContentBlocksProjection = `contentBlocks[] {
     _type,
     heading,
     question,
+    correctCode,
     answerTeaser,
     lastWeekQuestion,
     options[] {
@@ -215,7 +216,9 @@ export function createSanityLayer(opts) {
   /** @returns {ReturnType<ReturnType<typeof createImageUrlBuilder>["image"]> | null} */
   function urlFor(source) {
     if (!builder || !source) return null;
-    const hasRef = source.asset?._ref ?? source._ref;
+    // GROQ `asset->{...}` returns expanded assets with `_id` but often no `_ref`.
+    const hasRef =
+      source.asset?._ref ?? source.asset?._id ?? source._ref ?? source._id;
     if (!hasRef) return null;
     return builder.image(source);
   }
@@ -278,6 +281,14 @@ export function firstImageFromContentBlocks(blocks, urlFor) {
       case "photoOfWeekBlock": {
         const img = imageDimensionsAndUrl(block.image, urlFor);
         if (img) return img;
+        break;
+      }
+      case "proseSection": {
+        for (const node of block.body || []) {
+          if (!node || node._type !== "image") continue;
+          const img = imageDimensionsAndUrl(node, urlFor);
+          if (img) return img;
+        }
         break;
       }
       default:

@@ -335,6 +335,35 @@
   color: var(--text-primary);
 }
 
+.pollOptionButton {
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+  margin: 0;
+}
+
+.pollOptionButton:disabled {
+  cursor: default;
+}
+
+.pollReveal {
+  font-size: 0.95rem;
+  margin: 0.75rem 0 0;
+}
+
+.pollPoints {
+  font-size: 0.9rem;
+  margin: 0.75rem 0 0;
+  color: var(--text-secondary);
+}
+
+.pollMark {
+  flex-shrink: 0;
+  font-size: 1rem;
+  margin-left: 0.25rem;
+}
+
 .pollTeaser,
 .pollLastQ {
   font-size: 0.9rem;

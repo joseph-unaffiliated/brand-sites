@@ -94,7 +94,15 @@ export default function RootLayout({ children }) {
                     alt="The Pickle Report"
                     width={240}
                     height={40}
-                    style={{ width: "100%", height: "auto" }}
+                    className="footer-logo-img footer-logo-wordmark"
+                  />
+                  <Image
+                    src="/tpr-logo-black.png"
+                    alt=""
+                    width={33}
+                    height={24}
+                    className="footer-logo-img footer-logo-mark"
+                    aria-hidden
                   />
                 </Link>
                 <p className="footer-text">

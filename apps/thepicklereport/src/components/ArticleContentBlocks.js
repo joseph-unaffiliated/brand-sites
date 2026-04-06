@@ -2,22 +2,34 @@ import Image from "next/image";
 import Link from "next/link";
 import { PortableText } from "next-sanity";
 import { createImageUrlBuilder } from "@sanity/image-url";
+import PollBlockClient from "./PollBlockClient";
 import styles from "./ArticleContentBlocks.module.css";
 
 function urlForImage(projectId, dataset, source) {
   if (!projectId || !dataset || !source?.asset) return null;
   const a = source.asset;
   const ref = a._ref || (typeof a._id === "string" ? a._id : null);
-  if (!ref) return null;
-  try {
-    const normalized = { ...source, asset: { _ref: ref } };
-    return createImageUrlBuilder({ projectId, dataset })
-      .image(normalized)
-      .width(1400)
-      .url();
-  } catch {
-    return null;
+  if (ref) {
+    try {
+      const normalized = { ...source, asset: { _ref: ref } };
+      return createImageUrlBuilder({ projectId, dataset })
+        .image(normalized)
+        .width(1400)
+        .url();
+    } catch {
+      /* fall through to direct CDN URL when builder rejects an edge-case ref */
+    }
   }
+  if (typeof a.url === "string" && /^https:\/\/cdn\.sanity\.io\//.test(a.url)) {
+    try {
+      const u = new URL(a.url);
+      if (!u.searchParams.has("w")) u.searchParams.set("w", "1400");
+      return u.toString();
+    } catch {
+      return a.url;
+    }
+  }
+  return null;
 }
 
 function dims(source) {
@@ -153,7 +165,7 @@ function portableTextComponents(projectId, dataset) {
 
 const DEFAULT_PHOTO_OF_WEEK_HEADING = "Sexy Pic(kle) of the Week";
 
-export default function ArticleContentBlocks({ blocks, projectId, dataset }) {
+export default function ArticleContentBlocks({ blocks, projectId, dataset, articleSlug = "" }) {
   const orderedBlocks = orderPhotoOfWeekLast(blocks ?? []);
   const hasPhotoOfWeekBlock = orderedBlocks.some((b) => b?._type === "photoOfWeekBlock");
 
@@ -413,38 +425,7 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset }) {
             );
           }
           case "pollBlock": {
-            return (
-              <aside key={key} className={styles.poll}>
-                {block.heading ? <p className={styles.eyebrow}>{block.heading}</p> : null}
-                {block.question ? <h2 className={styles.blockHeading}>{block.question}</h2> : null}
-                <ul className={styles.pollOptionList}>
-                  {(block.options || []).map((opt, i) => {
-                    const letter =
-                      (opt.code && String(opt.code).trim()) ||
-                      String.fromCharCode(65 + i);
-                    return (
-                      <li key={opt._key || `${letter}-${i}`} className={styles.pollOptionRow}>
-                        <span className={styles.pollLetter} aria-hidden>
-                          {letter.replace(/\)$/, "")}
-                        </span>
-                        <span className={styles.pollOptionText}>{opt.text}</span>
-                      </li>
-                    );
-                  })}
-                </ul>
-                {block.answerTeaser ? <p className={styles.pollTeaser}>{block.answerTeaser}</p> : null}
-                {block.lastWeekQuestion ? <p className={styles.pollLastQ}>{block.lastWeekQuestion}</p> : null}
-                {(block.lastWeekResults || []).length > 0 ? (
-                  <ul className={styles.pollResults}>
-                    {block.lastWeekResults.map((r) => (
-                      <li key={r._key || r.label}>
-                        {r.isCorrect ? "✅" : "❌"} {Number.isFinite(r.percent) ? `${r.percent}%` : ""} — {r.label}
-                      </li>
-                    ))}
-                  </ul>
-                ) : null}
-              </aside>
-            );
+            return <PollBlockClient key={key} block={block} articleSlug={articleSlug} />;
           }
           case "photoOfWeekBlock": {
             const src = block.image ? urlForImage(projectId, dataset, block.image) : null;

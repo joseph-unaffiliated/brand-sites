@@ -219,6 +219,11 @@ function removePowPlaceholderParagraphs(body) {
     const t = blockText(b)
     if (t.includes('Sexy Pic(kle) of the Week')) return false
     if (t.trim().startsWith('Photo by Ananth Pai')) return false
+    if (t.trim().startsWith('Photo by Daniel Romero')) return false
+    if (t.trim().startsWith('Photo by Alexander Mils')) return false
+    if (t.trim().startsWith('Photo by Townsend Walton')) return false
+    if (t.trim().startsWith('Photo by Jerzy from Pixabay')) return false
+    if (t.includes('Reference Librarians Debra Pond and Steve Rice testing pickles')) return false
     return true
   })
 }
@@ -358,6 +363,458 @@ async function pipelinePickleAddictsFacebook(client, docId, targets, dryRun) {
   )
 }
 
+/** PicklePriestProfile.html → this-priest-will-bless-your-pickle-let-us-pray */
+async function pipelinePicklePriestBless(client, docId, targets, dryRun) {
+  const tm = targetsById(targets)
+  const cache = new Map()
+  const doc = await client.fetch(
+    `*[_id == $id][0]{ contentBlocks, mainImage, photoCredit }`,
+    {id: docId},
+  )
+  const blocks = structuredClone(doc.contentBlocks || [])
+  const proseIdx = blocks.findIndex((b) => b?._type === 'proseSection')
+  if (proseIdx < 0) throw new Error('No proseSection in contentBlocks')
+
+  const mainT = tm.get('main-hero')
+  const inline2T = tm.get('inline-2')
+  const mapT = tm.get('economics-map')
+  const powT = tm.get('photo-of-week')
+
+  const mainId = await ensureAsset(client, mainT, cache, dryRun)
+  const inline2Id = await ensureAsset(client, inline2T, cache, dryRun)
+  const mapId = await ensureAsset(client, mapT, cache, dryRun)
+  const powId = await ensureAsset(client, powT, cache, dryRun)
+
+  let body = [...(blocks[proseIdx].body || [])]
+
+  const courestyNeedle = 'Couresty of The Pickle Priest'
+  const courestyCredit = 'Courtesy of The Pickle Priest'
+
+  body = replaceParagraphWhereIncludes(body, courestyNeedle, ptImage(mainId, courestyCredit))
+  body = replaceParagraphWhereIncludes(body, courestyNeedle, ptImage(inline2Id, courestyCredit))
+  body = insertAfterParagraphIncludes(
+    body,
+    'By value, these countries imported 70.3% of all pickles worldwide',
+    ptImage(mapId, mapT.credit || undefined),
+  )
+  body = removePowPlaceholderParagraphs(body)
+
+  blocks[proseIdx] = {...blocks[proseIdx], body}
+
+  const pollIdx = blocks.findIndex((b) => b?._type === 'pollBlock')
+  if (pollIdx < 0) throw new Error('No pollBlock')
+
+  const powBlock = {
+    _type: 'photoOfWeekBlock',
+    _key: newKey('pow'),
+    heading: 'Sexy Pic(kle) of the Week',
+    image: imageValue(powId),
+    credit: powT.credit || '',
+  }
+
+  if (!dryRun) {
+    const nextBlocks = [...blocks.slice(0, pollIdx), powBlock, ...blocks.slice(pollIdx)]
+    await client
+      .patch(docId)
+      .set({
+        mainImage: imageValue(mainId),
+        photoCredit: mainT.credit || '',
+        contentBlocks: nextBlocks,
+      })
+      .commit()
+  }
+  console.log(
+    dryRun
+      ? '[dry-run] picklePriestBless: mainImage, 2 Couresty→PT images, economics chart, POW block, strip POW paragraphs'
+      : 'OK pipeline picklePriestBless',
+  )
+}
+
+/** ExclusiveInterviewWithHisHolinessThePicklePriest.html — single inline + main */
+async function pipelinePicklePriestInterview(client, docId, targets, dryRun) {
+  const tm = targetsById(targets)
+  const cache = new Map()
+  const doc = await client.fetch(`*[_id == $id][0]{ contentBlocks, mainImage, photoCredit }`, {
+    id: docId,
+  })
+  const blocks = structuredClone(doc.contentBlocks || [])
+  const proseIdx = blocks.findIndex((b) => b?._type === 'proseSection')
+  if (proseIdx < 0) throw new Error('No proseSection')
+
+  const mainT = tm.get('main-inline')
+  const mainId = await ensureAsset(client, mainT, cache, dryRun)
+
+  let body = [...(blocks[proseIdx].body || [])]
+  const courtesyNeedle = 'Courtesy ofThe Pickle Priest'
+  const courtesyCredit = 'Courtesy of The Pickle Priest'
+
+  body = replaceParagraphWhereIncludes(body, courtesyNeedle, ptImage(mainId, courtesyCredit))
+  blocks[proseIdx] = {...blocks[proseIdx], body}
+
+  if (!dryRun) {
+    await client
+      .patch(docId)
+      .set({
+        mainImage: imageValue(mainId),
+        photoCredit: mainT.credit || '',
+        contentBlocks: blocks,
+      })
+      .commit()
+  }
+  console.log(
+    dryRun
+      ? '[dry-run] picklePriestInterview: mainImage + Courtesy ofThe→PT image'
+      : 'OK pipeline picklePriestInterview',
+  )
+}
+
+/** 5FamousPicklesinFilmandTelevision.html */
+async function pipelineFiveFamousFilms(client, docId, targets, dryRun) {
+  const tm = targetsById(targets)
+  const cache = new Map()
+  const doc = await client.fetch(`*[_id == $id][0]{ contentBlocks, mainImage, photoCredit }`, {id: docId})
+  const blocks = structuredClone(doc.contentBlocks || [])
+  const proseIdx = blocks.findIndex((b) => b?._type === 'proseSection')
+  if (proseIdx < 0) throw new Error('No proseSection')
+
+  const mainT = tm.get('main-hero')
+  const imdb1T = tm.get('imdb-1')
+  const imdb2T = tm.get('imdb-2')
+  const susanT = tm.get('susan-screenshot')
+  const sethT = tm.get('seth-screenshot')
+  const econT = tm.get('economics-chart')
+  const powT = tm.get('photo-of-week')
+
+  const mainId = await ensureAsset(client, mainT, cache, dryRun)
+  const imdb1Id = await ensureAsset(client, imdb1T, cache, dryRun)
+  const imdb2Id = await ensureAsset(client, imdb2T, cache, dryRun)
+  const susanId = await ensureAsset(client, susanT, cache, dryRun)
+  const sethId = await ensureAsset(client, sethT, cache, dryRun)
+  const econId = await ensureAsset(client, econT, cache, dryRun)
+  const powId = await ensureAsset(client, powT, cache, dryRun)
+
+  let body = [...(blocks[proseIdx].body || [])]
+  body = replaceParagraphWhereIncludes(body, 'Courtesy of IMDB', ptImage(imdb1Id, imdb1T.credit))
+  body = replaceParagraphWhereIncludes(body, 'Courtesy of IMDB', ptImage(imdb2Id, imdb2T.credit))
+  body = replaceParagraphWhereIncludes(
+    body,
+    'Susan Sarandon in The Witches of Eastwick',
+    ptImage(susanId, susanT.credit || ''),
+  )
+  body = replaceParagraphWhereIncludes(
+    body,
+    'Seth Rogen in An American Pickle',
+    ptImage(sethId, sethT.credit || ''),
+  )
+  body = insertAfterParagraphIncludes(
+    body,
+    'Looks like more U.S adults are loving pickles than hating them.',
+    ptImage(econId, econT.credit || undefined),
+  )
+  body = removePowPlaceholderParagraphs(body)
+  blocks[proseIdx] = {...blocks[proseIdx], body}
+
+  const pollIdx = blocks.findIndex((b) => b?._type === 'pollBlock')
+  if (pollIdx < 0) throw new Error('No pollBlock')
+  const powBlock = {
+    _type: 'photoOfWeekBlock',
+    _key: newKey('pow'),
+    heading: 'Sexy Pic(kle) of the Week',
+    image: imageValue(powId),
+    credit: powT.credit || '',
+  }
+  if (!dryRun) {
+    const nextBlocks = [...blocks.slice(0, pollIdx), powBlock, ...blocks.slice(pollIdx)]
+    await client
+      .patch(docId)
+      .set({
+        mainImage: imageValue(mainId),
+        photoCredit: mainT.credit || '',
+        contentBlocks: nextBlocks,
+      })
+      .commit()
+  }
+  console.log(dryRun ? '[dry-run] fiveFamousFilms' : 'OK pipeline fiveFamousFilms')
+}
+
+/** PamelaAndersonsPickles.html */
+async function pipelinePamelaAnderson(client, docId, targets, dryRun) {
+  const tm = targetsById(targets)
+  const cache = new Map()
+  const doc = await client.fetch(`*[_id == $id][0]{ contentBlocks, mainImage, photoCredit }`, {id: docId})
+  const blocks = structuredClone(doc.contentBlocks || [])
+  const proseIdx = blocks.findIndex((b) => b?._type === 'proseSection')
+  if (proseIdx < 0) throw new Error('No proseSection')
+
+  const jarT = tm.get('jar-hero')
+  const pamT = tm.get('pam-inline')
+  const chartT = tm.get('top-brand-chart')
+  const powT = tm.get('photo-of-week')
+
+  const jarId = await ensureAsset(client, jarT, cache, dryRun)
+  const pamId = await ensureAsset(client, pamT, cache, dryRun)
+  const chartId = await ensureAsset(client, chartT, cache, dryRun)
+  const powId = await ensureAsset(client, powT, cache, dryRun)
+
+  let body = [...(blocks[proseIdx].body || [])]
+  body = replaceParagraphWhereIncludes(body, 'Courtesy of Flamingo Estate', ptImage(jarId, jarT.credit))
+  body = replaceParagraphWhereIncludes(body, 'Courtesy of Flamingo Estate', ptImage(pamId, pamT.credit))
+  body = insertAfterParagraphIncludes(
+    body,
+    'Based on 2024 Instacart orders',
+    ptImage(chartId, chartT.credit || undefined),
+  )
+  body = removePowPlaceholderParagraphs(body)
+  blocks[proseIdx] = {...blocks[proseIdx], body}
+
+  const pollIdx = blocks.findIndex((b) => b?._type === 'pollBlock')
+  if (pollIdx < 0) throw new Error('No pollBlock')
+  const powBlock = {
+    _type: 'photoOfWeekBlock',
+    _key: newKey('pow'),
+    heading: 'Sexy Pic(kle) of the Week',
+    image: imageValue(powId),
+    credit: powT.credit || '',
+  }
+  if (!dryRun) {
+    const nextBlocks = [...blocks.slice(0, pollIdx), powBlock, ...blocks.slice(pollIdx)]
+    await client
+      .patch(docId)
+      .set({
+        mainImage: imageValue(jarId),
+        photoCredit: jarT.credit || '',
+        contentBlocks: nextBlocks,
+      })
+      .commit()
+  }
+  console.log(dryRun ? '[dry-run] pamelaAnderson' : 'OK pipeline pamelaAnderson')
+}
+
+/** AthletesAndPickleJuice.html */
+async function pipelineAthletesPickleJuice(client, docId, targets, dryRun) {
+  const tm = targetsById(targets)
+  const cache = new Map()
+  const doc = await client.fetch(`*[_id == $id][0]{ contentBlocks, mainImage, photoCredit }`, {id: docId})
+  const blocks = structuredClone(doc.contentBlocks || [])
+  const proseIdx = blocks.findIndex((b) => b?._type === 'proseSection')
+  if (proseIdx < 0) throw new Error('No proseSection')
+
+  const blakeT = tm.get('blake-hero')
+  const spitT = tm.get('pickle-spit')
+  const chartT = tm.get('economics-chart')
+  const powT = tm.get('photo-of-week')
+
+  const blakeId = await ensureAsset(client, blakeT, cache, dryRun)
+  const spitId = await ensureAsset(client, spitT, cache, dryRun)
+  const chartId = await ensureAsset(client, chartT, cache, dryRun)
+  const powId = await ensureAsset(client, powT, cache, dryRun)
+
+  let body = [...(blocks[proseIdx].body || [])]
+  body = replaceParagraphWhereIncludes(body, 'Courtesy of Corey Masisak', ptImage(blakeId, blakeT.credit))
+  body = insertAfterParagraphIncludes(
+    body,
+    'in just 35 seconds.',
+    ptImage(spitId, spitT.credit || undefined),
+  )
+  body = insertAfterParagraphIncludes(
+    body,
+    'This clarification hasn\'t stopped businesses from capitalizing on athletes',
+    ptImage(chartId, chartT.credit || undefined),
+  )
+  body = removePowPlaceholderParagraphs(body)
+  blocks[proseIdx] = {...blocks[proseIdx], body}
+
+  const pollIdx = blocks.findIndex((b) => b?._type === 'pollBlock')
+  if (pollIdx < 0) throw new Error('No pollBlock')
+  const powBlock = {
+    _type: 'photoOfWeekBlock',
+    _key: newKey('pow'),
+    heading: 'Sexy Pic(kle) of the Week',
+    image: imageValue(powId),
+    credit: powT.credit || '',
+  }
+  if (!dryRun) {
+    const nextBlocks = [...blocks.slice(0, pollIdx), powBlock, ...blocks.slice(pollIdx)]
+    await client
+      .patch(docId)
+      .set({
+        mainImage: imageValue(blakeId),
+        photoCredit: blakeT.credit || '',
+        contentBlocks: nextBlocks,
+      })
+      .commit()
+  }
+  console.log(dryRun ? '[dry-run] athletesPickleJuice' : 'OK pipeline athletesPickleJuice')
+}
+
+/** KoolAidPicklesAndTheirPlaceInSouthernFoodHistory.html */
+async function pipelineKoolAidPickles(client, docId, targets, dryRun) {
+  const tm = targetsById(targets)
+  const cache = new Map()
+  const doc = await client.fetch(`*[_id == $id][0]{ contentBlocks, mainImage, photoCredit }`, {id: docId})
+  const blocks = structuredClone(doc.contentBlocks || [])
+  const proseIdx = blocks.findIndex((b) => b?._type === 'proseSection')
+  if (proseIdx < 0) throw new Error('No proseSection')
+
+  const mainT = tm.get('main-hero')
+  const prodT = tm.get('production-chart')
+  const powT = tm.get('photo-of-week')
+
+  const mainId = await ensureAsset(client, mainT, cache, dryRun)
+  const prodId = await ensureAsset(client, prodT, cache, dryRun)
+  const powId = await ensureAsset(client, powT, cache, dryRun)
+
+  let body = [...(blocks[proseIdx].body || [])]
+  body = replaceParagraphWhereIncludes(
+    body,
+    'Courtesy of De Agostini / A. Dagli Orti / Getty Images',
+    ptImage(mainId, mainT.credit),
+  )
+  body = insertAfterParagraphIncludes(
+    body,
+    'Meaning pickles are not a fad, they are a constant.',
+    ptImage(prodId, prodT.credit || undefined),
+  )
+  body = removePowPlaceholderParagraphs(body)
+  blocks[proseIdx] = {...blocks[proseIdx], body}
+
+  const pollIdx = blocks.findIndex((b) => b?._type === 'pollBlock')
+  if (pollIdx < 0) throw new Error('No pollBlock')
+  const powBlock = {
+    _type: 'photoOfWeekBlock',
+    _key: newKey('pow'),
+    heading: 'Sexy Pic(kle) of the Week',
+    image: imageValue(powId),
+    credit: powT.credit || '',
+  }
+  if (!dryRun) {
+    const nextBlocks = [...blocks.slice(0, pollIdx), powBlock, ...blocks.slice(pollIdx)]
+    await client
+      .patch(docId)
+      .set({
+        mainImage: imageValue(mainId),
+        photoCredit: mainT.credit || '',
+        contentBlocks: nextBlocks,
+      })
+      .commit()
+  }
+  console.log(dryRun ? '[dry-run] koolAidPickles' : 'OK pipeline koolAidPickles')
+}
+
+/** DaddyWhereDoPicklesComeFrom.html */
+async function pipelineDaddyWherePickles(client, docId, targets, dryRun) {
+  const tm = targetsById(targets)
+  const cache = new Map()
+  const doc = await client.fetch(`*[_id == $id][0]{ contentBlocks, mainImage, photoCredit }`, {id: docId})
+  const blocks = structuredClone(doc.contentBlocks || [])
+  const proseIdx = blocks.findIndex((b) => b?._type === 'proseSection')
+  if (proseIdx < 0) throw new Error('No proseSection')
+
+  const mainT = tm.get('main-hero')
+  const pilferT = tm.get('pilfer-inline')
+  const mapT = tm.get('guinness-map')
+  const powT = tm.get('photo-of-week')
+
+  const mainId = await ensureAsset(client, mainT, cache, dryRun)
+  const pilferId = await ensureAsset(client, pilferT, cache, dryRun)
+  const mapId = await ensureAsset(client, mapT, cache, dryRun)
+  const powId = await ensureAsset(client, powT, cache, dryRun)
+
+  let body = [...(blocks[proseIdx].body || [])]
+  body = replaceParagraphWhereIncludes(
+    body,
+    'Courtesy of De Agostini / A. Dagli Orti / Getty Images',
+    ptImage(mainId, mainT.credit),
+  )
+  body = replaceParagraphWhereIncludes(
+    body,
+    'Couresty of Pilfering Apples Tumblr',
+    ptImage(pilferId, pilferT.credit || 'Courtesy of Pilfering Apples Tumblr'),
+  )
+  body = insertAfterParagraphIncludes(
+    body,
+    'making America technically named after, that’s right, a pickle dealer.',
+    ptImage(mapId, mapT.credit || undefined),
+  )
+  body = removePowPlaceholderParagraphs(body)
+  blocks[proseIdx] = {...blocks[proseIdx], body}
+
+  const pollIdx = blocks.findIndex((b) => b?._type === 'pollBlock')
+  if (pollIdx < 0) throw new Error('No pollBlock')
+  const powBlock = {
+    _type: 'photoOfWeekBlock',
+    _key: newKey('pow'),
+    heading: 'Sexy Pic(kle) of the Week',
+    image: imageValue(powId),
+    credit: powT.credit || '',
+  }
+  if (!dryRun) {
+    const nextBlocks = [...blocks.slice(0, pollIdx), powBlock, ...blocks.slice(pollIdx)]
+    await client
+      .patch(docId)
+      .set({
+        mainImage: imageValue(mainId),
+        photoCredit: mainT.credit || '',
+        contentBlocks: nextBlocks,
+      })
+      .commit()
+  }
+  console.log(dryRun ? '[dry-run] daddyWherePickles' : 'OK pipeline daddyWherePickles')
+}
+
+/** HowHighShouldMyPickleBounce.html — prose only, no pollBlock in Sanity */
+async function pipelineHowHighPickleBounce(client, docId, targets, dryRun) {
+  const tm = targetsById(targets)
+  const cache = new Map()
+  const doc = await client.fetch(`*[_id == $id][0]{ contentBlocks, mainImage, photoCredit }`, {id: docId})
+  const blocks = structuredClone(doc.contentBlocks || [])
+  const proseIdx = blocks.findIndex((b) => b?._type === 'proseSection')
+  if (proseIdx < 0) throw new Error('No proseSection')
+
+  const mainT = tm.get('main-hero')
+  const bounceT = tm.get('bounce-screenshot')
+  const libT = tm.get('library-screenshot')
+  const powT = tm.get('photo-of-week')
+
+  const mainId = await ensureAsset(client, mainT, cache, dryRun)
+  const bounceId = await ensureAsset(client, bounceT, cache, dryRun)
+  const libId = await ensureAsset(client, libT, cache, dryRun)
+  const powId = await ensureAsset(client, powT, cache, dryRun)
+
+  let body = [...(blocks[proseIdx].body || [])]
+  body = insertAfterParagraphIncludes(
+    body,
+    'But is there any truth to this long-running factoid?',
+    ptImage(bounceId, bounceT.credit || undefined),
+  )
+  body = insertAfterParagraphIncludes(
+    body,
+    'Sparer was fined $500',
+    ptImage(libId, libT.credit || 'Reference Librarians Debra Pond and Steve Rice testing pickles'),
+  )
+  body = removePowPlaceholderParagraphs(body)
+  blocks[proseIdx] = {...blocks[proseIdx], body}
+
+  const powBlock = {
+    _type: 'photoOfWeekBlock',
+    _key: newKey('pow'),
+    heading: 'Sexy Pic(kle) of the Week',
+    image: imageValue(powId),
+    credit: powT.credit || '',
+  }
+  if (!dryRun) {
+    await client
+      .patch(docId)
+      .set({
+        mainImage: imageValue(mainId),
+        photoCredit: mainT.credit || '',
+        contentBlocks: [...blocks.slice(0, proseIdx + 1), powBlock],
+      })
+      .commit()
+  }
+  console.log(dryRun ? '[dry-run] howHighPickleBounce' : 'OK pipeline howHighPickleBounce')
+}
+
 async function runLegacyTargets(client, docId, blocks, targets, dryRun) {
   const cache = new Map()
   for (const t of targets || []) {
@@ -464,6 +921,22 @@ async function main() {
     await pipelineWhyDoPickles2Am(client, doc._id, articleCfg.targets, dryRun)
   } else if (pipeline === 'pickleAddictsFacebook') {
     await pipelinePickleAddictsFacebook(client, doc._id, articleCfg.targets, dryRun)
+  } else if (pipeline === 'picklePriestBless') {
+    await pipelinePicklePriestBless(client, doc._id, articleCfg.targets, dryRun)
+  } else if (pipeline === 'picklePriestInterview') {
+    await pipelinePicklePriestInterview(client, doc._id, articleCfg.targets, dryRun)
+  } else if (pipeline === 'fiveFamousFilms') {
+    await pipelineFiveFamousFilms(client, doc._id, articleCfg.targets, dryRun)
+  } else if (pipeline === 'pamelaAnderson') {
+    await pipelinePamelaAnderson(client, doc._id, articleCfg.targets, dryRun)
+  } else if (pipeline === 'athletesPickleJuice') {
+    await pipelineAthletesPickleJuice(client, doc._id, articleCfg.targets, dryRun)
+  } else if (pipeline === 'koolAidPickles') {
+    await pipelineKoolAidPickles(client, doc._id, articleCfg.targets, dryRun)
+  } else if (pipeline === 'daddyWherePickles') {
+    await pipelineDaddyWherePickles(client, doc._id, articleCfg.targets, dryRun)
+  } else if (pipeline === 'howHighPickleBounce') {
+    await pipelineHowHighPickleBounce(client, doc._id, articleCfg.targets, dryRun)
   } else {
     await runLegacyTargets(client, doc._id, blocks, articleCfg.targets, dryRun)
   }

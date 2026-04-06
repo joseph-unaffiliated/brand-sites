@@ -73,7 +73,16 @@ export default function Header() {
               width={240}
               height={40}
               priority
-              className="brand-logo-img"
+              className="brand-logo-img brand-logo-wordmark"
+            />
+            <Image
+              src="/tpr-logo-black.png"
+              alt=""
+              width={33}
+              height={24}
+              priority
+              className="brand-logo-img brand-logo-mark"
+              aria-hidden
             />
           </Link>
         </div>

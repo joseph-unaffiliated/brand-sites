@@ -61,6 +61,10 @@ NEXT_PUBLIC_ADSENSE_SLOT_MID=
 NEXT_PUBLIC_ADSENSE_SLOT_BOTTOM=
 ```
 
+**Cross-promo (Hookup Lists) instead of AdSense:** set `NEXT_PUBLIC_ADS_MODE=cross_promo`. Ad slots still need to be “enabled” (non-empty slot id **or** cross-promo mode fills rail/mid/bottom/sticky). Optional: `NEXT_PUBLIC_CROSS_PROMO_URL`, `NEXT_PUBLIC_CROSS_PROMO_HEADLINE`, `NEXT_PUBLIC_CROSS_PROMO_DESCRIPTION`, `NEXT_PUBLIC_CROSS_PROMO_BRAND_LABEL`, `NEXT_PUBLIC_CROSS_PROMO_LOGO_PATH`, `NEXT_PUBLIC_CROSS_PROMO_CTA`.
+
+**Email HTML → Sanity images:** source files live under `issues/thepicklereport/`; the manifest is `issues/thepicklereport/email-image-manifest.json`. Pipelines are in `studio-the-pickle-report/scripts/import-email-images.mjs`. With `SANITY_API_TOKEN` set, run from `studio-the-pickle-report`: `node scripts/import-email-images.mjs --slug=<slug>` (use `--dry-run` first). See `docs/ENVIRONMENT.md` for env vars.
+
 Then click **Redeploy**.
 
 ---

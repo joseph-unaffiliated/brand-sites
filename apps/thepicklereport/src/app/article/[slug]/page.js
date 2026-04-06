@@ -12,16 +12,23 @@ import HideWhenSubscribed from "@/components/HideWhenSubscribed";
 import RecordArticleView from "@/components/RecordArticleView";
 import ArticleSubscribeForm from "@/components/ArticleSubscribeForm";
 import ArticleContentBlocks from "@/components/ArticleContentBlocks";
-import AdUnit from "@/components/AdUnit";
+import AdSlot from "@/components/AdSlot";
 import ArticleAdStickyBottom from "@/components/ArticleAdStickyBottom";
 import styles from "./page.module.css";
 
 const SANITY_PROJECT_ID = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
 const SANITY_DATASET = process.env.NEXT_PUBLIC_SANITY_DATASET ?? "production";
 
+const ADS_MODE = (process.env.NEXT_PUBLIC_ADS_MODE || "cross_promo").toLowerCase();
+const CROSS_PROMO = ADS_MODE === "cross_promo";
+
 const SLOT_RAIL = process.env.NEXT_PUBLIC_ADSENSE_SLOT_RAIL;
 const SLOT_MID = process.env.NEXT_PUBLIC_ADSENSE_SLOT_MID;
 const SLOT_BOTTOM = process.env.NEXT_PUBLIC_ADSENSE_SLOT_BOTTOM;
+
+const SHOW_RAIL = CROSS_PROMO || !!SLOT_RAIL;
+const SHOW_MID = CROSS_PROMO || !!SLOT_MID;
+const SHOW_BOTTOM = CROSS_PROMO || !!SLOT_BOTTOM;
 
 export async function generateStaticParams() {
   return await getArticleSlugs();
@@ -63,7 +70,7 @@ export default async function ArticlePage({ params, searchParams: searchParamsPr
     Boolean(SANITY_PROJECT_ID);
 
   const contentBlocksForRender = showBlocks
-    ? dedupeSubtitleInContentBlocks(contentBlocks, article.subtitle)
+    ? dedupeSubtitleInContentBlocks(contentBlocks, article.subtitle, article.title)
     : contentBlocks;
 
   return (
@@ -128,6 +135,7 @@ export default async function ArticlePage({ params, searchParams: searchParamsPr
                       blocks={contentBlocksForRender}
                       projectId={SANITY_PROJECT_ID}
                       dataset={SANITY_DATASET}
+                      articleSlug={slug}
                     />
                   ) : (
                     <>
@@ -140,9 +148,9 @@ export default async function ArticlePage({ params, searchParams: searchParamsPr
                           {entry.body ? <p>{entry.body}</p> : null}
                         </article>
                       ))}
-                      {SLOT_MID && midIndex > 0 && (
+                      {SHOW_MID && midIndex > 0 && (
                         <div className={styles.adMid}>
-                          <AdUnit slotId={SLOT_MID} format="rectangle" />
+                          <AdSlot slotId={SLOT_MID} format="rectangle" />
                         </div>
                       )}
                       {entries.slice(midIndex).map((entry, i) => (
@@ -163,9 +171,9 @@ export default async function ArticlePage({ params, searchParams: searchParamsPr
                   </div>
                 )}
               </div>
-              {SLOT_BOTTOM && (
+              {SHOW_BOTTOM && (
                 <div className={styles.adBottom}>
-                  <AdUnit slotId={SLOT_BOTTOM} format="rectangle" />
+                  <AdSlot slotId={SLOT_BOTTOM} format="rectangle" />
                 </div>
               )}
               <div className="spacer-4rem" />
@@ -181,7 +189,16 @@ export default async function ArticlePage({ params, searchParams: searchParamsPr
               </div>
             </section>
           </HideWhenSubscribed>
-          {readMore.length > 0 && (
+          </div>
+        </div>
+        {SHOW_RAIL && (
+          <div className={styles.articleRail}>
+            <AdSlot slotId={SLOT_RAIL} format="vertical" />
+          </div>
+        )}
+        </div>
+        {readMore.length > 0 && (
+          <div className={styles.readMoreOuter}>
             <section className={styles.readMore} aria-label="Keep reading">
               <h2 className={styles.readMoreTitle}>Keep reading</h2>
               <div className={styles.readMoreGrid}>
@@ -211,15 +228,8 @@ export default async function ArticlePage({ params, searchParams: searchParamsPr
                 ))}
               </div>
             </section>
-          )}
-          </div>
-        </div>
-        {SLOT_RAIL && (
-          <div className={styles.articleRail}>
-            <AdUnit slotId={SLOT_RAIL} format="vertical" />
           </div>
         )}
-        </div>
       </section>
     </div>
   );

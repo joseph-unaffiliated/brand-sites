@@ -108,20 +108,48 @@ function stripSubtitleFromPortableBody(body, subtitle) {
   return [replaceFirstBlockText(first, stripped), ...body.slice(1)];
 }
 
+function headingsMatchHero(a, b) {
+  if (!a?.trim() || !b?.trim()) return false;
+  const norm = (s) => s.trim().toLowerCase().replace(/\s+/g, " ");
+  return norm(a) === norm(b);
+}
+
 /**
- * Remove article subtitle from the start of the first prose block when it repeats the hero dek
- * (matches email rendering, which shows the dek once).
+ * Remove hero duplicates from the first prose section: subtitle at the start of body, and
+ * section `heading` when it repeats the article title (H1 is already shown above).
+ *
+ * @param {string} [title] — when set, clears the first matching `heading` on proseSection / listicleSection / nibblesBlock
  */
-export function dedupeSubtitleInContentBlocks(blocks, subtitle) {
-  if (!Array.isArray(blocks) || !subtitle?.trim()) return blocks;
-  const sub = subtitle.trim();
-  let applied = false;
+export function dedupeSubtitleInContentBlocks(blocks, subtitle, title) {
+  if (!Array.isArray(blocks) || blocks.length === 0) return blocks;
+  const sub = subtitle?.trim();
+  const heroTitle = title?.trim();
+  let appliedSubtitle = false;
+  let appliedHeading = false;
+
   return blocks.map((block) => {
-    if (applied || block?._type !== "proseSection" || !Array.isArray(block.body)) {
-      return block;
+    let next = block;
+
+    if (
+      !appliedSubtitle &&
+      sub &&
+      block?._type === "proseSection" &&
+      Array.isArray(block.body)
+    ) {
+      const newBody = stripSubtitleFromPortableBody(block.body, sub);
+      if (newBody !== block.body) {
+        appliedSubtitle = true;
+        next = { ...block, body: newBody };
+      }
     }
-    const newBody = stripSubtitleFromPortableBody(block.body, sub);
-    if (newBody !== block.body) applied = true;
-    return { ...block, body: newBody };
+
+    if (!appliedHeading && heroTitle && next && typeof next.heading === "string") {
+      if (headingsMatchHero(next.heading, heroTitle)) {
+        appliedHeading = true;
+        next = { ...next, heading: undefined };
+      }
+    }
+
+    return next;
   });
 }
