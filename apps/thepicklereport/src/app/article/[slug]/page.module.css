@@ -6,12 +6,12 @@
 
 /* Leave space for sticky bottom ad when present */
 .page:has(.article-ad-sticky-bottom) {
-  padding-bottom: 70px;
+  padding-bottom: 112px;
 }
 
 /* Centered hero block: headline + image, no rail beside (align with article grid width) */
 .articleHeroBlock {
-  max-width: min(100%, 880px);
+  max-width: min(100%, 740px);
   margin-left: auto;
   margin-right: auto;
   padding-top: 1.5rem;
@@ -57,9 +57,9 @@
 
 @media (min-width: 1024px) {
   .articleBodyGrid {
-    grid-template-columns: minmax(0, 540px) 300px;
+    grid-template-columns: minmax(0, 540px) 160px;
     gap: 0 40px;
-    max-width: 880px;
+    max-width: 740px;
     padding-left: 0;
     padding-right: 0;
     align-items: start;

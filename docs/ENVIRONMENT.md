@@ -13,7 +13,11 @@
 | `NEXT_PUBLIC_ADSENSE_CLIENT` | yes | AdSense client id. |
 | `NEXT_PUBLIC_ADSENSE_SLOT_*` | yes | Slot ids for ad units (if used). |
 | `NEXT_PUBLIC_ADS_MODE` | yes | `cross_promo` (default in app when unset) or `adsense` for Google AdSense slots. |
-| `NEXT_PUBLIC_CROSS_PROMO_URL` | yes | External URL for the cross-promo card (default `https://hookuplists.com`). |
+| `NEXT_PUBLIC_SHARED_ADS_BRAND` | yes | When set (e.g. `the90sparent`), Pickle Report uses image creatives from `packages/shared-ads/<brand>/` instead of the default Hookup Lists text card. Omit on sites that should not load that set. |
+| `NEXT_PUBLIC_SHARED_ADS_URL_IN_ARTICLE` | yes | Destination URL for shared image ads in **rectangle** slots (mid + bottom in-article). Falls back to `NEXT_PUBLIC_CROSS_PROMO_URL`. |
+| `NEXT_PUBLIC_SHARED_ADS_URL_RAIL` | yes | Destination URL for the **rail** (sidebar) shared image ad. Falls back to `NEXT_PUBLIC_CROSS_PROMO_URL`. |
+| `NEXT_PUBLIC_SHARED_ADS_URL_STICKY` | yes | Destination URL for the **sticky footer** shared image ad (desktop + mobile creatives). Falls back to `NEXT_PUBLIC_CROSS_PROMO_URL`. |
+| `NEXT_PUBLIC_CROSS_PROMO_URL` | yes | Default external URL for cross-promo links when placement-specific URLs are unset (default `https://hookuplists.com`). Also used by the text Hookup Lists card. |
 | `NEXT_PUBLIC_CROSS_PROMO_HEADLINE` | yes | Card title. |
 | `NEXT_PUBLIC_CROSS_PROMO_DESCRIPTION` | yes | Short body text. |
 | `NEXT_PUBLIC_CROSS_PROMO_BRAND_LABEL` | yes | Small brand line (e.g. `Hookup Lists`). |

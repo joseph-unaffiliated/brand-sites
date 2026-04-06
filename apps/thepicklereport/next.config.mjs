@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   transpilePackages: [
+    "@publication-websites/shared-ads",
     "@publication-websites/web-shell",
     "@publication-websites/sanity-content",
     "@publication-websites/magic-client",

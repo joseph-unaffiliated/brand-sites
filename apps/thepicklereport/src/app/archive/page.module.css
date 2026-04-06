@@ -67,6 +67,10 @@
   box-shadow: 0 4px 16px rgba(2, 30, 21, 0.08);
 }
 
+.issueCardLink:hover .issueCardBody h3 {
+  text-decoration: underline;
+}
+
 .issueCardImage {
   line-height: 0;
   background: var(--surface-muted);
@@ -85,9 +89,9 @@
 }
 
 .issueCardBody h3 {
-  margin: 6px 0 8px;
-  font-size: 1.15rem;
-  font-weight: 600;
+  margin: 6px 0 6px;
+  font-size: var(--text-section-headline);
+  font-weight: 300;
   line-height: 1.25;
   font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
 }

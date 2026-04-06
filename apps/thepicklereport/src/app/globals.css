@@ -342,7 +342,7 @@ a {
 
 /* When sticky bottom ad is visible, reserve space so footer stays above it */
 .site-main:has(.article-ad-sticky-bottom) + .site-footer {
-  margin-bottom: 72px;
+  margin-bottom: 112px;
 }
 
 .footer-grid {
@@ -643,14 +643,59 @@ a {
   left: 0;
   right: 0;
   z-index: 100;
-  background: rgba(255, 255, 255, 0.98);
-  backdrop-filter: blur(8px);
-  border-top: 1px solid var(--border);
-  padding: 8px 16px;
+  background: transparent;
+  padding: 10px 8px calc(10px + env(safe-area-inset-bottom, 0px));
   display: flex;
   justify-content: center;
+  align-items: flex-start;
+  min-height: 0;
+  pointer-events: none;
+}
+
+.article-ad-sticky-bottom-inner {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  max-width: min(100vw, 1200px);
+  pointer-events: auto;
+}
+
+.article-ad-sticky-bottom-slot {
+  flex: 0 1 auto;
+  min-width: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.article-ad-sticky-dismiss {
+  flex: 0 0 auto;
+  margin-top: 2px;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
   align-items: center;
-  min-height: 50px;
+  justify-content: center;
+  font-family: system-ui, sans-serif;
+}
+
+.article-ad-sticky-dismiss:hover {
+  background: rgba(0, 0, 0, 0.68);
+}
+
+.article-ad-sticky-dismiss:focus-visible {
+  outline: 2px solid var(--accent, #474f00);
+  outline-offset: 2px;
 }
 
 .ad-placeholder {

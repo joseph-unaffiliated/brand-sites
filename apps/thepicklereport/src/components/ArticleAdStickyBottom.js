@@ -19,7 +19,19 @@ export default function ArticleAdStickyBottom() {
 
   return (
     <div className="article-ad-sticky-bottom">
-      <AdSlot slotId={SLOT_STICKY} format="horizontal" onCollapse={handleAdCollapse} />
+      <div className="article-ad-sticky-bottom-inner">
+        <div className="article-ad-sticky-bottom-slot">
+          <AdSlot slotId={SLOT_STICKY} format="horizontal" onCollapse={handleAdCollapse} />
+        </div>
+        <button
+          type="button"
+          className="article-ad-sticky-dismiss"
+          onClick={handleAdCollapse}
+          aria-label="Close advertisement"
+        >
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
     </div>
   );
 }
