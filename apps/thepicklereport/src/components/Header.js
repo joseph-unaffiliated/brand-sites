@@ -1,9 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useSubscriber } from "@/context/SubscriberContext";
+import BrandLogoMark from "@/components/BrandLogoMark";
+import BrandWordmark from "@/components/BrandWordmark";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -57,33 +58,21 @@ export default function Header() {
           aria-label="Toggle menu"
           onClick={() => setMenuOpen((o) => !o)}
         >
-          <span className="header-hamburger-line" />
-          <span className="header-hamburger-line" />
-          <span className="header-hamburger-line" />
+          <span className="header-hamburger-line" aria-hidden />
         </button>
         <nav className="site-nav site-nav-left header-nav-desktop" aria-label="Main">
           <Link href="/archive">Archive</Link>
           <Link href="/about">About</Link>
         </nav>
         <div className="brand">
-          <Link href="/" className="brand-name" onClick={() => setMenuOpen(false)}>
-            <Image
-              src="/tpr-wordmark-black.png"
-              alt="The Pickle Report"
-              width={240}
-              height={40}
-              priority
-              className="brand-logo-img brand-logo-wordmark"
-            />
-            <Image
-              src="/tpr-logo-black.png"
-              alt=""
-              width={33}
-              height={24}
-              priority
-              className="brand-logo-img brand-logo-mark"
-              aria-hidden
-            />
+          <Link
+            href="/"
+            className="brand-name"
+            onClick={() => setMenuOpen(false)}
+            aria-label="The Pickle Report"
+          >
+            <BrandWordmark className="brand-logo-img brand-logo-wordmark" />
+            <BrandLogoMark className="brand-logo-img brand-logo-mark" />
           </Link>
         </div>
         <nav className="site-nav site-nav-right header-nav-desktop" aria-label="Main">

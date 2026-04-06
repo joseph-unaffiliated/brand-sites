@@ -29,7 +29,20 @@ export default function ArticleAdStickyBottom() {
           onClick={handleAdCollapse}
           aria-label="Close advertisement"
         >
-          <span aria-hidden="true">×</span>
+          <svg
+            className="article-ad-sticky-dismiss-icon"
+            viewBox="0 0 12 12"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path
+              d="M2.5 2.5 L9.5 9.5 M9.5 2.5 L2.5 9.5"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+            />
+          </svg>
         </button>
       </div>
     </div>

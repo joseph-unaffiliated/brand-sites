@@ -75,7 +75,7 @@ export default function CrossPromoImageAd({ format = "rectangle", className, cre
             width={mob.width}
             height={mob.height}
             className="cross-promo-image-sticky-img cross-promo-image-sticky-img-mobile"
-            sizes={`(max-width: 1023px) min(${mob.width}px, calc(100vw - 32px)), 1px`}
+            sizes={`(max-width: 768px) min(${mob.width}px, calc(100vw - 32px)), 1px`}
           />
         </Link>
       </div>

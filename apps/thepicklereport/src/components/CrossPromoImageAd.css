@@ -50,8 +50,15 @@
   display: block;
 }
 
+.cross-promo-image-sticky-img-desktop,
+.cross-promo-image-sticky-img-mobile {
+  filter: drop-shadow(0 6px 28px rgba(2, 30, 21, 0.22))
+    drop-shadow(0 3px 10px rgba(2, 30, 21, 0.16))
+    drop-shadow(0 1px 3px rgba(2, 30, 21, 0.12));
+}
+
 /* Shrink only when the bar is narrower than the creative’s logical width */
-@media (min-width: 1024px) {
+@media (min-width: 769px) {
   .cross-promo-image-sticky-desktop .cross-promo-image-sticky-img-desktop {
     max-width: calc(100vw - 48px);
     height: auto;
@@ -62,7 +69,7 @@
   display: none;
 }
 
-@media (max-width: 1023px) {
+@media (max-width: 768px) {
   .cross-promo-image-sticky-desktop {
     display: none;
   }

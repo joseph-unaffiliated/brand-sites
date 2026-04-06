@@ -6,8 +6,9 @@
  */
 
 import Link from "next/link";
-import Image from "next/image";
 import { Suspense } from "react";
+import BrandLogoMark from "@/components/BrandLogoMark";
+import BrandWordmark from "@/components/BrandWordmark";
 import { Geist, Geist_Mono } from "next/font/google";
 import { FontAwesomeStylesheet, MarketingScripts, TypekitStylesheet } from "@publication-websites/web-shell";
 import { siteConfig } from "@/config/site";
@@ -89,21 +90,8 @@ export default function RootLayout({ children }) {
             <div className="container footer-grid">
               <div className="footer-brand">
                 <Link href="/" className="footer-logo" aria-label="The Pickle Report">
-                  <Image
-                    src="/tpr-wordmark-white.png"
-                    alt="The Pickle Report"
-                    width={240}
-                    height={40}
-                    className="footer-logo-img footer-logo-wordmark"
-                  />
-                  <Image
-                    src="/tpr-logo-black.png"
-                    alt=""
-                    width={33}
-                    height={24}
-                    className="footer-logo-img footer-logo-mark"
-                    aria-hidden
-                  />
+                  <BrandWordmark className="footer-logo-img footer-logo-wordmark" />
+                  <BrandLogoMark className="footer-logo-img footer-logo-mark" />
                 </Link>
                 <p className="footer-text">
                   The world&apos;s leading pickle news source. Delivered weekly.
