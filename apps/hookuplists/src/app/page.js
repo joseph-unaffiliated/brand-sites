@@ -50,7 +50,7 @@ export default async function Home({ searchParams: searchParamsProp }) {
           {/* Left column: exactly two cards */}
           <div className={styles.mosaicLeft}>
             {leftCards.map((article) => (
-              <article className={styles.mosaicCard} key={article.slug}>
+              <article className={styles.mosaicCard} key={article._id ?? article.slug}>
                 <Link
                   href={`/article/${article.slug}`}
                   className={styles.mosaicCardLink}

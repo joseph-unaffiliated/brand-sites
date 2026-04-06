@@ -22,7 +22,7 @@ export default async function ArchivePage() {
 
         <div className={styles.issueList}>
           {articles.map((article) => (
-            <article className={styles.issueCard} key={article.slug}>
+            <article className={styles.issueCard} key={article._id ?? article.slug}>
               <div>
                 <p className={styles.issueDate}>
                   {article.publishedDate

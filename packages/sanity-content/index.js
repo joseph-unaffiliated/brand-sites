@@ -337,6 +337,7 @@ export function mapArticle(raw, urlFor, fallbackImage = "/hl-photo.png") {
   const mainImageHeight = chosen?.height ?? 600;
 
   return {
+    _id: raw._id,
     slug: raw.slug,
     title: raw.title,
     kicker: raw.kicker,
@@ -365,7 +366,13 @@ export function createArticleQueries(layer) {
     async getArticles() {
       if (!client) return [];
       const raw = await client.fetch(articlesQuery, {}, nextOptions);
-      return (raw ?? []).map(map);
+      const mapped = (raw ?? []).map(map).filter(Boolean);
+      const bySlug = new Map();
+      for (const a of mapped) {
+        if (!a?.slug || bySlug.has(a.slug)) continue;
+        bySlug.set(a.slug, a);
+      }
+      return [...bySlug.values()];
     },
     async getArticleBySlug(slug) {
       if (!client) return null;

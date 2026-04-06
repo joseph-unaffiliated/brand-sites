@@ -204,7 +204,7 @@ export default async function ArticlePage({ params, searchParams: searchParamsPr
               <div className={styles.readMoreGrid}>
                 {readMore.map((rec) => (
                   <Link
-                    key={rec.slug}
+                    key={rec._id ?? rec.slug}
                     href={`/article/${rec.slug}`}
                     className={styles.readMoreCard}
                   >

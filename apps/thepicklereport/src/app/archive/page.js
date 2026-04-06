@@ -23,7 +23,7 @@ export default async function ArchivePage() {
 
         <div className={styles.issueMosaic}>
           {articles.map((article) => (
-            <article className={styles.issueCard} key={article.slug}>
+            <article className={styles.issueCard} key={article._id ?? article.slug}>
               <Link href={`/article/${article.slug}`} className={styles.issueCardLink}>
                 <div className={styles.issueCardImage}>
                   <Image

@@ -21,7 +21,7 @@ export default function HomeSnippetsList({ stackItems }) {
         const { demographic, description } = getDemographicAndDescription(article);
         return (
           <Link
-            key={article.slug}
+            key={article._id ?? article.slug}
             href={`/article/${article.slug}`}
             className={styles.snippetItem}
           >
