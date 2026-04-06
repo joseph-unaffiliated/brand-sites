@@ -29,10 +29,8 @@ export async function generateMetadata({ params }) {
 
 const READ_MORE_COUNT = 3;
 
-export default async function ArticlePage({ params, searchParams: searchParamsProp }) {
+export default async function ArticlePage({ params }) {
   const { slug } = await params;
-  const searchParams = typeof searchParamsProp?.then === "function" ? await searchParamsProp : searchParamsProp ?? {};
-  const initialEmail = searchParams?.email ? decodeURIComponent(String(searchParams.email)) : undefined;
 
   const [article, allArticles] = await Promise.all([
     getArticleBySlug(slug),
@@ -131,7 +129,7 @@ export default async function ArticlePage({ params, searchParams: searchParamsPr
                   <span>Hookup Lists</span>
                   <span className="italic">, weekly in your inbox</span>
                 </div>
-                <ArticleSubscribeForm initialEmail={initialEmail} />
+                <ArticleSubscribeForm />
               </div>
             </section>
           </HideWhenSubscribed>
