@@ -43,7 +43,7 @@ export default function Header() {
       href="/#subscribe"
       onClick={() => setMenuOpen(false)}
     >
-      Subscribe / Log in
+      Subscribe
     </a>
   );
 

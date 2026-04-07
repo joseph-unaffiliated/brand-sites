@@ -175,6 +175,48 @@
   margin-bottom: 0;
 }
 
+@media (max-width: 768px) {
+  .poll .blockHeading {
+    font-size: 1.2rem;
+    line-height: 1.15;
+    padding-bottom: 0.65rem;
+  }
+
+  .poll .photoOfWeekTitle {
+    font-size: 1.2rem;
+    line-height: 1.15;
+    padding-bottom: 0.65rem;
+  }
+
+  .block > .prose {
+    font-size: 1rem;
+  }
+
+  .block > .prose p {
+    font-size: 1rem;
+  }
+
+  .poll .prose {
+    font-size: 1rem;
+  }
+
+  .poll .prose p {
+    font-size: 1rem;
+  }
+
+  .poll .pollOptionRow {
+    font-size: 1rem;
+  }
+
+  .poll .pollTeaser,
+  .poll .pollLastQ,
+  .poll .pollReveal,
+  .poll .pollPoints,
+  .poll .pollResults {
+    font-size: 1rem;
+  }
+}
+
 /* Inline images: use padding-top (not margin-top) so space *adds* to the previous <p> margin.
    Otherwise margin collapses with the paragraph and the gap stays ~1.25rem. */
 .proseFigure {
@@ -276,16 +318,16 @@
   border-radius: 8px;
 }
 
-/* Poll-style asides: extra horizontal + vertical breathing room (trivia, Pickle Economics, Photo of Week) */
+/* Poll-style asides — mobile-first padding/spacing; large insets only ≥769px (avoid cascade bugs with @media max-width) */
 .poll {
-  padding: 2.5rem 2.25rem;
+  padding: 1rem 1rem;
   background: var(--bg);
   border-radius: 8px;
   border: 1px solid var(--border);
 }
 
 .pickleEconomicsBox {
-  margin-top: 2rem;
+  margin-top: 1.25rem;
 }
 
 .poll .eyebrow {
@@ -293,36 +335,70 @@
 }
 
 .poll:has(.photoOfWeekFigure) .eyebrow {
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 /* Inline figures inside poll-style boxes (Pickle Economics body, etc.) */
 .poll .prose figure.proseFigure {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  padding-top: 1rem;
+  margin-left: 0;
+  margin-right: 0;
+  margin-top: 0.65rem;
+  margin-bottom: 0.65rem;
+  padding-top: 0.65rem;
 }
 
 .poll .prose p + figure.proseFigure {
-  padding-top: 1rem;
+  padding-top: 0.65rem;
 }
 
-/* Inset inline images inside Pickle Economics module */
-.pickleEconomicsBox .prose figure.proseFigure {
-  margin-left: 1rem;
-  margin-right: 1rem;
-  box-sizing: border-box;
+@media (min-width: 769px) {
+  .poll {
+    padding: 2.5rem 2.25rem;
+  }
+
+  .pickleEconomicsBox {
+    margin-top: 2rem;
+  }
+
+  .poll:has(.photoOfWeekFigure) .eyebrow {
+    margin-bottom: 1rem;
+  }
+
+  .poll .prose figure.proseFigure {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    padding-top: 1rem;
+  }
+
+  .poll .prose p + figure.proseFigure {
+    padding-top: 1rem;
+  }
 }
 
+/* Pickle Economics lists: mobile-first (tighter); figures/lists get extra inset on desktop only */
 .pickleEconomicsBox .prose ul,
 .pickleEconomicsBox .prose ol {
-  padding-left: 1.75rem;
-  margin-left: 0.5rem;
+  padding-left: 1.25rem;
+  margin-left: 0.25rem;
   list-style-position: outside;
 }
 
 .pickleEconomicsBox .prose li {
   padding-left: 0.35rem;
+}
+
+@media (min-width: 769px) {
+  .pickleEconomicsBox .prose figure.proseFigure {
+    margin-left: 1rem;
+    margin-right: 1rem;
+    box-sizing: border-box;
+  }
+
+  .pickleEconomicsBox .prose ul,
+  .pickleEconomicsBox .prose ol {
+    padding-left: 1.75rem;
+    margin-left: 0.5rem;
+  }
 }
 
 .poll .photoOfWeekFigure {
@@ -362,7 +438,7 @@
 
 .pollOptionList {
   list-style: none;
-  margin: 0.75rem 0 1rem;
+  margin: 0.5rem 0 0.65rem;
   padding: 0;
   display: flex;
   flex-direction: column;
@@ -373,11 +449,21 @@
   display: flex;
   align-items: flex-start;
   gap: 0.75rem;
-  padding: 0.65rem 0.85rem;
+  padding: 0.5rem 0.5rem;
   border: 1px solid var(--border);
   border-radius: 8px;
   background: var(--bg);
   line-height: 1.4;
+}
+
+@media (min-width: 769px) {
+  .pollOptionList {
+    margin: 0.75rem 0 1rem;
+  }
+
+  .pollOptionRow {
+    padding: 0.65rem 0.85rem;
+  }
 }
 
 .pollLetter {

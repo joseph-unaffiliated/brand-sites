@@ -83,6 +83,7 @@ body {
 .site h4 {
   font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
   font-weight: 300;
+  text-wrap: balance;
 }
 
 :where(.site) p {
@@ -112,13 +113,14 @@ a {
 }
 
 @media (max-width: 480px) {
+  /* Keep 24px gutters so article / read-more / footer align on narrow phones */
   .container {
-    padding: 0 16px;
+    padding: 0 24px;
   }
 
   .articlebody-section .container-720 {
-    padding-left: 16px;
-    padding-right: 16px;
+    padding-left: 24px;
+    padding-right: 24px;
   }
 }
 
@@ -149,8 +151,10 @@ a {
   display: none;
   grid-column: 1;
   justify-self: start;
+  align-self: center;
   width: 44px;
   height: 44px;
+  margin: 0;
   padding: 0;
   border: none;
   background: transparent;
@@ -169,7 +173,9 @@ a {
   background: var(--text-primary);
   /* One bar + two shadows avoids subpixel mismatch between three separate boxes */
   box-shadow: 0 7px 0 var(--text-primary), 0 14px 0 var(--text-primary);
-  transition: 0.2s ease;
+  /* Shadows don't affect layout; nudge so the three-bar glyph is vertically centered in the tap target */
+  transform: translateY(-7px);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .site-header .header-subscribe-mobile {
@@ -246,9 +252,9 @@ a {
 
 .brand-logo-mark {
   display: block;
-  width: 64px;
+  width: 48px;
   height: auto;
-  max-width: min(64px, 100%);
+  max-width: min(48px, 100%);
   color: var(--text-primary);
   object-fit: contain;
 }
@@ -387,6 +393,16 @@ a {
   margin-bottom: 16px;
 }
 
+@media (max-width: 768px) {
+  .footer-grid {
+    align-items: start;
+  }
+
+  .footer-tagline {
+    display: none;
+  }
+}
+
 .footer-logo {
   display: block;
   width: auto;
@@ -400,9 +416,10 @@ a {
 
 .footer-logo-mark {
   display: block;
-  width: 64px;
+  width: 48px;
+  min-width: 48px;
   height: auto;
-  max-width: min(64px, 100%);
+  max-width: min(48px, 100%);
   color: var(--footer-text);
   object-fit: contain;
 }
@@ -744,6 +761,22 @@ a {
   outline-offset: 2px;
 }
 
+@media (max-width: 768px) {
+  .article-ad-sticky-dismiss {
+    left: auto;
+    top: 0;
+    right: 0;
+    transform: translateY(calc(-100% - 6px));
+    width: 22px;
+    height: 22px;
+  }
+
+  .article-ad-sticky-dismiss-icon {
+    width: 10px;
+    height: 10px;
+  }
+}
+
 .ad-placeholder {
   width: 100%;
   border-radius: 8px;
@@ -782,7 +815,7 @@ a {
 
 @media (max-width: 480px) {
   .header-row-1 {
-    padding: 20px 16px;
+    padding: 20px 24px;
   }
 }
 

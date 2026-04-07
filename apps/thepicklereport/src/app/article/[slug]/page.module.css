@@ -127,8 +127,10 @@
     display: none;
   }
 
+  /* Body grid already has 24px horizontal padding; don't double with inner inset */
   .articleContainerNoPadding {
-    padding-right: 1rem;
+    padding-left: 0;
+    padding-right: 0;
   }
 }
 

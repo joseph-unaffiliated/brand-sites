@@ -93,7 +93,7 @@ export default function RootLayout({ children }) {
                   <BrandWordmark className="footer-logo-img footer-logo-wordmark" />
                   <BrandLogoMark className="footer-logo-img footer-logo-mark" />
                 </Link>
-                <p className="footer-text">
+                <p className="footer-text footer-tagline">
                   The world&apos;s leading pickle news source. Delivered weekly.
                 </p>
               </div>

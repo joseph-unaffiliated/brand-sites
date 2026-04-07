@@ -143,7 +143,7 @@ export default async function Home({ searchParams: searchParamsProp }) {
                       })}
                     </div>
                   )}
-                  <span className={styles.featuredLink}>Read the list →</span>
+                  <span className={styles.featuredLink}>Read more →</span>
                 </div>
               </Link>
             )}
