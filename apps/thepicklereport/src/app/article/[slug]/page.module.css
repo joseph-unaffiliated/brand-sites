@@ -2,6 +2,9 @@
   display: flex;
   flex-direction: column;
   padding-bottom: 0;
+  /* Lets the article column use the full main width (avoids flex min-width:auto quirks). */
+  min-width: 0;
+  width: 100%;
 }
 
 /* Leave space for sticky bottom ad when present */
@@ -11,7 +14,7 @@
 
 /* Centered hero block: headline + image, no rail beside (align with article grid width) */
 .articleHeroBlock {
-  max-width: min(100%, 740px);
+  max-width: min(100%, 840px);
   margin-left: auto;
   margin-right: auto;
   padding-top: 1.5rem;
@@ -28,7 +31,7 @@
   border: none;
   border-top: 1px solid var(--border);
   margin: 1.75rem auto 0;
-  max-width: min(100%, 540px);
+  max-width: min(100%, 640px);
 }
 
 .articleBodyGridBlocksFirst {
@@ -56,13 +59,18 @@
 }
 
 @media (min-width: 769px) {
+  /* 640px prose + 40px gap + 160px rail = 840px; fixed gap, whole block centered */
   .articleBodyGrid {
-    grid-template-columns: minmax(0, 540px) 160px;
-    gap: 0 40px;
-    max-width: 740px;
+    grid-template-columns: 640px 160px;
+    gap: 40px;
+    width: min(840px, 100%);
+    max-width: 840px;
+    margin-left: auto;
+    margin-right: auto;
     padding-left: 0;
     padding-right: 0;
     align-items: start;
+    box-sizing: border-box;
   }
 }
 
@@ -85,9 +93,15 @@
 
 .articleContainerNoPadding {
   padding-top: 24px;
-  padding-bottom: 64px;
+  padding-bottom: 0;
   padding-left: 1rem;
   padding-right: 0;
+}
+
+@media (min-width: 769px) {
+  .articleContainerNoPadding {
+    padding-left: 0;
+  }
 }
 
 .articleRail {
@@ -95,6 +109,7 @@
   top: 24px;
   align-self: start;
   margin-top: 1.5rem;
+  box-sizing: border-box;
 }
 
 @media (min-width: 769px) {

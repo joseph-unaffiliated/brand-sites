@@ -94,6 +94,19 @@ function firstImageFieldFromContentBlocks(blocks) {
           }
         break
       }
+      case 'pickleEconomicsSection': {
+        for (const node of block.body || []) {
+          if (!node || node._type !== 'image') continue
+          const ref = imageAssetRef(node)
+          if (ref)
+            return {
+              _type: 'image',
+              asset: {_type: 'reference', _ref: ref},
+              ...(node.hotspot ? {hotspot: node.hotspot} : {}),
+            }
+        }
+        break
+      }
       default:
         break
     }

@@ -154,12 +154,16 @@
 
 .prose {
   line-height: 1.65;
-  font-size: var(--text-lead);
+  font-size: 1.2rem;
+  width: 100%;
+  max-width: min(640px, 100%);
 }
 
 .prose p {
   margin: 0 0 1.25rem;
   color: var(--text-secondary);
+  font-size: 1.2rem;
+  line-height: 1.85;
 }
 
 .prose p:last-child {
@@ -170,14 +174,14 @@
    Otherwise margin collapses with the paragraph and the gap stays ~1.25rem. */
 .proseFigure {
   margin-top: 0;
-  padding-top: 2rem;
+  padding-top: 1rem;
   margin-bottom: 1rem;
   box-sizing: border-box;
 }
 
 /* Explicit gap after body copy before the next image (e.g. "2. Cup O' Noodles…" → donuts) */
 .prose p + .proseFigure {
-  padding-top: 3.25rem;
+  padding-top: 1.5rem;
 }
 
 .prose > .proseFigure:first-child {
@@ -266,6 +270,27 @@
   padding: 1.5rem;
   background: hsl(66 12% 90%);
   border-radius: 8px;
+}
+
+.pickleEconomicsBox {
+  margin-top: 2rem;
+}
+
+/* Inline figures inside poll-style boxes (Pickle Economics body, etc.) */
+.poll .prose figure.proseFigure {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  padding-top: 1rem;
+}
+
+.poll .prose p + figure.proseFigure {
+  padding-top: 1rem;
+}
+
+.poll .photoOfWeekFigure {
+  margin-top: 0;
+  margin-bottom: 0;
+  width: 100%;
 }
 
 .eyebrow {
@@ -407,6 +432,4 @@
 
 .photoOfWeekFallback {
   margin-top: 2rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--border);
 }

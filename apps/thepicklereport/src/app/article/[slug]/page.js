@@ -85,7 +85,7 @@ export default async function ArticlePage({ params }) {
               <div className={styles.backLink}>
                 <Link href="/archive">← Back to archive</Link>
               </div>
-              <div className="spacer-2-5rem" />
+              <div className="spacer-3rem" />
               <div className="headline-block">
                 {article.kicker && article.kicker.trim().toLowerCase() !== "the pickle report" && (
                   <p className={styles.kicker}>{article.kicker}</p>
@@ -174,7 +174,6 @@ export default async function ArticlePage({ params }) {
                   <AdSlot slotId={SLOT_BOTTOM} format="rectangle" />
                 </div>
               )}
-              <div className="spacer-4rem" />
               <HideWhenSubscribed>
             <section className="newslettercta-section">
               <div className="newslettercta-block">

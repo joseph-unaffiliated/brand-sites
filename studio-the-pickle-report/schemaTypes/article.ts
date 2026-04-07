@@ -71,6 +71,7 @@ export const articleType = defineType({
         defineArrayMember({type: 'nibblesBlock'}),
         defineArrayMember({type: 'pollBlock'}),
         defineArrayMember({type: 'photoOfWeekBlock'}),
+        defineArrayMember({type: 'pickleEconomicsSection'}),
       ],
     }),
   ],

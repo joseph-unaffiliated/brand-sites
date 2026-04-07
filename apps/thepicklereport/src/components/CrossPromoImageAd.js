@@ -60,7 +60,7 @@ export default function CrossPromoImageAd({ format = "rectangle", className, cre
             width={desk.width}
             height={desk.height}
             className="cross-promo-image-sticky-img cross-promo-image-sticky-img-desktop"
-            sizes={`(max-width: 1280px) calc(100vw - 48px), ${desk.width}px`}
+            sizes="(min-width: 769px) 728px, 1px"
           />
         </Link>
         <Link
@@ -75,7 +75,7 @@ export default function CrossPromoImageAd({ format = "rectangle", className, cre
             width={mob.width}
             height={mob.height}
             className="cross-promo-image-sticky-img cross-promo-image-sticky-img-mobile"
-            sizes={`(max-width: 768px) min(${mob.width}px, calc(100vw - 32px)), 1px`}
+            sizes="(max-width: 768px) 320px, 1px"
           />
         </Link>
       </div>

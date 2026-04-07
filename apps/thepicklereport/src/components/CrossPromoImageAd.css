@@ -28,8 +28,8 @@
 .cross-promo-image-ad-rail {
   max-width: 160px;
   width: 100%;
-  margin-left: auto;
-  margin-right: auto;
+  margin-left: 0;
+  margin-right: 0;
 }
 
 .cross-promo-image-sticky {
@@ -42,6 +42,7 @@
 .cross-promo-image-sticky-link {
   display: block;
   line-height: 0;
+  max-width: 100%;
 }
 
 .cross-promo-image-sticky-img {
@@ -57,16 +58,21 @@
     drop-shadow(0 1px 3px rgba(2, 30, 21, 0.12));
 }
 
-/* Shrink only when the bar is narrower than the creative’s logical width */
-@media (min-width: 769px) {
-  .cross-promo-image-sticky-desktop .cross-promo-image-sticky-img-desktop {
-    max-width: calc(100vw - 48px);
-    height: auto;
-  }
-}
-
 .cross-promo-image-sticky-mobile {
   display: none;
+}
+
+/* Fixed logical widths (2× assets in shared-ads); max-width only shrinks when the bar is narrower */
+@media (min-width: 769px) {
+  .cross-promo-image-sticky-desktop {
+    max-width: 100%;
+  }
+
+  .cross-promo-image-sticky-desktop .cross-promo-image-sticky-img-desktop {
+    width: 728px;
+    max-width: 100%;
+    height: auto;
+  }
 }
 
 @media (max-width: 768px) {
@@ -76,11 +82,12 @@
 
   .cross-promo-image-sticky-mobile {
     display: block;
+    max-width: 100%;
   }
 
   .cross-promo-image-sticky-mobile .cross-promo-image-sticky-img-mobile {
-    max-width: min(100vw - 32px, 100%);
-    width: auto;
+    width: 320px;
+    max-width: 100%;
     height: auto;
   }
 }

@@ -8,6 +8,7 @@ import {didYouKnowBlockType} from './didYouKnowBlock'
 import {nibblesBlockType, nibblesItemType} from './nibblesBlock'
 import {pollBlockType, pollOptionType, pollResultType} from './pollBlock'
 import {photoOfWeekBlockType} from './photoOfWeekBlock'
+import {pickleEconomicsSectionType} from './pickleEconomicsSection'
 
 export const schemaTypes = [
   articleType,
@@ -24,4 +25,5 @@ export const schemaTypes = [
   pollOptionType,
   pollResultType,
   photoOfWeekBlockType,
+  pickleEconomicsSectionType,
 ]

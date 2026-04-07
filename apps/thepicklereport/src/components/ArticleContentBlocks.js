@@ -116,6 +116,20 @@ function splitBodyAroundMarketShareChart(body) {
   };
 }
 
+/** Inline "💡 Pickle Economics" line in PT body — section header styled like Photo of Week + poll-style box below. */
+function isPickleEconomicsInlineSectionParagraph(b) {
+  if (b?._type !== "block") return false;
+  const t = portableTextBlockPlainText(b).trim();
+  return /^\s*💡\s*Pickle Economics\s*$/i.test(t) || /^\s*Pickle Economics\s*$/i.test(t);
+}
+
+function findPickleEconomicsBodySplit(body) {
+  if (!Array.isArray(body)) return null;
+  const idx = body.findIndex((b) => isPickleEconomicsInlineSectionParagraph(b));
+  if (idx < 0) return null;
+  return { before: body.slice(0, idx), after: body.slice(idx + 1) };
+}
+
 function portableTextComponents(projectId, dataset) {
   return {
     types: {
@@ -192,6 +206,38 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset, artic
             const proseBodyForEconomics = hasMarketShareModule
               ? [...head, ...tail]
               : body;
+            const pickleSplit =
+              !hasMarketShareModule && findPickleEconomicsBodySplit(proseBodyForEconomics);
+
+            if (pickleSplit) {
+              const showPeMainTitle =
+                typeof block.heading === "string" &&
+                block.heading.trim() &&
+                !isPickleEconomicsLabelOnlyHeading(block.heading) &&
+                !hidePartHeading(block.heading);
+              return (
+                <section key={key} className={styles.block}>
+                  {pickleSplit.before.length > 0 ? (
+                    <div className={styles.prose}>
+                      <PortableText value={pickleSplit.before} components={ptComponents} />
+                    </div>
+                  ) : null}
+                  <aside
+                    className={`${styles.poll} ${styles.pickleEconomicsBox}`}
+                    aria-label="Pickle Economics"
+                  >
+                    <p className={styles.eyebrow}>Pickle Economics</p>
+                    {showPeMainTitle ? (
+                      <h2 className={styles.photoOfWeekTitle}>{block.heading.trim()}</h2>
+                    ) : null}
+                    <div className={styles.prose}>
+                      <PortableText value={pickleSplit.after} components={ptComponents} />
+                    </div>
+                  </aside>
+                </section>
+              );
+            }
+
             return (
               <section
                 key={key}
@@ -424,6 +470,32 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset, artic
               </section>
             );
           }
+          case "pickleEconomicsSection": {
+            const ptComponents = portableTextComponents(projectId, dataset);
+            const body = filterPollDuplicateProseLines(block.body ?? []);
+            if (body.length === 0) return null;
+            const showPeMainTitle =
+              typeof block.heading === "string" &&
+              block.heading.trim() &&
+              !isPickleEconomicsLabelOnlyHeading(block.heading) &&
+              !hidePartHeading(block.heading);
+            return (
+              <section key={key} className={styles.block}>
+                <aside
+                  className={`${styles.poll} ${styles.pickleEconomicsBox}`}
+                  aria-label="Pickle Economics"
+                >
+                  <p className={styles.eyebrow}>Pickle Economics</p>
+                  {showPeMainTitle ? (
+                    <h2 className={styles.photoOfWeekTitle}>{block.heading.trim()}</h2>
+                  ) : null}
+                  <div className={styles.prose}>
+                    <PortableText value={body} components={ptComponents} />
+                  </div>
+                </aside>
+              </section>
+            );
+          }
           case "pollBlock": {
             return <PollBlockClient key={key} block={block} articleSlug={articleSlug} />;
           }
@@ -432,32 +504,34 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset, artic
             const { w, h } = block.image ? dims(block.image) : { w: 900, h: 600 };
             const headingText = block.heading?.trim() || DEFAULT_PHOTO_OF_WEEK_HEADING;
             return (
-              <figure key={key} className={`${styles.figure} ${styles.photoOfWeekFigure}`}>
-                <h2 className={styles.photoOfWeekTitle}>{headingText}</h2>
-                {src ? (
-                  <Image
-                    src={src}
-                    alt=""
-                    width={w}
-                    height={h}
-                    className={styles.blockImage}
-                    sizes="(max-width: 900px) 100vw, 820px"
-                  />
-                ) : (
-                  <div className={styles.photoOfWeekPlaceholder} aria-hidden />
-                )}
-                {(block.caption || block.credit) && (
-                  <figcaption className={styles.caption}>
-                    {block.caption ? <span>{block.caption}</span> : null}
-                    {block.caption && block.credit ? (
-                      <span className={styles.captionSep}> · </span>
-                    ) : null}
-                    {block.credit ? (
-                      <span className={styles.credit}>{block.credit}</span>
-                    ) : null}
-                  </figcaption>
-                )}
-              </figure>
+              <aside key={key} className={styles.poll} aria-label={headingText}>
+                <p className={styles.eyebrow}>{headingText}</p>
+                <figure className={`${styles.figure} ${styles.photoOfWeekFigure}`}>
+                  {src ? (
+                    <Image
+                      src={src}
+                      alt=""
+                      width={w}
+                      height={h}
+                      className={styles.blockImage}
+                      sizes="(max-width: 900px) 100vw, 820px"
+                    />
+                  ) : (
+                    <div className={styles.photoOfWeekPlaceholder} aria-hidden />
+                  )}
+                  {(block.caption || block.credit) && (
+                    <figcaption className={styles.caption}>
+                      {block.caption ? <span>{block.caption}</span> : null}
+                      {block.caption && block.credit ? (
+                        <span className={styles.captionSep}> · </span>
+                      ) : null}
+                      {block.credit ? (
+                        <span className={styles.credit}>{block.credit}</span>
+                      ) : null}
+                    </figcaption>
+                  )}
+                </figure>
+              </aside>
             );
           }
           default:
@@ -465,8 +539,11 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset, artic
         }
       })}
       {!hasPhotoOfWeekBlock ? (
-        <aside className={styles.photoOfWeekFallback} aria-label={DEFAULT_PHOTO_OF_WEEK_HEADING}>
-          <h2 className={styles.photoOfWeekTitle}>{DEFAULT_PHOTO_OF_WEEK_HEADING}</h2>
+        <aside
+          className={`${styles.poll} ${styles.photoOfWeekFallback}`}
+          aria-label={DEFAULT_PHOTO_OF_WEEK_HEADING}
+        >
+          <p className={styles.eyebrow}>{DEFAULT_PHOTO_OF_WEEK_HEADING}</p>
           <div className={styles.photoOfWeekPlaceholder} aria-hidden />
         </aside>
       ) : null}

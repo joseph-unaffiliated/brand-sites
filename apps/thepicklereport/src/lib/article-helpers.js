@@ -133,7 +133,7 @@ export function dedupeSubtitleInContentBlocks(blocks, subtitle, title) {
     if (
       !appliedSubtitle &&
       sub &&
-      block?._type === "proseSection" &&
+      (block?._type === "proseSection" || block?._type === "pickleEconomicsSection") &&
       Array.isArray(block.body)
     ) {
       const newBody = stripSubtitleFromPortableBody(block.body, sub);

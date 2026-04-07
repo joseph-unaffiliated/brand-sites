@@ -22,28 +22,28 @@ export default function ArticleAdStickyBottom() {
       <div className="article-ad-sticky-bottom-inner">
         <div className="article-ad-sticky-bottom-slot">
           <AdSlot slotId={SLOT_STICKY} format="horizontal" onCollapse={handleAdCollapse} />
-        </div>
-        <button
-          type="button"
-          className="article-ad-sticky-dismiss"
-          onClick={handleAdCollapse}
-          aria-label="Close advertisement"
-        >
-          <svg
-            className="article-ad-sticky-dismiss-icon"
-            viewBox="0 0 12 12"
-            aria-hidden="true"
-            focusable="false"
+          <button
+            type="button"
+            className="article-ad-sticky-dismiss"
+            onClick={handleAdCollapse}
+            aria-label="Close advertisement"
           >
-            <path
-              d="M2.5 2.5 L9.5 9.5 M9.5 2.5 L2.5 9.5"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-            />
-          </svg>
-        </button>
+            <svg
+              className="article-ad-sticky-dismiss-icon"
+              viewBox="0 0 12 12"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path
+                d="M2.5 2.5 L9.5 9.5 M9.5 2.5 L2.5 9.5"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
   );

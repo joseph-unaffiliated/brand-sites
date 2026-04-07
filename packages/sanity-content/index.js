@@ -147,6 +147,29 @@ const articleContentBlocksProjection = `contentBlocks[] {
       },
       hotspot
     }
+  },
+  _type == "pickleEconomicsSection" => {
+    _key,
+    _type,
+    heading,
+    body[] {
+      ...,
+      _type == "image" => {
+        _type,
+        _key,
+        caption,
+        credit,
+        asset->{
+          _id,
+          _ref,
+          url,
+          metadata {
+            dimensions { width, height }
+          }
+        },
+        hotspot
+      }
+    }
   }
 }`;
 
@@ -283,7 +306,8 @@ export function firstImageFromContentBlocks(blocks, urlFor) {
         if (img) return img;
         break;
       }
-      case "proseSection": {
+      case "proseSection":
+      case "pickleEconomicsSection": {
         for (const node of block.body || []) {
           if (!node || node._type !== "image") continue;
           const img = imageDimensionsAndUrl(node, urlFor);
