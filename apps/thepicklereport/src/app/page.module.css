@@ -185,10 +185,6 @@
   margin: 0;
 }
 
-.mosaicCardLink:hover .mosaicCardHeadline {
-  text-decoration: underline;
-}
-
 /* Center: big feature */
 .mosaicCenter {
   min-width: 0;
@@ -483,10 +479,6 @@
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-}
-
-.gridCardLink:hover .gridCardHeadline {
-  text-decoration: underline;
 }
 
 @media (max-width: 900px) {

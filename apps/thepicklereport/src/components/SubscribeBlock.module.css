@@ -42,7 +42,11 @@
   min-width: 560px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 8px;
+}
+
+.bannerText .title {
+  margin: 0;
 }
 
 .bannerForm {

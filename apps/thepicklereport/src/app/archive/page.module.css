@@ -67,10 +67,6 @@
   box-shadow: 0 4px 16px rgba(2, 30, 21, 0.08);
 }
 
-.issueCardLink:hover .issueCardBody h3 {
-  text-decoration: underline;
-}
-
 .issueCardImage {
   line-height: 0;
   background: var(--surface-muted);
