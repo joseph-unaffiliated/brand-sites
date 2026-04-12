@@ -6,6 +6,7 @@
  */
 export const networkBrands = [
   { id: "hookuplists", name: "Hookup Lists", signupUrl: "https://magic.hookuplists.com/" },
+  { id: "thekissandtell", name: "The Kiss and Tell", signupUrl: "https://magic.thekissandtell.com/" },
   { id: "thepicklereport", name: "The Pickle Report", signupUrl: "https://magic.thepicklereport.com/" },
   { id: "themixedhome", name: "The Mixed Home", signupUrl: "https://magic.themixedhome.com/" },
   { id: "zitsandcake", name: "Zits and Cake", signupUrl: "https://magic.zitsandcake.com/" },
@@ -32,6 +33,7 @@ export const networkBrands = [
 
 /** Discover more: brands that show a "Subscribe" link (live signup). */
 export const discoverMoreSubscribeIds = [
+  "thekissandtell",
   "thepicklereport",
   "the90sparent",
   "heebnewsletters",

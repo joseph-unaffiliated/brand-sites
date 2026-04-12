@@ -7,7 +7,7 @@
 
 ## Deploy
 
-- **One Vercel project per app**, with **Root Directory** set to `apps/hookuplists`, `apps/thepicklereport`, etc.
+- **One Vercel project per app**, with **Root Directory** set to `apps/hookuplists`, `apps/thepicklereport`, `apps/thekissandtell`, `apps/the90sparent`, etc.
 - **Marketing sites must not** add **BigQuery** or other network DB clients for unauthenticated email lookup. Profile subscriptions load via **Bearer token** from **`magic.*`** (`/api/reader-subscriptions`).
 
 ## Env naming

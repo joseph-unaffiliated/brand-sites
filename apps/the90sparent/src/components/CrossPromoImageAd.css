@@ -1,0 +1,93 @@
+.cross-promo-image-ad-link {
+  display: block;
+  line-height: 0;
+}
+
+.cross-promo-image-ad-img {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.cross-promo-image-ad-inArticle {
+  max-width: 300px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+}
+
+.cross-promo-image-ad-inArticle .cross-promo-image-ad-link,
+.cross-promo-image-ad-inArticle .cross-promo-image-ad-img {
+  max-width: 300px;
+  width: 100%;
+  height: auto;
+}
+
+.cross-promo-image-ad-rail {
+  max-width: 160px;
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.cross-promo-image-sticky {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.cross-promo-image-sticky-link {
+  display: block;
+  line-height: 0;
+  max-width: 100%;
+}
+
+.cross-promo-image-sticky-img {
+  width: auto;
+  height: auto;
+  display: block;
+}
+
+.cross-promo-image-sticky-img-desktop,
+.cross-promo-image-sticky-img-mobile {
+  filter: drop-shadow(0 6px 28px rgba(2, 30, 21, 0.22))
+    drop-shadow(0 3px 10px rgba(2, 30, 21, 0.16))
+    drop-shadow(0 1px 3px rgba(2, 30, 21, 0.12));
+}
+
+.cross-promo-image-sticky-mobile {
+  display: none;
+}
+
+/* Fixed logical widths (2× assets in shared-ads); max-width only shrinks when the bar is narrower */
+@media (min-width: 769px) {
+  .cross-promo-image-sticky-desktop {
+    max-width: 100%;
+  }
+
+  .cross-promo-image-sticky-desktop .cross-promo-image-sticky-img-desktop {
+    width: 728px;
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .cross-promo-image-sticky-desktop {
+    display: none;
+  }
+
+  .cross-promo-image-sticky-mobile {
+    display: block;
+    max-width: 100%;
+  }
+
+  .cross-promo-image-sticky-mobile .cross-promo-image-sticky-img-mobile {
+    width: 320px;
+    max-width: 100%;
+    height: auto;
+  }
+}

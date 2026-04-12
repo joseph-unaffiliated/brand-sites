@@ -3,7 +3,7 @@
 ## Vercel (per publication)
 
 1. **Connect** the **`brand-sites`** Git repo.
-2. **Root Directory:** `apps/hookuplists` (or `apps/thepicklereport`, etc.).
+2. **Root Directory:** `apps/hookuplists`, `apps/thepicklereport`, `apps/thekissandtell`, `apps/the90sparent`, etc. (one Vercel project per app).
 3. **Production branch:** your default branch (`main` / `master`).
 4. **Environment variables:** see `docs/ENVIRONMENT.md` for that app.
 5. If the GitHub repo or URL changes, confirm the Vercel Git integration still points at the correct repo (re-link if needed).
