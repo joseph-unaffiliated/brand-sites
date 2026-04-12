@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Set each article's mainImage to the first image found in contentBlocks
- * (imageBlock → listicle items → didYouKnow chart → photo of week), matching
+ * (listicle items → photo of week), matching
  * frontend card/hero behavior. Skips documents with no inline images.
  *
  * Usage:
@@ -52,16 +52,6 @@ function firstImageFieldFromContentBlocks(blocks) {
   for (const block of blocks) {
     if (!block || typeof block !== 'object') continue
     switch (block._type) {
-      case 'imageBlock': {
-        const ref = imageAssetRef(block.image)
-        if (ref)
-          return {
-            _type: 'image',
-            asset: {_type: 'reference', _ref: ref},
-            ...(block.image?.hotspot ? {hotspot: block.image.hotspot} : {}),
-          }
-        break
-      }
       case 'listicleSection': {
         for (const item of block.items || []) {
           const ref = imageAssetRef(item?.image)
@@ -72,16 +62,6 @@ function firstImageFieldFromContentBlocks(blocks) {
               ...(item.image?.hotspot ? {hotspot: item.image.hotspot} : {}),
             }
         }
-        break
-      }
-      case 'didYouKnowBlock': {
-        const ref = imageAssetRef(block.chartImage)
-        if (ref)
-          return {
-            _type: 'image',
-            asset: {_type: 'reference', _ref: ref},
-            ...(block.chartImage?.hotspot ? {hotspot: block.chartImage.hotspot} : {}),
-          }
         break
       }
       case 'photoOfWeekBlock': {

@@ -203,18 +203,6 @@
   .poll .prose p {
     font-size: 1rem;
   }
-
-  .poll .pollOptionRow {
-    font-size: 1rem;
-  }
-
-  .poll .pollTeaser,
-  .poll .pollLastQ,
-  .poll .pollReveal,
-  .poll .pollPoints,
-  .poll .pollResults {
-    font-size: 1rem;
-  }
 }
 
 /* Inline images: use padding-top (not margin-top) so space *adds* to the previous <p> margin.
@@ -311,7 +299,6 @@
   white-space: pre-wrap;
 }
 
-.dyk,
 .nibbles {
   padding: 1.5rem;
   background: hsl(66 12% 90%);
@@ -434,99 +421,6 @@
 
 .nibblesLink {
   font-size: 0.95rem;
-}
-
-.pollOptionList {
-  list-style: none;
-  margin: 0.5rem 0 0.65rem;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.pollOptionRow {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
-  padding: 0.5rem 0.5rem;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: var(--bg);
-  line-height: 1.4;
-}
-
-@media (min-width: 769px) {
-  .pollOptionList {
-    margin: 0.75rem 0 1rem;
-  }
-
-  .pollOptionRow {
-    padding: 0.65rem 0.85rem;
-  }
-}
-
-.pollLetter {
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 1.75rem;
-  height: 1.75rem;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--accent);
-  border: 1px solid var(--accent);
-  border-radius: 4px;
-  background: hsl(66 30% 97%);
-}
-
-.pollOptionText {
-  flex: 1;
-  min-width: 0;
-  color: var(--text-primary);
-}
-
-.pollOptionButton {
-  width: 100%;
-  text-align: left;
-  font: inherit;
-  cursor: pointer;
-  margin: 0;
-}
-
-.pollOptionButton:disabled {
-  cursor: default;
-}
-
-.pollReveal {
-  font-size: 0.95rem;
-  margin: 0.75rem 0 0;
-}
-
-.pollPoints {
-  font-size: 0.9rem;
-  margin: 0.75rem 0 0;
-  color: var(--text-secondary);
-}
-
-.pollMark {
-  flex-shrink: 0;
-  font-size: 1rem;
-  margin-left: 0.25rem;
-}
-
-.pollTeaser,
-.pollLastQ {
-  font-size: 0.9rem;
-  margin: 0.75rem 0 0;
-}
-
-.pollResults {
-  list-style: none;
-  padding: 0;
-  margin: 0.75rem 0 0;
-  font-size: 0.9rem;
 }
 
 .photoOfWeekFigure {

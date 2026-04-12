@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import { isPartPlaceholderAge } from "@publication-websites/sanity-content";
 import {
   getArticles,
   getDemographicAndDescription,
@@ -116,33 +115,21 @@ export default async function Home({ searchParams: searchParamsProp }) {
                   {featuredDemographic && (
                     <p className={styles.featuredDek}>{featuredDemographic}</p>
                   )}
-                  {featured.entries?.length > 0 && (
-                    <div className={styles.featuredEntryPreview}>
-                      {featured.entries.slice(0, 5).map((entry, i) => {
-                        const stripPrefix =
-                          featuredDemographic || (featured.subtitle || "").trim();
-                        let snippet = (entry.body || "").trim();
-                        snippet = stripLeadingDuplicate(snippet, stripPrefix);
-                        const preview =
-                          snippet.length > 100
-                            ? `${snippet.slice(0, 100).trim()}…`
-                            : snippet;
-                        return (
-                          <div key={i} className={styles.featuredEntryBlock}>
-                            <div className={styles.featuredEntryLine}>
-                              {entry.age && !isPartPlaceholderAge(entry.age) && (
-                                <span className={styles.featuredEntryAge}>{entry.age}</span>
-                              )}
-                              {entry.title && <span className={styles.featuredEntryTitle}>{entry.title}</span>}
-                            </div>
-                            {preview && (
-                              <p className={styles.featuredEntrySnippet}>{preview}</p>
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
+                  {(() => {
+                    const stripPrefix =
+                      featuredDemographic || (featured.subtitle || "").trim();
+                    let snippet = (featured.summary || "").trim();
+                    snippet = stripLeadingDuplicate(snippet, stripPrefix);
+                    const preview =
+                      snippet.length > 160
+                        ? `${snippet.slice(0, 160).trim()}…`
+                        : snippet;
+                    return preview ? (
+                      <div className={styles.featuredEntryPreview}>
+                        <p className={styles.featuredEntrySnippet}>{preview}</p>
+                      </div>
+                    ) : null;
+                  })()}
                   <span className={styles.featuredLink}>Read more →</span>
                 </div>
               </Link>

@@ -115,10 +115,10 @@ function headingsMatchHero(a, b) {
 }
 
 /**
- * Remove hero duplicates from the first prose section: subtitle at the start of body, and
+ * Remove hero duplicates from the first feature section: subtitle at the start of body, and
  * section `heading` when it repeats the article title (H1 is already shown above).
  *
- * @param {string} [title] — when set, clears the first matching `heading` on proseSection / listicleSection / nibblesBlock
+ * @param {string} [title] — when set, clears the first matching `heading` on featureSection / examplesSection / aroundTheWebBlock
  */
 export function dedupeSubtitleInContentBlocks(blocks, subtitle, title) {
   if (!Array.isArray(blocks) || blocks.length === 0) return blocks;
@@ -133,7 +133,9 @@ export function dedupeSubtitleInContentBlocks(blocks, subtitle, title) {
     if (
       !appliedSubtitle &&
       sub &&
-      (block?._type === "proseSection" || block?._type === "pickleEconomicsSection") &&
+      (block?._type === "proseSection" ||
+        block?._type === "featureSection" ||
+        block?._type === "pickleEconomicsSection") &&
       Array.isArray(block.body)
     ) {
       const newBody = stripSubtitleFromPortableBody(block.body, sub);

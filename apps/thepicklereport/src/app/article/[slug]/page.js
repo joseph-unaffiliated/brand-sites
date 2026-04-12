@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { isPartPlaceholderAge } from "@publication-websites/sanity-content";
 import {
   getArticleBySlug,
   getArticleSlugs,
@@ -59,8 +58,6 @@ export default async function ArticlePage({ params }) {
     .filter((a) => a.slug !== slug)
     .slice(0, READ_MORE_COUNT);
 
-  const entries = article.entries ?? [];
-  const midIndex = Math.floor(entries.length / 2);
   const contentBlocks = article.contentBlocks ?? [];
   const showBlocks =
     Array.isArray(contentBlocks) &&
@@ -76,7 +73,7 @@ export default async function ArticlePage({ params }) {
       <RecordArticleView slug={slug} />
       <ArticleAdStickyBottom />
       <section className="articlebody-section">
-        {/* Centered hero: headline + optional cover image (legacy entries only) */}
+        {/* Centered hero: headline + optional cover image when not using content blocks */}
         <div
           className={`${styles.articleHeroBlock} ${showBlocks ? styles.articleHeroBlockInline : ""}`}
         >
@@ -135,33 +132,18 @@ export default async function ArticlePage({ params }) {
                       dataset={SANITY_DATASET}
                       articleSlug={slug}
                     />
-                  ) : (
+                  ) : article.summary ? (
                     <>
-                      {entries.slice(0, midIndex).map((entry, i) => (
-                        <article key={entry._key || `e-a-${i}`} className={styles.entry}>
-                          {entry.age && !isPartPlaceholderAge(entry.age) ? (
-                            <p className={styles.age}>{entry.age}</p>
-                          ) : null}
-                          {entry.title ? <h2>{entry.title}</h2> : null}
-                          {entry.body ? <p>{entry.body}</p> : null}
-                        </article>
-                      ))}
-                      {SHOW_MID && midIndex > 0 && (
+                      <article className={styles.entry}>
+                        <p>{article.summary}</p>
+                      </article>
+                      {SHOW_MID && (
                         <div className={styles.adMid}>
                           <AdSlot slotId={SLOT_MID} format="rectangle" />
                         </div>
                       )}
-                      {entries.slice(midIndex).map((entry, i) => (
-                        <article key={entry._key || `e-b-${midIndex + i}`} className={styles.entry}>
-                          {entry.age && !isPartPlaceholderAge(entry.age) ? (
-                            <p className={styles.age}>{entry.age}</p>
-                          ) : null}
-                          {entry.title ? <h2>{entry.title}</h2> : null}
-                          {entry.body ? <p>{entry.body}</p> : null}
-                        </article>
-                      ))}
                     </>
-                  )}
+                  ) : null}
                 </div>
                 {article.disclaimer && (
                   <div className="articlecopy-richtext">

@@ -8,17 +8,48 @@
   margin: 0;
 }
 
-/* Space below lead / section prose before the next element in the same block or the next block */
-.block > .prose {
+/* Space below lead / section feature column before the next element in the same block or the next block */
+.block > .feature {
   margin-bottom: 1.75rem;
 }
 
 .blockHeading {
+  font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
   font-size: 1.35rem;
-  font-weight: 600;
+  font-weight: 400;
   margin: 0;
   padding-bottom: 1.25rem;
   line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+.authorCard {
+  margin: 2rem 0 2.5rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--border);
+  max-width: min(640px, 100%);
+}
+
+.authorCardBio {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.5;
+  letter-spacing: -0.02em;
+  font-weight: 300;
+  color: var(--text-muted);
+}
+
+.examplesBlock .listicleItem {
+  margin: 0;
+}
+
+@media (min-width: 600px) {
+  .examplesBlock .listicleItem {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr);
+    gap: 1.25rem 1.5rem;
+    align-items: start;
+  }
 }
 
 /* Pickle Economics module (email-style card) */
@@ -117,17 +148,17 @@
   border-radius: 12px;
 }
 
-.economicsProse {
+.economicsFeature {
   text-align: center;
   color: var(--text-secondary);
 }
 
-.economicsProse :global(p) {
+.economicsFeature :global(p) {
   text-align: center;
 }
 
-.economicsProse :global(ul),
-.economicsProse :global(ol) {
+.economicsFeature :global(ul),
+.economicsFeature :global(ol) {
   text-align: left;
   margin-left: auto;
   margin-right: auto;
@@ -157,22 +188,39 @@
   text-underline-offset: 3px;
 }
 
-.prose {
-  line-height: 1.65;
-  font-size: 1.2rem;
+.feature {
+  line-height: 1.85;
+  font-size: 0.9375rem;
   width: 100%;
   max-width: min(640px, 100%);
 }
 
-.prose p {
+.feature p {
   margin: 0 0 1.25rem;
   color: var(--text-secondary);
-  font-size: 1.2rem;
+  font-size: 0.9375rem;
   line-height: 1.85;
+  letter-spacing: -0.02em;
+  font-weight: 300;
 }
 
-.prose p:last-child {
+.feature p:last-child {
   margin-bottom: 0;
+}
+
+.feature :global(h2),
+.feature :global(h3) {
+  font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  margin: 2rem 0 1rem;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+.feature :global(h2):first-child,
+.feature :global(h3):first-child {
+  margin-top: 0;
 }
 
 @media (max-width: 768px) {
@@ -182,44 +230,32 @@
     padding-bottom: 0.65rem;
   }
 
-  .poll .photoOfWeekTitle {
+  .poll .nostalgiaOfWeekTitle {
     font-size: 1.2rem;
     line-height: 1.15;
     padding-bottom: 0.65rem;
   }
 
-  .block > .prose {
+  .block > .feature {
     font-size: 1rem;
   }
 
-  .block > .prose p {
+  .block > .feature p {
     font-size: 1rem;
   }
 
-  .poll .prose {
+  .poll .feature {
     font-size: 1rem;
   }
 
-  .poll .prose p {
-    font-size: 1rem;
-  }
-
-  .poll .pollOptionRow {
-    font-size: 1rem;
-  }
-
-  .poll .pollTeaser,
-  .poll .pollLastQ,
-  .poll .pollReveal,
-  .poll .pollPoints,
-  .poll .pollResults {
+  .poll .feature p {
     font-size: 1rem;
   }
 }
 
 /* Inline images: use padding-top (not margin-top) so space *adds* to the previous <p> margin.
    Otherwise margin collapses with the paragraph and the gap stays ~1.25rem. */
-.proseFigure {
+.featureFigure {
   margin-top: 0;
   padding-top: 1rem;
   margin-bottom: 1rem;
@@ -227,19 +263,19 @@
 }
 
 /* Explicit gap after body copy before the next image (e.g. "2. Cup O' Noodles…" → donuts) */
-.prose p + .proseFigure {
+.feature p + .featureFigure {
   padding-top: 1.5rem;
 }
 
-.prose > .proseFigure:first-child {
+.feature > .featureFigure:first-child {
   padding-top: 0;
 }
 
-.proseFigure:has(.caption) {
+.featureFigure:has(.caption) {
   margin-bottom: 0;
 }
 
-.proseFigure .caption {
+.featureFigure .caption {
   margin-bottom: 1.15rem;
 }
 
@@ -269,13 +305,13 @@
   font-style: normal;
 }
 
-.proseLink {
+.featureLink {
   color: var(--accent);
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 
-.proseLink:hover {
+.featureLink:hover {
   color: var(--accent-strong);
 }
 
@@ -298,6 +334,15 @@
   margin-bottom: 1rem;
 }
 
+/* Inline PT for caption/credit (avoid <p> inside <p>) */
+.captionPtLine {
+  display: inline;
+}
+
+.captionPtLine + .captionPtLine::before {
+  content: " ";
+}
+
 .listicleCopy {
   line-height: 1.55;
 }
@@ -311,11 +356,43 @@
   white-space: pre-wrap;
 }
 
-.dyk,
-.nibbles {
-  padding: 1.5rem;
-  background: hsl(66 12% 90%);
-  border-radius: 8px;
+/* Portable Text in example cards (links, lists — not pre-wrap) */
+.exampleItemRichBody {
+  margin: 0.5rem 0 0;
+}
+
+.aroundTheWeb {
+  padding: 2rem 1.25rem 2.5rem;
+  background: var(--bg);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+.aroundTheWebSectionTitle {
+  font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 400;
+  text-align: center;
+  letter-spacing: -0.02em;
+  margin: 0 0 1.5rem;
+}
+
+.nostalgiaCard {
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 10px;
+  border: 1px solid var(--text-muted);
+  background: var(--bg);
+}
+
+.nostalgiaSectionTitle {
+  font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 400;
+  text-align: center;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.75rem;
 }
 
 /* Poll-style asides — mobile-first padding/spacing; large insets only ≥769px (avoid cascade bugs with @media max-width) */
@@ -334,12 +411,13 @@
   text-align: center;
 }
 
-.poll:has(.photoOfWeekFigure) .eyebrow {
+.poll:has(.nostalgiaOfWeekFigure) .eyebrow,
+.poll:has(.nostalgiaOfWeekFigure) .nostalgiaSectionTitle {
   margin-bottom: 0.5rem;
 }
 
 /* Inline figures inside poll-style boxes (Pickle Economics body, etc.) */
-.poll .prose figure.proseFigure {
+.poll .feature figure.featureFigure {
   margin-left: 0;
   margin-right: 0;
   margin-top: 0.65rem;
@@ -347,7 +425,7 @@
   padding-top: 0.65rem;
 }
 
-.poll .prose p + figure.proseFigure {
+.poll .feature p + figure.featureFigure {
   padding-top: 0.65rem;
 }
 
@@ -360,48 +438,49 @@
     margin-top: 2rem;
   }
 
-  .poll:has(.photoOfWeekFigure) .eyebrow {
+  .poll:has(.nostalgiaOfWeekFigure) .eyebrow,
+  .poll:has(.nostalgiaOfWeekFigure) .nostalgiaSectionTitle {
     margin-bottom: 1rem;
   }
 
-  .poll .prose figure.proseFigure {
+  .poll .feature figure.featureFigure {
     margin-top: 1rem;
     margin-bottom: 1rem;
     padding-top: 1rem;
   }
 
-  .poll .prose p + figure.proseFigure {
+  .poll .feature p + figure.featureFigure {
     padding-top: 1rem;
   }
 }
 
 /* Pickle Economics lists: mobile-first (tighter); figures/lists get extra inset on desktop only */
-.pickleEconomicsBox .prose ul,
-.pickleEconomicsBox .prose ol {
+.pickleEconomicsBox .feature ul,
+.pickleEconomicsBox .feature ol {
   padding-left: 1.25rem;
   margin-left: 0.25rem;
   list-style-position: outside;
 }
 
-.pickleEconomicsBox .prose li {
+.pickleEconomicsBox .feature li {
   padding-left: 0.35rem;
 }
 
 @media (min-width: 769px) {
-  .pickleEconomicsBox .prose figure.proseFigure {
+  .pickleEconomicsBox .feature figure.featureFigure {
     margin-left: 1rem;
     margin-right: 1rem;
     box-sizing: border-box;
   }
 
-  .pickleEconomicsBox .prose ul,
-  .pickleEconomicsBox .prose ol {
+  .pickleEconomicsBox .feature ul,
+  .pickleEconomicsBox .feature ol {
     padding-left: 1.75rem;
     margin-left: 0.5rem;
   }
 }
 
-.poll .photoOfWeekFigure {
+.poll .nostalgiaOfWeekFigure {
   margin-top: 0;
   margin-bottom: 0;
   width: 100%;
@@ -417,124 +496,48 @@
   opacity: 0.85;
 }
 
-.nibblesList {
+.aroundTheWebList {
   list-style: none;
   padding: 0;
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1.75rem;
 }
 
-.nibblesTitle {
-  font-size: 1.1rem;
+.aroundTheWebTitle {
+  font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
+  font-size: 1.15rem;
+  line-height: 1.25;
   margin: 0 0 0.35rem;
-  font-weight: 600;
+  font-weight: 400;
+  letter-spacing: -0.02em;
 }
 
-.nibblesLink {
-  font-size: 0.95rem;
-}
-
-.pollOptionList {
-  list-style: none;
-  margin: 0.5rem 0 0.65rem;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.pollOptionRow {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
-  padding: 0.5rem 0.5rem;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: var(--bg);
-  line-height: 1.4;
-}
-
-@media (min-width: 769px) {
-  .pollOptionList {
-    margin: 0.75rem 0 1rem;
-  }
-
-  .pollOptionRow {
-    padding: 0.65rem 0.85rem;
-  }
-}
-
-.pollLetter {
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 1.75rem;
-  height: 1.75rem;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--accent);
-  border: 1px solid var(--accent);
-  border-radius: 4px;
-  background: hsl(66 30% 97%);
-}
-
-.pollOptionText {
-  flex: 1;
-  min-width: 0;
+.aroundTheWebLink {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.45rem 0.65rem;
+  border: 1px solid var(--text-primary);
+  border-radius: 2px;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 300;
+  letter-spacing: -0.02em;
   color: var(--text-primary);
+  transition: background 0.15s;
 }
 
-.pollOptionButton {
-  width: 100%;
-  text-align: left;
-  font: inherit;
-  cursor: pointer;
-  margin: 0;
+.aroundTheWebLink:hover {
+  background: hsl(0 0% 96%);
 }
 
-.pollOptionButton:disabled {
-  cursor: default;
-}
-
-.pollReveal {
-  font-size: 0.95rem;
-  margin: 0.75rem 0 0;
-}
-
-.pollPoints {
-  font-size: 0.9rem;
-  margin: 0.75rem 0 0;
-  color: var(--text-secondary);
-}
-
-.pollMark {
-  flex-shrink: 0;
-  font-size: 1rem;
-  margin-left: 0.25rem;
-}
-
-.pollTeaser,
-.pollLastQ {
-  font-size: 0.9rem;
-  margin: 0.75rem 0 0;
-}
-
-.pollResults {
-  list-style: none;
-  padding: 0;
-  margin: 0.75rem 0 0;
-  font-size: 0.9rem;
-}
-
-.photoOfWeekFigure {
+.nostalgiaOfWeekFigure {
   margin-top: 0.5rem;
 }
 
-/* Tall portrait photos: cap height and center in the poll card */
-.photoOfWeekFigure .blockImage {
+/* Tall portrait images: cap height and center in the poll card */
+.nostalgiaOfWeekFigure .blockImage {
   width: auto;
   max-width: 100%;
   max-height: 600px;
@@ -544,13 +547,13 @@
   margin-right: auto;
 }
 
-.photoOfWeekFigure .caption {
+.nostalgiaOfWeekFigure .caption {
   margin-top: 0.35rem;
   margin-bottom: 1.15rem;
   width: 100%;
 }
 
-.photoOfWeekTitle {
+.nostalgiaOfWeekTitle {
   font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
   font-size: 1.35rem;
   font-weight: 300;
@@ -561,7 +564,7 @@
   color: var(--text-primary);
 }
 
-.photoOfWeekPlaceholder {
+.nostalgiaOfWeekPlaceholder {
   width: 100%;
   min-height: 140px;
   border-radius: 12px;
@@ -569,6 +572,6 @@
   background: hsl(66 8% 97%);
 }
 
-.photoOfWeekFallback {
+.nostalgiaOfWeekFallback {
   margin-top: 2rem;
 }

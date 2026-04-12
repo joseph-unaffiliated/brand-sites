@@ -8,7 +8,7 @@
  * Notes:
  * - Supports files containing either <x-base ...> XML-like templates or rendered HTML.
  * - Creates/updates documents in project/dataset from apps/thepicklereport/.env.local.
- * - Populates both legacy `entries` (best-effort) and new `contentBlocks`.
+ * - Populates `contentBlocks` (and uploads images for main/body where applicable).
  */
 
 import {existsSync, readFileSync, readdirSync, statSync} from 'fs'
@@ -163,7 +163,6 @@ function parseXmlIssue(content, fallbackSlug) {
   const feature = extractSection(content, 'Feature Section')
   const dyk = extractSection(content, 'DYK Section')
   const links = extractSection(content, 'Links Section')
-  const poll = extractSection(content, 'Poll Section')
   const photo = extractSection(content, 'Photo Section') || extractSection(content, 'Sexy Pic(kle) Section')
 
   const mainImageUrl =
@@ -211,26 +210,8 @@ function parseXmlIssue(content, fallbackSlug) {
     }
   }
 
-  const pollQuestion = getFirstMatch(poll, /<x-heading-2[^>]*>([\s\S]*?)<\/x-heading-2>/i)
-  const pollOptionsRaw = []
-  let optionMatch
-  const optionRe = /<x-cta[^>]*>([\s\S]*?)<\/x-cta>/gi
-  while ((optionMatch = optionRe.exec(poll)) !== null) {
-    const text = cleanText(optionMatch[1])
-    if (text) pollOptionsRaw.push(text)
-  }
-  const pollOptions = pollOptionsRaw.slice(0, 6).map((text, idx) => {
-    const codeMatch = text.match(/^([A-F])\)\s*/)
-    return {
-      _type: 'pollOption',
-      code: codeMatch ? codeMatch[1] : String.fromCharCode(65 + idx),
-      text: text.replace(/^[A-F]\)\s*/, ''),
-    }
-  })
-
   const photoImageUrl = getFirstMatch(photo || content, /<x-image[^>]*src="([^"]+)"/i)
   const photoCredit = getFirstMatch(photo || content, /Photo by\s*([^<\n]+)/i)
-  const dykImageUrl = getFirstMatch(dyk, /<x-image[^>]*src="([^"]+)"/i)
 
   const contentBlocks = []
   if (listicleItems.length) {
@@ -269,28 +250,11 @@ function parseXmlIssue(content, fallbackSlug) {
       })),
     })
   }
-  if (dyk) {
-    contentBlocks.push({
-      _type: 'didYouKnowBlock',
-      eyebrow: 'Did you know...',
-      title: getFirstMatch(dyk, /<x-heading-2[^>]*>([\s\S]*?)<\/x-heading-2>/i),
-      description: getFirstMatch(dyk, /<x-paragraph[^>]*>([\s\S]*?)<\/x-paragraph>/i),
-    })
-  }
   if (nibblesItems.length) {
     contentBlocks.push({
       _type: 'nibblesBlock',
       heading: 'Nibbles: Our Top Finds this Week',
       items: nibblesItems,
-    })
-  }
-  if (pollQuestion || pollOptions.length) {
-    contentBlocks.push({
-      _type: 'pollBlock',
-      heading: "Today's Pickle Trivia",
-      question: pollQuestion,
-      options: pollOptions,
-      answerTeaser: "The answer will be shared in next week's issue",
     })
   }
   if (photoImageUrl || photoCredit) {
@@ -311,16 +275,7 @@ function parseXmlIssue(content, fallbackSlug) {
     mainImageUrl,
     photoCredit: photoCredit || '',
     contentBlocks,
-    dykImageUrl,
     photoImageUrl,
-    entries: listicleItems.length
-      ? listicleItems.slice(0, 12).map((it) => ({
-          _type: 'articleEntry',
-          age: '',
-          title: '',
-          body: `${it.n}. ${it.body}`,
-        }))
-      : prose.slice(0, 8).map((p) => ({_type: 'articleEntry', age: '', title: '', body: p})),
   }
 }
 
@@ -371,25 +326,6 @@ function parseHtmlIssue(content, fallbackSlug) {
     })
   }
 
-  const pollQuestion = getFirstMatch(content, /Today's Pickle Trivia[\s\S]*?<h2[^>]*>([\s\S]*?)<\/h2>/i)
-  if (pollQuestion) {
-    const optionArea = content.match(/Today's Pickle Trivia([\s\S]*?)Last Week/i)?.[1] || ''
-    const optionTexts = getAllMatches(optionArea, /<span[^>]*>([\s\S]*?)<\/span>/gi).filter((t) =>
-      /^[A-F]\)/.test(t.trim()),
-    )
-    contentBlocks.push({
-      _type: 'pollBlock',
-      heading: "Today's Pickle Trivia",
-      question: pollQuestion,
-      options: optionTexts.slice(0, 6).map((t, idx) => ({
-        _type: 'pollOption',
-        code: t.trim()[0] || String.fromCharCode(65 + idx),
-        text: t.replace(/^[A-F]\)\s*/, ''),
-      })),
-      answerTeaser: "The answer will be shared in next week's issue",
-    })
-  }
-
   const nibblesStart = content.search(/Nibbles:\s*Our Top Finds this Week/i)
   if (nibblesStart >= 0) {
     const tail = content.slice(nibblesStart, nibblesStart + 10000)
@@ -429,9 +365,7 @@ function parseHtmlIssue(content, fallbackSlug) {
     mainImageUrl,
     photoCredit: '',
     contentBlocks,
-    dykImageUrl: '',
     photoImageUrl,
-    entries: prose.slice(0, 8).map((p) => ({_type: 'articleEntry', age: '', title: '', body: p})),
   }
 }
 
@@ -466,14 +400,6 @@ function toSanityDoc(parsed, filePath) {
     .slice(0, 20)
     .map((s) => ({_key: key('src'), _type: 'sourceLink', label: s.label || 'Source', url: s.url}))
 
-  const entries = (parsed.entries || []).map((entry) => ({
-    _key: entry._key || key('ent'),
-    _type: 'articleEntry',
-    age: entry.age || '',
-    title: entry.title || '',
-    body: entry.body || '',
-  }))
-
   const contentBlocks = (parsed.contentBlocks || []).map((block) => {
     const withKey = {...block, _key: block._key || key('blk')}
 
@@ -502,26 +428,6 @@ function toSanityDoc(parsed, filePath) {
         ctaLabel: item.ctaLabel || '',
         url: item.url || '',
       }))
-    }
-
-    if (withKey._type === 'pollBlock') {
-      if (Array.isArray(withKey.options)) {
-        withKey.options = withKey.options.map((opt) => ({
-          _key: opt._key || key('opt'),
-          _type: 'pollOption',
-          code: opt.code || '',
-          text: opt.text || '',
-        }))
-      }
-      if (Array.isArray(withKey.lastWeekResults)) {
-        withKey.lastWeekResults = withKey.lastWeekResults.map((res) => ({
-          _key: res._key || key('res'),
-          _type: 'pollResult',
-          isCorrect: Boolean(res.isCorrect),
-          percent: Number.isFinite(res.percent) ? res.percent : null,
-          label: res.label || '',
-        }))
-      }
     }
 
     if (withKey._type === 'listicleSection' && Array.isArray(withKey.items)) {
@@ -556,7 +462,6 @@ function toSanityDoc(parsed, filePath) {
     authorName: parsed.byline || 'The Pickle Report',
     disclaimer: '',
     sourceLinks,
-    entries,
     contentBlocks,
   }
 
@@ -629,14 +534,6 @@ async function hydrateDocsWithImages({docsWithParsed, projectId, dataset, token}
 
     const mainImage = await getOrUpload(parsed.mainImageUrl, `${slug}-main`)
     if (mainImage) doc.mainImage = mainImage
-
-    if (parsed.dykImageUrl) {
-      const dykImage = await getOrUpload(parsed.dykImageUrl, `${slug}-dyk`)
-      if (dykImage) {
-        const dykBlock = (doc.contentBlocks || []).find((block) => block?._type === 'didYouKnowBlock')
-        if (dykBlock) dykBlock.chartImage = dykImage
-      }
-    }
 
     if (parsed.photoImageUrl) {
       const photoBlockImage = await getOrUpload(parsed.photoImageUrl, `${slug}-photo`)

@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { PortableText } from "next-sanity";
 import { createImageUrlBuilder } from "@sanity/image-url";
-import PollBlockClient from "./PollBlockClient";
 import styles from "./ArticleContentBlocks.module.css";
 
 function urlForImage(projectId, dataset, source) {
@@ -61,11 +60,6 @@ function isPickleEconomicsLabelOnlyHeading(heading) {
   return /^pickle economics$/i.test(heading.trim());
 }
 
-function isPickleEconomicsDidYouKnow(block) {
-  const t = `${block?.title || ""} ${block?.eyebrow || ""}`;
-  return /pickle economics/i.test(t);
-}
-
 function isFestivalListicleHeading(heading) {
   if (typeof heading !== "string") return false;
   return /festival|picklesburgh|big dill|major pickle|economics/i.test(heading.trim());
@@ -76,25 +70,25 @@ function portableTextBlockPlainText(block) {
   return (block.children || []).map((c) => c.text || "").join("");
 }
 
-/** Copy duplicated from poll module; keep trivia only in pollBlock. */
-const DROPPED_PROSE_LINE_PATTERNS = [
+/** Strip duplicate teaser lines from Portable Text when they repeat UI elsewhere. */
+const DROPPED_FEATURE_LINE_PATTERNS = [
   /^\s*the answer will be shared in next week'?s issue\.?\s*$/i,
   /^\s*last week'?s pickle trivia:?\s*$/i,
 ];
 
-function shouldDropPollDuplicateProseBlock(b) {
+function shouldDropDuplicateTeaserBlock(b) {
   if (b?._type !== "block") return false;
   const t = portableTextBlockPlainText(b).trim();
   if (!t) return false;
-  return DROPPED_PROSE_LINE_PATTERNS.some((re) => re.test(t));
+  return DROPPED_FEATURE_LINE_PATTERNS.some((re) => re.test(t));
 }
 
-function filterPollDuplicateProseLines(body) {
+function filterDuplicateTeaserLines(body) {
   if (!Array.isArray(body)) return [];
-  return body.filter((b) => !shouldDropPollDuplicateProseBlock(b));
+  return body.filter((b) => !shouldDropDuplicateTeaserBlock(b));
 }
 
-/** Market share chart in Pickle Addicts: intro paragraph + PT image (not a didYouKnow block). */
+/** Market share chart in Pickle Addicts: intro paragraph + inline PT image. */
 function splitBodyAroundMarketShareChart(body) {
   if (!Array.isArray(body)) {
     return { head: [], chartIntro: null, chartImage: null, tail: [] };
@@ -197,7 +191,7 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset, artic
             const economics = isPickleEconomicsProseHeading(block.heading);
             const labelOnly = isPickleEconomicsLabelOnlyHeading(block.heading);
             const ptComponents = portableTextComponents(projectId, dataset);
-            const body = filterPollDuplicateProseLines(block.body ?? []);
+            const body = filterDuplicateTeaserLines(block.body ?? []);
             if (body.length === 0) {
               return null;
             }
@@ -317,27 +311,6 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset, artic
               </section>
             );
           }
-          case "imageBlock": {
-            const src = urlForImage(projectId, dataset, block.image);
-            if (!src) return null;
-            const { w, h } = dims(block.image);
-            return (
-              <figure key={key} className={`${styles.figure} ${styles.proseFigure}`}>
-                <Image src={src} alt="" width={w} height={h} className={styles.blockImage} sizes="(max-width: 900px) 100vw, 820px" />
-                {(block.caption || block.credit) && (
-                  <figcaption className={styles.caption}>
-                    {block.caption ? <span>{block.caption}</span> : null}
-                    {block.caption && block.credit ? (
-                      <span className={styles.captionSep}> · </span>
-                    ) : null}
-                    {block.credit ? (
-                      <span className={styles.credit}>{block.credit}</span>
-                    ) : null}
-                  </figcaption>
-                )}
-              </figure>
-            );
-          }
           case "listicleSection": {
             const showHeading = block.heading && !hidePartHeading(block.heading);
             const festivalList = isFestivalListicleHeading(block.heading);
@@ -397,60 +370,6 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset, artic
               </section>
             );
           }
-          case "didYouKnowBlock": {
-            const src = block.chartImage ? urlForImage(projectId, dataset, block.chartImage) : null;
-            const { w, h } = block.chartImage ? dims(block.chartImage) : { w: 900, h: 600 };
-            const economics = isPickleEconomicsDidYouKnow(block);
-            if (economics) {
-              return (
-                <aside key={key} className={`${styles.block} ${styles.economicsModule}`}>
-                  <div className={styles.economicsLabelRow}>
-                    <span className={styles.economicsIcon} aria-hidden>
-                      💡
-                    </span>
-                    <span className={styles.economicsLabelText}>Pickle Economics</span>
-                  </div>
-                  {block.title ? (
-                    <h2 className={styles.economicsMainTitle}>{block.title}</h2>
-                  ) : null}
-                  {block.description ? (
-                    <p className={styles.economicsIntro}>{block.description}</p>
-                  ) : null}
-                  {src ? (
-                    <div className={styles.economicsChartWrap}>
-                      <Image
-                        src={src}
-                        alt=""
-                        width={w}
-                        height={h}
-                        className={`${styles.blockImage} ${styles.economicsChart}`}
-                        sizes="(max-width: 900px) 100vw, 820px"
-                      />
-                    </div>
-                  ) : null}
-                </aside>
-              );
-            }
-            return (
-              <aside key={key} className={styles.dyk}>
-                {block.eyebrow ? <p className={styles.eyebrow}>{block.eyebrow}</p> : null}
-                {block.title ? <h2 className={styles.blockHeading}>{block.title}</h2> : null}
-                {block.description ? (
-                  <p className={styles.dykBody}>{block.description}</p>
-                ) : null}
-                {src ? (
-                  <Image
-                    src={src}
-                    alt=""
-                    width={w}
-                    height={h}
-                    className={styles.blockImage}
-                    sizes="(max-width: 900px) 100vw, 820px"
-                  />
-                ) : null}
-              </aside>
-            );
-          }
           case "nibblesBlock": {
             return (
               <section key={key} className={styles.nibbles}>
@@ -472,7 +391,7 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset, artic
           }
           case "pickleEconomicsSection": {
             const ptComponents = portableTextComponents(projectId, dataset);
-            const body = filterPollDuplicateProseLines(block.body ?? []);
+            const body = filterDuplicateTeaserLines(block.body ?? []);
             if (body.length === 0) return null;
             const showPeMainTitle =
               typeof block.heading === "string" &&
@@ -495,9 +414,6 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset, artic
                 </aside>
               </section>
             );
-          }
-          case "pollBlock": {
-            return <PollBlockClient key={key} block={block} articleSlug={articleSlug} />;
           }
           case "photoOfWeekBlock": {
             const src = block.image ? urlForImage(projectId, dataset, block.image) : null;

@@ -1,8 +1,8 @@
+import { Fragment } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { PortableText } from "next-sanity";
 import { createImageUrlBuilder } from "@sanity/image-url";
-import PollBlockClient from "./PollBlockClient";
 import styles from "./ArticleContentBlocks.module.css";
 
 function urlForImage(projectId, dataset, source) {
@@ -39,11 +39,23 @@ function dims(source) {
   return { w: w || 900, h: h || 600 };
 }
 
-function orderPhotoOfWeekLast(blocks) {
-  if (!Array.isArray(blocks)) return [];
-  const pow = blocks.filter((b) => b?._type === "photoOfWeekBlock");
-  const rest = blocks.filter((b) => b?._type !== "photoOfWeekBlock");
-  return [...rest, ...pow];
+function isNostalgiaOfWeekBlockType(b) {
+  return b?._type === "nostalgiaOfWeekBlock" || b?._type === "photoOfWeekBlock";
+}
+
+function isAroundTheWebBlock(b) {
+  return b?._type === "aroundTheWebBlock";
+}
+
+/** Core story → (optional) author card → Nostalgia → Around the Web — matches typical issue order. */
+function partitionArticleBlocks(blocks) {
+  if (!Array.isArray(blocks)) {
+    return { core: [], nostalgia: [], atw: [] };
+  }
+  const core = blocks.filter((b) => b && !isNostalgiaOfWeekBlockType(b) && !isAroundTheWebBlock(b));
+  const nostalgia = blocks.filter((b) => isNostalgiaOfWeekBlockType(b));
+  const atw = blocks.filter((b) => isAroundTheWebBlock(b));
+  return { core, nostalgia, atw };
 }
 
 function hidePartHeading(heading) {
@@ -51,7 +63,7 @@ function hidePartHeading(heading) {
   return /^\s*part\s+\d+\s*$/i.test(heading.trim());
 }
 
-function isPickleEconomicsProseHeading(heading) {
+function isPickleEconomicsFeatureHeading(heading) {
   if (typeof heading !== "string") return false;
   return /pickle economics|major pickle festivals/i.test(heading.trim());
 }
@@ -59,11 +71,6 @@ function isPickleEconomicsProseHeading(heading) {
 function isPickleEconomicsLabelOnlyHeading(heading) {
   if (typeof heading !== "string") return false;
   return /^pickle economics$/i.test(heading.trim());
-}
-
-function isPickleEconomicsDidYouKnow(block) {
-  const t = `${block?.title || ""} ${block?.eyebrow || ""}`;
-  return /pickle economics/i.test(t);
 }
 
 function isFestivalListicleHeading(heading) {
@@ -76,25 +83,25 @@ function portableTextBlockPlainText(block) {
   return (block.children || []).map((c) => c.text || "").join("");
 }
 
-/** Copy duplicated from poll module; keep trivia only in pollBlock. */
-const DROPPED_PROSE_LINE_PATTERNS = [
+/** Strip duplicate teaser lines from Portable Text when they repeat UI elsewhere. */
+const DROPPED_FEATURE_LINE_PATTERNS = [
   /^\s*the answer will be shared in next week'?s issue\.?\s*$/i,
   /^\s*last week'?s pickle trivia:?\s*$/i,
 ];
 
-function shouldDropPollDuplicateProseBlock(b) {
+function shouldDropDuplicateTeaserBlock(b) {
   if (b?._type !== "block") return false;
   const t = portableTextBlockPlainText(b).trim();
   if (!t) return false;
-  return DROPPED_PROSE_LINE_PATTERNS.some((re) => re.test(t));
+  return DROPPED_FEATURE_LINE_PATTERNS.some((re) => re.test(t));
 }
 
-function filterPollDuplicateProseLines(body) {
+function filterDuplicateTeaserLines(body) {
   if (!Array.isArray(body)) return [];
-  return body.filter((b) => !shouldDropPollDuplicateProseBlock(b));
+  return body.filter((b) => !shouldDropDuplicateTeaserBlock(b));
 }
 
-/** Market share chart in Pickle Addicts: intro paragraph + PT image (not a didYouKnow block). */
+/** Market share chart in Pickle Addicts: intro paragraph + inline PT image. */
 function splitBodyAroundMarketShareChart(body) {
   if (!Array.isArray(body)) {
     return { head: [], chartIntro: null, chartImage: null, tail: [] };
@@ -116,7 +123,7 @@ function splitBodyAroundMarketShareChart(body) {
   };
 }
 
-/** Inline "💡 Pickle Economics" line in PT body — section header styled like Photo of Week + poll-style box below. */
+/** Inline "💡 Pickle Economics" line in PT body — section header styled like Nostalgia of the Week + card box below. */
 function isPickleEconomicsInlineSectionParagraph(b) {
   if (b?._type !== "block") return false;
   const t = portableTextBlockPlainText(b).trim();
@@ -130,6 +137,18 @@ function findPickleEconomicsBodySplit(body) {
   return { before: body.slice(0, idx), after: body.slice(idx + 1) };
 }
 
+function captionCreditPortableTextComponents(projectId, dataset) {
+  const base = portableTextComponents(projectId, dataset);
+  return {
+    ...base,
+    block: {
+      normal: ({ children }) => (
+        <span className={styles.captionPtLine}>{children}</span>
+      ),
+    },
+  };
+}
+
 function portableTextComponents(projectId, dataset) {
   return {
     types: {
@@ -138,7 +157,7 @@ function portableTextComponents(projectId, dataset) {
         if (!src) return null;
         const { w, h } = dims(value);
         return (
-          <figure className={`${styles.figure} ${styles.proseFigure}`}>
+          <figure className={`${styles.figure} ${styles.featureFigure}`}>
             <Image
               src={src}
               alt=""
@@ -168,7 +187,7 @@ function portableTextComponents(projectId, dataset) {
           href={value?.href}
           rel="noopener noreferrer"
           target="_blank"
-          className={styles.proseLink}
+          className={styles.featureLink}
         >
           {children}
         </a>
@@ -177,37 +196,30 @@ function portableTextComponents(projectId, dataset) {
   };
 }
 
-const DEFAULT_PHOTO_OF_WEEK_HEADING = "Sexy Pic(kle) of the Week";
+const DEFAULT_NOSTALGIA_OF_WEEK_HEADING = "Nostalgia of the Week";
 
-export default function ArticleContentBlocks({ blocks, projectId, dataset, articleSlug = "" }) {
-  const orderedBlocks = orderPhotoOfWeekLast(blocks ?? []);
-  const hasPhotoOfWeekBlock = orderedBlocks.some((b) => b?._type === "photoOfWeekBlock");
+function renderContentBlock(block, projectId, dataset) {
+  if (!block?._type) return null;
+  const key = block._key || block._type;
 
-  if (!Array.isArray(blocks) || blocks.length === 0) return null;
-
-  return (
-    <div className={styles.blocks}>
-      {orderedBlocks.map((block) => {
-        if (!block?._type) return null;
-        const key = block._key || block._type;
-
-        switch (block._type) {
-          case "proseSection": {
+  switch (block._type) {
+          case "proseSection":
+          case "featureSection": {
             const showHeading = block.heading && !hidePartHeading(block.heading);
-            const economics = isPickleEconomicsProseHeading(block.heading);
+            const economics = isPickleEconomicsFeatureHeading(block.heading);
             const labelOnly = isPickleEconomicsLabelOnlyHeading(block.heading);
             const ptComponents = portableTextComponents(projectId, dataset);
-            const body = filterPollDuplicateProseLines(block.body ?? []);
+            const body = filterDuplicateTeaserLines(block.body ?? []);
             if (body.length === 0) {
               return null;
             }
             const { head, chartIntro, chartImage, tail } = splitBodyAroundMarketShareChart(body);
             const hasMarketShareModule = chartIntro && chartImage;
-            const proseBodyForEconomics = hasMarketShareModule
+            const featureBodyForEconomics = hasMarketShareModule
               ? [...head, ...tail]
               : body;
             const pickleSplit =
-              !hasMarketShareModule && findPickleEconomicsBodySplit(proseBodyForEconomics);
+              !hasMarketShareModule && findPickleEconomicsBodySplit(featureBodyForEconomics);
 
             if (pickleSplit) {
               const showPeMainTitle =
@@ -218,7 +230,7 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset, artic
               return (
                 <section key={key} className={styles.block}>
                   {pickleSplit.before.length > 0 ? (
-                    <div className={styles.prose}>
+                    <div className={styles.feature}>
                       <PortableText value={pickleSplit.before} components={ptComponents} />
                     </div>
                   ) : null}
@@ -228,9 +240,9 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset, artic
                   >
                     <p className={styles.eyebrow}>Pickle Economics</p>
                     {showPeMainTitle ? (
-                      <h2 className={styles.photoOfWeekTitle}>{block.heading.trim()}</h2>
+                      <h2 className={styles.nostalgiaOfWeekTitle}>{block.heading.trim()}</h2>
                     ) : null}
-                    <div className={styles.prose}>
+                    <div className={styles.feature}>
                       <PortableText value={pickleSplit.after} components={ptComponents} />
                     </div>
                   </aside>
@@ -260,7 +272,7 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset, artic
                 {hasMarketShareModule ? (
                   <>
                     {head.length > 0 ? (
-                      <div className={styles.prose}>
+                      <div className={styles.feature}>
                         <PortableText value={head} components={ptComponents} />
                       </div>
                     ) : null}
@@ -299,17 +311,17 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset, artic
                       })()}
                     </aside>
                     {tail.length > 0 ? (
-                      <div className={styles.prose}>
+                      <div className={styles.feature}>
                         <PortableText value={tail} components={ptComponents} />
                       </div>
                     ) : null}
                   </>
-                ) : Array.isArray(proseBodyForEconomics) && proseBodyForEconomics.length > 0 ? (
+                ) : Array.isArray(featureBodyForEconomics) && featureBodyForEconomics.length > 0 ? (
                   <div
-                    className={`${styles.prose} ${economics ? styles.economicsProse : ""}`}
+                    className={`${styles.feature} ${economics ? styles.economicsFeature : ""}`}
                   >
                     <PortableText
-                      value={proseBodyForEconomics}
+                      value={featureBodyForEconomics}
                       components={ptComponents}
                     />
                   </div>
@@ -317,41 +329,37 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset, artic
               </section>
             );
           }
-          case "imageBlock": {
-            const src = urlForImage(projectId, dataset, block.image);
-            if (!src) return null;
-            const { w, h } = dims(block.image);
-            return (
-              <figure key={key} className={`${styles.figure} ${styles.proseFigure}`}>
-                <Image src={src} alt="" width={w} height={h} className={styles.blockImage} sizes="(max-width: 900px) 100vw, 820px" />
-                {(block.caption || block.credit) && (
-                  <figcaption className={styles.caption}>
-                    {block.caption ? <span>{block.caption}</span> : null}
-                    {block.caption && block.credit ? (
-                      <span className={styles.captionSep}> · </span>
-                    ) : null}
-                    {block.credit ? (
-                      <span className={styles.credit}>{block.credit}</span>
-                    ) : null}
-                  </figcaption>
-                )}
-              </figure>
-            );
-          }
-          case "listicleSection": {
+          case "listicleSection":
+          case "examplesSection": {
+            const ptComponents = portableTextComponents(projectId, dataset);
+            const captionPtComponents = captionCreditPortableTextComponents(projectId, dataset);
             const showHeading = block.heading && !hidePartHeading(block.heading);
             const festivalList = isFestivalListicleHeading(block.heading);
             return (
               <section
                 key={key}
-                className={`${styles.block} ${festivalList ? styles.economicsFestivalList : ""}`}
+                className={`${styles.block} ${
+                  block._type === "examplesSection" ? styles.examplesBlock : ""
+                } ${festivalList ? styles.economicsFestivalList : ""}`}
               >
                 {showHeading ? <h2 className={styles.blockHeading}>{block.heading}</h2> : null}
                 <div className={styles.listicle}>
-                  {(block.items || []).map((item) => {
-                    const ik = item._key || `${item.itemNumber}-${item.title}`;
+                  {(block.items || []).map((item, itemIdx) => {
+                    const ik =
+                      item._key ||
+                      (block._type === "listicleSection"
+                        ? `${item.itemNumber}-${item.title}`
+                        : `example-${itemIdx}`);
                     const imgSrc = item.image ? urlForImage(projectId, dataset, item.image) : null;
                     const { w, h } = item.image ? dims(item.image) : { w: 900, h: 600 };
+                    const hasCap =
+                      typeof item.caption === "string"
+                        ? Boolean(item.caption?.trim())
+                        : Array.isArray(item.caption) && item.caption.length > 0;
+                    const hasCred =
+                      typeof item.credit === "string"
+                        ? Boolean(item.credit?.trim())
+                        : Array.isArray(item.credit) && item.credit.length > 0;
                     return (
                       <article key={ik} className={styles.listicleItem}>
                         {imgSrc ? (
@@ -364,31 +372,59 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset, artic
                               className={styles.blockImage}
                               sizes="(max-width: 900px) 100vw, 720px"
                             />
-                            {(item.caption || item.credit) && (
-                              <p className={styles.caption}>
-                                {item.caption ? <span>{item.caption}</span> : null}
-                                {item.caption && item.credit ? (
+                            {(hasCap || hasCred) && (
+                              <figcaption className={styles.caption}>
+                                {hasCap ? (
+                                  typeof item.caption === "string" ? (
+                                    <span>{item.caption}</span>
+                                  ) : (
+                                    <PortableText
+                                      value={item.caption}
+                                      components={captionPtComponents}
+                                    />
+                                  )
+                                ) : null}
+                                {hasCap && hasCred ? (
                                   <span className={styles.captionSep}> · </span>
                                 ) : null}
-                                {item.credit ? (
-                                  <span className={styles.credit}>{item.credit}</span>
+                                {hasCred ? (
+                                  typeof item.credit === "string" ? (
+                                    <span className={styles.credit}>{item.credit}</span>
+                                  ) : (
+                                    <span className={styles.credit}>
+                                      <PortableText
+                                        value={item.credit}
+                                        components={captionPtComponents}
+                                      />
+                                    </span>
+                                  )
                                 ) : null}
-                              </p>
+                              </figcaption>
                             )}
                           </div>
                         ) : null}
                         <div className={styles.listicleCopy}>
-                          {Number.isFinite(item.itemNumber) ? (
+                          {block._type === "examplesSection" ? (
+                            <span className={styles.itemNum}>{itemIdx + 1}. </span>
+                          ) : Number.isFinite(item.itemNumber) ? (
                             <span className={styles.itemNum}>{item.itemNumber}. </span>
                           ) : null}
-                          {item.title ? (
+                          {block._type === "listicleSection" && item.title ? (
                             <strong
                               className={festivalList ? styles.festivalItemTitle : undefined}
                             >
                               {item.title}
                             </strong>
                           ) : null}
-                          {item.body ? <p className={styles.listicleBody}>{item.body}</p> : null}
+                          {item.body ? (
+                            block._type === "examplesSection" && Array.isArray(item.body) ? (
+                              <div className={`${styles.exampleItemRichBody} ${styles.feature}`}>
+                                <PortableText value={item.body} components={ptComponents} />
+                              </div>
+                            ) : (
+                              <p className={styles.listicleBody}>{item.body}</p>
+                            )
+                          ) : null}
                         </div>
                       </article>
                     );
@@ -397,70 +433,19 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset, artic
               </section>
             );
           }
-          case "didYouKnowBlock": {
-            const src = block.chartImage ? urlForImage(projectId, dataset, block.chartImage) : null;
-            const { w, h } = block.chartImage ? dims(block.chartImage) : { w: 900, h: 600 };
-            const economics = isPickleEconomicsDidYouKnow(block);
-            if (economics) {
-              return (
-                <aside key={key} className={`${styles.block} ${styles.economicsModule}`}>
-                  <div className={styles.economicsLabelRow}>
-                    <span className={styles.economicsIcon} aria-hidden>
-                      💡
-                    </span>
-                    <span className={styles.economicsLabelText}>Pickle Economics</span>
-                  </div>
-                  {block.title ? (
-                    <h2 className={styles.economicsMainTitle}>{block.title}</h2>
-                  ) : null}
-                  {block.description ? (
-                    <p className={styles.economicsIntro}>{block.description}</p>
-                  ) : null}
-                  {src ? (
-                    <div className={styles.economicsChartWrap}>
-                      <Image
-                        src={src}
-                        alt=""
-                        width={w}
-                        height={h}
-                        className={`${styles.blockImage} ${styles.economicsChart}`}
-                        sizes="(max-width: 900px) 100vw, 820px"
-                      />
-                    </div>
-                  ) : null}
-                </aside>
-              );
-            }
+          case "nibblesBlock":
+          case "aroundTheWebBlock": {
             return (
-              <aside key={key} className={styles.dyk}>
-                {block.eyebrow ? <p className={styles.eyebrow}>{block.eyebrow}</p> : null}
-                {block.title ? <h2 className={styles.blockHeading}>{block.title}</h2> : null}
-                {block.description ? (
-                  <p className={styles.dykBody}>{block.description}</p>
+              <section key={key} className={styles.aroundTheWeb}>
+                {block.heading ? (
+                  <h2 className={styles.aroundTheWebSectionTitle}>{block.heading}</h2>
                 ) : null}
-                {src ? (
-                  <Image
-                    src={src}
-                    alt=""
-                    width={w}
-                    height={h}
-                    className={styles.blockImage}
-                    sizes="(max-width: 900px) 100vw, 820px"
-                  />
-                ) : null}
-              </aside>
-            );
-          }
-          case "nibblesBlock": {
-            return (
-              <section key={key} className={styles.nibbles}>
-                {block.heading ? <h2 className={styles.blockHeading}>{block.heading}</h2> : null}
-                <ul className={styles.nibblesList}>
+                <ul className={styles.aroundTheWebList}>
                   {(block.items || []).map((item) => (
                     <li key={item._key || item.url}>
-                      {item.title ? <h3 className={styles.nibblesTitle}>{item.title}</h3> : null}
+                      {item.title ? <h3 className={styles.aroundTheWebTitle}>{item.title}</h3> : null}
                       {item.url ? (
-                        <Link href={item.url} rel="noopener noreferrer" target="_blank" className={styles.nibblesLink}>
+                        <Link href={item.url} rel="noopener noreferrer" target="_blank" className={styles.aroundTheWebLink}>
                           {item.ctaLabel || "Read more"} →
                         </Link>
                       ) : null}
@@ -472,7 +457,7 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset, artic
           }
           case "pickleEconomicsSection": {
             const ptComponents = portableTextComponents(projectId, dataset);
-            const body = filterPollDuplicateProseLines(block.body ?? []);
+            const body = filterDuplicateTeaserLines(block.body ?? []);
             if (body.length === 0) return null;
             const showPeMainTitle =
               typeof block.heading === "string" &&
@@ -487,26 +472,34 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset, artic
                 >
                   <p className={styles.eyebrow}>Pickle Economics</p>
                   {showPeMainTitle ? (
-                    <h2 className={styles.photoOfWeekTitle}>{block.heading.trim()}</h2>
+                    <h2 className={styles.nostalgiaOfWeekTitle}>{block.heading.trim()}</h2>
                   ) : null}
-                  <div className={styles.prose}>
+                  <div className={styles.feature}>
                     <PortableText value={body} components={ptComponents} />
                   </div>
                 </aside>
               </section>
             );
           }
-          case "pollBlock": {
-            return <PollBlockClient key={key} block={block} articleSlug={articleSlug} />;
-          }
-          case "photoOfWeekBlock": {
+          case "photoOfWeekBlock":
+          case "nostalgiaOfWeekBlock": {
+            const captionPtComponents = captionCreditPortableTextComponents(projectId, dataset);
             const src = block.image ? urlForImage(projectId, dataset, block.image) : null;
             const { w, h } = block.image ? dims(block.image) : { w: 900, h: 600 };
-            const headingText = block.heading?.trim() || DEFAULT_PHOTO_OF_WEEK_HEADING;
+            const headingText = block.heading?.trim() || DEFAULT_NOSTALGIA_OF_WEEK_HEADING;
+            const hasCap = Boolean(block.caption?.trim?.());
+            const hasCred =
+              typeof block.credit === "string"
+                ? Boolean(block.credit?.trim())
+                : Array.isArray(block.credit) && block.credit.length > 0;
             return (
-              <aside key={key} className={styles.poll} aria-label={headingText}>
-                <p className={styles.eyebrow}>{headingText}</p>
-                <figure className={`${styles.figure} ${styles.photoOfWeekFigure}`}>
+              <aside
+                key={key}
+                className={`${styles.poll} ${styles.nostalgiaCard}`}
+                aria-label={headingText}
+              >
+                <h2 className={styles.nostalgiaSectionTitle}>{headingText}</h2>
+                <figure className={`${styles.figure} ${styles.nostalgiaOfWeekFigure}`}>
                   {src ? (
                     <Image
                       src={src}
@@ -517,16 +510,25 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset, artic
                       sizes="(max-width: 900px) 100vw, 820px"
                     />
                   ) : (
-                    <div className={styles.photoOfWeekPlaceholder} aria-hidden />
+                    <div className={styles.nostalgiaOfWeekPlaceholder} aria-hidden />
                   )}
-                  {(block.caption || block.credit) && (
+                  {(hasCap || hasCred) && (
                     <figcaption className={styles.caption}>
-                      {block.caption ? <span>{block.caption}</span> : null}
-                      {block.caption && block.credit ? (
+                      {hasCap ? <span>{block.caption}</span> : null}
+                      {hasCap && hasCred ? (
                         <span className={styles.captionSep}> · </span>
                       ) : null}
-                      {block.credit ? (
-                        <span className={styles.credit}>{block.credit}</span>
+                      {hasCred ? (
+                        typeof block.credit === "string" ? (
+                          <span className={styles.credit}>{block.credit}</span>
+                        ) : (
+                          <span className={styles.credit}>
+                            <PortableText
+                              value={block.credit}
+                              components={captionPtComponents}
+                            />
+                          </span>
+                        )
                       ) : null}
                     </figcaption>
                   )}
@@ -537,16 +539,63 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset, artic
           default:
             return null;
         }
+}
+
+export default function ArticleContentBlocks({
+  blocks,
+  projectId,
+  dataset,
+  articleSlug = "",
+  bio,
+}) {
+  if (!Array.isArray(blocks) || blocks.length === 0) return null;
+
+  const bioTrim = typeof bio === "string" ? bio.trim() : "";
+  const showAuthorCard = Boolean(bioTrim);
+  const { core, nostalgia, atw } = partitionArticleBlocks(blocks);
+
+  const segments = [];
+  for (const b of core) segments.push({ kind: "block", block: b });
+  if (showAuthorCard) segments.push({ kind: "author" });
+  if (nostalgia.length > 0) {
+    for (const b of nostalgia) segments.push({ kind: "block", block: b });
+  } else {
+    segments.push({ kind: "nostalgiaFallback" });
+  }
+  for (const b of atw) segments.push({ kind: "block", block: b });
+
+  return (
+    <div className={styles.blocks}>
+      {segments.map((seg, i) => {
+        if (seg.kind === "author") {
+          return (
+            <aside
+              key="author-bio"
+              className={styles.authorCard}
+              aria-label="About the author"
+            >
+              <p className={styles.authorCardBio}>{bioTrim}</p>
+            </aside>
+          );
+        }
+        if (seg.kind === "nostalgiaFallback") {
+          return (
+            <aside
+              key="nostalgia-fallback"
+              className={`${styles.poll} ${styles.nostalgiaOfWeekFallback}`}
+              aria-label={DEFAULT_NOSTALGIA_OF_WEEK_HEADING}
+            >
+              <p className={styles.eyebrow}>{DEFAULT_NOSTALGIA_OF_WEEK_HEADING}</p>
+              <div className={styles.nostalgiaOfWeekPlaceholder} aria-hidden />
+            </aside>
+          );
+        }
+        return (
+          <Fragment key={seg.block._key || `seg-${i}`}>
+            {renderContentBlock(seg.block, projectId, dataset)}
+          </Fragment>
+        );
       })}
-      {!hasPhotoOfWeekBlock ? (
-        <aside
-          className={`${styles.poll} ${styles.photoOfWeekFallback}`}
-          aria-label={DEFAULT_PHOTO_OF_WEEK_HEADING}
-        >
-          <p className={styles.eyebrow}>{DEFAULT_PHOTO_OF_WEEK_HEADING}</p>
-          <div className={styles.photoOfWeekPlaceholder} aria-hidden />
-        </aside>
-      ) : null}
     </div>
   );
 }

@@ -10,8 +10,8 @@ import { createClient } from "next-sanity";
 import { createImageUrlBuilder } from "@sanity/image-url";
 
 /**
- * Expand nested image references inside content blocks so listicle images,
- * chart images, and portable-text images resolve in the browser.
+ * Expand nested image references inside content blocks so listicle / examples images,
+ * chart images, and portable-text images resolve in the browser (proseSection / featureSection).
  */
 const articleContentBlocksProjection = `contentBlocks[] {
   _key,
@@ -39,22 +39,27 @@ const articleContentBlocksProjection = `contentBlocks[] {
       }
     }
   },
-  _type == "imageBlock" => {
+  _type == "featureSection" => {
     _key,
     _type,
-    caption,
-    credit,
-    linkUrl,
-    image {
-      asset->{
-        _id,
-        _ref,
-        url,
-        metadata {
-          dimensions { width, height }
-        }
-      },
-      hotspot
+    heading,
+    body[] {
+      ...,
+      _type == "image" => {
+        _type,
+        _key,
+        caption,
+        credit,
+        asset->{
+          _id,
+          _ref,
+          url,
+          metadata {
+            dimensions { width, height }
+          }
+        },
+        hotspot
+      }
     }
   },
   _type == "listicleSection" => {
@@ -81,22 +86,57 @@ const articleContentBlocksProjection = `contentBlocks[] {
       }
     }
   },
-  _type == "didYouKnowBlock" => {
+  _type == "examplesSection" => {
     _key,
     _type,
-    eyebrow,
-    title,
-    description,
-    chartImage {
-      asset->{
-        _id,
-        _ref,
-        url,
-        metadata {
-          dimensions { width, height }
+    heading,
+    items[] {
+      _key,
+      body[] {
+        ...,
+        _type == "image" => {
+          _type,
+          _key,
+          caption,
+          credit,
+          asset->{
+            _id,
+            _ref,
+            url,
+            metadata {
+              dimensions { width, height }
+            }
+          },
+          hotspot
         }
       },
-      hotspot
+      caption[] {
+        ...,
+        markDefs[] {
+          _key,
+          _type,
+          href
+        }
+      },
+      credit[] {
+        ...,
+        markDefs[] {
+          _key,
+          _type,
+          href
+        }
+      },
+      image {
+        asset->{
+          _id,
+          _ref,
+          url,
+          metadata {
+            dimensions { width, height }
+          }
+        },
+        hotspot
+      }
     }
   },
   _type == "nibblesBlock" => {
@@ -110,24 +150,15 @@ const articleContentBlocksProjection = `contentBlocks[] {
       ctaLabel
     }
   },
-  _type == "pollBlock" => {
+  _type == "aroundTheWebBlock" => {
     _key,
     _type,
     heading,
-    question,
-    correctCode,
-    answerTeaser,
-    lastWeekQuestion,
-    options[] {
+    items[] {
       _key,
-      code,
-      text
-    },
-    lastWeekResults[] {
-      _key,
-      isCorrect,
-      percent,
-      label
+      title,
+      url,
+      ctaLabel
     }
   },
   _type == "photoOfWeekBlock" => {
@@ -135,6 +166,31 @@ const articleContentBlocksProjection = `contentBlocks[] {
     _type,
     heading,
     credit,
+    caption,
+    image {
+      asset->{
+        _id,
+        _ref,
+        url,
+        metadata {
+          dimensions { width, height }
+        }
+      },
+      hotspot
+    }
+  },
+  _type == "nostalgiaOfWeekBlock" => {
+    _key,
+    _type,
+    heading,
+    credit[] {
+      ...,
+      markDefs[] {
+        _key,
+        _type,
+        href
+      }
+    },
     caption,
     image {
       asset->{
@@ -189,6 +245,8 @@ export const articlesQuery = `*[_type == "article"] | order(publishedDate desc, 
   publishedDate,
   entries[] { _key, age, title, body },
   disclaimer,
+  bio,
+  authorName,
   ${articleContentBlocksProjection}
 }`;
 
@@ -208,6 +266,8 @@ export const articleBySlugQuery = `*[_type == "article" && slug.current == $slug
   publishedDate,
   entries[] { _key, age, title, body },
   disclaimer,
+  bio,
+  authorName,
   ${articleContentBlocksProjection}
 }`;
 
@@ -284,11 +344,6 @@ export function firstImageFromContentBlocks(blocks, urlFor) {
   for (const block of blocks) {
     if (!block || typeof block !== "object") continue;
     switch (block._type) {
-      case "imageBlock": {
-        const img = imageDimensionsAndUrl(block.image, urlFor);
-        if (img) return img;
-        break;
-      }
       case "listicleSection": {
         for (const item of block.items || []) {
           const img = imageDimensionsAndUrl(item?.image, urlFor);
@@ -296,17 +351,28 @@ export function firstImageFromContentBlocks(blocks, urlFor) {
         }
         break;
       }
-      case "didYouKnowBlock": {
-        const img = imageDimensionsAndUrl(block.chartImage, urlFor);
-        if (img) return img;
+      case "examplesSection": {
+        for (const item of block.items || []) {
+          const img = imageDimensionsAndUrl(item?.image, urlFor);
+          if (img) return img;
+          if (Array.isArray(item?.body)) {
+            for (const node of item.body) {
+              if (node?._type !== "image") continue;
+              const img2 = imageDimensionsAndUrl(node, urlFor);
+              if (img2) return img2;
+            }
+          }
+        }
         break;
       }
-      case "photoOfWeekBlock": {
+      case "photoOfWeekBlock":
+      case "nostalgiaOfWeekBlock": {
         const img = imageDimensionsAndUrl(block.image, urlFor);
         if (img) return img;
         break;
       }
       case "proseSection":
+      case "featureSection":
       case "pickleEconomicsSection": {
         for (const node of block.body || []) {
           if (!node || node._type !== "image") continue;
@@ -360,6 +426,15 @@ export function mapArticle(raw, urlFor, fallbackImage = "/hl-photo.png") {
   const mainImageWidth = chosen?.width ?? 900;
   const mainImageHeight = chosen?.height ?? 600;
 
+  /** Document main image only (for issue lead art). Listing thumbnail still uses `mainImage`. */
+  const heroImage = fromMain
+    ? {
+        url: fromMain.url,
+        width: raw.mainImageWidth ?? fromMain.width,
+        height: raw.mainImageHeight ?? fromMain.height,
+      }
+    : null;
+
   return {
     _id: raw._id,
     slug: raw.slug,
@@ -370,11 +445,14 @@ export function mapArticle(raw, urlFor, fallbackImage = "/hl-photo.png") {
     mainImage,
     mainImageWidth,
     mainImageHeight,
+    heroImage,
     photoCredit: raw.photoCredit,
     brandExplainer: raw.brandExplainer,
     publishedDate: raw.publishedDate,
     entries: raw.entries ?? [],
     disclaimer: raw.disclaimer,
+    bio: raw.bio,
+    authorName: raw.authorName,
     contentBlocks: raw.contentBlocks ?? [],
   };
 }

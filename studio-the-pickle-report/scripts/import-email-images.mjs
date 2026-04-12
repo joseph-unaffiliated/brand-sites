@@ -143,40 +143,12 @@ function resolvePaths(contentBlocks, match) {
   if (!Array.isArray(contentBlocks)) return null
   const {blockType} = match
 
-  if (blockType === 'imageBlock') {
-    const ordinal = match.ordinal ?? 0
-    const idxs = []
-    for (let i = 0; i < contentBlocks.length; i++) {
-      if (contentBlocks[i]?._type === 'imageBlock') idxs.push(i)
-    }
-    const bi = idxs[ordinal]
-    if (bi === undefined) return null
-    return {
-      imagePath: `contentBlocks[${bi}].image`,
-      creditPath: `contentBlocks[${bi}].credit`,
-    }
-  }
-
   if (blockType === 'photoOfWeekBlock') {
     const bi = contentBlocks.findIndex((b) => b?._type === 'photoOfWeekBlock')
     if (bi < 0) return null
     return {
       imagePath: `contentBlocks[${bi}].image`,
       creditPath: `contentBlocks[${bi}].credit`,
-    }
-  }
-
-  if (blockType === 'didYouKnowBlock') {
-    const inc = match.titleIncludes
-    const bi = contentBlocks.findIndex(
-      (b) =>
-        b?._type === 'didYouKnowBlock' &&
-        (inc ? String(b.title || '').includes(inc) : true),
-    )
-    if (bi < 0) return null
-    return {
-      imagePath: `contentBlocks[${bi}].chartImage`,
-      creditPath: null,
     }
   }
 
@@ -206,11 +178,11 @@ function replaceParagraphWhereIncludes(body, includes, replacement) {
   return out
 }
 
-function insertAfterParagraphIncludes(body, includes, imageBlock) {
+function insertAfterParagraphIncludes(body, includes, insertedImage) {
   const out = [...body]
   const idx = out.findIndex((b) => blockText(b).includes(includes))
   if (idx < 0) throw new Error(`No paragraph containing: ${includes}`)
-  out.splice(idx + 1, 0, imageBlock)
+  out.splice(idx + 1, 0, insertedImage)
   return out
 }
 
@@ -226,6 +198,18 @@ function removePowPlaceholderParagraphs(body) {
     if (t.includes('Reference Librarians Debra Pond and Steve Rice testing pickles')) return false
     return true
   })
+}
+
+/** Index to splice in photoOfWeekBlock (after nibbles, else after listicle / prose). */
+function insertIdxForPhotoOfWeekBlock(blocks) {
+  if (!Array.isArray(blocks)) return 0
+  const nib = blocks.findIndex((b) => b?._type === 'nibblesBlock')
+  if (nib >= 0) return nib + 1
+  const list = blocks.findIndex((b) => b?._type === 'listicleSection')
+  if (list >= 0) return list + 1
+  const prose = blocks.findIndex((b) => b?._type === 'proseSection')
+  if (prose >= 0) return prose + 1
+  return blocks.length
 }
 
 async function pipelineWhyDoPickles2Am(client, docId, targets, dryRun) {
@@ -264,8 +248,7 @@ async function pipelineWhyDoPickles2Am(client, docId, targets, dryRun) {
 
   blocks[proseIdx] = {...blocks[proseIdx], body}
 
-  const pollIdx = blocks.findIndex((b) => b?._type === 'pollBlock')
-  if (pollIdx < 0) throw new Error('No pollBlock')
+  const insertIdx = insertIdxForPhotoOfWeekBlock(blocks)
 
   const powBlock = {
     _type: 'photoOfWeekBlock',
@@ -276,7 +259,7 @@ async function pipelineWhyDoPickles2Am(client, docId, targets, dryRun) {
   }
 
   if (!dryRun) {
-    const nextBlocks = [...blocks.slice(0, pollIdx), powBlock, ...blocks.slice(pollIdx)]
+    const nextBlocks = [...blocks.slice(0, insertIdx), powBlock, ...blocks.slice(insertIdx)]
     await client
       .patch(docId)
       .set({
@@ -288,7 +271,7 @@ async function pipelineWhyDoPickles2Am(client, docId, targets, dryRun) {
   }
   console.log(
     dryRun
-      ? '[dry-run] would set mainImage, prose images (fridge + map), insert photoOfWeekBlock before poll'
+      ? '[dry-run] would set mainImage, prose images (fridge + map), insert photoOfWeekBlock after nibbles/first section'
       : 'OK pipeline whyDoPickles2Am: mainImage, prose PT images, photoOfWeekBlock',
   )
 }
@@ -329,8 +312,7 @@ async function pipelinePickleAddictsFacebook(client, docId, targets, dryRun) {
 
   blocks[proseIdx] = {...blocks[proseIdx], body}
 
-  const pollIdx = blocks.findIndex((b) => b?._type === 'pollBlock')
-  if (pollIdx < 0) throw new Error('No pollBlock')
+  const insertIdx = insertIdxForPhotoOfWeekBlock(blocks)
 
   const powT = tm.get('photo-of-week')
   const powId = await ensureAsset(client, powT, cache, dryRun)
@@ -346,7 +328,7 @@ async function pipelinePickleAddictsFacebook(client, docId, targets, dryRun) {
   }
 
   if (!dryRun) {
-    const nextBlocks = [...blocks.slice(0, pollIdx), powBlock, ...blocks.slice(pollIdx)]
+    const nextBlocks = [...blocks.slice(0, insertIdx), powBlock, ...blocks.slice(insertIdx)]
     await client
       .patch(docId)
       .set({
@@ -401,8 +383,7 @@ async function pipelinePicklePriestBless(client, docId, targets, dryRun) {
 
   blocks[proseIdx] = {...blocks[proseIdx], body}
 
-  const pollIdx = blocks.findIndex((b) => b?._type === 'pollBlock')
-  if (pollIdx < 0) throw new Error('No pollBlock')
+  const insertIdx = insertIdxForPhotoOfWeekBlock(blocks)
 
   const powBlock = {
     _type: 'photoOfWeekBlock',
@@ -413,7 +394,7 @@ async function pipelinePicklePriestBless(client, docId, targets, dryRun) {
   }
 
   if (!dryRun) {
-    const nextBlocks = [...blocks.slice(0, pollIdx), powBlock, ...blocks.slice(pollIdx)]
+    const nextBlocks = [...blocks.slice(0, insertIdx), powBlock, ...blocks.slice(insertIdx)]
     await client
       .patch(docId)
       .set({
@@ -514,8 +495,7 @@ async function pipelineFiveFamousFilms(client, docId, targets, dryRun) {
   body = removePowPlaceholderParagraphs(body)
   blocks[proseIdx] = {...blocks[proseIdx], body}
 
-  const pollIdx = blocks.findIndex((b) => b?._type === 'pollBlock')
-  if (pollIdx < 0) throw new Error('No pollBlock')
+  const insertIdx = insertIdxForPhotoOfWeekBlock(blocks)
   const powBlock = {
     _type: 'photoOfWeekBlock',
     _key: newKey('pow'),
@@ -524,7 +504,7 @@ async function pipelineFiveFamousFilms(client, docId, targets, dryRun) {
     credit: powT.credit || '',
   }
   if (!dryRun) {
-    const nextBlocks = [...blocks.slice(0, pollIdx), powBlock, ...blocks.slice(pollIdx)]
+    const nextBlocks = [...blocks.slice(0, insertIdx), powBlock, ...blocks.slice(insertIdx)]
     await client
       .patch(docId)
       .set({
@@ -567,8 +547,7 @@ async function pipelinePamelaAnderson(client, docId, targets, dryRun) {
   body = removePowPlaceholderParagraphs(body)
   blocks[proseIdx] = {...blocks[proseIdx], body}
 
-  const pollIdx = blocks.findIndex((b) => b?._type === 'pollBlock')
-  if (pollIdx < 0) throw new Error('No pollBlock')
+  const insertIdx = insertIdxForPhotoOfWeekBlock(blocks)
   const powBlock = {
     _type: 'photoOfWeekBlock',
     _key: newKey('pow'),
@@ -577,7 +556,7 @@ async function pipelinePamelaAnderson(client, docId, targets, dryRun) {
     credit: powT.credit || '',
   }
   if (!dryRun) {
-    const nextBlocks = [...blocks.slice(0, pollIdx), powBlock, ...blocks.slice(pollIdx)]
+    const nextBlocks = [...blocks.slice(0, insertIdx), powBlock, ...blocks.slice(insertIdx)]
     await client
       .patch(docId)
       .set({
@@ -624,8 +603,7 @@ async function pipelineAthletesPickleJuice(client, docId, targets, dryRun) {
   body = removePowPlaceholderParagraphs(body)
   blocks[proseIdx] = {...blocks[proseIdx], body}
 
-  const pollIdx = blocks.findIndex((b) => b?._type === 'pollBlock')
-  if (pollIdx < 0) throw new Error('No pollBlock')
+  const insertIdx = insertIdxForPhotoOfWeekBlock(blocks)
   const powBlock = {
     _type: 'photoOfWeekBlock',
     _key: newKey('pow'),
@@ -634,7 +612,7 @@ async function pipelineAthletesPickleJuice(client, docId, targets, dryRun) {
     credit: powT.credit || '',
   }
   if (!dryRun) {
-    const nextBlocks = [...blocks.slice(0, pollIdx), powBlock, ...blocks.slice(pollIdx)]
+    const nextBlocks = [...blocks.slice(0, insertIdx), powBlock, ...blocks.slice(insertIdx)]
     await client
       .patch(docId)
       .set({
@@ -678,8 +656,7 @@ async function pipelineKoolAidPickles(client, docId, targets, dryRun) {
   body = removePowPlaceholderParagraphs(body)
   blocks[proseIdx] = {...blocks[proseIdx], body}
 
-  const pollIdx = blocks.findIndex((b) => b?._type === 'pollBlock')
-  if (pollIdx < 0) throw new Error('No pollBlock')
+  const insertIdx = insertIdxForPhotoOfWeekBlock(blocks)
   const powBlock = {
     _type: 'photoOfWeekBlock',
     _key: newKey('pow'),
@@ -688,7 +665,7 @@ async function pipelineKoolAidPickles(client, docId, targets, dryRun) {
     credit: powT.credit || '',
   }
   if (!dryRun) {
-    const nextBlocks = [...blocks.slice(0, pollIdx), powBlock, ...blocks.slice(pollIdx)]
+    const nextBlocks = [...blocks.slice(0, insertIdx), powBlock, ...blocks.slice(insertIdx)]
     await client
       .patch(docId)
       .set({
@@ -739,8 +716,7 @@ async function pipelineDaddyWherePickles(client, docId, targets, dryRun) {
   body = removePowPlaceholderParagraphs(body)
   blocks[proseIdx] = {...blocks[proseIdx], body}
 
-  const pollIdx = blocks.findIndex((b) => b?._type === 'pollBlock')
-  if (pollIdx < 0) throw new Error('No pollBlock')
+  const insertIdx = insertIdxForPhotoOfWeekBlock(blocks)
   const powBlock = {
     _type: 'photoOfWeekBlock',
     _key: newKey('pow'),
@@ -749,7 +725,7 @@ async function pipelineDaddyWherePickles(client, docId, targets, dryRun) {
     credit: powT.credit || '',
   }
   if (!dryRun) {
-    const nextBlocks = [...blocks.slice(0, pollIdx), powBlock, ...blocks.slice(pollIdx)]
+    const nextBlocks = [...blocks.slice(0, insertIdx), powBlock, ...blocks.slice(insertIdx)]
     await client
       .patch(docId)
       .set({
@@ -762,7 +738,7 @@ async function pipelineDaddyWherePickles(client, docId, targets, dryRun) {
   console.log(dryRun ? '[dry-run] daddyWherePickles' : 'OK pipeline daddyWherePickles')
 }
 
-/** HowHighShouldMyPickleBounce.html — prose only, no pollBlock in Sanity */
+/** HowHighShouldMyPickleBounce.html — prose-only article; POW block appended after prose */
 async function pipelineHowHighPickleBounce(client, docId, targets, dryRun) {
   const tm = targetsById(targets)
   const cache = new Map()

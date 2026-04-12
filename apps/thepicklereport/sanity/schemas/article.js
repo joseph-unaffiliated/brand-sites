@@ -17,12 +17,6 @@ export default {
     { name: "photoCredit", type: "string", title: "Photo credit" },
     { name: "brandExplainer", type: "text", title: "Brand explainer" },
     { name: "publishedDate", type: "datetime", title: "Published date" },
-    {
-      name: "entries",
-      type: "array",
-      title: "Entries",
-      of: [{ type: "articleEntry" }],
-    },
     { name: "disclaimer", type: "text", title: "Disclaimer" },
   ],
   preview: {

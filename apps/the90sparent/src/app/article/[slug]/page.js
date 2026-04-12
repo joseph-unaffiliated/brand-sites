@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { isPartPlaceholderAge } from "@publication-websites/sanity-content";
 import {
   getArticleBySlug,
   getArticleSlugs,
@@ -14,7 +13,7 @@ import ArticleSubscribeForm from "@/components/ArticleSubscribeForm";
 import ArticleContentBlocks from "@/components/ArticleContentBlocks";
 import AdSlot from "@/components/AdSlot";
 import ArticleAdStickyBottom from "@/components/ArticleAdStickyBottom";
-import { siteDisplayName, siteKickerLower } from "@/config/site";
+import { siteDisplayName, siteKickerLower, siteMastheadTagline } from "@/config/site";
 import styles from "./page.module.css";
 
 const SANITY_PROJECT_ID = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
@@ -60,8 +59,6 @@ export default async function ArticlePage({ params }) {
     .filter((a) => a.slug !== slug)
     .slice(0, READ_MORE_COUNT);
 
-  const entries = article.entries ?? [];
-  const midIndex = Math.floor(entries.length / 2);
   const contentBlocks = article.contentBlocks ?? [];
   const showBlocks =
     Array.isArray(contentBlocks) &&
@@ -77,27 +74,67 @@ export default async function ArticlePage({ params }) {
       <RecordArticleView slug={slug} />
       <ArticleAdStickyBottom />
       <section className="articlebody-section">
-        {/* Centered hero: headline + optional cover image (legacy entries only) */}
+        {/* Centered hero: headline + optional cover image when not using content blocks */}
         <div
           className={`${styles.articleHeroBlock} ${showBlocks ? styles.articleHeroBlockInline : ""}`}
         >
+          {showBlocks ? (
+            <header className={styles.emailMasthead} aria-label="Publication">
+              <Link href="/" className={styles.emailMastheadLogoLink}>
+                <Image
+                  src="/tpr-wordmark.svg"
+                  alt={siteDisplayName}
+                  width={240}
+                  height={48}
+                  className={styles.emailMastheadLogo}
+                  priority
+                />
+              </Link>
+              <p className={styles.emailMastheadTagline}>{siteMastheadTagline}</p>
+            </header>
+          ) : null}
           <div className={styles.articleHero}>
             <div className={styles.articleHeroContent}>
               <div className={styles.backLink}>
                 <Link href="/archive">← Back to archive</Link>
               </div>
               <div className="spacer-3rem" />
-              <div className="headline-block">
+              {showBlocks && article.heroImage?.url ? (
+                <div className={styles.leadImageSection}>
+                  <div className={styles.leadImageFrame}>
+                    <Image
+                      src={article.heroImage.url}
+                      alt=""
+                      width={article.heroImage.width || 1200}
+                      height={article.heroImage.height || 800}
+                      priority
+                      className={styles.leadImage}
+                      sizes="(max-width: 640px) 100vw, 640px"
+                    />
+                  </div>
+                  {article.photoCredit ? (
+                    <p className={styles.leadImageCredit}>{article.photoCredit}</p>
+                  ) : null}
+                </div>
+              ) : null}
+              <div className={`headline-block ${showBlocks ? styles.headlineBlockIssue : ""}`}>
                 {article.kicker && article.kicker.trim().toLowerCase() !== siteKickerLower && (
                   <p className={styles.kicker}>{article.kicker}</p>
                 )}
-                <h1 className="headline-text">{article.title}</h1>
-                <div className="subtitle-container">
+                <h1 className={`headline-text ${showBlocks ? styles.issueHeadline : ""}`}>
+                  {article.title}
+                </h1>
+                <div className={`subtitle-container ${showBlocks ? styles.issueSubtitle : ""}`}>
                   <p>{article.subtitle}</p>
                 </div>
               </div>
               {showBlocks ? (
-                <hr className={styles.articleHeaderRule} aria-hidden />
+                <>
+                  <hr className={styles.articleHeaderRule} aria-hidden />
+                  {article.authorName?.trim() ? (
+                    <p className={styles.issueByline}>By {article.authorName.trim()}</p>
+                  ) : null}
+                </>
               ) : (
                 <div className="spacer-4rem" />
               )}
@@ -135,38 +172,24 @@ export default async function ArticlePage({ params }) {
                       projectId={SANITY_PROJECT_ID}
                       dataset={SANITY_DATASET}
                       articleSlug={slug}
+                      bio={article.bio ?? article.disclaimer}
                     />
-                  ) : (
+                  ) : article.summary ? (
                     <>
-                      {entries.slice(0, midIndex).map((entry, i) => (
-                        <article key={entry._key || `e-a-${i}`} className={styles.entry}>
-                          {entry.age && !isPartPlaceholderAge(entry.age) ? (
-                            <p className={styles.age}>{entry.age}</p>
-                          ) : null}
-                          {entry.title ? <h2>{entry.title}</h2> : null}
-                          {entry.body ? <p>{entry.body}</p> : null}
-                        </article>
-                      ))}
-                      {SHOW_MID && midIndex > 0 && (
+                      <article className={styles.entry}>
+                        <p>{article.summary}</p>
+                      </article>
+                      {SHOW_MID && (
                         <div className={styles.adMid}>
                           <AdSlot slotId={SLOT_MID} format="rectangle" />
                         </div>
                       )}
-                      {entries.slice(midIndex).map((entry, i) => (
-                        <article key={entry._key || `e-b-${midIndex + i}`} className={styles.entry}>
-                          {entry.age && !isPartPlaceholderAge(entry.age) ? (
-                            <p className={styles.age}>{entry.age}</p>
-                          ) : null}
-                          {entry.title ? <h2>{entry.title}</h2> : null}
-                          {entry.body ? <p>{entry.body}</p> : null}
-                        </article>
-                      ))}
                     </>
-                  )}
+                  ) : null}
                 </div>
-                {article.disclaimer && (
+                {!showBlocks && (article.bio ?? article.disclaimer) && (
                   <div className="articlecopy-richtext">
-                    <p className={styles.disclaimer}>{article.disclaimer}</p>
+                    <p className={styles.bio}>{article.bio ?? article.disclaimer}</p>
                   </div>
                 )}
               </div>
