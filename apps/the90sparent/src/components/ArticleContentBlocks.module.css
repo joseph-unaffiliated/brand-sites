@@ -240,9 +240,10 @@
   text-underline-offset: 3px;
 }
 
+/* Match The Pickle Report `.prose` (ArticleContentBlocks) sizing */
 .feature {
-  line-height: 1.85;
-  font-size: 0.9375rem;
+  line-height: 1.65;
+  font-size: 1.2rem;
   width: 100%;
   max-width: min(640px, 100%);
 }
@@ -250,9 +251,8 @@
 .feature p {
   margin: 0 0 1.25rem;
   color: var(--text-secondary);
-  font-size: 0.9375rem;
+  font-size: 1.2rem;
   line-height: 1.85;
-  letter-spacing: -0.02em;
   font-weight: 300;
 }
 
@@ -260,11 +260,19 @@
   margin-bottom: 0;
 }
 
+/* Beat `:where(.site) p` / `.site` paragraph rules when global CSS order varies (Pickle parity). */
+:global(.articlebody-section) :global(.articlecopy-richtext) .feature p {
+  font-size: 1.2rem;
+  line-height: 1.85;
+  font-weight: 300;
+  color: var(--text-secondary);
+}
+
 .feature :global(h2),
 .feature :global(h3) {
   font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
-  font-size: 0.9375rem;
-  font-weight: 700;
+  font-size: 1.35rem;
+  font-weight: 600;
   margin: 2rem 0 1rem;
   letter-spacing: -0.02em;
   color: var(--text-primary);
@@ -275,10 +283,10 @@
   margin-top: 0;
 }
 
-/* PT subheads (h4): same measure as body copy, bold, extra space below */
+/* PT subheads (h4): medium weight vs body */
 .feature :global(h4) {
   font-family: inherit;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   line-height: 1.85;
   letter-spacing: -0.02em;
   font-weight: 500;
@@ -287,6 +295,40 @@
 }
 
 .feature :global(h4):first-child {
+  margin-top: 0;
+}
+
+/*
+ * Portable Text feature headings: `.site h1–h4` in globals.css ties on specificity with
+ * `.feature h*`; production chunk order can let globals win. Scope under article copy so
+ * these rules always beat `.site h*` (same idea as `.aroundTheWebSectionTitle`).
+ */
+:global(.articlebody-section) :global(.articlecopy-richtext) .feature :global(h2),
+:global(.articlebody-section) :global(.articlecopy-richtext) .feature :global(h3) {
+  font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
+  font-size: 1.35rem;
+  font-weight: 600;
+  margin: 2rem 0 1rem;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+:global(.articlebody-section) :global(.articlecopy-richtext) .feature :global(h2):first-child,
+:global(.articlebody-section) :global(.articlecopy-richtext) .feature :global(h3):first-child {
+  margin-top: 0;
+}
+
+:global(.articlebody-section) :global(.articlecopy-richtext) .feature :global(h4) {
+  font-family: inherit;
+  font-size: 1.2rem;
+  line-height: 1.85;
+  letter-spacing: -0.02em;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin: 1.5rem 0 1rem;
+}
+
+:global(.articlebody-section) :global(.articlecopy-richtext) .feature :global(h4):first-child {
   margin-top: 0;
 }
 
@@ -311,7 +353,15 @@
     font-size: 1rem;
   }
 
+  :global(.articlebody-section) :global(.articlecopy-richtext) .block > .feature p {
+    font-size: 1rem;
+  }
+
   .block > .feature :global(h4) {
+    font-size: 1rem;
+  }
+
+  :global(.articlebody-section) :global(.articlecopy-richtext) .block > .feature :global(h4) {
     font-size: 1rem;
   }
 
@@ -329,6 +379,14 @@
   }
 
   .poll .feature :global(h4) {
+    font-size: 1rem;
+  }
+
+  :global(.articlebody-section) :global(.articlecopy-richtext) .poll .feature :global(h4) {
+    font-size: 1rem;
+  }
+
+  :global(.articlebody-section) :global(.articlecopy-richtext) .poll .feature p {
     font-size: 1rem;
   }
 }

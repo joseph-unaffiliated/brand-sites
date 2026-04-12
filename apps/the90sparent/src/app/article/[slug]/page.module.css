@@ -60,13 +60,7 @@
   box-sizing: border-box;
 }
 
-:global(.articlebody-section) .issueHeadline {
-  font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
-  font-size: clamp(2rem, 5vw, 2.75rem);
-  font-weight: 400;
-  line-height: 1.15;
-  letter-spacing: -0.02em;
-}
+/* Issue articles also use `headline-text`; typography matches globals (Pickle Report). */
 
 :global(.articlebody-section) .issueSubtitle {
   font-size: 15px;
@@ -90,13 +84,6 @@
 /* Content-block articles: headline and rule first; lead image below (Pickle-style) */
 .articleHeroBlockInline .articleHeroContent {
   padding-bottom: 0;
-}
-
-.articleHeaderRule {
-  border: none;
-  border-top: 1px solid var(--border);
-  margin: 1.75rem auto 0;
-  max-width: min(100%, 640px);
 }
 
 .articleHeroContent {

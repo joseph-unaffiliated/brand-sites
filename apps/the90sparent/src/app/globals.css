@@ -245,36 +245,7 @@ a {
   object-fit: contain;
 }
 
-.brand-text-wordmark {
-  display: inline-block;
-  font-family: "halyard-display", "Helvetica Neue", Arial, sans-serif;
-  font-weight: 600;
-  font-size: clamp(14px, 2.4vw, 22px);
-  letter-spacing: -0.02em;
-  line-height: 1.15;
-  color: var(--text-primary);
-  max-width: min(240px, 70vw);
-  text-align: center;
-}
-
-.brand-monogram {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
-  width: 48px;
-  min-width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  border: 1px solid var(--border);
-  font-family: "halyard-display", "Helvetica Neue", Arial, sans-serif;
-  font-weight: 600;
-  font-size: 18px;
-  line-height: 1;
-  color: var(--text-primary);
-}
-
-/* Mobile: monogram only; desktop: text wordmark */
+/* Mobile: logo mark only; desktop: wordmark + mark hidden (see `.brand-logo-wordmark`) */
 .brand-logo-wordmark {
   display: none;
 }
@@ -451,12 +422,6 @@ a {
   color: var(--footer-text);
   border-color: rgba(255, 255, 255, 0.35);
   object-fit: contain;
-}
-
-.footer-logo .brand-text-wordmark {
-  color: var(--footer-text);
-  font-size: clamp(12px, 2vw, 16px);
-  max-width: min(160px, 28vw);
 }
 
 @media (min-width: 769px) {

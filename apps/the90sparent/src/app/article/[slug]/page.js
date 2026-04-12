@@ -88,16 +88,13 @@ export default async function ArticlePage({ params }) {
                 {article.kicker && article.kicker.trim().toLowerCase() !== siteKickerLower && (
                   <p className={styles.kicker}>{article.kicker}</p>
                 )}
-                <h1 className={`headline-text ${showBlocks ? styles.issueHeadline : ""}`}>
-                  {article.title}
-                </h1>
+                <h1 className="headline-text">{article.title}</h1>
                 <div className={`subtitle-container ${showBlocks ? styles.issueSubtitle : ""}`}>
                   <p>{article.subtitle}</p>
                 </div>
               </div>
               {showBlocks ? (
                 <>
-                  <hr className={styles.articleHeaderRule} aria-hidden />
                   {article.authorName?.trim() ? (
                     <p className={styles.issueByline}>By {article.authorName.trim()}</p>
                   ) : null}

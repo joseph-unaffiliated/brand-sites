@@ -13,7 +13,7 @@ const layer = createSanityLayer({
 
 const queries = createArticleQueries({
   ...layer,
-  fallbackImage: process.env.NEXT_PUBLIC_SITE_OG_IMAGE || "/next.svg",
+  fallbackImage: process.env.NEXT_PUBLIC_SITE_OG_IMAGE || "/tnp-photo.gif",
 });
 
 export {

@@ -39,8 +39,6 @@ export const siteHeroTagline =
 export const contactEmail =
   process.env.NEXT_PUBLIC_CONTACT_EMAIL || "contact@the90sparent.com";
 
-export const siteMonogram = process.env.NEXT_PUBLIC_SITE_MONOGRAM || "9";
-
 /** Lowercase publication name: hide duplicate kicker when it matches the masthead. */
 export const siteKickerLower = siteDisplayName.toLowerCase();
 

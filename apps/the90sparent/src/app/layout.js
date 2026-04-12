@@ -40,9 +40,10 @@ const siteUrl = siteConfig.siteUrl;
 
 const siteDescription =
   process.env.NEXT_PUBLIC_SITE_DESCRIPTION || siteDefaultDescription;
-const ogImagePath = process.env.NEXT_PUBLIC_SITE_OG_IMAGE;
-const faviconPath = process.env.NEXT_PUBLIC_SITE_FAVICON;
-const appleIconPath = process.env.NEXT_PUBLIC_SITE_APPLE_ICON;
+/** Defaults match `public/tnp-*` brand assets (override per env on Vercel if needed). */
+const ogImagePath = process.env.NEXT_PUBLIC_SITE_OG_IMAGE || "/tnp-photo.gif";
+const faviconPath = process.env.NEXT_PUBLIC_SITE_FAVICON || "/tnp-favicon.ico";
+const appleIconPath = process.env.NEXT_PUBLIC_SITE_APPLE_ICON || "/tnp-webclip.png";
 
 export const metadata = {
   title: siteDisplayName,
