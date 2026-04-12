@@ -342,7 +342,13 @@ function renderContentBlock(block, projectId, dataset) {
                   block._type === "examplesSection" ? styles.examplesBlock : ""
                 } ${festivalList ? styles.economicsFestivalList : ""}`}
               >
-                {showHeading ? <h2 className={styles.blockHeading}>{block.heading}</h2> : null}
+                {showHeading ? (
+                  block._type === "examplesSection" ? (
+                    <h4 className={styles.examplesSectionHeading}>{block.heading}</h4>
+                  ) : (
+                    <h2 className={styles.blockHeading}>{block.heading}</h2>
+                  )
+                ) : null}
                 <div className={styles.listicle}>
                   {(block.items || []).map((item, itemIdx) => {
                     const ik =
@@ -360,6 +366,7 @@ function renderContentBlock(block, projectId, dataset) {
                       typeof item.credit === "string"
                         ? Boolean(item.credit?.trim())
                         : Array.isArray(item.credit) && item.credit.length > 0;
+                    const isExamples = block._type === "examplesSection";
                     return (
                       <article key={ik} className={styles.listicleItem}>
                         {imgSrc ? (
@@ -372,7 +379,7 @@ function renderContentBlock(block, projectId, dataset) {
                               className={styles.blockImage}
                               sizes="(max-width: 900px) 100vw, 720px"
                             />
-                            {(hasCap || hasCred) && (
+                            {!isExamples && (hasCap || hasCred) ? (
                               <figcaption className={styles.caption}>
                                 {hasCap ? (
                                   typeof item.caption === "string" ? (
@@ -400,13 +407,11 @@ function renderContentBlock(block, projectId, dataset) {
                                   )
                                 ) : null}
                               </figcaption>
-                            )}
+                            ) : null}
                           </div>
                         ) : null}
                         <div className={styles.listicleCopy}>
-                          {block._type === "examplesSection" ? (
-                            <span className={styles.itemNum}>{itemIdx + 1}. </span>
-                          ) : Number.isFinite(item.itemNumber) ? (
+                          {block._type === "listicleSection" && Number.isFinite(item.itemNumber) ? (
                             <span className={styles.itemNum}>{item.itemNumber}. </span>
                           ) : null}
                           {block._type === "listicleSection" && item.title ? (
@@ -424,6 +429,30 @@ function renderContentBlock(block, projectId, dataset) {
                             ) : (
                               <p className={styles.listicleBody}>{item.body}</p>
                             )
+                          ) : null}
+                          {isExamples && hasCap ? (
+                            <div className={styles.exampleItemCaptionBelow}>
+                              {typeof item.caption === "string" ? (
+                                <span>{item.caption}</span>
+                              ) : (
+                                <PortableText
+                                  value={item.caption}
+                                  components={captionPtComponents}
+                                />
+                              )}
+                            </div>
+                          ) : null}
+                          {isExamples && hasCred ? (
+                            <div className={styles.exampleItemCredit}>
+                              {typeof item.credit === "string" ? (
+                                <span className={styles.credit}>{item.credit}</span>
+                              ) : (
+                                <PortableText
+                                  value={item.credit}
+                                  components={captionPtComponents}
+                                />
+                              )}
+                            </div>
                           ) : null}
                         </div>
                       </article>
@@ -443,12 +472,19 @@ function renderContentBlock(block, projectId, dataset) {
                 <ul className={styles.aroundTheWebList}>
                   {(block.items || []).map((item) => (
                     <li key={item._key || item.url}>
-                      {item.title ? <h3 className={styles.aroundTheWebTitle}>{item.title}</h3> : null}
                       {item.url ? (
-                        <Link href={item.url} rel="noopener noreferrer" target="_blank" className={styles.aroundTheWebLink}>
-                          {item.ctaLabel || "Read more"} →
+                        <Link
+                          href={item.url}
+                          rel="noopener noreferrer"
+                          target="_blank"
+                          className={styles.aroundTheWebItemLink}
+                        >
+                          {item.title ? <h3 className={styles.aroundTheWebTitle}>{item.title}</h3> : null}
+                          <span className={styles.aroundTheWebLink}>{item.ctaLabel || "Read more"} →</span>
                         </Link>
-                      ) : null}
+                      ) : (
+                        item.title ? <h3 className={styles.aroundTheWebTitle}>{item.title}</h3> : null
+                      )}
                     </li>
                   ))}
                 </ul>
@@ -547,10 +583,12 @@ export default function ArticleContentBlocks({
   dataset,
   articleSlug = "",
   bio,
+  authorName,
 }) {
   if (!Array.isArray(blocks) || blocks.length === 0) return null;
 
   const bioTrim = typeof bio === "string" ? bio.trim() : "";
+  const authorNameTrim = typeof authorName === "string" ? authorName.trim() : "";
   const showAuthorCard = Boolean(bioTrim);
   const { core, nostalgia, atw } = partitionArticleBlocks(blocks);
 
@@ -574,6 +612,9 @@ export default function ArticleContentBlocks({
               className={styles.authorCard}
               aria-label="About the author"
             >
+              {authorNameTrim ? (
+                <p className={styles.authorCardByline}>By {authorNameTrim}</p>
+              ) : null}
               <p className={styles.authorCardBio}>{bioTrim}</p>
             </aside>
           );

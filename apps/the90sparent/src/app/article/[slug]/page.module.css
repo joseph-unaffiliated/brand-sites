@@ -22,37 +22,9 @@
   padding-right: 24px;
 }
 
-/* Newsletter-style masthead (issue articles with content blocks) */
-.emailMasthead {
-  text-align: center;
-  margin-bottom: 2rem;
-  max-width: 640px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.emailMastheadLogoLink {
-  display: inline-block;
-  text-decoration: none;
-}
-
-.emailMastheadLogo {
-  width: min(240px, 80vw);
-  height: auto;
-}
-
-.emailMastheadTagline {
-  margin: 1rem 0 0;
-  font-size: 11px;
-  line-height: 1.5;
-  letter-spacing: -0.02em;
-  font-weight: 300;
-  color: var(--text-secondary);
-  white-space: pre-line;
-}
-
+/* Below headline / rule / byline (Pickle Report–style order) */
 .leadImageSection {
-  margin: 0 auto 2.5rem;
+  margin: 2.75rem auto 2.5rem;
   max-width: 640px;
 }
 
@@ -81,6 +53,11 @@
 
 .headlineBlockIssue {
   gap: 0.75rem;
+  max-width: 640px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
 }
 
 :global(.articlebody-section) .issueHeadline {
@@ -110,7 +87,7 @@
   color: var(--text-secondary);
 }
 
-/* Content-block articles: no cover image; title flows into body */
+/* Content-block articles: headline and rule first; lead image below (Pickle-style) */
 .articleHeroBlockInline .articleHeroContent {
   padding-bottom: 0;
 }
@@ -120,10 +97,6 @@
   border-top: 1px solid var(--border);
   margin: 1.75rem auto 0;
   max-width: min(100%, 640px);
-}
-
-.articleBodyGridBlocksFirst {
-  padding-top: 1.25rem;
 }
 
 .articleHeroContent {
@@ -160,6 +133,15 @@
     align-items: start;
     box-sizing: border-box;
   }
+}
+
+/* After hero + lead image, pull prose up (must follow .articleBodyGrid so it wins the cascade) */
+.articleBodyGridBlocksFirst {
+  padding-top: 12px;
+}
+
+.articleBodyGridBlocksFirst .articleContainerNoPadding {
+  padding-top: 12px;
 }
 
 .articleHeroImage .mainimage-block {

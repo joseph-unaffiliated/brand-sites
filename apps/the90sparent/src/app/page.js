@@ -37,7 +37,7 @@ export default async function Home({ searchParams: searchParamsProp }) {
           <p className={styles.heroTagline}>{siteHeroTagline}</p>
           {totalCount > 0 && (
             <p className={styles.heroMeta}>
-              {totalCount} list{totalCount !== 1 ? "s" : ""} in the archive
+              {totalCount} article{totalCount !== 1 ? "s" : ""} in the archive
               {" · "}
               <HideWhenSubscribed>
                 <a href="/#subscribe">Get the next one in your inbox</a>

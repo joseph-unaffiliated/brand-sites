@@ -13,7 +13,7 @@ import ArticleSubscribeForm from "@/components/ArticleSubscribeForm";
 import ArticleContentBlocks from "@/components/ArticleContentBlocks";
 import AdSlot from "@/components/AdSlot";
 import ArticleAdStickyBottom from "@/components/ArticleAdStickyBottom";
-import { siteDisplayName, siteKickerLower, siteMastheadTagline } from "@/config/site";
+import { siteDisplayName, siteKickerLower } from "@/config/site";
 import styles from "./page.module.css";
 
 const SANITY_PROJECT_ID = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
@@ -78,45 +78,12 @@ export default async function ArticlePage({ params }) {
         <div
           className={`${styles.articleHeroBlock} ${showBlocks ? styles.articleHeroBlockInline : ""}`}
         >
-          {showBlocks ? (
-            <header className={styles.emailMasthead} aria-label="Publication">
-              <Link href="/" className={styles.emailMastheadLogoLink}>
-                <Image
-                  src="/tpr-wordmark.svg"
-                  alt={siteDisplayName}
-                  width={240}
-                  height={48}
-                  className={styles.emailMastheadLogo}
-                  priority
-                />
-              </Link>
-              <p className={styles.emailMastheadTagline}>{siteMastheadTagline}</p>
-            </header>
-          ) : null}
           <div className={styles.articleHero}>
             <div className={styles.articleHeroContent}>
               <div className={styles.backLink}>
                 <Link href="/archive">← Back to archive</Link>
               </div>
               <div className="spacer-3rem" />
-              {showBlocks && article.heroImage?.url ? (
-                <div className={styles.leadImageSection}>
-                  <div className={styles.leadImageFrame}>
-                    <Image
-                      src={article.heroImage.url}
-                      alt=""
-                      width={article.heroImage.width || 1200}
-                      height={article.heroImage.height || 800}
-                      priority
-                      className={styles.leadImage}
-                      sizes="(max-width: 640px) 100vw, 640px"
-                    />
-                  </div>
-                  {article.photoCredit ? (
-                    <p className={styles.leadImageCredit}>{article.photoCredit}</p>
-                  ) : null}
-                </div>
-              ) : null}
               <div className={`headline-block ${showBlocks ? styles.headlineBlockIssue : ""}`}>
                 {article.kicker && article.kicker.trim().toLowerCase() !== siteKickerLower && (
                   <p className={styles.kicker}>{article.kicker}</p>
@@ -133,6 +100,24 @@ export default async function ArticlePage({ params }) {
                   <hr className={styles.articleHeaderRule} aria-hidden />
                   {article.authorName?.trim() ? (
                     <p className={styles.issueByline}>By {article.authorName.trim()}</p>
+                  ) : null}
+                  {article.heroImage?.url ? (
+                    <div className={styles.leadImageSection}>
+                      <div className={styles.leadImageFrame}>
+                        <Image
+                          src={article.heroImage.url}
+                          alt=""
+                          width={article.heroImage.width || 1200}
+                          height={article.heroImage.height || 800}
+                          priority
+                          className={styles.leadImage}
+                          sizes="(max-width: 640px) 100vw, 640px"
+                        />
+                      </div>
+                      {article.photoCredit ? (
+                        <p className={styles.leadImageCredit}>{article.photoCredit}</p>
+                      ) : null}
+                    </div>
                   ) : null}
                 </>
               ) : (
@@ -173,6 +158,7 @@ export default async function ArticlePage({ params }) {
                       dataset={SANITY_DATASET}
                       articleSlug={slug}
                       bio={article.bio ?? article.disclaimer}
+                      authorName={article.authorName}
                     />
                   ) : article.summary ? (
                     <>

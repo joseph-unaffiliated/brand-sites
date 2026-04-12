@@ -335,7 +335,7 @@ function imageDimensionsAndUrl(field, urlFor) {
 }
 
 /**
- * First inline image in issue body blocks (preferred over document mainImage for cards when present).
+ * First usable image found in issue body blocks — used when the article has no document `mainImage`.
  * @param {unknown} blocks
  * @param {(source: unknown) => unknown} urlFor
  */
@@ -421,12 +421,13 @@ export function mapArticle(raw, urlFor, fallbackImage = "/hl-photo.png") {
     }
   }
 
-  const chosen = fromBlocks ?? fromMain;
+  /** Document main image wins for listings, archive, and OG; block images are fallback only. */
+  const chosen = fromMain ?? fromBlocks;
   const mainImage = chosen?.url ?? fallbackImage;
   const mainImageWidth = chosen?.width ?? 900;
   const mainImageHeight = chosen?.height ?? 600;
 
-  /** Document main image only (for issue lead art). Listing thumbnail still uses `mainImage`. */
+  /** Document main image only (for issue lead art when blocks are present). */
   const heroImage = fromMain
     ? {
         url: fromMain.url,

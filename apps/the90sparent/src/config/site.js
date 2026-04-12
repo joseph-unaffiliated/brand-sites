@@ -36,11 +36,6 @@ export const siteHeroTagline =
   process.env.NEXT_PUBLIC_SITE_HERO_TAGLINE ||
   "Parenting today, with one foot still in the 1990s.";
 
-/** Masthead under logo on issue-style article pages (mirrors newsletter). */
-export const siteMastheadTagline =
-  process.env.NEXT_PUBLIC_SITE_MASTHEAD_TAGLINE ||
-  "A weekly email series for Millennial parents\nwho are nostalgic for 'the good old days'";
-
 export const contactEmail =
   process.env.NEXT_PUBLIC_CONTACT_EMAIL || "contact@the90sparent.com";
 
