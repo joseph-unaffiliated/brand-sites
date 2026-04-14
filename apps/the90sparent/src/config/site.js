@@ -43,11 +43,12 @@ export const contactEmail =
 export const siteKickerLower = siteDisplayName.toLowerCase();
 
 export const subscribeCardTitle =
-  process.env.NEXT_PUBLIC_SUBSCRIBE_CARD_TITLE || "The '90s Parent";
+  process.env.NEXT_PUBLIC_SUBSCRIBE_CARD_TITLE ||
+  "We're Bringing Back the Old School";
 
 export const subscribeCardDek =
   process.env.NEXT_PUBLIC_SUBSCRIBE_CARD_DEK ||
-  "Laugh-out-loud stories, honest takes, and the occasional survival tip—weekly, free, and worth forwarding.";
+  "Join The 90s Parent newsletter and get a weekly breakdown of parenting hacks, tips and stories from the Millennial parents who are all that and a bag of chips, delivered straight to your inbox.";
 
 export const siteConfig = {
   brandId: process.env.NEXT_PUBLIC_BRAND_ID || "the90sparent",

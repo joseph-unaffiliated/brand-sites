@@ -107,7 +107,7 @@
 /* Pickle Economics module (email-style card) */
 .economicsModule {
   padding: 1.75rem 1.5rem 2rem;
-  background: hsl(66 12% 90%);
+  background: hsl(252 12% 90%);
   border-radius: 12px;
   text-align: center;
 }
@@ -776,7 +776,7 @@
   min-height: 140px;
   border-radius: 12px;
   border: 1px dashed var(--border);
-  background: hsl(66 8% 97%);
+  background: hsl(252 8% 97%);
 }
 
 .nostalgiaOfWeekFallback {

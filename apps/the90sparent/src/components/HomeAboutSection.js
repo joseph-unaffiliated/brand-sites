@@ -16,12 +16,16 @@ export default function HomeAboutSection({ totalCount = 0 }) {
             <h2 className={styles.subscribeHeadline}>More about {siteDisplayName}</h2>
             <p className={styles.lede}>
               <em>{siteDisplayName}</em> is for anyone raising kids while still humming theme songs
-              from 1994. Each issue mixes humor, honesty, and the occasional rant about snacks,
+              from 1994. Each article mixes humor, honesty, and the occasional rant about snacks,
               screens, and sleep.
               {totalCount > 0 && (
                 <>
                   {" "}
-                  We&apos;ve published <strong>{totalCount} issues</strong> so far
+                  We&apos;ve published{" "}
+                  <strong>
+                    {totalCount} {totalCount === 1 ? "article" : "articles"}
+                  </strong>{" "}
+                  so far
                   {isSubscribed
                     ? " — with a new one in your inbox every week."
                     : " — with a new one in your inbox every week when you subscribe."}
@@ -31,7 +35,7 @@ export default function HomeAboutSection({ totalCount = 0 }) {
           </div>
           <div className={styles.secondaryLinks}>
             <Link href="/archive">
-              Read past issues{totalCount > 0 ? ` (${totalCount})` : ""}
+              Read past articles{totalCount > 0 ? ` (${totalCount})` : ""}
             </Link>
             <span>·</span>
             <Link href="/about">Learn about the project</Link>

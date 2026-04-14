@@ -1,23 +1,23 @@
 :root {
-  /* Chromatic palette: hue 66° (same as brand #474F00); only saturation/lightness vary. */
+  /* Chromatic palette: indigo family anchored on #070039 / #180D6C; only saturation/lightness vary. */
   --bg: #ffffff;
   --surface: #ffffff;
-  --surface-muted: hsl(66, 9%, 96%);
-  --surface-gradient-end: hsl(66, 10%, 92%);
-  --text-primary: hsl(66, 38%, 9%);
-  --text-secondary: hsl(66, 28%, 14%);
-  --text-muted: hsl(66, 14%, 44%);
-  --text-muted-light: hsl(66, 8%, 58%);
-  --accent: #474f00;
-  --accent-strong: hsl(66, 100%, 26%);
-  --border: hsl(66, 10%, 88%);
-  --footer-bg: hsl(66, 42%, 7%);
-  --footer-text: hsl(66, 16%, 90%);
-  --footer-accent: hsl(66, 22%, 68%);
-  --text-on-dark: hsl(66, 12%, 92%);
-  --subscribe-overlay: hsla(66, 45%, 8%, 0.45);
-  --subscribe-grad-top: hsl(66, 46%, 22%);
-  --subscribe-grad-bottom: hsl(66, 50%, 11%);
+  --surface-muted: hsl(252, 9%, 96%);
+  --surface-gradient-end: hsl(252, 10%, 92%);
+  --text-primary: hsl(252, 38%, 9%);
+  --text-secondary: hsl(252, 28%, 14%);
+  --text-muted: hsl(252, 14%, 44%);
+  --text-muted-light: hsl(252, 8%, 58%);
+  --accent: #180d6c;
+  --accent-strong: hsl(252, 65%, 42%);
+  --border: hsl(252, 10%, 88%);
+  --footer-bg: #070039;
+  --footer-text: hsl(252, 16%, 90%);
+  --footer-accent: hsl(252, 22%, 68%);
+  --text-on-dark: hsl(252, 12%, 92%);
+  --subscribe-overlay: hsla(252, 45%, 8%, 0.45);
+  --subscribe-grad-top: hsl(252, 46%, 22%);
+  --subscribe-grad-bottom: hsl(252, 50%, 11%);
   --max-width: 960px;
   --radius: 12px;
 
@@ -80,7 +80,9 @@ body {
 .site h1,
 .site h2,
 .site h3,
-.site h4 {
+.site h4,
+.site h5,
+.site h6 {
   font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
   font-weight: 300;
   text-wrap: balance;
@@ -235,7 +237,6 @@ a {
 .brand-name {
   font-size: 18px;
   display: inline-block;
-  padding-top: 8px;
   max-width: 100%;
 }
 
@@ -263,7 +264,7 @@ a {
   .brand-logo-wordmark {
     display: block;
     box-sizing: border-box;
-    width: min(240px, 36vw);
+    width: min(200px, 30vw);
     max-width: 100%;
     height: auto;
     max-height: none;
@@ -754,7 +755,7 @@ a {
 }
 
 .article-ad-sticky-dismiss:focus-visible {
-  outline: 2px solid var(--accent, #474f00);
+  outline: 2px solid var(--accent, #180d6c);
   outline-offset: 2px;
 }
 

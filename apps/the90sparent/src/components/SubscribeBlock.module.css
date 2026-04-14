@@ -113,6 +113,7 @@
   font-weight: 300;
   line-height: 32px;
   margin: 0 0 .5rem 0;
+  text-wrap: balance;
 }
 
 .dek {
