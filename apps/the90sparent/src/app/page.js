@@ -3,7 +3,6 @@ import Link from "next/link";
 import {
   getArticles,
   getDemographicAndDescription,
-  stripLeadingDuplicate,
 } from "@/lib/articles";
 import SubscribeBlock from "@/components/SubscribeBlock";
 import HideWhenSubscribed from "@/components/HideWhenSubscribed";
@@ -16,6 +15,40 @@ import styles from "./page.module.css";
 const LEFT_COUNT = 2;
 /** Max items for "More issues" (client shows 2 when signed out, 5 when signed in). */
 const STACK_COUNT_MAX = 5;
+
+function plainTextFromPortableTextBlocks(blocks) {
+  if (!Array.isArray(blocks)) return "";
+  return blocks
+    .flatMap((block) => {
+      if (!Array.isArray(block?.children)) return [];
+      return block.children
+        .map((child) => (typeof child?.text === "string" ? child.text : ""))
+        .filter(Boolean);
+    })
+    .join(" ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function firstWordsWithEllipsis(text, wordCount = 150) {
+  const clean = (text || "").replace(/\s+/g, " ").trim();
+  if (!clean) return "";
+  const words = clean.split(" ");
+  if (words.length <= wordCount) return clean;
+  return `${words.slice(0, wordCount).join(" ")}…`;
+}
+
+function featuredPreviewFromArticle(article) {
+  const sections = Array.isArray(article?.contentBlocks) ? article.contentBlocks : [];
+  const bodyText = sections
+    .map((section) => plainTextFromPortableTextBlocks(section?.body))
+    .filter(Boolean)
+    .join(" ")
+    .replace(/\s+/g, " ")
+    .trim();
+  const fallback = (article?.summary || article?.subtitle || "").trim();
+  return firstWordsWithEllipsis(bodyText || fallback, 150);
+}
 
 export default async function Home({ searchParams: searchParamsProp }) {
   const searchParams = typeof searchParamsProp?.then === "function" ? await searchParamsProp : searchParamsProp ?? {};
@@ -115,14 +148,7 @@ export default async function Home({ searchParams: searchParamsProp }) {
                     <p className={styles.featuredDek}>{featuredDemographic}</p>
                   )}
                   {(() => {
-                    const stripPrefix =
-                      featuredDemographic || (featured.subtitle || "").trim();
-                    let snippet = (featured.summary || "").trim();
-                    snippet = stripLeadingDuplicate(snippet, stripPrefix);
-                    const preview =
-                      snippet.length > 160
-                        ? `${snippet.slice(0, 160).trim()}…`
-                        : snippet;
+                    const preview = featuredPreviewFromArticle(featured);
                     return preview ? (
                       <div className={styles.featuredEntryPreview}>
                         <p className={styles.featuredEntrySnippet}>{preview}</p>

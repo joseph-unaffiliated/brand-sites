@@ -112,9 +112,24 @@
 }
 
 .issueCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 300;
   color: var(--accent);
+}
+
+.issueCtaArrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+  padding-top: 2px;
+}
+
+.issueCtaArrow svg {
+  display: block;
 }
 
 .issueCardPlaceholder {
@@ -129,6 +144,6 @@
 }
 
 .issueCardPlaceholder .issueCta {
-  display: inline-block;
+  display: inline-flex;
   margin-top: 4px;
 }

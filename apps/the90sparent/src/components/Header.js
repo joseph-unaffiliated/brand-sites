@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { useSubscriber } from "@/context/SubscriberContext";
 import BrandLogoMark from "@/components/BrandLogoMark";
 import BrandWordmark from "@/components/BrandWordmark";
+import ContactCopyLink from "@/components/ContactCopyLink";
 import { siteDisplayName } from "@/config/site";
 
 export default function Header() {
@@ -77,7 +78,7 @@ export default function Header() {
           </Link>
         </div>
         <nav className="site-nav site-nav-right header-nav-desktop" aria-label="Main">
-          <Link href="/contact">Contact</Link>
+          <ContactCopyLink>Contact</ContactCopyLink>
           {ctaDesktop}
         </nav>
         {ctaMobile}
@@ -96,9 +97,7 @@ export default function Header() {
             <Link href="/about" onClick={() => setMenuOpen(false)}>
               About
             </Link>
-            <Link href="/contact" onClick={() => setMenuOpen(false)}>
-              Contact
-            </Link>
+            <ContactCopyLink onClick={() => setMenuOpen(false)}>Contact</ContactCopyLink>
           </nav>
         </div>
       </div>

@@ -24,7 +24,7 @@
 
 /* Below headline / rule / byline (Pickle Report–style order) */
 .leadImageSection {
-  margin: 2.75rem auto 2.5rem;
+  margin: 3.5rem auto 2.5rem;
   max-width: 640px;
 }
 
@@ -71,14 +71,14 @@
 }
 
 .issueByline {
-  margin: 0.75rem auto 0;
+  margin: 3rem auto 0;
   max-width: 640px;
   font-size: 13px;
   line-height: 1.35;
   font-weight: 300;
   letter-spacing: -0.02em;
   text-align: center;
-  color: var(--text-secondary);
+  color: var(--text-muted);
 }
 
 /* Content-block articles: headline and rule first; lead image below (Pickle-style) */
@@ -355,7 +355,7 @@
   font-size: var(--text-card-headline);
   font-weight: 300;
   line-height: 1.25;
-  margin: 1rem 1rem .5rem 1rem;
+  margin: 1rem 1rem 1.5rem 1rem;
 }
 
 .readMoreDek {
@@ -382,10 +382,6 @@
 }
 
 @media (max-width: 640px) {
-  .articlebody-section .articlepage-form {
-    flex-direction: column;
-  }
-
   .articlebody-section .articlepage-form input {
     min-width: 100%;
   }

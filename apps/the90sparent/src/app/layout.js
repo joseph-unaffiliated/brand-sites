@@ -19,6 +19,8 @@ import {
 } from "@/config/site";
 import Header from "@/components/Header";
 import SubscribePopup from "@/components/SubscribePopup";
+import ContactCopyLink from "@/components/ContactCopyLink";
+import ContactCopyToast from "@/components/ContactCopyToast";
 import { SubscriberProvider } from "@/context/SubscriberContext";
 import "./globals.css";
 
@@ -89,6 +91,7 @@ export default function RootLayout({ children }) {
               <SubscribePopup />
             </Suspense>
             <main className="site-main">{children}</main>
+            <ContactCopyToast />
           <footer className="site-footer">
             <div className="container footer-grid">
               <div className="footer-brand">
@@ -104,7 +107,7 @@ export default function RootLayout({ children }) {
                 <div className="footer-links">
                   <Link href="/archive">Archive</Link>
                   <Link href="/about">About</Link>
-                  <Link href="/contact">Contact</Link>
+                  <ContactCopyLink>Contact</ContactCopyLink>
                 </div>
               </div>
               <div>

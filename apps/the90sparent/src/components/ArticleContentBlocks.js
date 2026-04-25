@@ -480,7 +480,7 @@ function renderContentBlock(block, projectId, dataset) {
                           className={styles.aroundTheWebItemLink}
                         >
                           {item.title ? <h3 className={styles.aroundTheWebTitle}>{item.title}</h3> : null}
-                          <span className={styles.aroundTheWebLink}>{item.ctaLabel || "Read more"} →</span>
+                          <span className={styles.aroundTheWebLink}>{item.ctaLabel || "Read more"}</span>
                         </Link>
                       ) : (
                         item.title ? <h3 className={styles.aroundTheWebTitle}>{item.title}</h3> : null

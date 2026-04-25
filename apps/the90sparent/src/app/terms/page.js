@@ -23,7 +23,7 @@ export default function TermsPage() {
           SECTIONS 11 AND 12 OF THESE TERMS.
         </p>
 
-        <h2>1. INTRODUCTION</h2>
+        <h2>1. Introduction</h2>
         <p>
           This is a legally binding agreement between Unaffiliated Inc.
           (&quot;Unaffiliated,&quot; &quot;Company,&quot; &quot;we&quot;, or
@@ -85,7 +85,7 @@ export default function TermsPage() {
         </p>
         <p>You agree not to use the Services if we have prohibited you from using them.</p>
 
-        <h2>2. COMMUNICATIONS AND NOTICES</h2>
+        <h2>2. Communications and Notices</h2>
         <p>
           <strong>Communication Preferences.</strong> You consent to receive
           communications by email. We may send you curated content including
@@ -104,7 +104,7 @@ export default function TermsPage() {
           writing.
         </p>
 
-        <h2>3. CONTENT AND LICENSING</h2>
+        <h2>3. Content and Licensing</h2>
         <p>
           All materials on the Services, including the designs, graphics, text,
           sounds, pictures, videos, software and other files and the selection
@@ -200,7 +200,7 @@ export default function TermsPage() {
           acknowledgement or compensation to you.
         </p>
 
-        <h2>4. MEMBER CONTENT</h2>
+        <h2>4. Member Content</h2>
         <p>
           Certain Services may enable you or other users to create, modify,
           submit, or add (collectively, &quot;Post&quot;) text, images, videos,
@@ -266,7 +266,7 @@ export default function TermsPage() {
           reason of any Member Content you Post.
         </p>
 
-        <h2>5. RELEASE</h2>
+        <h2>5. Release</h2>
         <p>
           To the extent permitted by applicable law, you agree not to hold
           Unaffiliated or its owners, officers, directors, shareholders, agents,
@@ -293,7 +293,7 @@ export default function TermsPage() {
           interactions, you assume these risks.
         </p>
 
-        <h2>6. COPYRIGHT COMPLAINTS - DIGITAL MILLENNIUM COPYRIGHT ACT</h2>
+        <h2>6. Copyright Complaints - Digital Millennium Copyright Act</h2>
         <p>
           It is our policy to terminate the accounts of repeat infringers in
           appropriate circumstances. If you believe your intellectual property
@@ -316,7 +316,7 @@ export default function TermsPage() {
           DAMAGES, COURT COSTS, AND ATTORNEYS&apos; FEES.
         </p>
 
-        <h2>7. THIRD PARTY WEBSITES</h2>
+        <h2>7. Third Party Websites</h2>
         <p>
           The Services may contain links to third-party websites. If you use
           these links, you will leave the Services and your dealings will
@@ -328,7 +328,7 @@ export default function TermsPage() {
           products or services.
         </p>
 
-        <h2>8. DISCLAIMER OF WARRANTIES AND LIMITATION OF LIABILITY</h2>
+        <h2>8. Disclaimer of Warranties and Limitation of Liability</h2>
         <p className={styles.notice}>
           YOUR USE OF THE SERVICES IS AT YOUR SOLE RISK. UNAFFILIATED IS
           PROVIDING THE SERVICES ALONG WITH CONTENT AND MATERIALS AND THE
@@ -388,7 +388,7 @@ export default function TermsPage() {
           LIABILITY IS LIMITED, ONLY TO THE EXTENT PERMITTED BY LAW.
         </p>
 
-        <h2>9. SERVICE USAGE; TERMINATION OF USAGE</h2>
+        <h2>9. Service Usage; Termination of Usage</h2>
         <p>
           You agree to use the Services only for lawful purposes. You will not
           share your login credentials or access to the Services with anybody.
@@ -421,7 +421,7 @@ export default function TermsPage() {
           suspension, or discontinuation of the Services.
         </p>
 
-        <h2>10. INDEMNIFICATION</h2>
+        <h2>10. Indemnification</h2>
         <p>
           You agree to indemnify, defend and hold harmless Unaffiliated and its
           Affiliated Parties against all liability, causes of action, damages
@@ -432,7 +432,7 @@ export default function TermsPage() {
           Services.
         </p>
 
-        <h2>11. APPLICABLE LAW; JURISDICTION; DISPUTE RESOLUTION</h2>
+        <h2>11. Applicable Law; Jurisdiction; Dispute Resolution</h2>
         <p>
           These Terms shall be governed by the laws of the United States and the
           State of New York, without giving effect to any conflict of laws
@@ -813,7 +813,7 @@ export default function TermsPage() {
           time it takes effect will be deemed acceptance of those changes.
         </p>
 
-        <h2>12. CLASS ACTION WAIVER</h2>
+        <h2>12. Class Action Waiver</h2>
         <p>
           You may only resolve your disputes with Unaffiliated on an individual
           basis, and may not bring a claim as a plaintiff or a class member in
@@ -834,7 +834,7 @@ export default function TermsPage() {
           representative action brought against Unaffiliated by someone else.
         </p>
 
-        <h2>13. MISCELLANEOUS</h2>
+        <h2>13. Miscellaneous</h2>
         <p>
           <strong>Severability.</strong> If any provision of these Terms is deemed
           unlawful, void, or for any reason unenforceable by an arbitrator or
@@ -867,7 +867,7 @@ export default function TermsPage() {
           obligations it receives hereunder without restriction.
         </p>
 
-        <h2>14. TECHNOLOGY AND RESOURCES</h2>
+        <h2>14. Technology and Resources</h2>
         <p>
           The use of the App requires use of a mobile device. Use our App, our
           Sites, and other Services made available online or that are capable
@@ -911,7 +911,7 @@ export default function TermsPage() {
           except in compliance with all applicable laws.
         </p>
 
-        <h2>15. CONTACT INFORMATION</h2>
+        <h2>15. Contact Information</h2>
         <p>
           If you have any comments, questions, or concerns regarding these
           Terms or the Services, please contact us at{" "}

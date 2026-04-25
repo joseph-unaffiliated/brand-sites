@@ -38,7 +38,7 @@ export default function HomeAboutSection({ totalCount = 0 }) {
               Read past articles{totalCount > 0 ? ` (${totalCount})` : ""}
             </Link>
             <span>·</span>
-            <Link href="/about">Learn about the project</Link>
+            <Link href="/about">About</Link>
             {!isSubscribed && (
               <>
                 <span>·</span>

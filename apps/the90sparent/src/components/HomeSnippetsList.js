@@ -6,7 +6,7 @@ import { useSubscriber } from "@/context/SubscriberContext";
 import { getDemographicAndDescription } from "@/lib/articles";
 import styles from "../app/page.module.css";
 
-const SNIPPETS_SIGNED_OUT = 2;
+const SNIPPETS_SIGNED_OUT = 3;
 const SNIPPETS_SIGNED_IN = 5;
 
 export default function HomeSnippetsList({ stackItems }) {

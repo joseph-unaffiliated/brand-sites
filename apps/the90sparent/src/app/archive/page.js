@@ -50,7 +50,24 @@ export default async function ArchivePage() {
                       article.summary ||
                       article.subtitle}
                   </p>
-                  <span className={styles.issueCta}>Read issue →</span>
+                  <span className={styles.issueCta}>
+                    <span>Read issue</span>
+                    <span className={styles.issueCtaArrow} aria-hidden>
+                      <svg
+                        width="7"
+                        height="6"
+                        viewBox="0 0 7 6"
+                        fill="none"
+                        role="presentation"
+                        focusable="false"
+                      >
+                        <path
+                          d="M0 2.91722H6.01145M6.01145 2.91722L3.44774 0.353516M6.01145 2.91722L3.44774 5.48093"
+                          stroke="currentColor"
+                        />
+                      </svg>
+                    </span>
+                  </span>
                 </div>
               </Link>
             </article>
@@ -65,7 +82,22 @@ export default async function ArchivePage() {
                     New issues drop weekly. Subscribe to get them in your inbox.
                   </p>
                   <a className={styles.issueCta} href="/#subscribe">
-                    Subscribe →
+                    <span>Subscribe</span>
+                    <span className={styles.issueCtaArrow} aria-hidden>
+                      <svg
+                        width="7"
+                        height="6"
+                        viewBox="0 0 7 6"
+                        fill="none"
+                        role="presentation"
+                        focusable="false"
+                      >
+                        <path
+                          d="M0 2.91722H6.01145M6.01145 2.91722L3.44774 0.353516M6.01145 2.91722L3.44774 5.48093"
+                          stroke="currentColor"
+                        />
+                      </svg>
+                    </span>
                   </a>
                 </div>
               </div>

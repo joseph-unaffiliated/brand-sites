@@ -98,16 +98,40 @@ export default function SubscribeFormWithTurnstile({ initialEmail, layout = "sta
           </>
         ) : (
           <>
-            <input
-              ref={emailRef}
-              id="email"
-              name="email"
-              type="email"
-              placeholder="Email address"
-              required
-              defaultValue={initialEmail}
-              disabled={loading}
-            />
+            <div className={styles.formRow}>
+              <input
+                ref={emailRef}
+                id="email"
+                name="email"
+                type="email"
+                placeholder="Email"
+                required
+                defaultValue={initialEmail}
+                disabled={loading}
+              />
+              <button
+                type="submit"
+                className={styles.submitPill}
+                disabled={!verified || loading}
+              >
+                <span>{loading ? "Submitting…" : "Subscribe"}</span>
+                <span className={styles.submitPillArrow} aria-hidden>
+                  <svg
+                    width="8"
+                    height={(8 * 6) / 7}
+                    viewBox="0 0 7 6"
+                    fill="none"
+                    role="presentation"
+                    focusable="false"
+                  >
+                    <path
+                      d="M0 2.91722H6.01145M6.01145 2.91722L3.44774 0.353516M6.01145 2.91722L3.44774 5.48093"
+                      stroke="currentColor"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
             {showTurnstile && (
               <div className={styles.turnstileWrap}>
                 <Turnstile
@@ -118,13 +142,6 @@ export default function SubscribeFormWithTurnstile({ initialEmail, layout = "sta
                 />
               </div>
             )}
-            <button
-              type="submit"
-              className="button button-primary"
-              disabled={!verified || loading}
-            >
-              {loading ? "Submitting…" : "Subscribe"}
-            </button>
           </>
         )}
       </form>

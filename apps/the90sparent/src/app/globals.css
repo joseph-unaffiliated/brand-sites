@@ -390,7 +390,7 @@ a {
 .footer-brand {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 12px;
   margin-bottom: 16px;
 }
 
@@ -645,17 +645,25 @@ a {
 
 .articlebody-section .articlepage-form {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: stretch;
   gap: 12px;
-  align-items: center;
   width: 100%;
 }
 
+.articlebody-section .articlepage-form > div {
+  width: 100%;
+  min-width: 0;
+}
+
 .articlebody-section .articlepage-form input {
-  flex: 1;
-  min-width: 200px;
+  box-sizing: border-box;
+  width: 100%;
+  flex: 1 1 auto;
+  min-width: 0;
   height: 40px;
-  padding: 0 16px;
+  padding: 0 130px 0 16px;
   border-radius: 4px;
   border: 1px solid rgba(255, 255, 255, 0.3);
   background: rgba(255, 255, 255, 0.08);
@@ -757,6 +765,32 @@ a {
 .article-ad-sticky-dismiss:focus-visible {
   outline: 2px solid var(--accent, #180d6c);
   outline-offset: 2px;
+}
+
+.contact-copy-toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+  transform: translate(-50%, 12px);
+  z-index: 250;
+  max-width: min(92vw, 560px);
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(7, 0, 57, 0.95);
+  color: var(--text-on-dark);
+  font-size: 13px;
+  line-height: 1.3;
+  text-align: center;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.contact-copy-toast-visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
 }
 
 @media (max-width: 768px) {

@@ -4,6 +4,7 @@ export default function BrandLogoMark({ className }) {
     <svg
       className={className}
       viewBox="0 0 50 24"
+      preserveAspectRatio="xMinYMin meet"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden
