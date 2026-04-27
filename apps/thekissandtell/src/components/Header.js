@@ -25,7 +25,7 @@ export default function Header() {
     </Link>
   ) : (
     <a className="button button-secondary" href="/#subscribe">
-      Subscribe / Log in
+      Subscribe
     </a>
   );
 

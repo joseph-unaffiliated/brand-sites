@@ -11,13 +11,19 @@
 
 .header h1 {
   font-size: clamp(2.2rem, 3vw, 3rem);
-  margin-bottom: 12px;
+  margin-top: 0;
+  margin-bottom: 4px;
 }
 
 .header p {
   color: var(--text-secondary);
   line-height: 1.35;
   max-width: 620px;
+  margin: 0;
+}
+
+.header p.kicker {
+  margin-bottom: 12px;
 }
 
 .kicker {
@@ -25,7 +31,6 @@
   letter-spacing: 0.2em;
   font-size: var(--text-label);
   color: var(--text-muted);
-  margin-bottom: 12px;
 }
 
 /* Three-column masonry: cards stack in columns with no vertical gap between cards */

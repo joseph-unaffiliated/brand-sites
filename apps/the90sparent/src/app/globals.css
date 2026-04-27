@@ -154,8 +154,8 @@ a {
   grid-column: 1;
   justify-self: start;
   align-self: center;
-  width: 44px;
-  height: 44px;
+  width: 36px;
+  height: 36px;
   margin: 0;
   padding: 0;
   border: none;
@@ -169,14 +169,14 @@ a {
 .header-hamburger-line {
   display: block;
   flex-shrink: 0;
-  width: 22px;
+  width: 18px;
   height: 2px;
   border-radius: 1px;
   background: var(--text-primary);
   /* One bar + two shadows avoids subpixel mismatch between three separate boxes */
-  box-shadow: 0 7px 0 var(--text-primary), 0 14px 0 var(--text-primary);
+  box-shadow: 0 5px 0 var(--text-primary), 0 10px 0 var(--text-primary);
   /* Shadows don't affect layout; nudge so the three-bar glyph is vertically centered in the tap target */
-  transform: translateY(-7px);
+  transform: translateY(-5px);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -201,7 +201,7 @@ a {
 
 .site-nav {
   display: flex;
-  gap: 20px;
+  gap: 28px;
   align-items: center;
   font-size: 13px;
   font-weight: 300;
@@ -213,10 +213,14 @@ a {
   color: var(--text-primary);
 }
 
-/* Subscribe / Log in button: match Contact (13px, 0.02em) */
+/* Subscribe button: match Contact (13px, 0.02em); +2px bottom vs .button default */
 .site-header .header-nav-desktop .button {
   font-size: 13px;
   letter-spacing: 0.02em;
+}
+
+.site-header .header-nav-desktop .button:not(.header-profile-link) {
+  padding-bottom: 12px;
 }
 
 .site-nav-left {
@@ -314,6 +318,8 @@ a {
   position: absolute;
   top: 0;
   left: 0;
+  display: flex;
+  flex-direction: column;
   width: min(320px, 85vw);
   max-width: 100%;
   height: 100%;
@@ -331,9 +337,27 @@ a {
 .header-drawer-nav {
   display: flex;
   flex-direction: column;
+  flex: 1 1 auto;
   gap: 8px;
+  min-height: 0;
+  overflow-y: auto;
   padding-top: 60px;
   font-size: 16px;
+}
+
+.header-drawer-bottom {
+  flex-shrink: 0;
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+
+.header-drawer-primary-cta {
+  width: 100%;
+  padding-top: 14px;
+  padding-bottom: 14px;
+  font-size: 16px;
+  font-weight: 500;
 }
 
 .header-drawer-nav a {
@@ -355,6 +379,24 @@ a {
   flex: 1;
 }
 
+/* Subscription /snoozed, /unsubscribed, /subscribed: center card in the full main column */
+main.site-main:has(> [data-subscription-landing]) {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+main.site-main > [data-subscription-landing] {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 0;
+  box-sizing: border-box;
+}
+
 .site-footer {
   border-top: 1px solid var(--border);
   background: var(--footer-bg);
@@ -372,7 +414,7 @@ a {
   display: grid;
   gap: 48px;
   grid-template-columns: 1fr auto auto;
-  align-items: center;
+  align-items: start;
 }
 
 .footer-title {
@@ -392,6 +434,10 @@ a {
   flex-direction: column;
   gap: 12px;
   margin-bottom: 16px;
+}
+
+.footer-text.footer-tagline {
+  white-space: pre-line;
 }
 
 @media (max-width: 768px) {
@@ -455,13 +501,18 @@ a {
 .footer-links {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
   color: var(--footer-accent);
   font-size: 12px;
 }
 
 .footer-links a:hover {
   color: var(--bg);
+}
+
+.footer-links > .footer-text {
+  margin: 0;
+  padding-top: 2px;
 }
 
 .button {

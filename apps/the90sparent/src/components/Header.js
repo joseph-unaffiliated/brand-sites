@@ -6,6 +6,8 @@ import { useSubscriber } from "@/context/SubscriberContext";
 import BrandLogoMark from "@/components/BrandLogoMark";
 import BrandWordmark from "@/components/BrandWordmark";
 import ContactCopyLink from "@/components/ContactCopyLink";
+import SubmissionsCopyLink from "@/components/SubmissionsCopyLink";
+import AdvertiseCopyLink from "@/components/AdvertiseCopyLink";
 import { siteDisplayName } from "@/config/site";
 
 export default function Header() {
@@ -20,26 +22,13 @@ export default function Header() {
     };
   }, [menuOpen]);
 
-  const ctaDesktop = isSubscribed ? (
-    <Link href="/profile" className="button button-secondary header-profile-link" aria-label="Profile">
-      <i className="fa-solid fa-user-circle" aria-hidden />
-    </Link>
-  ) : (
+  const subscribeDesktop = (
     <a className="button button-secondary" href="/#subscribe">
-      Subscribe / Log in
+      Subscribe
     </a>
   );
 
-  const ctaMobile = isSubscribed ? (
-    <Link
-      href="/profile"
-      className="button button-secondary header-subscribe-mobile header-profile-link"
-      onClick={() => setMenuOpen(false)}
-      aria-label="Profile"
-    >
-      <i className="fa-solid fa-user-circle" aria-hidden />
-    </Link>
-  ) : (
+  const subscribeMobile = (
     <a
       className="button button-secondary header-subscribe-mobile"
       href="/#subscribe"
@@ -64,7 +53,12 @@ export default function Header() {
         </button>
         <nav className="site-nav site-nav-left header-nav-desktop" aria-label="Main">
           <Link href="/archive">Archive</Link>
-          <Link href="/about">About</Link>
+          {!isSubscribed && (
+            <>
+              <Link href="/about">About</Link>
+              <SubmissionsCopyLink />
+            </>
+          )}
         </nav>
         <div className="brand">
           <Link
@@ -78,10 +72,13 @@ export default function Header() {
           </Link>
         </div>
         <nav className="site-nav site-nav-right header-nav-desktop" aria-label="Main">
-          <ContactCopyLink>Contact</ContactCopyLink>
-          {ctaDesktop}
+          {isSubscribed ? (
+            <Link href="/about">About</Link>
+          ) : (
+            subscribeDesktop
+          )}
         </nav>
-        {ctaMobile}
+        {!isSubscribed ? subscribeMobile : null}
       </div>
       <div
         id="header-drawer"
@@ -97,8 +94,27 @@ export default function Header() {
             <Link href="/about" onClick={() => setMenuOpen(false)}>
               About
             </Link>
-            <ContactCopyLink onClick={() => setMenuOpen(false)}>Contact</ContactCopyLink>
+            <ContactCopyLink onClick={() => setMenuOpen(false)} />
+            <SubmissionsCopyLink onClick={() => setMenuOpen(false)} />
+            <AdvertiseCopyLink onClick={() => setMenuOpen(false)} />
+            <Link href="/terms" onClick={() => setMenuOpen(false)}>
+              Terms
+            </Link>
+            <Link href="/privacy" onClick={() => setMenuOpen(false)}>
+              Privacy
+            </Link>
           </nav>
+          {!isSubscribed ? (
+            <div className="header-drawer-bottom">
+              <a
+                className="button button-primary header-drawer-primary-cta"
+                href="/#subscribe"
+                onClick={() => setMenuOpen(false)}
+              >
+                Subscribe
+              </a>
+            </div>
+          ) : null}
         </div>
       </div>
     </header>

@@ -1,0 +1,288 @@
+{
+  "$schemaNote": "URLs from Customer.io HTML under issues/thepicklereport/. Import script maps them into prose + blocks (see studio-the-pickle-report/scripts/import-email-images.mjs).",
+  "articles": [
+    {
+      "slugs": ["why-do-pickles-taste-better-at-2-am"],
+      "sourceHtml": "WhyDoPicklesTasteBetterat2AM.html",
+      "pipeline": "whyDoPickles2Am",
+      "targets": [
+        {
+          "id": "main-fridge",
+          "url": "https://userimg-assets.customeriomail.com/images/client-env-198880/1774555201333_latenightfridgeraid_01KMNVPZW22TY5TAG40WDB5NE2.png",
+          "credit": "Credit: Sydney Moore, Unsplash"
+        },
+        {
+          "id": "inline-fridge",
+          "url": "https://userimg-assets.customeriomail.com/images/client-env-198880/1774555201333_latenightfridgeraid_01KMNVPZW22TY5TAG40WDB5NE2.png",
+          "credit": "Credit: Sydney Moore, Unsplash"
+        },
+        {
+          "id": "pickle-economics-map",
+          "url": "https://userimg-assets.customeriomail.com/images/client-env-198880/1774548914163_Pickle%20Festival%20Map_01KMNNQ45NNDP5QB7QAZ346T14.png",
+          "credit": ""
+        },
+        {
+          "id": "photo-of-week",
+          "url": "https://userimg-assets.customeriomail.com/images/client-env-198880/Screenshot%202026-03-23%20at%203.06.44%E2%80%AFPM_01KME1FRBDBD1R6M7SW26T05SD.png",
+          "credit": "Photo by Kathryn Taylor, Cookie + Kate"
+        }
+      ]
+    },
+    {
+      "slugs": [
+        "hot-takes-from-the-pickle-addicts-anonymous-facebook-group",
+        "pickle-addicts-anonymous-facebook-group"
+      ],
+      "sourceHtml": "PickleAddictsAnonymousFacebookGroup.html",
+      "pipeline": "pickleAddictsFacebook",
+      "targets": [
+        {
+          "id": "intro-kaitlyn",
+          "url": "https://userimg-assets.customeriomail.com/images/client-env-198880/Screenshot%202026-02-05%20at%2012.52.32%E2%80%AFPM_01KGQEZ6DRBBKKR444E0T60B2J.png",
+          "credit": "Courtesy of Kaitlyn Smith"
+        },
+        {
+          "id": "item-axea",
+          "url": "https://userimg-assets.customeriomail.com/images/client-env-198880/539971448_758320986913431_7451374803343031935_n_01KGQF48WQV70T3XBEY9X27MEB.jpg",
+          "credit": "Courtesy of Axea Glenca"
+        },
+        {
+          "id": "item-cyrus",
+          "url": "https://userimg-assets.customeriomail.com/images/client-env-198880/582371857_25882665951335700_4804427010944122602_n_01KGQF6JJ5PP60QE5AR2H6SMMF.jpg",
+          "credit": "Courtesy of Cyrus Sauvage"
+        },
+        {
+          "id": "item-candy",
+          "url": "https://userimg-assets.customeriomail.com/images/client-env-198880/Screenshot%202026-02-05%20at%201.00.02%E2%80%AFPM%20optimized%20Feb%205,%202026,%201-00-47%20PM_01KGQFDF24F6DRVBNF9BD2FK66.png",
+          "credit": "Courtesy of Candy Funhouse"
+        },
+        {
+          "id": "item-osweetz",
+          "url": "https://userimg-assets.customeriomail.com/images/client-env-198880/Screenshot%202026-02-05%20at%201.02.38%E2%80%AFPM%20optimized%20Feb%205,%202026,%201-03-07%20PM_01KGQFHQEWEJH12YG71ZTA8TZA_01KH1TVE9TKDJ1JDA8TR0X0SNT.png",
+          "credit": "Courtesy of O'Sweetz"
+        },
+        {
+          "id": "did-you-know-chart",
+          "url": "https://userimg-assets.customeriomail.com/images/client-env-198880/Pie%20Chart%20by%20Type_01KH1XCWTYV6VR170H0FQH196D.png",
+          "credit": ""
+        },
+        {
+          "id": "photo-of-week",
+          "url": "https://userimg-assets.customeriomail.com/images/client-env-198880/ananth-pai-rUlbvGtJLj8-unsplash_01KGQFTC70R6K569GCEBFEWBSB.jpg",
+          "credit": "Photo by Ananth Pai"
+        }
+      ]
+    },
+    {
+      "slugs": ["this-priest-will-bless-your-pickle-let-us-pray"],
+      "sourceHtml": "PicklePriestProfile.html",
+      "pipeline": "picklePriestBless",
+      "targets": [
+        {
+          "id": "main-hero",
+          "url": "https://userimg-assets.customeriomail.com/images/client-env-198880/3D592438-BC4F-470D-A641-CFBE98949087_01KG5FWZD89J4GXA6JY8BSQNZ2.jpeg",
+          "credit": "Courtesy of The Pickle Priest"
+        },
+        {
+          "id": "inline-2",
+          "url": "https://userimg-assets.customeriomail.com/images/client-env-198880/3_01KG5G7HB1YMA82SGEZ2J2HCND.png",
+          "credit": "Courtesy of The Pickle Priest"
+        },
+        {
+          "id": "economics-map",
+          "url": "https://userimg-assets.customeriomail.com/images/client-env-198880/Pickle%20Value%20by%20Country_01KGG0MP0MDJP819H5W92848QV.png",
+          "credit": ""
+        },
+        {
+          "id": "photo-of-week",
+          "url": "https://userimg-assets.customeriomail.com/images/client-env-198880/daniel-romero-H8_EcBZcWww-unsplash_01KG7SKFC6S7EHSCCVBEPC9216.jpg",
+          "credit": "Photo by Daniel Romero"
+        }
+      ]
+    },
+    {
+      "slugs": ["exclusive-interview-with-his-holiness-the-pickle-priest"],
+      "sourceHtml": "ExclusiveInterviewWithHisHolinessThePicklePriest.html",
+      "pipeline": "picklePriestInterview",
+      "targets": [
+        {
+          "id": "main-inline",
+          "url": "https://userimg-assets.customeriomail.com/images/client-env-198880/IMG_4330_01KG5FWZDG7620YEM6VH3HHM7S.jpeg",
+          "credit": "Courtesy of The Pickle Priest"
+        }
+      ]
+    },
+    {
+      "slugs": ["5-famous-pickles-in-film-and-television"],
+      "sourceHtml": "5FamousPicklesinFilmandTelevision.html",
+      "pipeline": "fiveFamousFilms",
+      "targets": [
+        {
+          "id": "main-hero",
+          "url": "https://userimg-assets.customeriomail.com/images/client-env-198880/Screenshot%202026-03-23%20at%202.21.46%E2%80%AFPM%20optimized%20Mar%2023,%202026,%202-21-54%20PM_01KMDYX64BTHAYQE711XEXHF9Q.png",
+          "credit": "Credit: IMDB"
+        },
+        {
+          "id": "imdb-1",
+          "url": "https://userimg-assets.customeriomail.com/images/client-env-198880/Screenshot%202026-03-23%20at%202.21.46%E2%80%AFPM%20optimized%20Mar%2023,%202026,%202-21-54%20PM_01KMDYX64BTHAYQE711XEXHF9Q.png",
+          "credit": "Courtesy of IMDB"
+        },
+        {
+          "id": "imdb-2",
+          "url": "https://userimg-assets.customeriomail.com/images/client-env-198880/Screenshot%202026-03-23%20at%202.24.11%E2%80%AFPM_01KMDZ1DMEBXTMHSFR037YT7QY.png",
+          "credit": "Courtesy of IMDB"
+        },
+        {
+          "id": "susan-screenshot",
+          "url": "https://userimg-assets.customeriomail.com/images/client-env-198880/Screenshot%202026-03-23%20at%202.29.48%E2%80%AFPM%20optimized%20Mar%2023,%202026,%202-29-53%20PM_01KMDZBT47HN6HQWZ8DTTVA427.png",
+          "credit": "Susan Sarandon in The Witches of Eastwick"
+        },
+        {
+          "id": "seth-screenshot",
+          "url": "https://userimg-assets.customeriomail.com/images/client-env-198880/Screenshot%202026-03-23%20at%202.30.46%E2%80%AFPM%20optimized%20Mar%2023,%202026,%202-30-56%20PM_01KMDZDQEBD4YBSE1BVWD3Y0XT.png",
+          "credit": "Seth Rogen in An American Pickle"
+        },
+        {
+          "id": "economics-chart",
+          "url": "https://userimg-assets.customeriomail.com/images/client-env-198880/1774292457906_Most%20Hated%20Foods_01KME14PHAXT2ECB9STSRJTC24.png",
+          "credit": ""
+        },
+        {
+          "id": "photo-of-week",
+          "url": "https://userimg-assets.customeriomail.com/images/client-env-198880/SEW-quick-dill-pickles-jvcz-mediumSquareAt3X_01KMDZTEVD3KRQQCK9VY10KTX5.jpg",
+          "credit": "Photo: Serious Eats / J. Kenji López-Alt"
+        }
+      ]
+    },
+    {
+      "slugs": ["pamela-andersons-38-pickles-sent-me-into-an-existential-doom-spiral"],
+      "sourceHtml": "PamelaAndersonsPickles.html",
+      "pipeline": "pamelaAnderson",
+      "targets": [
+        {
+          "id": "jar-hero",
+          "url": "https://userimg-assets.customeriomail.com/images/client-env-198880/jar_01KK9MDPMQ3DY2FJFXTVFS95RK.png",
+          "credit": "Courtesy of Flamingo Estate"
+        },
+        {
+          "id": "pam-inline",
+          "url": "https://userimg-assets.customeriomail.com/images/client-env-198880/pam_01KK9M9J0SYJQ4EA0HHYCKMZ3D.png",
+          "credit": "Courtesy of Flamingo Estate"
+        },
+        {
+          "id": "top-brand-chart",
+          "url": "https://userimg-assets.customeriomail.com/images/client-env-198880/Top%20Brand%20by%20State_01KKVRRENF57ZPHBQ2JEPFT8WS.png",
+          "credit": ""
+        },
+        {
+          "id": "photo-of-week",
+          "url": "https://userimg-assets.customeriomail.com/images/client-env-198880/tomato%20pickle_01KK9MW1HFDAM2C68G00P56BJ4.png",
+          "credit": "Photo by Victor Salazar"
+        }
+      ]
+    },
+    {
+      "slugs": ["why-are-athletes-drinking-pickle-juice"],
+      "sourceHtml": "AthletesAndPickleJuice.html",
+      "pipeline": "athletesPickleJuice",
+      "targets": [
+        {
+          "id": "blake-hero",
+          "url": "https://userimg-assets.customeriomail.com/images/client-env-198880/blakecoleman-e1542292847597_01KJZGFB0EZPBH9BVYE4AN6NE3.png",
+          "credit": "Courtesy of Corey Masisak"
+        },
+        {
+          "id": "pickle-spit",
+          "url": "https://userimg-assets.customeriomail.com/images/client-env-198880/pickle%20spit_01KJZGXXZFSQGSKET4JART1202.png",
+          "credit": ""
+        },
+        {
+          "id": "economics-chart",
+          "url": "https://userimg-assets.customeriomail.com/images/client-env-198880/1772140478649_B%26G%20Foods%20Net%20Sales_01KJDWVGCJKN80QNYD9RSEPPND.png",
+          "credit": ""
+        },
+        {
+          "id": "photo-of-week",
+          "url": "https://userimg-assets.customeriomail.com/images/client-env-198880/4_1772732721_Screenshot_2026-03-05_at_12.42.58%E2%80%AFPM_01KJZHNW2YKQW34EKTBQESR8G4.png",
+          "credit": "Photo by Solstice Annan"
+        }
+      ]
+    },
+    {
+      "slugs": ["kool-aid-pickles-and-their-place-in-southern-food-history"],
+      "sourceHtml": "KoolAidPicklesAndTheirPlaceInSouthernFoodHistory.html",
+      "pipeline": "koolAidPickles",
+      "targets": [
+        {
+          "id": "main-hero",
+          "url": "https://userimg-assets.customeriomail.com/images/client-env-198880/Screenshot%202026-02-12%20at%202.42.24%E2%80%AFPM%20optimized%20Feb%2012,%202026,%202-42-37%20PM_01KH9P0Y37RN86EDQN3030G0BG.png",
+          "credit": "Courtesy of De Agostini / A. Dagli Orti / Getty Images"
+        },
+        {
+          "id": "production-chart",
+          "url": "https://userimg-assets.customeriomail.com/images/client-env-198880/Pickle%20Production_01KHYCQN6TH97C0ZFGJSBHAGCV.png",
+          "credit": ""
+        },
+        {
+          "id": "photo-of-week",
+          "url": "https://userimg-assets.customeriomail.com/images/client-env-198880/Screenshot%202026-02-12%20at%202.51.28%E2%80%AFPM%20optimized%20Feb%2012,%202026,%202-51-46%20PM_01KH9PHPWBXSQH3QGN08AGT8AP.png",
+          "credit": "Photo by Townsend Walton"
+        }
+      ]
+    },
+    {
+      "slugs": ["daddy-where-do-pickles-come-from"],
+      "sourceHtml": "DaddyWhereDoPicklesComeFrom.html",
+      "pipeline": "daddyWherePickles",
+      "targets": [
+        {
+          "id": "main-hero",
+          "url": "https://userimg-assets.customeriomail.com/images/client-env-198880/Screenshot%202026-02-12%20at%201.26.59%E2%80%AFPM%20optimized%20Feb%2012,%202026,%201-27-08%20PM_01KH9HPQNCRYQWJJAVAJCPXWAR.png",
+          "credit": "Courtesy of De Agostini / A. Dagli Orti / Getty Images"
+        },
+        {
+          "id": "pilfer-inline",
+          "url": "https://userimg-assets.customeriomail.com/images/client-env-198880/Screenshot%202026-02-12%20at%201.45.02%E2%80%AFPM_01KH9JQNQVEZV5Q3QZBVF72NR4.png",
+          "credit": "Courtesy of Pilfering Apples Tumblr"
+        },
+        {
+          "id": "guinness-map",
+          "url": "https://userimg-assets.customeriomail.com/images/client-env-198880/guinessmap_01KHBZSP4MHW6FX4H7VRYVH6GD.png",
+          "credit": ""
+        },
+        {
+          "id": "photo-of-week",
+          "url": "https://userimg-assets.customeriomail.com/images/client-env-198880/Image%20by%20Jerzy%20from%20Pixabay_01KH9K7W785RFABM9BNNFNA0QC.jpg",
+          "credit": "Photo by Jerzy from Pixabay"
+        }
+      ]
+    },
+    {
+      "slugs": ["how-high-should-your-pickle-bounce"],
+      "sourceHtml": "HowHighShouldMyPickleBounce.html",
+      "pipeline": "howHighPickleBounce",
+      "targets": [
+        {
+          "id": "main-hero",
+          "url": "https://userimg-assets.customeriomail.com/images/client-env-198880/Screenshot%202026-01-22%20at%204.39.34%E2%80%AFPM_01KFKTEYJHVR9WT67NDZH08VFT.jpg",
+          "credit": ""
+        },
+        {
+          "id": "bounce-screenshot",
+          "url": "https://userimg-assets.customeriomail.com/images/client-env-198880/Screenshot%202026-01-22%20at%204.39.34%E2%80%AFPM_01KFKTEYJHVR9WT67NDZH08VFT.jpg",
+          "credit": ""
+        },
+        {
+          "id": "library-screenshot",
+          "url": "https://userimg-assets.customeriomail.com/images/client-env-198880/1767990609671_Screenshot%202026-01-09%20at%202.57.37%E2%80%AFPM_01KEJ77HV3TJZF6SZ032BZFD0P.jpg",
+          "credit": "Reference Librarians Debra Pond and Steve Rice testing pickles"
+        },
+        {
+          "id": "photo-of-week",
+          "url": "https://userimg-assets.customeriomail.com/images/client-env-198880/alexander-mils-8ecQc9jbeRw-unsplash_01KFKTMHE8AK1GT8QMPQH1NJH1.jpg",
+          "credit": "Photo by Alexander Mils"
+        }
+      ]
+    }
+  ]
+}

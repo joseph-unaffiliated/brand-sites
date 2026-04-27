@@ -242,7 +242,7 @@
   font-size: var(--text-dek);
   line-height: 1.45;
   color: var(--text-muted);
-  margin: 0 0 24px;
+  margin: 0 0 8px;
 }
 
 .featuredEntryPreview {

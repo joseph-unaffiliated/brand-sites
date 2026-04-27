@@ -2,22 +2,24 @@
 
 import { useEffect, useRef, useState } from "react";
 
-const TOAST_MESSAGE = '"contact@the90sparent.com" has been copied to your clipboard';
-
 export default function ContactCopyToast() {
   const [visible, setVisible] = useState(false);
+  const [message, setMessage] = useState("");
   const timeoutRef = useRef(null);
 
   useEffect(() => {
-    const showToast = () => {
+    const showToast = (event) => {
+      const email = event?.detail?.email;
+      if (!email || typeof email !== "string") return;
       if (timeoutRef.current) window.clearTimeout(timeoutRef.current);
+      setMessage(`"${email}" has been copied to your clipboard`);
       setVisible(true);
       timeoutRef.current = window.setTimeout(() => setVisible(false), 2600);
     };
 
-    window.addEventListener("contact-email-copied", showToast);
+    window.addEventListener("clipboard-email-copied", showToast);
     return () => {
-      window.removeEventListener("contact-email-copied", showToast);
+      window.removeEventListener("clipboard-email-copied", showToast);
       if (timeoutRef.current) window.clearTimeout(timeoutRef.current);
     };
   }, []);
@@ -29,7 +31,7 @@ export default function ContactCopyToast() {
       aria-live="polite"
       aria-atomic="true"
     >
-      {TOAST_MESSAGE}
+      {message}
     </div>
   );
 }

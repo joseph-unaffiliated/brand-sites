@@ -9,10 +9,12 @@ export const metadata = {
 
 export default function PrivacyPage() {
   return (
-    <div className={styles.page}>
+    <div className={`${styles.page} ${styles.pageLegal}`}>
       <div className="container">
-        <h1>Privacy Policy</h1>
-        <p className={styles.meta}>Last updated: October 23, 2025</p>
+        <header className={styles.legalHeader}>
+          <h1>Privacy Policy</h1>
+          <p className={styles.legalMeta}>Last updated: October 23, 2025</p>
+        </header>
         <p>
           This Privacy Policy describes how Unaffiliated Inc. collects, uses,
           discloses, and protects your personal information in connection with
@@ -39,22 +41,48 @@ export default function PrivacyPage() {
           <a href="mailto:privacy@unaffiliated.co">privacy@unaffiliated.co</a>.
         </p>
 
-        <h2>Table of Contents</h2>
+        <h2 id="table-of-contents">Table of Contents</h2>
         <ul className={styles.list}>
-          <li>Information We Collect</li>
-          <li>Use of Information</li>
-          <li>Disclosure of Information</li>
-          <li>Your Rights and Choices</li>
-          <li>Shine the Light (California Only)</li>
-          <li>International Data Transfer</li>
-          <li>Data Retention</li>
-          <li>Protection of Information</li>
-          <li>Children Under 13</li>
-          <li>Updates and Changes to This Policy</li>
-          <li>Contacting Us</li>
+          <li>
+            <a href="#1.-INFORMATION-WE-COLLECT">Information We Collect</a>
+          </li>
+          <li>
+            <a href="#2.-USE-OF-INFORMATION">Use of Information</a>
+          </li>
+          <li>
+            <a href="#3.-DISCLOSURE-OF-INFORMATION">Disclosure of Information</a>
+          </li>
+          <li>
+            <a href="#4.-YOUR-RIGHTS-AND-CHOICES">Your Rights and Choices</a>
+          </li>
+          <li>
+            <a href="#5.-SHINE-THE-LIGHT-CALIFORNIA-ONLY">
+              Shine the Light (California Only)
+            </a>
+          </li>
+          <li>
+            <a href="#6.-INTERNATIONAL-DATA-TRANSFER">International Data Transfer</a>
+          </li>
+          <li>
+            <a href="#7.-DATA-RETENTION">Data Retention</a>
+          </li>
+          <li>
+            <a href="#8.-PROTECTION-OF-INFORMATION">Protection of Information</a>
+          </li>
+          <li>
+            <a href="#9.-CHILDREN-UNDER-13">Children Under 13</a>
+          </li>
+          <li>
+            <a href="#10.-UPDATES-AND-CHANGES-TO-THIS-POLICY">
+              Updates and Changes to This Policy
+            </a>
+          </li>
+          <li>
+            <a href="#11.-CONTACTING-US">Contacting Us</a>
+          </li>
         </ul>
 
-        <h2>1. Information We Collect</h2>
+        <h2 id="1.-INFORMATION-WE-COLLECT">1. Information We Collect</h2>
         <p>
           <strong>a. Information You Provide to Us:</strong>
         </p>
@@ -112,7 +140,7 @@ export default function PrivacyPage() {
           as personal information.
         </p>
 
-        <h2>2. Use of Information</h2>
+        <h2 id="2.-USE-OF-INFORMATION">2. Use of Information</h2>
         <p>
           We and our vendors and service providers use the information described
           above for the following purposes:
@@ -157,7 +185,7 @@ export default function PrivacyPage() {
           Area, we do so on additional or other grounds if required by law.
         </p>
 
-        <h2>3. Disclosure of Information</h2>
+        <h2 id="3.-DISCLOSURE-OF-INFORMATION">3. Disclosure of Information</h2>
         <p>We may disclose your information as follows:</p>
         <ul className={styles.list}>
           <li><strong>To vendors and service providers:</strong> We disclose information to companies that provide services to us, such as providers that host or operate our website or app, analyze data, or provide customer service, data storage, marketing, analytics, security, or fraud prevention. We may engage a third party to host or operate any aspect of the Services and any other aspect of our businesses, including any mechanism through which we send or receive communications, such as our email systems and our Sites.</li>
@@ -174,7 +202,7 @@ export default function PrivacyPage() {
           information for any purpose.
         </p>
 
-        <h2>4. Your Rights and Choices</h2>
+        <h2 id="4.-YOUR-RIGHTS-AND-CHOICES">4. Your Rights and Choices</h2>
         <p>
           <strong>a. Marketing Communications</strong>
         </p>
@@ -286,7 +314,9 @@ export default function PrivacyPage() {
           a more limited set of data.
         </p>
 
-        <h2>5. Shine the Light (California Only)</h2>
+        <h2 id="5.-SHINE-THE-LIGHT-CALIFORNIA-ONLY">
+          5. Shine the Light (California Only)
+        </h2>
         <p>
           With certain exceptions, California&apos;s Shine the Light Law (CA
           Civil Code § 1798.83) allows California residents with which a
@@ -324,7 +354,7 @@ export default function PrivacyPage() {
           opt-out email.
         </p>
 
-        <h2>6. International Data Transfer</h2>
+        <h2 id="6.-INTERNATIONAL-DATA-TRANSFER">6. International Data Transfer</h2>
         <p>
           We are headquartered in Canada, and recipients of the data disclosures
           described in this Privacy Policy are generally located in Canada. In
@@ -348,14 +378,14 @@ export default function PrivacyPage() {
           out below.
         </p>
 
-        <h2>7. Data Retention</h2>
+        <h2 id="7.-DATA-RETENTION">7. Data Retention</h2>
         <p>
           We keep your information until after we determine its retention is
           no longer necessary for the purposes described in this Privacy
           Policy.
         </p>
 
-        <h2>8. Protection of Information</h2>
+        <h2 id="8.-PROTECTION-OF-INFORMATION">8. Protection of Information</h2>
         <p>
           To help protect personal information, we have put in place physical,
           technical, and administrative safeguards. However, we cannot assure
@@ -364,7 +394,7 @@ export default function PrivacyPage() {
           Policy.
         </p>
 
-        <h2>9. Children Under 13</h2>
+        <h2 id="9.-CHILDREN-UNDER-13">9. Children Under 13</h2>
         <p>
           If you are a parent or legal guardian and think your child under 13
           (or a higher age threshold where applicable) has given us personal
@@ -373,14 +403,16 @@ export default function PrivacyPage() {
           so that we can delete it.
         </p>
 
-        <h2>10. Updates and Changes to This Policy</h2>
+        <h2 id="10.-UPDATES-AND-CHANGES-TO-THIS-POLICY">
+          10. Updates and Changes to This Policy
+        </h2>
         <p>
           We may update this Privacy Policy from time to time, such as to
           reflect changes in our practices or for legal reasons. We will post
           those changes here or on a similarly accessible page.
         </p>
 
-        <h2>11. Contacting Us</h2>
+        <h2 id="11.-CONTACTING-US">11. Contacting Us</h2>
         <p>
           If you have any questions or comments regarding our privacy policy
           and practices, or to submit a request or complaint, please email us

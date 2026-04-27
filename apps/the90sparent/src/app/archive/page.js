@@ -4,8 +4,24 @@ import { getArticles, ensureDescriptionOnly } from "@/lib/articles";
 import HideWhenSubscribed from "@/components/HideWhenSubscribed";
 import styles from "./page.module.css";
 
+function publishedTime(article) {
+  if (!article?.publishedDate) return null;
+  const t = new Date(article.publishedDate).getTime();
+  return Number.isNaN(t) ? null : t;
+}
+
+/** Newest first; undated / invalid dates last, stable for ties. */
+function sortByPublishedDateDesc(a, b) {
+  const ta = publishedTime(a);
+  const tb = publishedTime(b);
+  if (ta != null && tb != null && ta !== tb) return tb - ta;
+  if (ta != null && tb == null) return -1;
+  if (ta == null && tb != null) return 1;
+  return String(a?.slug || "").localeCompare(String(b?.slug || ""));
+}
+
 export default async function ArchivePage() {
-  const articles = await getArticles();
+  const articles = (await getArticles()).slice().sort(sortByPublishedDateDesc);
 
   return (
     <div className={styles.page}>
@@ -14,10 +30,7 @@ export default async function ArchivePage() {
           <div>
             <p className={styles.kicker}>Archive</p>
             <h1>Past issues</h1>
-            <p>
-              Browse the full library of issues. Each entry
-              includes a summary, themes, and links.
-            </p>
+            <p>Browse the full library of articles</p>
           </div>
         </header>
 

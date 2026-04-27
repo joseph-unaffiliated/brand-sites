@@ -8,14 +8,16 @@ export const metadata = {
 
 export default function TermsPage() {
   return (
-    <div className={styles.page}>
+    <div className={`${styles.page} ${styles.pageLegal}`}>
       <div className="container">
-        <h1>Terms of Use</h1>
-        <p className={styles.meta}>
-          Last update posted: October 23, 2025
-          <br />
-          Effective: October 23, 2025
-        </p>
+        <header className={styles.legalHeader}>
+          <h1>Terms of Use</h1>
+          <p className={styles.legalMeta}>
+            Last update posted: October 23, 2025
+            <br />
+            Effective: October 23, 2025
+          </p>
+        </header>
         <p className={styles.notice}>
           THIS AGREEMENT INCLUDES MANDATORY ARBITRATION, CLASS ACTION WAIVER,
           AND JURY WAIVER PROVISIONS. BY USING THE SERVICES OR ACCEPTING THESE
@@ -38,8 +40,15 @@ export default function TermsPage() {
         <p>
           By using the Services in any manner, (i) you agree to these Terms, and
           (ii) you authorize the collection, use, disclosure and other handling
-          of information as set forth in our privacy policy located at
-          unaffiliated.co/privacy/network. You must comply with these Terms and
+          of information as set forth in our privacy policy located at{" "}
+          <a
+            href="https://unaffiliated.co/privacy/network"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            unaffiliated.co/privacy/network
+          </a>
+          . You must comply with these Terms and
           any other policies, rules and guidelines that Unaffiliated provides in
           the Services. If you do not agree, you may not use the Services.
         </p>
@@ -54,7 +63,9 @@ export default function TermsPage() {
           by posting the updated version and updating the &quot;Last Update
           Posted&quot; date at the top of the page. Unless you first reject the
           updated Terms by discontinuing all use of the Services and sending a
-          notice of termination to legal@unaffiliated.co, you will be deemed to
+          notice of termination to{" "}
+          <a href="mailto:legal@unaffiliated.co">legal@unaffiliated.co</a>, you
+          will be deemed to
           accept the changes and they will take effect at the &quot;Update
           Effective Time&quot;, which is the earlier of: (a) 11:00 a.m. Eastern
           time on the 30th day after Unaffiliated posts them (or a later date
@@ -94,7 +105,8 @@ export default function TermsPage() {
           clicking the unsubscribe links contained in emails. You can opt out of
           any direct promotional communications by emailing your request to opt
           out, along with the contact information to which your request
-          applies, to privacy@unaffiliated.co.
+          applies, to{" "}
+          <a href="mailto:privacy@unaffiliated.co">privacy@unaffiliated.co</a>.
         </p>
         <p>
           You agree that providing you these Terms (including all updates
@@ -298,7 +310,8 @@ export default function TermsPage() {
           It is our policy to terminate the accounts of repeat infringers in
           appropriate circumstances. If you believe your intellectual property
           is being infringed by the Services, please submit a complaint and
-          request for takedown of specific material to legal@unaffiliated.co. Be
+          request for takedown of specific material to{" "}
+          <a href="mailto:legal@unaffiliated.co">legal@unaffiliated.co</a>. Be
           sure to provide us with the following information:
         </p>
         <ul className={styles.list}>
@@ -458,7 +471,8 @@ export default function TermsPage() {
           Unaffiliated is committed to working with you to reach a reasonable
           resolution. However, we can only do this if we know about it.
           Therefore, for any concern you may have with the Services, you agree
-          to first send a written description of it to legal@unaffiliated.co so
+          to first send a written description of it to{" "}
+          <a href="mailto:legal@unaffiliated.co">legal@unaffiliated.co</a> so
           we have an opportunity to address it. You agree to work with
           Unaffiliated in good faith to resolve the concern. We believe this
           should lead to resolution. However, if for some reason the concern is
@@ -473,8 +487,9 @@ export default function TermsPage() {
           Disputes, (except as provided for herein) subject to the terms set
           forth below and the National Arbitration and Mediation
           (&quot;NAM&quot;) rules. If you are initiating arbitration, a copy of
-          the demand shall also be emailed to legal@unaffiliated.co. Any demand
-          initiating arbitration, whether filed by you or Unaffiliated, must
+          the demand shall also be emailed to{" "}
+          <a href="mailto:legal@unaffiliated.co">legal@unaffiliated.co</a>. Any
+          demand initiating arbitration, whether filed by you or Unaffiliated, must
           include the email address you used to create an account with
           Unaffiliated.
         </p>
@@ -842,7 +857,8 @@ export default function TermsPage() {
           any remaining provisions shall not be affected.
         </p>
         <p>
-          <strong>Entire Agreement.</strong> These Terms, the Privacy Policy and
+          <strong>Entire Agreement.</strong> These Terms, the{" "}
+          <a href="https://unaffiliated.co/terms/network">Privacy Policy</a> and
           any other policies or guidelines referenced within these Terms
           constitute the entire and only agreement between Unaffiliated and you
           with respect to the Services. These Terms supersede any prior or

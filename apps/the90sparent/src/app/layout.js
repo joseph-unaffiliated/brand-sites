@@ -20,6 +20,8 @@ import {
 import Header from "@/components/Header";
 import SubscribePopup from "@/components/SubscribePopup";
 import ContactCopyLink from "@/components/ContactCopyLink";
+import SubmissionsCopyLink from "@/components/SubmissionsCopyLink";
+import AdvertiseCopyLink from "@/components/AdvertiseCopyLink";
 import ContactCopyToast from "@/components/ContactCopyToast";
 import { SubscriberProvider } from "@/context/SubscriberContext";
 import "./globals.css";
@@ -107,13 +109,15 @@ export default function RootLayout({ children }) {
                 <div className="footer-links">
                   <Link href="/archive">Archive</Link>
                   <Link href="/about">About</Link>
-                  <ContactCopyLink>Contact</ContactCopyLink>
+                  <Link href="/terms">Terms</Link>
+                  <Link href="/privacy">Privacy</Link>
                 </div>
               </div>
               <div>
                 <div className="footer-links">
-                  <Link href="/terms">Terms</Link>
-                  <Link href="/privacy">Privacy</Link>
+                  <ContactCopyLink>Contact</ContactCopyLink>
+                  <SubmissionsCopyLink>Submissions</SubmissionsCopyLink>
+                  <AdvertiseCopyLink />
                   <p className="footer-text">
                     © {siteDisplayName}. 2026.
                   </p>

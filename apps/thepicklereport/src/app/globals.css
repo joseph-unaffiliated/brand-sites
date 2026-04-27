@@ -211,7 +211,7 @@ a {
   color: var(--text-primary);
 }
 
-/* Subscribe / Log in button: match Contact (13px, 0.02em) */
+/* Subscribe button: match Contact (13px, 0.02em) */
 .site-header .header-nav-desktop .button {
   font-size: 13px;
   letter-spacing: 0.02em;

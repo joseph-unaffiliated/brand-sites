@@ -24,7 +24,10 @@ export default function SubscribePopup() {
   useEffect(() => {
     if (isSubscribed) return;
     function handleClick(e) {
-      const link = e.target.closest('a[href*="#subscribe"]');
+      const t = e.target;
+      const el = t instanceof Element ? t : t?.parentElement;
+      if (!el?.closest) return;
+      const link = el.closest('a[href*="#subscribe"]');
       if (link) {
         e.preventDefault();
         setOpen(true);

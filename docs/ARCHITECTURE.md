@@ -38,6 +38,10 @@ Homepage query parameters (`/?subscribed=true`, `/?poll`, …) are normalized by
 
 If no token (legacy flow), profile shows **this site’s** subscription from local state only.
 
+## Planned reader auth (not built yet)
+
+A fuller **magic-link sign-in for existing subscribers**, **Customer.io** transactional mail, and **network profile** UX is spec’d in **`docs/reader-magic-link-and-network-profile-spec.md`**. Implementing it will extend magic + marketing flows described above.
+
 ## Shared packages
 
 | Package | Role |

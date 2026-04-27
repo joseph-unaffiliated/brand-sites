@@ -30,11 +30,11 @@ export const siteDefaultDescription =
 
 export const siteFooterTagline =
   process.env.NEXT_PUBLIC_SITE_FOOTER_TAGLINE ||
-  "For parents who remember Blockbuster and still lose their keys. Delivered weekly.";
+  "A weekly email series for Millennial parents\nwho are nostalgic for 'the good old days'";
 
 export const siteHeroTagline =
   process.env.NEXT_PUBLIC_SITE_HERO_TAGLINE ||
-  "Parenting today, with one foot still in the 1990s.";
+  "For us Millennial parents, nostalgic for 'the good old days'";
 
 export const contactEmail =
   process.env.NEXT_PUBLIC_CONTACT_EMAIL || "contact@the90sparent.com";

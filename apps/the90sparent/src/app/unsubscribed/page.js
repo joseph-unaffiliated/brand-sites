@@ -3,15 +3,21 @@
 import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { BRAND, executeAction, isRealBrowser } from '@/lib/subscription';
+import { resolveEmailFromUrlOrStorage } from '@/lib/subscriptionLandingEmail';
 import { contactEmail, siteConfig, siteDisplayName } from '@/config/site';
+import actions from '@/components/SubscriptionPageActions.module.css';
 import styles from './page.module.css';
 
 function UnsubscribedContent() {
   const searchParams = useSearchParams();
   const [status, setStatus] = useState('confirming');
+  const [resolvedEmail, setResolvedEmail] = useState(null);
+
+  useEffect(() => {
+    setResolvedEmail(resolveEmailFromUrlOrStorage(searchParams));
+  }, [searchParams]);
 
   const encodedEmail = searchParams.get('email');
-  const email = encodedEmail ? decodeURIComponent(encodedEmail) : null;
 
   useEffect(() => {
     localStorage.removeItem(`subscribed_${BRAND}`);
@@ -39,48 +45,60 @@ function UnsubscribedContent() {
 
   function handleFeedback() {
     const subject = `Unsubscribe Feedback - ${BRAND}`;
-    const body = email ? `User email: ${email}\n\nFeedback:\n` : 'Feedback:\n';
+    const body = resolvedEmail ? `User email: ${resolvedEmail}\n\nFeedback:\n` : 'Feedback:\n';
     window.location.href = `mailto:${contactEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   }
 
   return (
-    <div className={styles.wrap}>
+    <div className={styles.wrap} data-subscription-landing>
       <div className={styles.card}>
-        <h1 className={styles.heading}>You&apos;ve been unsubscribed.</h1>
+        <h1 className={styles.heading}>
+          {status === 'error' && (
+            <>Something went wrong when trying to unsubscribe you.</>
+          )}
+          {status === 'confirming' && (
+            <>Unsubscribing you now&hellip;</>
+          )}
+          {status === 'done' && (
+            <>We&apos;re sorry to see you go.</>
+          )}
+        </h1>
 
         {status === 'confirming' && (
-          <p className={styles.body}>Unsubscribing you now&hellip;</p>
+          <p className={styles.body}>Please wait just a moment.</p>
         )}
         {status === 'done' && (
-          <p className={styles.body}>We&apos;re sorry to see you go. You&apos;ve been removed from {siteDisplayName}.</p>
-        )}
-        {status === 'error' && (
           <p className={styles.body}>
-            Something went wrong.{' '}
-            <button className={styles.retryLink} onClick={retry}>Try again</button>
+            You&apos;ve been unsubscribed from {siteDisplayName}.
           </p>
         )}
-
-        {email && (
-          <div className={styles.actions}>
-            <a
-              className="button button-secondary"
-              href={`${siteConfig.magicSubscribeBase}?email=${encodeURIComponent(email)}`}
-            >
-              Resubscribe
-            </a>
-            <a
-              className="button button-secondary"
-              href={`${siteConfig.magicSubscribeBase}snooze?email=${encodeURIComponent(email)}`}
-            >
-              Snooze instead
-            </a>
+        {status === 'error' && (
+          <div className={styles.errorTryAgain}>
+            <button type="button" className={actions.btn} onClick={retry}>
+              Try again
+            </button>
           </div>
         )}
 
-        <button className={styles.feedbackLink} onClick={handleFeedback}>
-          Share feedback
-        </button>
+        {resolvedEmail && status === 'done' && (
+          <div className={`${actions.actionRow} ${actions.actionRowNowrap}`}>
+            <button type="button" className={actions.btn} onClick={handleFeedback}>
+              Send feedback
+            </button>
+            <a
+              className={actions.btn}
+              href={`${siteConfig.magicSubscribeBase}snooze?email=${encodeURIComponent(resolvedEmail)}`}
+            >
+              Snooze for 3 months instead
+            </a>
+            <a
+              className={`${actions.btn} ${actions.btnPrimary}`}
+              href={`${siteConfig.magicSubscribeBase}?email=${encodeURIComponent(resolvedEmail)}`}
+            >
+              Whoops! Resubscribe me
+            </a>
+          </div>
+        )}
       </div>
     </div>
   );

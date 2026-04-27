@@ -3,13 +3,21 @@
 import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { BRAND, executeAction, isRealBrowser } from '@/lib/subscription';
+import { resolveEmailFromUrlOrStorage } from '@/lib/subscriptionLandingEmail';
 import { useSubscriber } from '@/context/SubscriberContext';
+import SubscriptionSuccessRecs from '@/components/SubscriptionSuccessRecs';
+import actions from '@/components/SubscriptionPageActions.module.css';
 import styles from './page.module.css';
 
 function SubscribedContent() {
   const searchParams = useSearchParams();
   const [status, setStatus] = useState('confirming');
+  const [recEmail, setRecEmail] = useState(null);
   const { refresh } = useSubscriber();
+
+  useEffect(() => {
+    setRecEmail(resolveEmailFromUrlOrStorage(searchParams));
+  }, [searchParams]);
 
   useEffect(() => {
     const encodedEmail = searchParams.get('email');
@@ -48,33 +56,52 @@ function SubscribedContent() {
       .catch(() => setStatus('error'));
   }
 
+  const showRecs = status === 'success' || status === 'no-email';
+
   return (
-    <div className={styles.wrap}>
-      <div className={styles.card}>
-        <h1 className={styles.heading}>You&apos;re in.</h1>
+    <div className={styles.wrap} data-subscription-landing>
+      <div className={`${styles.card} ${actions.cardWide}`}>
+        <h1 className={styles.heading}>
+          {status === 'confirming' && (
+            <>Confirming your subscription&hellip;</>
+          )}
+          {(status === 'success' || status === 'no-email') && (
+            <>Thanks for subscribing.</>
+          )}
+          {status === 'error' && (
+            <>Something went wrong when trying to confirm your subscription.</>
+          )}
+          {status === 'bot' && (
+            <>One more step</>
+          )}
+        </h1>
 
         {status === 'confirming' && (
-          <p className={styles.body}>Confirming your subscription&hellip;</p>
+          <p className={styles.body}>Please wait just a moment.</p>
         )}
-        {status === 'success' && (
-          <p className={styles.body}>Thanks for subscribing, check your inbox for our welcome email.</p>
+        {(status === 'success' || status === 'no-email') && (
+          <p className={styles.body}>Check your inbox for our welcome email.</p>
         )}
         {status === 'error' && (
-          <p className={styles.body}>
-            Something went wrong confirming your subscription.{' '}
-            <button className={styles.retryLink} onClick={retry}>Try again</button>
-          </p>
+          <div className={styles.errorTryAgain}>
+            <button type="button" className={actions.btn} onClick={retry}>
+              Try again
+            </button>
+          </div>
         )}
         {status === 'bot' && (
-          <p className={styles.body}>
-            Please{' '}
-            <button className={styles.retryLink} onClick={retry}>click here</button>{' '}
-            to confirm your subscription.
-          </p>
+          <>
+            <p className={styles.body}>
+              We couldn&apos;t confirm you automatically. Use the button below to try again.
+            </p>
+            <div className={styles.errorTryAgain}>
+              <button type="button" className={actions.btn} onClick={retry}>
+                Try again
+              </button>
+            </div>
+          </>
         )}
-        {status === 'no-email' && (
-          <p className={styles.body}>Your subscription is confirmed.</p>
-        )}
+        {showRecs && <SubscriptionSuccessRecs email={recEmail} />}
       </div>
     </div>
   );

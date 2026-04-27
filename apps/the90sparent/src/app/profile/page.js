@@ -72,7 +72,7 @@ export default function ProfilePage() {
     return (
       <div className={styles.needSubscribe}>
         <p>Subscribe to get a profile and manage your subscription.</p>
-        <Link href="/#subscribe">Subscribe / Log in</Link>
+        <Link href="/#subscribe">Subscribe</Link>
       </div>
     );
   }

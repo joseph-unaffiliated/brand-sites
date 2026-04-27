@@ -2,54 +2,32 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 50vh;
-  padding: 4rem 1.5rem;
+  padding: 2rem 1.5rem;
+  box-sizing: border-box;
 }
 
 .card {
-  max-width: 480px;
+  max-width: min(100%, 960px);
   width: 100%;
   text-align: center;
 }
 
 .heading {
   font-size: 2.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
+  text-wrap: balance;
+}
+
+.errorTryAgain {
+  margin-top: 0.5rem;
+  display: flex;
+  justify-content: center;
 }
 
 .body {
   font-size: 1.125rem;
   line-height: 1.6;
   color: var(--color-text-muted);
+  margin-top: 0;
 }
 
-.actions {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-top: 2rem;
-}
-
-.retryLink {
-  background: none;
-  border: none;
-  padding: 0;
-  color: inherit;
-  text-decoration: underline;
-  cursor: pointer;
-  font-size: inherit;
-}
-
-.feedbackLink {
-  background: none;
-  border: none;
-  padding: 0;
-  margin-top: 1.5rem;
-  color: var(--text-muted-light);
-  font-size: 0.875rem;
-  text-decoration: underline;
-  cursor: pointer;
-  display: block;
-  width: 100%;
-}

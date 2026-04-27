@@ -41,6 +41,38 @@
   margin-bottom: 20px;
 }
 
+/* Terms + Privacy: centered display title, grey dates, room before body (matches publication legal layout) */
+.pageLegal {
+  padding-top: 80px;
+  padding-bottom: 80px;
+}
+
+.legalHeader {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 2.5rem;
+}
+
+.legalHeader h1 {
+  font-size: clamp(2.85rem, 5.5vw, 4rem);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  margin: 0 0 1.1rem;
+  line-height: 1.08;
+  color: var(--text-primary);
+}
+
+.legalMeta {
+  margin: 0;
+  max-width: none;
+  color: var(--text-muted);
+  font-family: "halyard-display", "Helvetica Neue", Arial, sans-serif;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  font-weight: 300;
+  text-align: center;
+}
+
 .page h3 {
   font-size: 1.15rem;
   margin-top: 20px;
@@ -57,4 +89,45 @@
   margin-bottom: 8px;
   color: var(--text-secondary);
   line-height: 1.35;
+}
+
+/* Center the text column (720px) within the container, same as Webflow legal pages */
+.pageLegal p {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.pageLegal h2,
+.pageLegal h3 {
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* In-page anchors (e.g. Privacy TOC): clear fixed / sticky header */
+.pageLegal h2[id] {
+  scroll-margin-top: 5rem;
+}
+
+.pageLegal .notice {
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
+  /* Extra room before §1 (Terms); default .notice is 20px */
+  margin-bottom: 2.5rem;
+}
+
+/* Terms: more space between title block and all-caps notice (padding avoids margin collapse) */
+.pageLegal .legalHeader + .notice {
+  padding-top: 1.5rem;
+}
+
+/* Privacy: first body paragraph only — padding avoids margin-collapse with .legalHeader */
+.pageLegal .legalHeader + p:not(.notice) {
+  padding-top: 1.5rem;
+}
+
+.pageLegal ul.list {
+  margin-left: auto;
+  margin-right: auto;
 }

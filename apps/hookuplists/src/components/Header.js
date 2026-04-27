@@ -23,7 +23,7 @@ export default function Header() {
     </Link>
   ) : (
     <a className="button button-secondary" href="/#subscribe">
-      Subscribe / Log in
+      Subscribe
     </a>
   );
 
@@ -42,7 +42,7 @@ export default function Header() {
       href="/#subscribe"
       onClick={() => setMenuOpen(false)}
     >
-      Subscribe / Log in
+      Subscribe
     </a>
   );
 
