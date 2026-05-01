@@ -328,6 +328,8 @@ a {
     grid-template-columns: 1fr auto 1fr;
     align-items: center;
     gap: 0 28px;
+    /* Less air below the hairline before the hero (signed-in has no subscribe rail). */
+    padding-bottom: calc(var(--header-mark-h) * 0.22 + 12px);
   }
 
   .site-header--marketing .header-row-marketing--subscribed .brand {
@@ -352,6 +354,12 @@ a {
     justify-self: start;
     justify-content: flex-start;
     flex: unset;
+  }
+
+  /* Keep link text clearly above the hairline (grid vertically centers short rails on the mark). */
+  .site-header--marketing .header-row-marketing--subscribed .site-nav-left,
+  .site-header--marketing .header-row-marketing--subscribed .site-nav-right {
+    transform: translateY(-10px);
   }
 
   /* Article: equal-width side rails so the wordmark stays centered in the container. */
@@ -398,7 +406,7 @@ a {
 
 @media (min-width: 769px) {
   .site-header.site-header--marketing ~ .site-main {
-    padding-top: 10px;
+    padding-top: 6px;
   }
 }
 
