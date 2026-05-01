@@ -110,8 +110,14 @@
 
 @media (min-width: 769px) {
   .examplesBlock .listicleCopy {
-    padding-top: 64px;
+    padding-top: 32px;
     box-sizing: border-box;
+  }
+
+  /* Tighter headline → body (half of the default 0.5rem from .exampleItemRichBody / .listicleBody) */
+  .examplesBlock .listicleCopy > .exampleItemRichBody,
+  .examplesBlock .listicleCopy > .listicleBody {
+    margin-top: 0.25rem;
   }
 }
 

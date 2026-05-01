@@ -3,6 +3,9 @@
  *
  * Non-technical readers: this wraps every page—the logo bar, subscribe popup, and
  * the legal footer. Day-to-day article text lives in Sanity, not here.
+ *
+ * OneTrust + Retention: `ComplianceScripts.js` (override with NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT
+ * and NEXT_PUBLIC_RETENTION_SITE_ID on Vercel if IDs change).
  */
 
 import Link from "next/link";
@@ -19,6 +22,7 @@ import {
   siteDisplayName,
   siteFooterTagline,
 } from "@/config/site";
+import { OneTrustScripts, RetentionScript } from "@/components/ComplianceScripts";
 import Header from "@/components/Header";
 import SubscribePopup from "@/components/SubscribePopup";
 import SubmissionsCopyLink from "@/components/SubmissionsCopyLink";
@@ -83,8 +87,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
+        <OneTrustScripts />
         <TypekitStylesheet kitId={siteConfig.typekitKitId} />
         <FontAwesomeStylesheet />
+        <RetentionScript />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <MarketingScripts adsenseClient={ADSENSE_CLIENT} metaPixelId={META_PIXEL_ID} />

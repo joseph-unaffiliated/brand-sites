@@ -7,7 +7,7 @@
   width: 100%;
 }
 
-/* Leave space for sticky bottom ad when present */
+/* Bottom slack so the sticky ad can scroll off above the footer (ad lives after read-more in the page column) */
 .page:has(.article-ad-sticky-bottom) {
   padding-bottom: 112px;
 }

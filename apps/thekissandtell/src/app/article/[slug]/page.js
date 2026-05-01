@@ -72,7 +72,6 @@ export default async function ArticlePage({ params }) {
   return (
     <div className={styles.page}>
       <RecordArticleView slug={slug} />
-      <ArticleAdStickyBottom />
       <section className="articlebody-section">
         {/* Centered hero: headline + optional cover image when not using content blocks */}
         <div
@@ -211,6 +210,7 @@ export default async function ArticlePage({ params }) {
           </div>
         )}
       </section>
+      <ArticleAdStickyBottom />
     </div>
   );
 }

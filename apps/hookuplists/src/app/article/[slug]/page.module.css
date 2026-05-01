@@ -4,9 +4,9 @@
   padding-bottom: 0;
 }
 
-/* Leave space for sticky bottom ad when present */
+/* Bottom slack so the sticky ad can scroll off above the footer (ad lives after the article section) */
 .page:has(.article-ad-sticky-bottom) {
-  padding-bottom: 70px;
+  padding-bottom: 100px;
 }
 
 /* Centered hero block: headline + image, no rail beside */
