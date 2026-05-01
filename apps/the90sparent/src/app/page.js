@@ -13,8 +13,8 @@ import styles from "./page.module.css";
 
 /** Atlantic-style: 1 center, 2 left, N in right stack. No article repeated. */
 const LEFT_COUNT = 2;
-/** Max items for "More issues" (client shows 2 when signed out, 5 when signed in). */
-const STACK_COUNT_MAX = 5;
+/** Max items for "More issues" (client shows 3 when signed out, 6 when signed in). */
+const STACK_COUNT_MAX = 6;
 
 function plainTextFromPortableTextBlocks(blocks) {
   if (!Array.isArray(blocks)) return "";
@@ -155,7 +155,7 @@ export default async function Home({ searchParams: searchParamsProp }) {
                       </div>
                     ) : null;
                   })()}
-                  <span className={styles.featuredLink}>Read more →</span>
+                  <span className={styles.featuredLink}>Read more</span>
                 </div>
               </Link>
             )}

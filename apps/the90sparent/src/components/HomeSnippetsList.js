@@ -7,7 +7,7 @@ import { getDemographicAndDescription } from "@/lib/articles";
 import styles from "../app/page.module.css";
 
 const SNIPPETS_SIGNED_OUT = 3;
-const SNIPPETS_SIGNED_IN = 5;
+const SNIPPETS_SIGNED_IN = 6;
 
 export default function HomeSnippetsList({ stackItems }) {
   const { isSubscribed } = useSubscriber();
@@ -47,7 +47,7 @@ export default function HomeSnippetsList({ stackItems }) {
         );
       })}
       <Link href="/archive" className={styles.snippetArchive}>
-        See full archive →
+        See full archive
       </Link>
     </div>
   );

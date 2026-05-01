@@ -27,6 +27,8 @@
 | `NEXT_PUBLIC_SITE_DISPLAY_NAME` | yes | Site title / OG name. |
 | `NEXT_PUBLIC_SITE_DESCRIPTION` | yes | Meta description. |
 | `NEXT_PUBLIC_SITE_OG_IMAGE` | yes | Path to OG image (default `/hl-photo.png`). |
+| `NEXT_PUBLIC_SITE_FAVICON` | yes | Primary favicon path under `public/` (often `.ico`; The ’90s Parent default `/tnp-favicon.ico`). |
+| `NEXT_PUBLIC_SITE_FAVICON_PNG` | yes | PNG favicon for `metadata.icons` (The ’90s Parent default `/tnp-favicon.png`; other apps may ignore until they add a second icon in layout). |
 | `NEXT_PUBLIC_TYPEKIT_KIT_ID` | yes | Adobe Fonts kit (optional per brand). |
 
 **Do not** set `GCP_*` on marketing apps for reader profile; removed BigQuery route.

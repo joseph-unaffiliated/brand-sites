@@ -46,18 +46,20 @@ const siteDescription =
   process.env.NEXT_PUBLIC_SITE_DESCRIPTION || siteDefaultDescription;
 /** Defaults match `public/tnp-*` brand assets (override per env on Vercel if needed). */
 const ogImagePath = process.env.NEXT_PUBLIC_SITE_OG_IMAGE || "/tnp-photo.gif";
-const faviconPath = process.env.NEXT_PUBLIC_SITE_FAVICON || "/tnp-favicon.ico";
+const faviconIco = process.env.NEXT_PUBLIC_SITE_FAVICON || "/tnp-favicon.ico";
+const faviconPng = process.env.NEXT_PUBLIC_SITE_FAVICON_PNG || "/tnp-favicon.png";
 const appleIconPath = process.env.NEXT_PUBLIC_SITE_APPLE_ICON || "/tnp-webclip.png";
 
 export const metadata = {
   title: siteDisplayName,
   description: siteDescription,
-  icons: faviconPath || appleIconPath
-    ? {
-        ...(faviconPath ? { icon: faviconPath } : {}),
-        ...(appleIconPath ? { apple: appleIconPath } : {}),
-      }
-    : undefined,
+  icons: {
+    icon: [
+      { url: faviconIco },
+      { url: faviconPng, type: "image/png" },
+    ],
+    ...(appleIconPath ? { apple: appleIconPath } : {}),
+  },
   openGraph: {
     title: siteDisplayName,
     description: siteDescription,

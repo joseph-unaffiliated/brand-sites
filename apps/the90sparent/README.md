@@ -13,4 +13,4 @@ Next.js marketing site for **The '90s Parent** publication.
 
 Header/footer use inline SVG in `BrandWordmark.js` and `BrandLogoMark.js` (sourced from `public/tnp-wordmark.svg` and `public/tnp-logo.svg`; paths use `currentColor` so they follow theme text color). Replace those SVGs when the brand updates.
 
-Metadata defaults (`layout.js`): favicon `/tnp-favicon.ico`, Apple touch icon `/tnp-webclip.png`, OG/social preview `/tnp-photo.gif`. Override with `NEXT_PUBLIC_SITE_FAVICON`, `NEXT_PUBLIC_SITE_APPLE_ICON`, `NEXT_PUBLIC_SITE_OG_IMAGE` on Vercel if needed.
+Metadata defaults (`layout.js`): favicons `/tnp-favicon.ico` and `/tnp-favicon.png` (both in `public/`), Apple touch icon `/tnp-webclip.png`, OG/social preview `/tnp-photo.gif`. Override with `NEXT_PUBLIC_SITE_FAVICON`, `NEXT_PUBLIC_SITE_FAVICON_PNG`, `NEXT_PUBLIC_SITE_APPLE_ICON`, `NEXT_PUBLIC_SITE_OG_IMAGE` on Vercel if needed.
