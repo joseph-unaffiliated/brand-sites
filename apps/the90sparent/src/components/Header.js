@@ -5,10 +5,10 @@ import { useState, useEffect } from "react";
 import { useSubscriber } from "@/context/SubscriberContext";
 import BrandLogoMark from "@/components/BrandLogoMark";
 import BrandWordmark from "@/components/BrandWordmark";
-import ContactCopyLink from "@/components/ContactCopyLink";
+import { ContactCopyLink } from "@publication-websites/web-shell/contact-copy";
 import SubmissionsCopyLink from "@/components/SubmissionsCopyLink";
 import AdvertiseCopyLink from "@/components/AdvertiseCopyLink";
-import { siteDisplayName } from "@/config/site";
+import { contactEmail, siteDisplayName } from "@/config/site";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -94,7 +94,7 @@ export default function Header() {
             <Link href="/about" onClick={() => setMenuOpen(false)}>
               About
             </Link>
-            <ContactCopyLink onClick={() => setMenuOpen(false)} />
+            <ContactCopyLink email={contactEmail} onClick={() => setMenuOpen(false)} />
             <SubmissionsCopyLink onClick={() => setMenuOpen(false)} />
             <AdvertiseCopyLink onClick={() => setMenuOpen(false)} />
             <Link href="/terms" onClick={() => setMenuOpen(false)}>

@@ -5,7 +5,8 @@
   "type": "module",
   "main": "index.js",
   "exports": {
-    ".": "./index.js"
+    ".": "./index.js",
+    "./contact-copy": "./contact-copy/index.js"
   },
   "peerDependencies": {
     "next": ">=14",

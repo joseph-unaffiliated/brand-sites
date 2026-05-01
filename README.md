@@ -2,7 +2,7 @@
 
 Monorepo for **publication marketing sites** (Next.js) plus shared packages. This repo is **`brand-sites`** on GitHub. Internal npm packages still use the scope **`@publication-websites/*`** (name in `packages/*/package.json`); that is unrelated to the Git repo name.
 
-**New here and not a developer?** Read **[STARTHERE.md](./STARTHERE.md)** first.
+**New here and not a developer?** Read **[STARTHERE.md](./STARTHERE.md)** first. For a full tour of every folder and **every tracked file** (with links into GitHub), read **[docs/REPO-GUIDE-FOR-NOVICES.md](./docs/REPO-GUIDE-FOR-NOVICES.md)**.
 
 ## Quick start
 
@@ -36,6 +36,7 @@ pnpm exec turbo dev --filter=thepicklereport
 
 ## Docs
 
+- [docs/REPO-GUIDE-FOR-NOVICES.md](docs/REPO-GUIDE-FOR-NOVICES.md) — plain-English tour of the whole repo; appendix links every tracked file on GitHub  
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — data flow, middleware, profile tokens  
 - [docs/ENVIRONMENT.md](docs/ENVIRONMENT.md) — env vars  
 - [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) — Vercel + Cloudflare  

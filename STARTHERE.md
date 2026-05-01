@@ -20,6 +20,8 @@ _(Fill in your team’s process: Slack channel, PM tool, etc.)_
 
 ## For developers
 
+- **[`docs/REPO-GUIDE-FOR-NOVICES.md`](./docs/REPO-GUIDE-FOR-NOVICES.md)** — long plain-English tour of the whole repository and an appendix that links to **each** tracked file on GitHub (also useful for curious non-developers who want depth).
+
 - **`README.md`** — clone, install, run locally.
 - **`AGENTS.md`** — rules for AI coding assistants working in this repo.
 - **`docs/ARCHITECTURE.md`** — how requests flow (middleware, magic, profile).

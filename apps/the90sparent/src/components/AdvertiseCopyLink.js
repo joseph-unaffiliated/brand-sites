@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { copyEmailToClipboard, notifyEmailCopiedToClipboard } from "@/lib/copy-email-clipboard";
+import { copyEmailToClipboard, notifyEmailCopiedToClipboard } from "@publication-websites/web-shell/contact-copy";
 
 const ADVERTISE_EMAIL = "advertise@the90sparent.com";
 

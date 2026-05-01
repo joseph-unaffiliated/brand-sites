@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import "./contact-copy-toast.css";
 
 export default function ContactCopyToast() {
   const [visible, setVisible] = useState(false);

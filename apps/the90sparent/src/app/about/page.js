@@ -1,9 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Suspense } from "react";
 import styles from "../basic-page.module.css";
 import aboutStyles from "./page.module.css";
 import articleStyles from "../article/[slug]/page.module.css";
-import SubscribeCta from "@/components/SubscribeCta";
 import AboutOutreach from "./AboutOutreach";
 import { siteDisplayName, siteKickerLower } from "@/config/site";
 import { getArticles } from "@/lib/articles";
@@ -94,11 +94,10 @@ export default async function AboutPage() {
                 believe, you&apos;re in the right place.
               </p>
 
-              <h2>Explore and subscribe</h2>
-              <SubscribeCta />
-
               <h2>Get in touch</h2>
-              <AboutOutreach />
+              <Suspense fallback={null}>
+                <AboutOutreach />
+              </Suspense>
             </div>
 
             <aside

@@ -131,6 +131,21 @@
   padding-top: 12px;
 }
 
+/* Hero photo credit → first body paragraph: margin + grid + container padding stack on narrow viewports */
+@media (max-width: 768px) {
+  .leadImageSection {
+    margin-bottom: 0.75rem;
+  }
+
+  .articleBodyGridBlocksFirst {
+    padding-top: 0;
+  }
+
+  .articleBodyGridBlocksFirst .articleContainerNoPadding {
+    padding-top: 10px;
+  }
+}
+
 .articleHeroImage .mainimage-block {
   width: 100%;
 }

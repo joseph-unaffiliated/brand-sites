@@ -11,7 +11,9 @@ import BrandLogoMark from "@/components/BrandLogoMark";
 import BrandWordmark from "@/components/BrandWordmark";
 import { Geist, Geist_Mono } from "next/font/google";
 import { FontAwesomeStylesheet, MarketingScripts, TypekitStylesheet } from "@publication-websites/web-shell";
+import { ContactCopyLink, ContactCopyToast } from "@publication-websites/web-shell/contact-copy";
 import {
+  contactEmail,
   siteConfig,
   siteDefaultDescription,
   siteDisplayName,
@@ -19,10 +21,8 @@ import {
 } from "@/config/site";
 import Header from "@/components/Header";
 import SubscribePopup from "@/components/SubscribePopup";
-import ContactCopyLink from "@/components/ContactCopyLink";
 import SubmissionsCopyLink from "@/components/SubmissionsCopyLink";
 import AdvertiseCopyLink from "@/components/AdvertiseCopyLink";
-import ContactCopyToast from "@/components/ContactCopyToast";
 import { SubscriberProvider } from "@/context/SubscriberContext";
 import "./globals.css";
 
@@ -115,7 +115,7 @@ export default function RootLayout({ children }) {
               </div>
               <div>
                 <div className="footer-links">
-                  <ContactCopyLink>Contact</ContactCopyLink>
+                  <ContactCopyLink email={contactEmail}>Contact</ContactCopyLink>
                   <SubmissionsCopyLink>Submissions</SubmissionsCopyLink>
                   <AdvertiseCopyLink />
                   <p className="footer-text">

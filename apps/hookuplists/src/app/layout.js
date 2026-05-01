@@ -9,7 +9,8 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { Geist, Geist_Mono } from "next/font/google";
 import { FontAwesomeStylesheet, MarketingScripts, TypekitStylesheet } from "@publication-websites/web-shell";
-import { siteConfig } from "@/config/site";
+import { ContactCopyLink, ContactCopyToast } from "@publication-websites/web-shell/contact-copy";
+import { contactEmail, siteConfig } from "@/config/site";
 import Header from "@/components/Header";
 import SubscribePopup from "@/components/SubscribePopup";
 import { SubscriberProvider } from "@/context/SubscriberContext";
@@ -80,6 +81,7 @@ export default function RootLayout({ children }) {
               <SubscribePopup />
             </Suspense>
             <main className="site-main">{children}</main>
+            <ContactCopyToast />
           <footer className="site-footer">
             <div className="container footer-grid">
               <div className="footer-brand">
@@ -109,7 +111,7 @@ export default function RootLayout({ children }) {
                 <div className="footer-links">
                   <Link href="/archive">Archive</Link>
                   <Link href="/about">About</Link>
-                  <Link href="/contact">Contact</Link>
+                  <ContactCopyLink email={contactEmail}>Contact</ContactCopyLink>
                 </div>
               </div>
               <div>

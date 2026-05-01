@@ -24,4 +24,7 @@ export const siteConfig = {
   typekitKitId: process.env.NEXT_PUBLIC_TYPEKIT_KIT_ID || "xon1hcs",
 };
 
+export const contactEmail =
+  process.env.NEXT_PUBLIC_CONTACT_EMAIL || "contact@thepicklereport.com";
+
 export const BRAND = siteConfig.brandId;

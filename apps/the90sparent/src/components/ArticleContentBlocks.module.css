@@ -13,6 +13,10 @@
   margin-top: -0.5rem;
 }
 
+.blocks > .examplesBlock + .block {
+  margin-top: 0.75rem;
+}
+
 /* Tighter handoff into author card (avoid gap + feature margin + author margin stacking) */
 .blocks > .block:has(+ .authorCard) > .feature {
   margin-bottom: 0;
@@ -101,6 +105,13 @@
     grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr);
     gap: 1.25rem 1.5rem;
     align-items: start;
+  }
+}
+
+@media (min-width: 769px) {
+  .examplesBlock .listicleCopy {
+    padding-top: 64px;
+    box-sizing: border-box;
   }
 }
 
@@ -370,6 +381,64 @@
     font-size: 1rem;
   }
 
+  /* Examples only, mobile: more air between stacked listicle items (copy → next image) */
+  .examplesBlock .listicle {
+    gap: 3rem;
+  }
+
+  /* Examples only, mobile: inset copy under full-bleed photo; center body + caption + credit */
+  .examplesBlock .listicleCopy {
+    padding-left: 0.875rem;
+    padding-right: 0.875rem;
+    box-sizing: border-box;
+    text-align: center;
+  }
+
+  .examplesBlock .exampleItemRichBody {
+    text-align: center;
+  }
+
+  .examplesBlock .exampleItemCaptionBelow,
+  .examplesBlock .exampleItemCredit {
+    text-align: center;
+  }
+
+  /* Examples listicle PT: nested `.feature`, not `.block > .feature`, so match main body mobile sizing */
+  .examplesBlock .exampleItemRichBody.feature {
+    font-size: 1rem;
+    line-height: 1.65;
+  }
+
+  .examplesBlock .exampleItemRichBody :global(p) {
+    font-size: 1rem;
+    line-height: 1.85;
+    font-weight: 300;
+    text-align: center;
+  }
+
+  :global(.articlebody-section)
+    :global(.articlecopy-richtext)
+    .examplesBlock
+    .exampleItemRichBody
+    :global(p) {
+    font-size: 1rem;
+    line-height: 1.85;
+    font-weight: 300;
+    text-align: center;
+  }
+
+  .examplesBlock .exampleItemRichBody :global(h4) {
+    font-size: 1rem;
+  }
+
+  :global(.articlebody-section)
+    :global(.articlecopy-richtext)
+    .examplesBlock
+    .exampleItemRichBody
+    :global(h4) {
+    font-size: 1rem;
+  }
+
   .poll .feature {
     font-size: 1rem;
   }
@@ -558,7 +627,7 @@
 :global(.articlebody-section) :global(.articlecopy-richtext) .aroundTheWeb h2.aroundTheWebSectionTitle {
   font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
   font-size: 2rem;
-  font-weight: 400;
+  font-weight: 300;
   line-height: 1.25;
   text-align: center;
   letter-spacing: -0.02em;
@@ -582,7 +651,7 @@
 .nostalgiaSectionTitle {
   font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
   font-size: 2rem;
-  font-weight: 400;
+  font-weight: 300;
   line-height: 1.25;
   text-align: center;
   letter-spacing: -0.02em;
@@ -605,9 +674,12 @@
   text-align: center;
 }
 
-.poll:has(.nostalgiaOfWeekFigure) .eyebrow,
-.poll:has(.nostalgiaOfWeekFigure) .nostalgiaSectionTitle {
+.poll:has(.nostalgiaOfWeekFigure) .eyebrow {
   margin-bottom: 0.5rem;
+}
+
+.poll:has(.nostalgiaOfWeekFigure) .nostalgiaSectionTitle {
+  margin-bottom: 1.25rem;
 }
 
 /* Inline figures inside poll-style boxes (Pickle Economics body, etc.) */
@@ -641,9 +713,12 @@
     margin-top: 2rem;
   }
 
-  .poll:has(.nostalgiaOfWeekFigure) .eyebrow,
+  .poll:has(.nostalgiaOfWeekFigure) .eyebrow {
+    margin-bottom: 0.65rem;
+  }
+
   .poll:has(.nostalgiaOfWeekFigure) .nostalgiaSectionTitle {
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
   }
 
   .poll .feature figure.featureFigure {
