@@ -221,7 +221,7 @@ a {
   font-size: 13px;
   font-weight: 300;
   color: var(--text-secondary);
-  letter-spacing: 0.02em;
+  letter-spacing: -0.02em;
 }
 
 .site-nav a:hover {
@@ -244,6 +244,11 @@ a {
 
 .site-nav-right {
   justify-content: flex-end;
+}
+
+/* Decorative slab only when subscribed + marketing; hidden until desktop rules show it. */
+.header-marketing-subscribed-bg {
+  display: none;
 }
 
 @media (min-width: 769px) {
@@ -274,7 +279,7 @@ a {
     left: calc(50% - 50vw);
     width: calc(50vw - var(--logo-line-gap) / 2);
     right: auto;
-    top: calc(22px + var(--header-mark-h) / 2);
+    top: calc(20px + var(--header-mark-h) / 2);
     height: 1px;
     background: var(--border);
     pointer-events: none;
@@ -287,7 +292,7 @@ a {
     right: calc(50% - 50vw);
     width: calc(50vw - var(--logo-line-gap) / 2);
     left: auto;
-    top: calc(22px + var(--header-mark-h) / 2);
+    top: calc(20px + var(--header-mark-h) / 2);
     height: 1px;
     background: var(--border);
     pointer-events: none;
@@ -329,11 +334,12 @@ a {
     align-items: center;
     gap: 0 28px;
     /* Less air below the hairline before the hero (signed-in has no subscribe rail). */
-    padding-bottom: calc(var(--header-mark-h) * 0.22 + 12px);
+    padding-bottom: max(4px, calc(var(--header-mark-h) * 0.22 + 12px - 16px));
   }
 
   .site-header--marketing .header-row-marketing--subscribed .brand {
-    position: static;
+    position: relative;
+    z-index: 3;
     grid-column: 2;
     justify-self: center;
     align-self: center;
@@ -356,10 +362,30 @@ a {
     flex: unset;
   }
 
-  /* Keep link text clearly above the hairline (grid vertically centers short rails on the mark). */
+  /* Wide chip behind Archive | logo | About; covers hairline; links stay vertically centered on the grid. */
+  .site-header--marketing .header-row-marketing--subscribed .header-marketing-subscribed-bg {
+    display: block;
+    position: absolute;
+    left: 50%;
+    top: 6px;
+    transform: translateX(-50%);
+    /* Logo + hairline gap + nav links, plus ~24px inset to chip edge on each side. */
+    width: min(calc(var(--logo-line-gap) + 140px + 2 * 24px), calc(100% - 48px));
+    height: calc(18px + var(--header-mark-h) + 22px);
+    border-radius: 6px;
+    background: var(--bg);
+    z-index: 2;
+    pointer-events: none;
+  }
+
   .site-header--marketing .header-row-marketing--subscribed .site-nav-left,
   .site-header--marketing .header-row-marketing--subscribed .site-nav-right {
-    transform: translateY(-10px);
+    position: relative;
+    z-index: 3;
+  }
+
+  .site-header--marketing .header-row-marketing--subscribed .brand-name {
+    background: transparent;
   }
 
   /* Article: equal-width side rails so the wordmark stays centered in the container. */
@@ -1138,7 +1164,7 @@ main.site-main > [data-subscription-landing] {
     left: calc(50% - 50vw);
     width: calc(50vw - var(--logo-line-gap) / 2);
     right: auto;
-    top: calc(36px + var(--header-mark-h) / 2);
+    top: calc(34px + var(--header-mark-h) / 2);
     height: 1px;
     background: var(--border);
     pointer-events: none;
@@ -1151,7 +1177,7 @@ main.site-main > [data-subscription-landing] {
     right: calc(50% - 50vw);
     width: calc(50vw - var(--logo-line-gap) / 2);
     left: auto;
-    top: calc(36px + var(--header-mark-h) / 2);
+    top: calc(34px + var(--header-mark-h) / 2);
     height: 1px;
     background: var(--border);
     pointer-events: none;
