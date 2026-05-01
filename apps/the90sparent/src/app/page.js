@@ -71,9 +71,11 @@ export default async function Home({ searchParams: searchParamsProp }) {
           {totalCount > 0 && (
             <p className={styles.heroMeta}>
               {totalCount} article{totalCount !== 1 ? "s" : ""} in the archive
-              {" · "}
               <HideWhenSubscribed>
-                <a href="/#subscribe">Get the next one in your inbox</a>
+                <>
+                  {" · "}
+                  <a href="/#subscribe">Get the next one in your inbox</a>
+                </>
               </HideWhenSubscribed>
             </p>
           )}

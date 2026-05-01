@@ -47,7 +47,7 @@ export default function Header() {
       className={`site-header ${isArticle ? "site-header--article" : "site-header--marketing"}`}
     >
       <div
-        className={`header-row-1 ${isArticle ? "container" : "container-wide header-row-marketing"}`}
+        className={`header-row-1 ${isArticle ? "container" : `container-wide header-row-marketing${isSubscribed ? " header-row-marketing--subscribed" : ""}`}`}
       >
         <button
           type="button"
