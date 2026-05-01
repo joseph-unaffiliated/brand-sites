@@ -7,6 +7,7 @@ import articleStyles from "../article/[slug]/page.module.css";
 import AboutOutreach from "./AboutOutreach";
 import { siteDisplayName, siteKickerLower } from "@/config/site";
 import { getArticles } from "@/lib/articles";
+import { pickRandomArticles } from "@/lib/pickRandomArticles";
 
 export const metadata = {
   title: `About | ${siteDisplayName}`,
@@ -16,7 +17,7 @@ const READ_MORE_COUNT = 3;
 
 export default async function AboutPage() {
   const allArticles = await getArticles();
-  const readMore = allArticles.slice(0, READ_MORE_COUNT);
+  const readMore = pickRandomArticles(allArticles, { count: READ_MORE_COUNT });
 
   return (
     <>

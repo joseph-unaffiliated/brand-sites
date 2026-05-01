@@ -106,8 +106,8 @@
   padding-right: 24px;
 }
 
-@media (min-width: 769px) {
-  /* 640px feature column + 40px gap + 160px rail = 840px; fixed gap, whole block centered */
+/* Two columns + rail only when viewport fits 640 + gap + 160 (~840px) with side margin (drops rail 769–899px). */
+@media (min-width: 900px) {
   .articleBodyGrid {
     grid-template-columns: 640px 160px;
     gap: 40px;
@@ -170,7 +170,7 @@
   padding-right: 0;
 }
 
-@media (min-width: 769px) {
+@media (min-width: 900px) {
   .articleContainerNoPadding {
     padding-left: 0;
   }
@@ -184,7 +184,7 @@
   box-sizing: border-box;
 }
 
-@media (min-width: 769px) {
+@media (min-width: 900px) {
   .articleRail {
     grid-column: 2;
   }
@@ -194,11 +194,13 @@
   min-height: 0;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 899px) {
   .articleRail {
     display: none;
   }
+}
 
+@media (max-width: 768px) {
   /* Body grid already has 24px horizontal padding; don't double with inner inset */
   .articleContainerNoPadding {
     padding-left: 0;
@@ -206,9 +208,14 @@
   }
 }
 
-.adMid,
-.adBottom {
+.adMid {
   margin: 2rem 0;
+  min-height: 0;
+}
+
+/* No in-flow newsletter below this slot anymore; drop bottom margin so the column doesn’t sit low vs the rail. */
+.adBottom {
+  margin: 2rem 0 0;
   min-height: 0;
 }
 

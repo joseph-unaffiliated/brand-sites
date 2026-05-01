@@ -7,12 +7,11 @@ import {
   getArticles,
   dedupeSubtitleInContentBlocks,
 } from "@/lib/articles";
-import HideWhenSubscribed from "@/components/HideWhenSubscribed";
+import { pickRandomArticles } from "@/lib/pickRandomArticles";
 import RecordArticleView from "@/components/RecordArticleView";
-import ArticleSubscribeForm from "@/components/ArticleSubscribeForm";
 import ArticleContentBlocks from "@/components/ArticleContentBlocks";
 import AdSlot from "@/components/AdSlot";
-import ArticleAdStickyBottom from "@/components/ArticleAdStickyBottom";
+import ArticleStickyBottom from "@/components/ArticleStickyBottom";
 import { siteDisplayName, siteKickerLower } from "@/config/site";
 import styles from "./page.module.css";
 
@@ -55,9 +54,10 @@ export default async function ArticlePage({ params }) {
   ]);
   if (!article) notFound();
 
-  const readMore = allArticles
-    .filter((a) => a.slug !== slug)
-    .slice(0, READ_MORE_COUNT);
+  const readMore = pickRandomArticles(allArticles, {
+    count: READ_MORE_COUNT,
+    excludeSlug: slug,
+  });
 
   const contentBlocks = article.contentBlocks ?? [];
   const showBlocks =
@@ -177,18 +177,6 @@ export default async function ArticlePage({ params }) {
                   <AdSlot slotId={SLOT_BOTTOM} format="rectangle" />
                 </div>
               )}
-              <HideWhenSubscribed>
-            <section className="newslettercta-section">
-              <div className="newslettercta-block">
-                <div className="newslettercta-prompt">
-                  <span>Subscribe for more from </span>
-                  <span>{siteDisplayName}</span>
-                  <span className="italic">, weekly in your inbox</span>
-                </div>
-                <ArticleSubscribeForm />
-              </div>
-            </section>
-          </HideWhenSubscribed>
           </div>
         </div>
         {SHOW_RAIL && (
@@ -231,7 +219,7 @@ export default async function ArticlePage({ params }) {
           </div>
         )}
       </section>
-      <ArticleAdStickyBottom />
+      <ArticleStickyBottom />
     </div>
   );
 }

@@ -10,8 +10,9 @@
   display: block;
 }
 
+/* Match article “Around the Web” rail (ArticleContentBlocks `.aroundTheWeb` max-width: 480px). */
 .cross-promo-image-ad-inArticle {
-  max-width: 300px;
+  max-width: 480px;
   width: 100%;
   margin-left: auto;
   margin-right: auto;
@@ -20,7 +21,7 @@
 
 .cross-promo-image-ad-inArticle .cross-promo-image-ad-link,
 .cross-promo-image-ad-inArticle .cross-promo-image-ad-img {
-  max-width: 300px;
+  max-width: 480px;
   width: 100%;
   height: auto;
 }

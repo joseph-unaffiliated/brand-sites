@@ -124,6 +124,22 @@
   color: rgba(255, 255, 255, 0.95);
 }
 
+/* Subscribe email only: no default focus ring; hide placeholder on focus so the caret is the cue. */
+.form .formRow input:focus,
+.form .formRow input:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.form .formRow input:focus::placeholder,
+.form .formRow input:focus-visible::placeholder {
+  color: transparent;
+}
+
+.form .formRow input:focus::-webkit-input-placeholder {
+  color: transparent;
+}
+
 .submitPill {
   position: absolute;
   right: 0;

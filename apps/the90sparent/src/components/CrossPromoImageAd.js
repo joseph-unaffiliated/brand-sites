@@ -107,7 +107,7 @@ export default function CrossPromoImageAd({ format = "rectangle", className, cre
           sizes={
             placement === "rail"
               ? `${lay.width}px`
-              : `(max-width: 640px) 100vw, ${lay.width}px`
+              : "(max-width: 640px) 100vw, 480px"
           }
         />
       </Link>

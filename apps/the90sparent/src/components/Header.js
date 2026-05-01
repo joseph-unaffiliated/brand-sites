@@ -2,8 +2,10 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { useSubscriber } from "@/context/SubscriberContext";
 import BrandLogoMark from "@/components/BrandLogoMark";
+import BrandLogoMarkLarge from "@/components/BrandLogoMarkLarge";
 import BrandWordmark from "@/components/BrandWordmark";
 import { ContactCopyLink } from "@publication-websites/web-shell/contact-copy";
 import SubmissionsCopyLink from "@/components/SubmissionsCopyLink";
@@ -11,6 +13,8 @@ import AdvertiseCopyLink from "@/components/AdvertiseCopyLink";
 import { contactEmail, siteDisplayName } from "@/config/site";
 
 export default function Header() {
+  const pathname = usePathname() || "";
+  const isArticle = pathname.startsWith("/article/");
   const [menuOpen, setMenuOpen] = useState(false);
   const { isSubscribed } = useSubscriber();
 
@@ -39,8 +43,12 @@ export default function Header() {
   );
 
   return (
-    <header className="site-header">
-      <div className="header-row-1 container">
+    <header
+      className={`site-header ${isArticle ? "site-header--article" : "site-header--marketing"}`}
+    >
+      <div
+        className={`header-row-1 ${isArticle ? "container" : "container-wide header-row-marketing"}`}
+      >
         <button
           type="button"
           className="header-hamburger"
@@ -68,7 +76,11 @@ export default function Header() {
             aria-label={siteDisplayName}
           >
             <BrandWordmark className="brand-logo-img brand-logo-wordmark" />
-            <BrandLogoMark className="brand-logo-img brand-logo-mark" />
+            {isArticle ? (
+              <BrandLogoMark className="brand-logo-img brand-logo-mark" />
+            ) : (
+              <BrandLogoMarkLarge className="brand-logo-img brand-logo-mark brand-logo-mark-large" />
+            )}
           </Link>
         </div>
         <nav className="site-nav site-nav-right header-nav-desktop" aria-label="Main">

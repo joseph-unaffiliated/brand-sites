@@ -114,6 +114,17 @@ a {
   padding: 0 24px;
 }
 
+/* Home / utility header: align with 1200px mosaic rail (wider than default 960px container). */
+.container-wide {
+  width: 100%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 24px;
+  padding-right: 24px;
+  box-sizing: border-box;
+}
+
 @media (max-width: 480px) {
   /* Keep 24px gutters so article / read-more / footer align on narrow phones */
   .container {
@@ -126,11 +137,15 @@ a {
   }
 }
 
-/* Atlantic-style header: row 1 = [nav | logo | nav], row 2 = wordmark, divider below */
+/* Atlantic-style header: row 1 = [nav | logo | nav]; article pages keep a simple bottom rule. */
 .site-header {
   position: relative;
   border-bottom: 1px solid var(--border);
   background: var(--bg);
+}
+
+.site-header--marketing {
+  border-bottom: none;
 }
 
 .header-row-1 {
@@ -231,6 +246,127 @@ a {
   justify-content: flex-end;
 }
 
+@media (min-width: 769px) {
+  /* Marketing & utility: edge-to-edge nav; hairline gaps around logomark; nav sits low toward line. */
+  .site-header--marketing .header-row-marketing {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    gap: 16px 28px;
+    --header-mark-w: min(168px, 20vw);
+    /* Large mark viewBox is 46×24 (BrandLogoMarkLarge). */
+    --header-mark-h: calc(var(--header-mark-w) * 24 / 46);
+    --logo-line-pad-x: 34px;
+    --logo-line-gap: calc(var(--header-mark-w) + 2 * var(--logo-line-pad-x));
+    padding-top: 14px;
+    /* Extra 4px below accounts for logomark + hairline shifted down without growing min-height (avoids moving centered nav). */
+    padding-bottom: calc(var(--header-mark-h) * 0.32 + 26px);
+    min-height: calc(14px + var(--header-mark-h) / 2 + 26px);
+  }
+
+  .site-header--marketing .header-row-marketing::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: calc(50% + var(--logo-line-gap) / 2);
+    top: calc(22px + var(--header-mark-h) / 2);
+    height: 1px;
+    background: var(--border);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .site-header--marketing .header-row-marketing::after {
+    content: "";
+    position: absolute;
+    left: calc(50% + var(--logo-line-gap) / 2);
+    right: 0;
+    top: calc(22px + var(--header-mark-h) / 2);
+    height: 1px;
+    background: var(--border);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .site-header--marketing .header-row-marketing .brand {
+    position: absolute;
+    left: 50%;
+    top: 14px;
+    transform: translateX(-50%);
+    z-index: 2;
+    grid-column: unset;
+  }
+
+  .site-header--marketing .header-row-marketing .brand-name {
+    display: inline-block;
+    padding: 5px var(--logo-line-pad-x);
+    background: var(--bg);
+    border-radius: 4px;
+    position: relative;
+    z-index: 3;
+  }
+
+  .site-header--marketing .header-row-marketing .site-nav-left,
+  .site-header--marketing .header-row-marketing .site-nav-right {
+    position: relative;
+    z-index: 2;
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+  }
+
+  /* Article: equal-width side rails so the wordmark stays centered in the container. */
+  .site-header--article .header-row-1 {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    column-gap: 32px;
+    row-gap: 0;
+    padding-top: 22px;
+    padding-bottom: 22px;
+    min-height: 0;
+  }
+
+  .site-header--article .header-hamburger {
+    display: none;
+  }
+
+  .site-header--article .site-nav-left {
+    justify-self: stretch;
+    justify-content: flex-end;
+    min-width: 0;
+  }
+
+  .site-header--article .site-nav-right {
+    justify-self: stretch;
+    justify-content: flex-start;
+    min-width: 0;
+  }
+
+  .site-header--article .brand {
+    position: static;
+    grid-column: 2;
+    justify-self: center;
+    transform: none;
+    flex-shrink: 0;
+  }
+}
+
+/* Slight drop of main content under the taller marketing header. */
+.site-header.site-header--marketing ~ .site-main {
+  padding-top: 8px;
+}
+
+@media (min-width: 769px) {
+  .site-header.site-header--marketing ~ .site-main {
+    padding-top: 10px;
+  }
+}
+
 .brand {
   display: flex;
   align-items: center;
@@ -265,10 +401,11 @@ a {
 }
 
 @media (min-width: 769px) {
-  .brand-logo-wordmark {
+  /* Article: full wordmark (default desktop). */
+  .site-header--article .brand-logo-wordmark {
     display: block;
     box-sizing: border-box;
-    width: min(200px, 30vw);
+    width: min(168px, 26vw);
     max-width: 100%;
     height: auto;
     max-height: none;
@@ -276,8 +413,22 @@ a {
     object-fit: contain;
   }
 
-  .brand-logo-mark {
+  .site-header--article .brand-logo-mark {
     display: none;
+  }
+
+  /* Marketing / utility: large logomark only. */
+  .site-header--marketing .brand-logo-wordmark {
+    display: none;
+  }
+
+  .site-header--marketing .brand-logo-mark {
+    display: block;
+    width: var(--header-mark-w, min(168px, 20vw));
+    max-width: min(168px, 20vw);
+    height: auto;
+    color: var(--text-primary);
+    object-fit: contain;
   }
 }
 
@@ -720,10 +871,26 @@ main.site-main > [data-subscription-landing] {
   color: rgba(255, 255, 255, 0.6);
 }
 
+.articlebody-section .articlepage-form input:focus,
+.articlebody-section .articlepage-form input:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.articlebody-section .articlepage-form input:focus::placeholder,
+.articlebody-section .articlepage-form input:focus-visible::placeholder {
+  color: transparent;
+}
+
+.articlebody-section .articlepage-form input:focus::-webkit-input-placeholder {
+  color: transparent;
+}
+
 .articlebody-section .article-disclaimer {
   font-size: 11px;
   color: rgba(255, 255, 255, 0.6);
   line-height: 1.25;
+  margin: 0;
 }
 
 .articlebody-section .article-disclaimer a {
@@ -778,6 +945,53 @@ main.site-main > [data-subscription-landing] {
   width: auto;
   margin-left: 0;
   margin-right: 0;
+}
+
+/* Subscribe CTA in the same sticky shell: wider than in-article 640 cap; ad slot stays shrink-wrapped. */
+.article-ad-sticky-bottom-slot.article-ad-sticky-subscribe-slot {
+  flex: 0 1 auto;
+  width: min(800px, calc(100vw - 96px));
+  max-width: calc(100vw - 32px);
+}
+
+.article-ad-sticky-subscribe-slot .article-sticky-subscribe-inner {
+  width: 100%;
+  min-width: 0;
+}
+
+/* Sticky subscribe: asymmetric vertical rhythm (prompt↔form vs form↔disclaimer need different gaps). */
+.article-ad-sticky-subscribe-slot .newslettercta-block {
+  gap: 0;
+  max-width: none;
+  border-radius: 1rem;
+}
+
+.article-ad-sticky-subscribe-slot .newslettercta-block > .newslettercta-prompt {
+  margin-bottom: 1.125rem;
+}
+
+.article-ad-sticky-subscribe-slot .newslettercta-block > .articlepage-form {
+  margin-bottom: 0.25rem;
+}
+
+@media (max-width: 768px) {
+  .article-ad-sticky-bottom--subscribe {
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+
+  .article-ad-sticky-bottom--subscribe .article-ad-sticky-subscribe-slot {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .article-ad-sticky-subscribe-slot .newslettercta-block {
+    padding-bottom: 0.5rem;
+  }
+}
+
+.article-ad-sticky-subscribe-slot .articlebody-section .articlepage-form {
+  gap: 4px;
 }
 
 .article-ad-sticky-dismiss {
@@ -863,6 +1077,77 @@ main.site-main > [data-subscription-landing] {
     padding: 6px 12px;
   }
 
+  /* Marketing mobile: hairline gaps + white chip behind mark; tighter below header. */
+  .site-header--marketing .header-row-marketing {
+    position: relative;
+    --header-mark-w: min(120px, 36vw);
+    --header-mark-h: calc(var(--header-mark-w) * 24 / 46);
+    --logo-line-pad-x: 24px;
+    --logo-line-gap: calc(var(--header-mark-w) + 2 * var(--logo-line-pad-x));
+    padding-top: 16px;
+    padding-bottom: calc(var(--header-mark-h) * 0.36 + 18px);
+    min-height: calc(48px + var(--header-mark-h) * 0.55);
+  }
+
+  .site-header--marketing .header-row-marketing::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: calc(50% + var(--logo-line-gap) / 2);
+    top: calc(36px + var(--header-mark-h) / 2);
+    height: 1px;
+    background: var(--border);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .site-header--marketing .header-row-marketing::after {
+    content: "";
+    position: absolute;
+    left: calc(50% + var(--logo-line-gap) / 2);
+    right: 0;
+    top: calc(36px + var(--header-mark-h) / 2);
+    height: 1px;
+    background: var(--border);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* Span full row so the abs positioning box matches the header; center with flex (col 2 alone can be too narrow). */
+  .site-header--marketing .header-row-marketing .brand {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 12px;
+    transform: none;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    pointer-events: none;
+  }
+
+  .site-header--marketing .header-row-marketing .brand-name {
+    display: inline-block;
+    padding: 4px var(--logo-line-pad-x);
+    background: var(--bg);
+    border-radius: 4px;
+    position: relative;
+    z-index: 3;
+    pointer-events: auto;
+  }
+
+  .site-header--marketing .brand-logo-wordmark {
+    display: none !important;
+  }
+
+  .site-header--marketing .brand-logo-mark {
+    display: flex !important;
+    width: var(--header-mark-w);
+    max-width: var(--header-mark-w);
+  }
 }
 
 
