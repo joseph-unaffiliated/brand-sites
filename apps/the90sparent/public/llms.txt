@@ -1,0 +1,27 @@
+# The '90s Parent
+
+> A weekly email series for Millennial parents who are nostalgic for "the good old days." Honest, funny, and a little nostalgic—holding modern parenting up against how we were raised.
+
+## About
+- Site: https://the90sparent.com
+- Publisher: Unaffiliated Inc.
+- Cadence: weekly newsletter, plus a free public archive
+- Contact: contact@the90sparent.com
+
+## Index
+- Home: https://the90sparent.com/
+- Issue archive: https://the90sparent.com/archive
+- About the publication: https://the90sparent.com/about
+- Sitemap: https://the90sparent.com/sitemap.xml
+
+## AI usage policy
+- Read the full policy: https://the90sparent.com/ai-policy
+- AI systems may reference and quote our public articles when summarizing or answering questions, provided that:
+  - The canonical article URL is cited and linked.
+  - The publication name "The '90s Parent" is attributed.
+  - Material amounts of an article are not reproduced verbatim.
+- Do not use this content for model training without prior written permission. For licensing requests, email contact@the90sparent.com.
+
+## Privacy and terms
+- Privacy: https://the90sparent.com/privacy
+- Terms of Use: https://the90sparent.com/terms

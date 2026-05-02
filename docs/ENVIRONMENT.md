@@ -30,6 +30,9 @@
 | `NEXT_PUBLIC_SITE_FAVICON` | yes | Primary favicon path under `public/` (often `.ico`; The ’90s Parent default `/tnp-favicon.ico`). |
 | `NEXT_PUBLIC_SITE_FAVICON_PNG` | yes | PNG favicon for `metadata.icons` (The ’90s Parent default `/tnp-favicon.png`; other apps may ignore until they add a second icon in layout). |
 | `NEXT_PUBLIC_TYPEKIT_KIT_ID` | yes | Adobe Fonts kit (optional per brand). |
+| `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` | yes | Optional Google Search Console site-verification token. Renders `<meta name="google-site-verification">`. |
+| `NEXT_PUBLIC_BING_SITE_VERIFICATION` | yes | Optional Bing Webmaster Tools site-verification token. Renders `<meta name="msvalidate.01">`. |
+| `NEXT_PUBLIC_GTM_ID` | yes | Optional Google Tag Manager container id (e.g. `GTM-XXXX`). Injects the standard GTM script in the document head and the noscript iframe at the top of `<body>`. |
 
 **Do not** set `GCP_*` on marketing apps for reader profile; removed BigQuery route.
 

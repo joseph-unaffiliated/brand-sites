@@ -11,6 +11,19 @@ import { pickRandomArticles } from "@/lib/pickRandomArticles";
 
 export const metadata = {
   title: `About | ${siteDisplayName}`,
+  description: `About ${siteDisplayName} — a weekly email series for Millennial parents that holds modern parenting up against the way we grew up.`,
+  alternates: { canonical: "/about" },
+  openGraph: {
+    title: `About | ${siteDisplayName}`,
+    description: `About ${siteDisplayName} — a weekly email series for Millennial parents that holds modern parenting up against the way we grew up.`,
+    url: "/about",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `About | ${siteDisplayName}`,
+    description: `About ${siteDisplayName} — a weekly email series for Millennial parents that holds modern parenting up against the way we grew up.`,
+  },
 };
 
 const READ_MORE_COUNT = 3;
@@ -131,7 +144,7 @@ export default async function AboutPage() {
                   <div className={articleStyles.readMoreThumb}>
                     <Image
                       src={rec.mainImage}
-                      alt=""
+                      alt={rec.title}
                       width={280}
                       height={187}
                       sizes="(max-width: 640px) 100vw, 280px"

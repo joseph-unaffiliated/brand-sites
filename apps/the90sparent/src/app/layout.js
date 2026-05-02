@@ -6,6 +6,9 @@
  *
  * OneTrust + Retention: `ComplianceScripts.js` (override with NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT
  * and NEXT_PUBLIC_RETENTION_SITE_ID on Vercel if IDs change).
+ *
+ * Google Tag Manager: set `NEXT_PUBLIC_GTM_ID` (e.g. `GTM-XXXX`) on Vercel; see `GoogleTagManager.js`.
+ * Search Console verification is separate: `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` in metadata.
  */
 
 import Link from "next/link";
@@ -23,6 +26,7 @@ import {
   siteFooterTagline,
 } from "@/config/site";
 import { OneTrustScripts, RetentionScript } from "@/components/ComplianceScripts";
+import { GoogleTagManagerNoscript, GoogleTagManagerScript } from "@/components/GoogleTagManager";
 import Header from "@/components/Header";
 import SubscribePopup from "@/components/SubscribePopup";
 import SubmissionsCopyLink from "@/components/SubmissionsCopyLink";
@@ -54,9 +58,24 @@ const faviconIco = process.env.NEXT_PUBLIC_SITE_FAVICON || "/tnp-favicon.ico";
 const faviconPng = process.env.NEXT_PUBLIC_SITE_FAVICON_PNG || "/tnp-favicon.png";
 const appleIconPath = process.env.NEXT_PUBLIC_SITE_APPLE_ICON || "/tnp-webclip.png";
 
+function safeUrl(value) {
+  try {
+    return value ? new URL(value) : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+const googleSiteVerification = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION;
+const bingSiteVerification = process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION;
+
 export const metadata = {
+  metadataBase: safeUrl(siteUrl),
   title: siteDisplayName,
   description: siteDescription,
+  applicationName: siteDisplayName,
+  formatDetection: { telephone: false },
+  alternates: { canonical: "/" },
   icons: {
     icon: [
       { url: faviconIco },
@@ -81,18 +100,24 @@ export const metadata = {
     description: siteDescription,
     images: ogImagePath ? [`${siteUrl}${ogImagePath}`] : undefined,
   },
+  verification: {
+    ...(googleSiteVerification ? { google: googleSiteVerification } : {}),
+    ...(bingSiteVerification ? { other: { "msvalidate.01": bingSiteVerification } } : {}),
+  },
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
+        <GoogleTagManagerScript />
         <OneTrustScripts />
         <TypekitStylesheet kitId={siteConfig.typekitKitId} />
         <FontAwesomeStylesheet />
         <RetentionScript />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
+        <GoogleTagManagerNoscript />
         <MarketingScripts adsenseClient={ADSENSE_CLIENT} metaPixelId={META_PIXEL_ID} />
         <SubscriberProvider>
           <div className="site">
@@ -119,6 +144,7 @@ export default function RootLayout({ children }) {
                   <Link href="/about">About</Link>
                   <Link href="/terms">Terms</Link>
                   <Link href="/privacy">Privacy</Link>
+                  <Link href="/ai-policy">AI policy</Link>
                 </div>
               </div>
               <div>

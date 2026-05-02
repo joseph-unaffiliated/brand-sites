@@ -8,8 +8,26 @@ import SubscribeBlock from "@/components/SubscribeBlock";
 import HideWhenSubscribed from "@/components/HideWhenSubscribed";
 import HomeSnippetsList from "@/components/HomeSnippetsList";
 import HomeAboutSection from "@/components/HomeAboutSection";
-import { siteHeroTagline, siteKickerLower } from "@/config/site";
+import JsonLd from "@/components/JsonLd";
+import {
+  siteConfig,
+  siteDefaultDescription,
+  siteDisplayName,
+  siteHeroTagline,
+  siteKickerLower,
+} from "@/config/site";
 import styles from "./page.module.css";
+
+const SITE_DESCRIPTION =
+  process.env.NEXT_PUBLIC_SITE_DESCRIPTION || siteDefaultDescription;
+const SITE_OG_IMAGE_PATH =
+  process.env.NEXT_PUBLIC_SITE_OG_IMAGE || "/tnp-photo.gif";
+
+function absoluteSiteUrl(path) {
+  const base = siteConfig.siteUrl.replace(/\/$/, "");
+  if (!path) return base;
+  return path.startsWith("http") ? path : `${base}${path.startsWith("/") ? "" : "/"}${path}`;
+}
 
 /** Atlantic-style: 1 center, 2 left, N in right stack. No article repeated. */
 const LEFT_COUNT = 2;
@@ -62,8 +80,42 @@ export default async function Home({ searchParams: searchParamsProp }) {
   const stackItems = articles.slice(1 + LEFT_COUNT, 1 + LEFT_COUNT + STACK_COUNT_MAX);
   const featuredDemographic = featured ? getDemographicAndDescription(featured).demographic : "";
 
+  const homeUrl = absoluteSiteUrl("/");
+  const ogImageUrl = absoluteSiteUrl(SITE_OG_IMAGE_PATH);
+
+  const websiteJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: siteDisplayName,
+    url: homeUrl,
+    description: SITE_DESCRIPTION,
+    inLanguage: "en",
+    publisher: {
+      "@type": "Organization",
+      name: siteDisplayName,
+      url: homeUrl,
+      logo: ogImageUrl,
+    },
+  };
+
+  const organizationJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: siteDisplayName,
+    url: homeUrl,
+    logo: ogImageUrl,
+    description: SITE_DESCRIPTION,
+    parentOrganization: {
+      "@type": "Organization",
+      name: "Unaffiliated Inc.",
+      url: "https://unaffiliated.co",
+    },
+  };
+
   return (
     <div className={styles.page}>
+      <JsonLd data={websiteJsonLd} />
+      <JsonLd data={organizationJsonLd} />
       {/* Hero line */}
       <section className={styles.hero}>
         <div className="container">
@@ -96,7 +148,7 @@ export default async function Home({ searchParams: searchParamsProp }) {
                   <div className={styles.mosaicCardImage}>
                     <Image
                       src={article.mainImage}
-                      alt=""
+                      alt={article.title}
                       width={400}
                       height={267}
                       sizes="(max-width: 900px) 100vw, 320px"
@@ -136,7 +188,7 @@ export default async function Home({ searchParams: searchParamsProp }) {
                 <div className={styles.featuredImage}>
                   <Image
                     src={featured.mainImage}
-                    alt=""
+                    alt={featured.title}
                     width={featured.mainImageWidth || 900}
                     height={featured.mainImageHeight || 600}
                     priority

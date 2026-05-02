@@ -37,7 +37,7 @@ export default function HomeSnippetsList({ stackItems }) {
             <span className={styles.snippetThumb}>
               <Image
                 src={article.mainImage}
-                alt=""
+                alt={article.title}
                 width={72}
                 height={72}
                 sizes="72px"

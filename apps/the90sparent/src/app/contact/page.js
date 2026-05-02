@@ -3,6 +3,19 @@ import { contactEmail, siteDisplayName } from "@/config/site";
 
 export const metadata = {
   title: `Contact | ${siteDisplayName}`,
+  description: `Reach out to ${siteDisplayName} with questions, feedback, or collaboration ideas.`,
+  alternates: { canonical: "/contact" },
+  openGraph: {
+    title: `Contact | ${siteDisplayName}`,
+    description: `Reach out to ${siteDisplayName} with questions, feedback, or collaboration ideas.`,
+    url: "/contact",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `Contact | ${siteDisplayName}`,
+    description: `Reach out to ${siteDisplayName} with questions, feedback, or collaboration ideas.`,
+  },
 };
 
 export default function ContactPage() {

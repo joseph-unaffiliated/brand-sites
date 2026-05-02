@@ -229,6 +229,17 @@ const articleContentBlocksProjection = `contentBlocks[] {
   }
 }`;
 
+/** Shared SEO + freshness fields. Studios that don't define these yet simply return null. */
+const articleSeoProjection = `seoTitle,
+  seoDescription,
+  socialImage,
+  "socialImageWidth": socialImage.asset->metadata.dimensions.width,
+  "socialImageHeight": socialImage.asset->metadata.dimensions.height,
+  noIndex,
+  dateModified,
+  tags,
+  _updatedAt`;
+
 /** All articles, for list/archive. */
 export const articlesQuery = `*[_type == "article"] | order(publishedDate desc, _updatedAt desc) {
   _id,
@@ -247,6 +258,7 @@ export const articlesQuery = `*[_type == "article"] | order(publishedDate desc, 
   disclaimer,
   bio,
   authorName,
+  ${articleSeoProjection},
   ${articleContentBlocksProjection}
 }`;
 
@@ -268,6 +280,7 @@ export const articleBySlugQuery = `*[_type == "article" && slug.current == $slug
   disclaimer,
   bio,
   authorName,
+  ${articleSeoProjection},
   ${articleContentBlocksProjection}
 }`;
 
@@ -436,6 +449,26 @@ export function mapArticle(raw, urlFor, fallbackImage = "/hl-photo.png") {
       }
     : null;
 
+  /** Optional editor-controlled OG/Twitter image; falls back to mainImage downstream. */
+  let socialImage = null;
+  if (raw.socialImage) {
+    const socialBuilder = urlFor(raw.socialImage);
+    if (socialBuilder) {
+      try {
+        const url = socialBuilder.width(1200).url();
+        if (url) {
+          socialImage = {
+            url,
+            width: raw.socialImageWidth ?? 1200,
+            height: raw.socialImageHeight ?? 630,
+          };
+        }
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+
   return {
     _id: raw._id,
     slug: raw.slug,
@@ -455,6 +488,12 @@ export function mapArticle(raw, urlFor, fallbackImage = "/hl-photo.png") {
     bio: raw.bio,
     authorName: raw.authorName,
     contentBlocks: raw.contentBlocks ?? [],
+    seoTitle: raw.seoTitle ?? null,
+    seoDescription: raw.seoDescription ?? null,
+    socialImage,
+    noIndex: Boolean(raw.noIndex),
+    dateModified: raw.dateModified ?? raw._updatedAt ?? null,
+    tags: Array.isArray(raw.tags) ? raw.tags : [],
   };
 }
 

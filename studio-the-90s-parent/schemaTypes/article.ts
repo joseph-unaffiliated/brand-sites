@@ -4,6 +4,15 @@ export const articleType = defineType({
   name: 'article',
   title: 'Article',
   type: 'document',
+  fieldsets: [
+    {
+      name: 'seo',
+      title: 'SEO',
+      description:
+        'Optional overrides for search and social previews. Leave blank to use the title, summary, and main image.',
+      options: {collapsible: true, collapsed: true},
+    },
+  ],
   fields: [
     defineField({
       name: 'title',
@@ -66,6 +75,56 @@ export const articleType = defineType({
       title: 'Source links',
       type: 'array',
       of: [defineArrayMember({type: 'sourceLink'})],
+    }),
+    defineField({
+      name: 'seoTitle',
+      title: 'SEO title',
+      description:
+        'Overrides the page <title> and Open Graph title. Falls back to the article title.',
+      type: 'string',
+      fieldset: 'seo',
+    }),
+    defineField({
+      name: 'seoDescription',
+      title: 'SEO description',
+      description:
+        'Overrides the meta description and Open Graph description. Falls back to the summary or dek.',
+      type: 'text',
+      rows: 3,
+      fieldset: 'seo',
+    }),
+    defineField({
+      name: 'socialImage',
+      title: 'Social share image',
+      description: 'Optional Open Graph / Twitter card image. Falls back to the main image.',
+      type: 'image',
+      options: {hotspot: true},
+      fieldset: 'seo',
+    }),
+    defineField({
+      name: 'noIndex',
+      title: 'Hide from search engines',
+      description: 'When checked, this article is marked noindex/nofollow.',
+      type: 'boolean',
+      initialValue: false,
+      fieldset: 'seo',
+    }),
+    defineField({
+      name: 'dateModified',
+      title: 'Last modified',
+      description:
+        'Optional last meaningful edit date. Leave blank to use the system updated time.',
+      type: 'datetime',
+      fieldset: 'seo',
+    }),
+    defineField({
+      name: 'tags',
+      title: 'Tags',
+      description: 'Optional topic tags for clustering and analytics.',
+      type: 'array',
+      of: [defineArrayMember({type: 'string'})],
+      options: {layout: 'tags'},
+      fieldset: 'seo',
     }),
     // Matches shared @publication-websites/sanity-content projections + Next.js renderers.
     

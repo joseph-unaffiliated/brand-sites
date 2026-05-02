@@ -12,7 +12,8 @@ import RecordArticleView from "@/components/RecordArticleView";
 import ArticleContentBlocks from "@/components/ArticleContentBlocks";
 import AdSlot from "@/components/AdSlot";
 import ArticleStickyBottom from "@/components/ArticleStickyBottom";
-import { siteDisplayName, siteKickerLower } from "@/config/site";
+import JsonLd from "@/components/JsonLd";
+import { siteConfig, siteDisplayName, siteKickerLower } from "@/config/site";
 import styles from "./page.module.css";
 
 const SANITY_PROJECT_ID = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
@@ -33,13 +34,73 @@ export async function generateStaticParams() {
   return await getArticleSlugs();
 }
 
+function absoluteUrl(maybeUrl) {
+  if (!maybeUrl) return null;
+  try {
+    return new URL(maybeUrl, siteConfig.siteUrl).toString();
+  } catch {
+    return null;
+  }
+}
+
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const article = await getArticleBySlug(slug);
   if (!article) return { title: siteDisplayName };
+
+  const canonical = `/article/${slug}`;
+  const fallbackDescription = (article.summary || article.subtitle || "").trim() || undefined;
+  const description = (article.seoDescription?.trim() || fallbackDescription) ?? undefined;
+  const title = article.seoTitle?.trim()
+    ? article.seoTitle
+    : `${article.title} | ${siteDisplayName}`;
+
+  const social = article.socialImage;
+  const ogImageEntry = social?.url
+    ? {
+        url: social.url,
+        width: social.width || 1200,
+        height: social.height || 630,
+        alt: article.title,
+      }
+    : article.mainImage
+      ? {
+          url: article.mainImage,
+          width: article.mainImageWidth || 1200,
+          height: article.mainImageHeight || 630,
+          alt: article.title,
+        }
+      : null;
+
+  const authors = article.authorName ? [{ name: article.authorName }] : undefined;
+  const robots = article.noIndex
+    ? { index: false, follow: false }
+    : undefined;
+
   return {
-    title: `${article.title} | ${siteDisplayName}`,
-    description: article.summary || article.subtitle,
+    title,
+    description,
+    alternates: { canonical },
+    authors,
+    robots,
+    openGraph: {
+      title,
+      description,
+      url: absoluteUrl(canonical) ?? canonical,
+      siteName: siteDisplayName,
+      type: "article",
+      ...(article.publishedDate ? { publishedTime: article.publishedDate } : {}),
+      ...(article.dateModified ? { modifiedTime: article.dateModified } : {}),
+      ...(article.authorName ? { authors: [article.authorName] } : {}),
+      ...(article.tags?.length ? { tags: article.tags } : {}),
+      ...(ogImageEntry ? { images: [ogImageEntry] } : {}),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      ...(ogImageEntry ? { images: [ogImageEntry.url] } : {}),
+    },
   };
 }
 
@@ -69,8 +130,56 @@ export default async function ArticlePage({ params }) {
     ? dedupeSubtitleInContentBlocks(contentBlocks, article.subtitle, article.title)
     : contentBlocks;
 
+  const canonicalArticleUrl = `${siteConfig.siteUrl.replace(/\/$/, "")}/article/${slug}`;
+  const heroImageUrl =
+    article.socialImage?.url || article.heroImage?.url || article.mainImage || null;
+
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: article.title,
+    description: (article.seoDescription || article.summary || article.subtitle || "").trim() || undefined,
+    inLanguage: "en",
+    mainEntityOfPage: { "@type": "WebPage", "@id": canonicalArticleUrl },
+    url: canonicalArticleUrl,
+    ...(article.publishedDate ? { datePublished: article.publishedDate } : {}),
+    ...(article.dateModified ? { dateModified: article.dateModified } : {}),
+    ...(article.authorName
+      ? { author: { "@type": "Person", name: article.authorName } }
+      : {}),
+    publisher: {
+      "@type": "Organization",
+      name: siteDisplayName,
+      url: siteConfig.siteUrl,
+    },
+    ...(heroImageUrl ? { image: [heroImageUrl] } : {}),
+    ...(article.tags?.length ? { keywords: article.tags.join(", ") } : {}),
+    ...(article.noIndex ? { isAccessibleForFree: true } : {}),
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: siteConfig.siteUrl,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: article.title,
+        item: canonicalArticleUrl,
+      },
+    ],
+  };
+
   return (
     <div className={styles.page}>
+      <JsonLd data={articleJsonLd} />
+      <JsonLd data={breadcrumbJsonLd} />
       <RecordArticleView slug={slug} />
       <section className="articlebody-section">
         {/* Centered hero: headline + optional cover image when not using content blocks */}
@@ -99,7 +208,7 @@ export default async function ArticlePage({ params }) {
                       <div className={styles.leadImageFrame}>
                         <Image
                           src={article.heroImage.url}
-                          alt=""
+                          alt={article.title}
                           width={article.heroImage.width || 1200}
                           height={article.heroImage.height || 800}
                           priority
@@ -123,7 +232,7 @@ export default async function ArticlePage({ params }) {
               <div className="mainimage-block">
                 <Image
                   src={article.mainImage}
-                  alt=""
+                  alt={article.title}
                   width={article.mainImageWidth || 900}
                   height={article.mainImageHeight || 600}
                   priority
@@ -199,7 +308,7 @@ export default async function ArticlePage({ params }) {
                     <div className={styles.readMoreThumb}>
                       <Image
                         src={rec.mainImage}
-                        alt=""
+                        alt={rec.title}
                         width={280}
                         height={187}
                         sizes="(max-width: 640px) 100vw, 280px"

@@ -5,6 +5,18 @@ import { siteDisplayName } from "@/config/site";
 export const metadata = {
   title: `Privacy Policy | ${siteDisplayName}`,
   description: `Privacy Policy for ${siteDisplayName} and Unaffiliated Inc. services.`,
+  alternates: { canonical: "/privacy" },
+  openGraph: {
+    title: `Privacy Policy | ${siteDisplayName}`,
+    description: `Privacy Policy for ${siteDisplayName} and Unaffiliated Inc. services.`,
+    url: "/privacy",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `Privacy Policy | ${siteDisplayName}`,
+    description: `Privacy Policy for ${siteDisplayName} and Unaffiliated Inc. services.`,
+  },
 };
 
 export default function PrivacyPage() {

@@ -4,6 +4,18 @@ import { siteDisplayName } from "@/config/site";
 export const metadata = {
   title: `Terms of Use | ${siteDisplayName}`,
   description: `Terms of Use for ${siteDisplayName} and Unaffiliated Inc. services.`,
+  alternates: { canonical: "/terms" },
+  openGraph: {
+    title: `Terms of Use | ${siteDisplayName}`,
+    description: `Terms of Use for ${siteDisplayName} and Unaffiliated Inc. services.`,
+    url: "/terms",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `Terms of Use | ${siteDisplayName}`,
+    description: `Terms of Use for ${siteDisplayName} and Unaffiliated Inc. services.`,
+  },
 };
 
 export default function TermsPage() {
