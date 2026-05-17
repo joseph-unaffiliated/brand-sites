@@ -56,9 +56,14 @@ export function pathForIntent(intent, routeMap = {}) {
  */
 export function stripConsumedSearchParams(url, intent) {
   switch (intent.kind) {
-    case "poll":
+    case "poll": {
+      const choice = url.searchParams.get("poll");
+      if (choice != null && String(choice).trim() !== "") {
+        url.searchParams.set("choice", String(choice).trim());
+      }
       url.searchParams.delete("poll");
       break;
+    }
     case "subscribed":
       url.searchParams.delete("subscribed");
       break;

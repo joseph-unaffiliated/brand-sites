@@ -466,3 +466,69 @@
 .photoOfWeekFallback {
   margin-top: 2rem;
 }
+
+.voteQuestion {
+  font-size: 1.1rem;
+  line-height: 1.45;
+  margin: 0 0 1rem;
+  text-align: center;
+}
+
+.voteOptions {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.voteOption {
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+.voteOptionCode {
+  font-weight: 600;
+}
+
+.voteTeaser {
+  font-size: 0.9rem;
+  opacity: 0.85;
+  text-align: center;
+  margin: 0;
+}
+
+.lastWeekRecap {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+.lastWeekLabel {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 0 0 0.35rem;
+  opacity: 0.75;
+}
+
+.lastWeekQuestion {
+  margin: 0 0 0.65rem;
+  font-size: 0.95rem;
+}
+
+.lastWeekResults {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.lastWeekResults li {
+  margin-bottom: 0.25rem;
+}
+
+.lastWeekCorrect {
+  font-weight: 600;
+}

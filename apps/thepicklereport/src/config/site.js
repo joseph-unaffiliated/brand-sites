@@ -1,6 +1,6 @@
 /**
- * Per-site identity: The Pickle Report (second publication template).
- * Set Sanity and imagery via env; replace `public/` assets for this brand.
+ * Per-site identity: The Pickle Report.
+ * Set Sanity, magic hosts, and public copy via env; tune defaults below for this brand.
  */
 
 function defaultMagicOrigin() {
@@ -15,16 +15,49 @@ function defaultMagicOrigin() {
   return "https://magic.thepicklereport.com";
 }
 
+function defaultMagicSubscribeBase() {
+  const exec =
+    process.env.NEXT_PUBLIC_MAGIC_EXECUTE_URL || "https://magic.thepicklereport.com/execute";
+  return exec.replace(/\/execute\/?$/, "/");
+}
+
+export const siteDisplayName =
+  process.env.NEXT_PUBLIC_SITE_DISPLAY_NAME || "The Pickle Report";
+
+export const siteDefaultDescription =
+  process.env.NEXT_PUBLIC_SITE_DESCRIPTION ||
+  "The world's leading pickle news source. Salty, crunchy, weekly pickle coverage delivered to your inbox.";
+
+export const siteFooterTagline =
+  process.env.NEXT_PUBLIC_SITE_FOOTER_TAGLINE ||
+  "The world's leading pickle news source. Delivered weekly.";
+
+export const siteHeroTagline =
+  process.env.NEXT_PUBLIC_SITE_HERO_TAGLINE ||
+  "The world's leading pickle news source.";
+
+export const contactEmail =
+  process.env.NEXT_PUBLIC_CONTACT_EMAIL || "contact@thepicklereport.com";
+
+/** Lowercase publication name: hide duplicate kicker when it matches the masthead. */
+export const siteKickerLower = siteDisplayName.toLowerCase();
+
+export const subscribeCardTitle =
+  process.env.NEXT_PUBLIC_SUBSCRIBE_CARD_TITLE || "Get The Pickle Report";
+
+export const subscribeCardDek =
+  process.env.NEXT_PUBLIC_SUBSCRIBE_CARD_DEK ||
+  "Join the newsletter for weekly pickle news, trivia, and more—delivered straight to your inbox.";
+
 export const siteConfig = {
   brandId: process.env.NEXT_PUBLIC_BRAND_ID || "thepicklereport",
   magicExecuteUrl:
     process.env.NEXT_PUBLIC_MAGIC_EXECUTE_URL || "https://magic.thepicklereport.com/execute",
   magicReaderApiOrigin: process.env.NEXT_PUBLIC_MAGIC_READER_API_ORIGIN || defaultMagicOrigin(),
+  magicSubscribeBase:
+    process.env.NEXT_PUBLIC_MAGIC_SUBSCRIBE_BASE || defaultMagicSubscribeBase(),
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL || "https://thepicklereport.com",
   typekitKitId: process.env.NEXT_PUBLIC_TYPEKIT_KIT_ID || "xon1hcs",
 };
-
-export const contactEmail =
-  process.env.NEXT_PUBLIC_CONTACT_EMAIL || "contact@thepicklereport.com";
 
 export const BRAND = siteConfig.brandId;

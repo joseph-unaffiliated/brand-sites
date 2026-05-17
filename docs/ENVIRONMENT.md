@@ -13,7 +13,7 @@
 | `NEXT_PUBLIC_ADSENSE_CLIENT` | yes | AdSense client id. |
 | `NEXT_PUBLIC_ADSENSE_SLOT_*` | yes | Slot ids for ad units (if used). |
 | `NEXT_PUBLIC_ADS_MODE` | yes | `cross_promo` (default in app when unset) or `adsense` for Google AdSense slots. |
-| `NEXT_PUBLIC_SHARED_ADS_BRAND` | yes | When set (e.g. `the90sparent`), Pickle Report uses image creatives from `packages/shared-ads/<brand>/` instead of the default Hookup Lists text card. Omit on sites that should not load that set. |
+| `NEXT_PUBLIC_SHARED_ADS_BRAND` | yes | Image ad set under `packages/shared-ads/<brand>/`. **The Pickle Report** defaults to `thepicklereport` in `apps/thepicklereport/next.config.mjs`. |
 | `NEXT_PUBLIC_SHARED_ADS_URL_IN_ARTICLE` | yes | Destination URL for shared image ads in **rectangle** slots (mid + bottom in-article). Falls back to `NEXT_PUBLIC_CROSS_PROMO_URL`. |
 | `NEXT_PUBLIC_SHARED_ADS_URL_RAIL` | yes | Destination URL for the **rail** (sidebar) shared image ad. Falls back to `NEXT_PUBLIC_CROSS_PROMO_URL`. |
 | `NEXT_PUBLIC_SHARED_ADS_URL_STICKY` | yes | Destination URL for the **sticky footer** shared image ad (desktop + mobile creatives). Falls back to `NEXT_PUBLIC_CROSS_PROMO_URL`. |
@@ -33,6 +33,10 @@
 | `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` | yes | Optional Google Search Console site-verification token. Renders `<meta name="google-site-verification">`. |
 | `NEXT_PUBLIC_BING_SITE_VERIFICATION` | yes | Optional Bing Webmaster Tools site-verification token. Renders `<meta name="msvalidate.01">`. |
 | `NEXT_PUBLIC_GTM_ID` | yes | Optional Google Tag Manager container id (e.g. `GTM-XXXX`). Injects the standard GTM script in the document head and the noscript iframe at the top of `<body>`. |
+| `NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT` | yes | Optional OneTrust domain script UUID (Pickle loads only when set). |
+| `NEXT_PUBLIC_RETENTION_SITE_ID` | yes | Optional Retention.com browser snippet site id (loads only when set). |
+
+**Pickle copy/paste:** [`THEPICKLEREPORT_VERCEL_ENV.md`](./THEPICKLEREPORT_VERCEL_ENV.md).
 
 **Do not** set `GCP_*` on marketing apps for reader profile; removed BigQuery route.
 

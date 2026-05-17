@@ -1,54 +1,52 @@
-'use client';
+import { Suspense } from "react";
+import PollResult from "@/components/PollResult";
+import { getArticleBySlug, getArticles } from "@/lib/articles";
+import { pickRandomArticles } from "@/lib/pickRandomArticles";
+import { findVoteBlock, normalizeChoiceCode } from "@/lib/vote-block";
+import styles from "./page.module.css";
 
-import { Suspense, useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
-import { executeAction, isRealBrowser } from '@/lib/subscription';
-import styles from './page.module.css';
+export default async function PollPage({ searchParams: searchParamsProp }) {
+  const searchParams =
+    typeof searchParamsProp?.then === "function"
+      ? await searchParamsProp
+      : searchParamsProp ?? {};
 
-function PollContent() {
-  const searchParams = useSearchParams();
-  const [subscribeStatus, setSubscribeStatus] = useState(null);
+  const choice = normalizeChoiceCode(searchParams.choice ?? searchParams.poll);
+  const issueSlug =
+    typeof searchParams.issue === "string" ? searchParams.issue.trim() : "";
 
-  const isSubscribed = searchParams.get('subscribed') === 'true';
+  let voteBlock = null;
+  let articleTitle = null;
+  let recommendations = [];
 
-  useEffect(() => {
-    if (typeof gtag !== 'undefined') {
-      gtag('event', 'poll_view', { event_category: 'engagement', event_label: 'magic_link_redirect' });
+  if (issueSlug) {
+    const article = await getArticleBySlug(issueSlug);
+    if (article) {
+      articleTitle = article.title;
+      voteBlock = findVoteBlock(article.contentBlocks);
     }
-
-    if (isSubscribed && searchParams.get('email') && isRealBrowser()) {
-      executeAction(searchParams, 'subscribe')
-        .then((data) => setSubscribeStatus(data.success ? 'success' : 'error'))
-        .catch(() => setSubscribeStatus('error'));
-    }
-  }, [searchParams, isSubscribed]);
+    const articles = await getArticles();
+    recommendations = pickRandomArticles(articles, {
+      excludeSlug: issueSlug,
+      count: 6,
+    });
+  }
 
   return (
-    <div className={styles.wrap}>
-      <div className={styles.card}>
-        {isSubscribed && (
-          <p className={styles.thanks}>
-            {subscribeStatus === 'success'
-              ? "You're now subscribed to The Pickle Report — thanks for voting!"
-              : subscribeStatus === 'error'
-              ? "We had trouble confirming your subscription, but your vote was counted."
-              : "Thanks for subscribing and voting!"}
-          </p>
-        )}
-
-        <h1 className={styles.heading}>You&apos;re all set.</h1>
-        <p className={styles.body}>
-          Thanks for participating. We&apos;ll be in touch when we have more for you.
-        </p>
-      </div>
-    </div>
-  );
-}
-
-export default function PollPage() {
-  return (
-    <Suspense>
-      <PollContent />
+    <Suspense
+      fallback={
+        <div className={styles.wrap}>
+          <p className={styles.body}>Loading…</p>
+        </div>
+      }
+    >
+      <PollResult
+        issueSlug={issueSlug}
+        choice={choice}
+        voteBlock={voteBlock}
+        articleTitle={articleTitle}
+        recommendations={recommendations}
+      />
     </Suspense>
   );
 }

@@ -1,6 +1,6 @@
 # The Pickle Report (site app)
 
-Next.js publication in the **`brand-sites`** monorepo. Duplicate of the Hookup Lists app structure with **Pickle**-specific defaults in `src/config/site.js`.
+Next.js publication in the **`brand-sites`** monorepo. **Pickle-only** magic: `magic.thepicklereport.com` (see `src/config/site.js`).
 
 ## Before first deploy
 
@@ -10,4 +10,5 @@ Next.js publication in the **`brand-sites`** monorepo. Duplicate of the Hookup L
 4. Set **Vercel Root Directory** to `apps/thepicklereport`.
 5. Set display strings: `NEXT_PUBLIC_SITE_DISPLAY_NAME`, `NEXT_PUBLIC_SITE_DESCRIPTION`, optional `NEXT_PUBLIC_SITE_OG_IMAGE`, etc.
 
-For a full copy/paste setup flow, see [`docs/THEPICKLEREPORT_LAUNCH_GUIDE.md`](../../docs/THEPICKLEREPORT_LAUNCH_GUIDE.md).
+Vercel env copy/paste: [`docs/THEPICKLEREPORT_VERCEL_ENV.md`](../../docs/THEPICKLEREPORT_VERCEL_ENV.md).  
+Launch checklist: [`docs/THEPICKLEREPORT_LAUNCH_GUIDE.md`](../../docs/THEPICKLEREPORT_LAUNCH_GUIDE.md).

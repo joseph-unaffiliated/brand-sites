@@ -16,6 +16,8 @@ import {
   discoverMoreSubscribeIds,
   discoverMorePreSubscribeIds,
 } from "@/data/networkNewsletters";
+import { fetchReaderTriviaStats } from "@/lib/fetch-reader-trivia-stats";
+import { readTriviaState } from "@/lib/trivia-points";
 import styles from "./page.module.css";
 
 const READ_ARTICLES_KEY = `read_articles_${BRAND}`;
@@ -38,6 +40,8 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
   const [apiError, setApiError] = useState(false);
   const [readSlugs, setReadSlugs] = useState([]);
+  const [triviaPoints, setTriviaPoints] = useState(0);
+  const [triviaAnswered, setTriviaAnswered] = useState(0);
 
   useEffect(() => {
     if (!isSubscribed || !email) {
@@ -66,6 +70,18 @@ export default function ProfilePage() {
 
   useEffect(() => {
     setReadSlugs(getReadSlugs());
+    const local = readTriviaState();
+    const answered = Object.values(local.byQuestion || {}).filter((q) => q?.answered).length;
+    setTriviaPoints(local.totalPoints || 0);
+    setTriviaAnswered(answered);
+
+    const token = getReaderToken();
+    if (token) {
+      fetchReaderTriviaStats(token).then((data) => {
+        if (typeof data?.totalPoints === "number") setTriviaPoints(data.totalPoints);
+        if (typeof data?.questionsAnswered === "number") setTriviaAnswered(data.questionsAnswered);
+      });
+    }
   }, []);
 
   if (!isSubscribed && !loading) {
@@ -202,6 +218,16 @@ export default function ProfilePage() {
             ))}
           </ul>
         )}
+      </section>
+
+      <section className={styles.section}>
+        <h2 className={styles.sectionTitle}>Pickle trivia</h2>
+        <p className={styles.accountLine}>
+          <strong>Score:</strong> {triviaPoints} point{triviaPoints === 1 ? "" : "s"}
+        </p>
+        <p className={styles.accountLine}>
+          <strong>Questions answered:</strong> {triviaAnswered}
+        </p>
       </section>
 
       <section className={styles.section}>

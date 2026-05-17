@@ -2,7 +2,25 @@ import Image from "next/image";
 import Link from "next/link";
 import { getArticles, ensureDescriptionOnly } from "@/lib/articles";
 import HideWhenSubscribed from "@/components/HideWhenSubscribed";
+import { siteDisplayName } from "@/config/site";
 import styles from "./page.module.css";
+
+export const metadata = {
+  title: `Archive | ${siteDisplayName}`,
+  description: `Browse the full library of issues from ${siteDisplayName}. Newest first.`,
+  alternates: { canonical: "/archive" },
+  openGraph: {
+    title: `Archive | ${siteDisplayName}`,
+    description: `Browse the full library of issues from ${siteDisplayName}. Newest first.`,
+    url: "/archive",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `Archive | ${siteDisplayName}`,
+    description: `Browse the full library of issues from ${siteDisplayName}. Newest first.`,
+  },
+};
 
 export default async function ArchivePage() {
   const articles = await getArticles();

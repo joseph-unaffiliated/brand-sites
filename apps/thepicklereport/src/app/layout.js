@@ -1,8 +1,10 @@
 /**
  * Site chrome: fonts, global ad/pixel loaders (via web-shell), header/footer.
  *
- * Non-technical readers: this wraps every page—the logo bar, subscribe popup, and
- * the legal footer. Day-to-day article text lives in Sanity, not here.
+ * OneTrust + Retention: `ComplianceScripts.js` (set NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT
+ * and NEXT_PUBLIC_RETENTION_SITE_ID on Vercel when IDs are ready).
+ *
+ * Google Tag Manager: set `NEXT_PUBLIC_GTM_ID` on Vercel; see `GoogleTagManager.js`.
  */
 
 import Link from "next/link";
@@ -12,14 +14,21 @@ import BrandWordmark from "@/components/BrandWordmark";
 import { Geist, Geist_Mono } from "next/font/google";
 import { FontAwesomeStylesheet, MarketingScripts, TypekitStylesheet } from "@publication-websites/web-shell";
 import { ContactCopyLink, ContactCopyToast } from "@publication-websites/web-shell/contact-copy";
-import { contactEmail, siteConfig } from "@/config/site";
+import {
+  contactEmail,
+  siteConfig,
+  siteDefaultDescription,
+  siteDisplayName,
+  siteFooterTagline,
+} from "@/config/site";
+import { OneTrustScripts, RetentionScript } from "@/components/ComplianceScripts";
+import { GoogleTagManagerNoscript, GoogleTagManagerScript } from "@/components/GoogleTagManager";
 import Header from "@/components/Header";
 import SubscribePopup from "@/components/SubscribePopup";
 import { SubscriberProvider } from "@/context/SubscriberContext";
 import "./globals.css";
 
-const ADSENSE_CLIENT =
-  process.env.NEXT_PUBLIC_ADSENSE_CLIENT;
+const ADSENSE_CLIENT = process.env.NEXT_PUBLIC_ADSENSE_CLIENT;
 const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID;
 
 const geistSans = Geist({
@@ -34,24 +43,38 @@ const geistMono = Geist_Mono({
 
 const siteUrl = siteConfig.siteUrl;
 
-const siteDisplayName =
-  process.env.NEXT_PUBLIC_SITE_DISPLAY_NAME || "The Pickle Report";
 const siteDescription =
-  process.env.NEXT_PUBLIC_SITE_DESCRIPTION ||
-  "The World's Leading Pickle News Source. Salty, crunchy, weekly pickle coverage delivered to your inbox.";
-const ogImagePath = process.env.NEXT_PUBLIC_SITE_OG_IMAGE;
-const faviconPath = process.env.NEXT_PUBLIC_SITE_FAVICON;
-const appleIconPath = process.env.NEXT_PUBLIC_SITE_APPLE_ICON;
+  process.env.NEXT_PUBLIC_SITE_DESCRIPTION || siteDefaultDescription;
+const ogImagePath = process.env.NEXT_PUBLIC_SITE_OG_IMAGE || "/tpr-logo.svg";
+const faviconIco = process.env.NEXT_PUBLIC_SITE_FAVICON || "/favicon.ico";
+const faviconPng = process.env.NEXT_PUBLIC_SITE_FAVICON_PNG || "/icon.png";
+const appleIconPath = process.env.NEXT_PUBLIC_SITE_APPLE_ICON || "/apple-icon.png";
+
+function safeUrl(value) {
+  try {
+    return value ? new URL(value) : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+const googleSiteVerification = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION;
+const bingSiteVerification = process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION;
 
 export const metadata = {
+  metadataBase: safeUrl(siteUrl),
   title: siteDisplayName,
   description: siteDescription,
-  icons: faviconPath || appleIconPath
-    ? {
-        ...(faviconPath ? { icon: faviconPath } : {}),
-        ...(appleIconPath ? { apple: appleIconPath } : {}),
-      }
-    : undefined,
+  applicationName: siteDisplayName,
+  formatDetection: { telephone: false },
+  alternates: { canonical: "/" },
+  icons: {
+    icon: [
+      { url: faviconIco },
+      { url: faviconPng, type: "image/png" },
+    ],
+    ...(appleIconPath ? { apple: appleIconPath } : {}),
+  },
   openGraph: {
     title: siteDisplayName,
     description: siteDescription,
@@ -69,16 +92,24 @@ export const metadata = {
     description: siteDescription,
     images: ogImagePath ? [`${siteUrl}${ogImagePath}`] : undefined,
   },
+  verification: {
+    ...(googleSiteVerification ? { google: googleSiteVerification } : {}),
+    ...(bingSiteVerification ? { other: { "msvalidate.01": bingSiteVerification } } : {}),
+  },
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
+        <GoogleTagManagerScript />
+        <OneTrustScripts />
         <TypekitStylesheet kitId={siteConfig.typekitKitId} />
         <FontAwesomeStylesheet />
+        <RetentionScript />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
+        <GoogleTagManagerNoscript />
         <MarketingScripts adsenseClient={ADSENSE_CLIENT} metaPixelId={META_PIXEL_ID} />
         <SubscriberProvider>
           <div className="site">
@@ -88,35 +119,31 @@ export default function RootLayout({ children }) {
             </Suspense>
             <main className="site-main">{children}</main>
             <ContactCopyToast />
-          <footer className="site-footer">
-            <div className="container footer-grid">
-              <div className="footer-brand">
-                <Link href="/" className="footer-logo" aria-label="The Pickle Report">
-                  <BrandWordmark className="footer-logo-img footer-logo-wordmark" />
-                  <BrandLogoMark className="footer-logo-img footer-logo-mark" />
-                </Link>
-                <p className="footer-text footer-tagline">
-                  The world&apos;s leading pickle news source. Delivered weekly.
-                </p>
-              </div>
-              <div>
-                <div className="footer-links">
-                  <Link href="/archive">Archive</Link>
-                  <Link href="/about">About</Link>
-                  <ContactCopyLink email={contactEmail}>Contact</ContactCopyLink>
+            <footer className="site-footer">
+              <div className="container footer-grid">
+                <div className="footer-brand">
+                  <Link href="/" className="footer-logo" aria-label={siteDisplayName}>
+                    <BrandWordmark className="footer-logo-img footer-logo-wordmark" />
+                    <BrandLogoMark className="footer-logo-img footer-logo-mark" />
+                  </Link>
+                  <p className="footer-text footer-tagline">{siteFooterTagline}</p>
+                </div>
+                <div>
+                  <div className="footer-links">
+                    <Link href="/archive">Archive</Link>
+                    <Link href="/about">About</Link>
+                    <ContactCopyLink email={contactEmail}>Contact</ContactCopyLink>
+                  </div>
+                </div>
+                <div>
+                  <div className="footer-links">
+                    <Link href="/terms">Terms</Link>
+                    <Link href="/privacy">Privacy</Link>
+                    <p className="footer-text">© {siteDisplayName}. 2026.</p>
+                  </div>
                 </div>
               </div>
-              <div>
-                <div className="footer-links">
-                  <Link href="/terms">Terms</Link>
-                  <Link href="/privacy">Privacy</Link>
-                  <p className="footer-text">
-                    © The Pickle Report. 2026.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </footer>
+            </footer>
           </div>
         </SubscriberProvider>
       </body>

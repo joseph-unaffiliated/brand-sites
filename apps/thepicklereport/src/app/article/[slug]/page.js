@@ -7,12 +7,15 @@ import {
   getArticles,
   dedupeSubtitleInContentBlocks,
 } from "@/lib/articles";
+import { pickRandomArticles } from "@/lib/pickRandomArticles";
 import HideWhenSubscribed from "@/components/HideWhenSubscribed";
 import RecordArticleView from "@/components/RecordArticleView";
 import ArticleSubscribeForm from "@/components/ArticleSubscribeForm";
 import ArticleContentBlocks from "@/components/ArticleContentBlocks";
 import AdSlot from "@/components/AdSlot";
 import ArticleAdStickyBottom from "@/components/ArticleAdStickyBottom";
+import JsonLd from "@/components/JsonLd";
+import { siteConfig, siteDisplayName, siteKickerLower } from "@/config/site";
 import styles from "./page.module.css";
 
 const SANITY_PROJECT_ID = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
@@ -33,13 +36,71 @@ export async function generateStaticParams() {
   return await getArticleSlugs();
 }
 
+function absoluteUrl(maybeUrl) {
+  if (!maybeUrl) return null;
+  try {
+    return new URL(maybeUrl, siteConfig.siteUrl).toString();
+  } catch {
+    return null;
+  }
+}
+
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const article = await getArticleBySlug(slug);
-  if (!article) return { title: "The Pickle Report" };
+  if (!article) return { title: siteDisplayName };
+
+  const canonical = `/article/${slug}`;
+  const fallbackDescription = (article.summary || article.subtitle || "").trim() || undefined;
+  const description = (article.seoDescription?.trim() || fallbackDescription) ?? undefined;
+  const title = article.seoTitle?.trim()
+    ? article.seoTitle
+    : `${article.title} | ${siteDisplayName}`;
+
+  const social = article.socialImage;
+  const ogImageEntry = social?.url
+    ? {
+        url: social.url,
+        width: social.width || 1200,
+        height: social.height || 630,
+        alt: article.title,
+      }
+    : article.mainImage
+      ? {
+          url: article.mainImage,
+          width: article.mainImageWidth || 1200,
+          height: article.mainImageHeight || 630,
+          alt: article.title,
+        }
+      : null;
+
+  const authors = article.authorName ? [{ name: article.authorName }] : undefined;
+  const robots = article.noIndex ? { index: false, follow: false } : undefined;
+
   return {
-    title: `${article.title} | The Pickle Report`,
-    description: article.summary || article.subtitle,
+    title,
+    description,
+    alternates: { canonical },
+    authors,
+    robots,
+    openGraph: {
+      title,
+      description,
+      url: absoluteUrl(canonical) ?? canonical,
+      siteName: siteDisplayName,
+      type: "article",
+      ...(article.publishedDate ? { publishedTime: article.publishedDate } : {}),
+      ...(article.dateModified ? { modifiedTime: article.dateModified } : {}),
+      ...(article.authorName ? { authors: [article.authorName] } : {}),
+      ...(article.tags?.length ? { tags: article.tags } : {}),
+      ...(ogImageEntry ? { images: [ogImageEntry] } : {}),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      ...(ogImageEntry ? { images: [ogImageEntry.url] } : {}),
+    },
   };
 }
 
@@ -54,9 +115,55 @@ export default async function ArticlePage({ params }) {
   ]);
   if (!article) notFound();
 
-  const readMore = allArticles
-    .filter((a) => a.slug !== slug)
-    .slice(0, READ_MORE_COUNT);
+  const readMore = pickRandomArticles(allArticles, {
+    count: READ_MORE_COUNT,
+    excludeSlug: slug,
+  });
+
+  const canonicalArticleUrl = `${siteConfig.siteUrl.replace(/\/$/, "")}/article/${slug}`;
+  const heroImageUrl =
+    article.socialImage?.url || article.heroImage?.url || article.mainImage || null;
+
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: article.title,
+    description: (article.seoDescription || article.summary || article.subtitle || "").trim() || undefined,
+    inLanguage: "en",
+    mainEntityOfPage: { "@type": "WebPage", "@id": canonicalArticleUrl },
+    url: canonicalArticleUrl,
+    ...(article.publishedDate ? { datePublished: article.publishedDate } : {}),
+    ...(article.dateModified ? { dateModified: article.dateModified } : {}),
+    ...(article.authorName
+      ? { author: { "@type": "Person", name: article.authorName } }
+      : {}),
+    publisher: {
+      "@type": "Organization",
+      name: siteDisplayName,
+      url: siteConfig.siteUrl,
+    },
+    ...(heroImageUrl ? { image: [heroImageUrl] } : {}),
+    ...(article.tags?.length ? { keywords: article.tags.join(", ") } : {}),
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: siteConfig.siteUrl,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: article.title,
+        item: canonicalArticleUrl,
+      },
+    ],
+  };
 
   const contentBlocks = article.contentBlocks ?? [];
   const showBlocks =
@@ -70,6 +177,8 @@ export default async function ArticlePage({ params }) {
 
   return (
     <div className={styles.page}>
+      <JsonLd data={articleJsonLd} />
+      <JsonLd data={breadcrumbJsonLd} />
       <RecordArticleView slug={slug} />
       <section className="articlebody-section">
         {/* Centered hero: headline + optional cover image when not using content blocks */}
@@ -83,7 +192,7 @@ export default async function ArticlePage({ params }) {
               </div>
               <div className="spacer-3rem" />
               <div className="headline-block">
-                {article.kicker && article.kicker.trim().toLowerCase() !== "the pickle report" && (
+                {article.kicker && article.kicker.trim().toLowerCase() !== siteKickerLower && (
                   <p className={styles.kicker}>{article.kicker}</p>
                 )}
                 <h1 className="headline-text">{article.title}</h1>
@@ -195,7 +304,7 @@ export default async function ArticlePage({ params }) {
                         sizes="(max-width: 640px) 100vw, 280px"
                       />
                     </div>
-                    {rec.kicker && rec.kicker.trim().toLowerCase() !== "the pickle report" && (
+                    {rec.kicker && rec.kicker.trim().toLowerCase() !== siteKickerLower && (
                       <p className={styles.readMoreKicker}>{rec.kicker}</p>
                     )}
                     <h3 className={styles.readMoreHeadline}>{rec.title}</h3>

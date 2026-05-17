@@ -62,7 +62,9 @@ https://hookuplists.com,https://www.hookuplists.com,https://thepicklereport.com,
 | Magic Vercel project | `READERS_CORS_ORIGINS` should include |
 |----------------------|----------------------------------------|
 | `magic.hookuplists.com` | `https://hookuplists.com`, optional `www`, optional `http://localhost:3000` |
-| `magic.thepicklereport.com` | `https://thepicklereport.com`, optional `www`, optional `http://localhost:3001` |
+| `magic.thepicklereport.com` | **Pickle only:** `https://thepicklereport.com`, optional `www`, optional `http://localhost:3001` — do not point Pickle marketing at `magic.hookuplists.com` |
+
+Pickle copy/paste env: [`THEPICKLEREPORT_VERCEL_ENV.md`](./THEPICKLEREPORT_VERCEL_ENV.md).
 
 If one magic deployment serves **multiple** brands (unusual), merge all relevant marketing origins into one comma list (still no spaces unless your parser trims—our code uses `.trim()` per segment).
 

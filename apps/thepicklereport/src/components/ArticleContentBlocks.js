@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { PortableText } from "next-sanity";
 import { createImageUrlBuilder } from "@sanity/image-url";
+import { isTriviaBlock, normalizeChoiceCode } from "@/lib/vote-block";
 import styles from "./ArticleContentBlocks.module.css";
 
 function urlForImage(projectId, dataset, source) {
@@ -36,13 +37,6 @@ function dims(source) {
   const w = dim?.width;
   const h = dim?.height;
   return { w: w || 900, h: h || 600 };
-}
-
-function orderPhotoOfWeekLast(blocks) {
-  if (!Array.isArray(blocks)) return [];
-  const pow = blocks.filter((b) => b?._type === "photoOfWeekBlock");
-  const rest = blocks.filter((b) => b?._type !== "photoOfWeekBlock");
-  return [...rest, ...pow];
 }
 
 function hidePartHeading(heading) {
@@ -174,14 +168,14 @@ function portableTextComponents(projectId, dataset) {
 const DEFAULT_PHOTO_OF_WEEK_HEADING = "Sexy Pic(kle) of the Week";
 
 export default function ArticleContentBlocks({ blocks, projectId, dataset, articleSlug = "" }) {
-  const orderedBlocks = orderPhotoOfWeekLast(blocks ?? []);
-  const hasPhotoOfWeekBlock = orderedBlocks.some((b) => b?._type === "photoOfWeekBlock");
+  const list = Array.isArray(blocks) ? blocks : [];
+  const hasPhotoOfWeekBlock = list.some((b) => b?._type === "photoOfWeekBlock");
 
-  if (!Array.isArray(blocks) || blocks.length === 0) return null;
+  if (list.length === 0) return null;
 
   return (
     <div className={styles.blocks}>
-      {orderedBlocks.map((block) => {
+      {list.map((block) => {
         if (!block?._type) return null;
         const key = block._key || block._type;
 
@@ -413,6 +407,53 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset, artic
                   </div>
                 </aside>
               </section>
+            );
+          }
+          case "pickleVoteBlock": {
+            const headingText =
+              block.heading?.trim() ||
+              (isTriviaBlock(block) ? "Today's Pickle Trivia" : "Poll");
+            const lastWeek = block.lastWeek;
+            return (
+              <aside key={key} className={styles.poll} aria-label={headingText}>
+                <p className={styles.eyebrow}>{headingText}</p>
+                {block.question ? (
+                  <p className={styles.voteQuestion}>{block.question}</p>
+                ) : null}
+                <ol className={styles.voteOptions}>
+                  {(block.options || []).map((opt) => {
+                    const code = normalizeChoiceCode(opt?.code);
+                    return (
+                      <li key={opt._key || code} className={styles.voteOption}>
+                        <span className={styles.voteOptionCode}>
+                          {code ? `${code.toUpperCase()}.` : ""}
+                        </span>{" "}
+                        {opt.label}
+                      </li>
+                    );
+                  })}
+                </ol>
+                {block.teaserLine ? (
+                  <p className={styles.voteTeaser}>{block.teaserLine}</p>
+                ) : null}
+                {lastWeek?.question && Array.isArray(lastWeek.results) && lastWeek.results.length > 0 ? (
+                  <div className={styles.lastWeekRecap}>
+                    <p className={styles.lastWeekLabel}>Last week</p>
+                    <p className={styles.lastWeekQuestion}>{lastWeek.question}</p>
+                    <ul className={styles.lastWeekResults}>
+                      {lastWeek.results.map((r) => (
+                        <li
+                          key={r._key || r.code}
+                          className={r.wasCorrect ? styles.lastWeekCorrect : undefined}
+                        >
+                          {r.label || (r.code ? String(r.code).toUpperCase() : "")}
+                          {typeof r.percent === "number" ? ` — ${r.percent}%` : ""}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : null}
+              </aside>
             );
           }
           case "photoOfWeekBlock": {

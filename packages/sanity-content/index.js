@@ -226,6 +226,29 @@ const articleContentBlocksProjection = `contentBlocks[] {
         hotspot
       }
     }
+  },
+  _type == "pickleVoteBlock" => {
+    _key,
+    _type,
+    heading,
+    question,
+    correctOptionCode,
+    teaserLine,
+    options[] {
+      _key,
+      code,
+      label
+    },
+    lastWeek {
+      question,
+      results[] {
+        _key,
+        code,
+        label,
+        percent,
+        wasCorrect
+      }
+    }
   }
 }`;
 

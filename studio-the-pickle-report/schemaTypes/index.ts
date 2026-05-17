@@ -5,6 +5,11 @@ import {listicleItemType, listicleSectionType} from './listicleSection'
 import {nibblesBlockType, nibblesItemType} from './nibblesBlock'
 import {photoOfWeekBlockType} from './photoOfWeekBlock'
 import {pickleEconomicsSectionType} from './pickleEconomicsSection'
+import {
+  pickleVoteBlockType,
+  pickleVoteOptionType,
+  pickleVoteLastWeekResultType,
+} from './pickleVoteBlock'
 
 export const schemaTypes = [
   articleType,
@@ -16,4 +21,7 @@ export const schemaTypes = [
   nibblesItemType,
   photoOfWeekBlockType,
   pickleEconomicsSectionType,
+  pickleVoteBlockType,
+  pickleVoteOptionType,
+  pickleVoteLastWeekResultType,
 ]

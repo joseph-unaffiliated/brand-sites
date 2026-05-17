@@ -1,118 +1,94 @@
 # The Pickle Report setup guide (copy/paste)
 
-This is the shortest path to launch `apps/thepicklereport` with your current setup (one shared `subscription-functions` magic backend).
+Launch `apps/thepicklereport` with **its own** marketing site and **its own** magic host (`magic.thepicklereport.com`). Pickle does not use Hookup Lists magic or Hookup Lists Vercel env.
 
 ## 0) Preconditions
 
-- Repo already running as monorepo (`brand-sites`)
-- `subscription-functions` project exists in Vercel
-- Hookup Lists already live
+- Monorepo (`brand-sites`) builds locally
+- **Two** Vercel projects (or two domains on distinct configs): marketing + magic for Pickle
+- Sanity project for Pickle (`studio-the-pickle-report/`)
 
 ---
 
-## 1) Create the Vercel project for Pickle
+## 1) Create the Vercel project for Pickle (marketing)
 
-1. Vercel -> **Add New Project**
-2. Select repo: `brand-sites`
-3. Set **Root Directory**: `apps/thepicklereport`
-4. Build command: leave default (`next build`)
-5. Output directory: default
-6. Deploy
-
----
-
-## 2) Create Pickle Sanity project
-
-1. Go to [https://sanity.io/manage](https://sanity.io/manage)
-2. Create new project for Pickle
-3. Create (or use) dataset: `production`
-4. Copy the **Project ID**
+1. Vercel → **Add New Project**
+2. Repo: `brand-sites`
+3. **Root Directory**: `apps/thepicklereport`
+4. Build: default (`next build`)
+5. Deploy
 
 ---
 
-## 3) Add Vercel env vars for Pickle (copy/paste)
+## 2) Sanity
 
-Vercel -> Pickle project -> **Settings -> Environment Variables**
+1. [sanity.io/manage](https://sanity.io/manage) — Pickle project
+2. Dataset: `production`
+3. Copy **Project ID** into env (see step 3)
 
-Paste these (update placeholders):
+---
+
+## 3) Marketing env vars
+
+**Full paste block:** [`THEPICKLEREPORT_VERCEL_ENV.md`](./THEPICKLEREPORT_VERCEL_ENV.md) (section A).
+
+Minimum:
 
 ```text
 NEXT_PUBLIC_SITE_URL=https://thepicklereport.com
 NEXT_PUBLIC_BRAND_ID=thepicklereport
-NEXT_PUBLIC_MAGIC_EXECUTE_URL=https://magic.hookuplists.com/execute
-NEXT_PUBLIC_MAGIC_READER_API_ORIGIN=https://magic.hookuplists.com
+NEXT_PUBLIC_MAGIC_EXECUTE_URL=https://magic.thepicklereport.com/execute
+NEXT_PUBLIC_MAGIC_READER_API_ORIGIN=https://magic.thepicklereport.com
 
 NEXT_PUBLIC_SANITY_PROJECT_ID=YOUR_PICKLE_SANITY_PROJECT_ID
 NEXT_PUBLIC_SANITY_DATASET=production
 
 NEXT_PUBLIC_SITE_DISPLAY_NAME=The Pickle Report
 NEXT_PUBLIC_SITE_DESCRIPTION=YOUR_PICKLE_DESCRIPTION
-NEXT_PUBLIC_SITE_OG_IMAGE=/hl-photo.png
-
-NEXT_PUBLIC_ADSENSE_CLIENT=YOUR_ADSENSE_CLIENT
-NEXT_PUBLIC_META_PIXEL_ID=YOUR_META_PIXEL_ID
+NEXT_PUBLIC_SITE_OG_IMAGE=/tpr-photo.png
 ```
 
-Optional ad slots:
+**Ads:** `NEXT_PUBLIC_ADS_MODE=cross_promo` uses Pickle image creatives by default (`NEXT_PUBLIC_SHARED_ADS_BRAND=thepicklereport`). See the Vercel env doc for slots, GTM, OneTrust, etc.
 
-```text
-NEXT_PUBLIC_ADSENSE_SLOT_RAIL=
-NEXT_PUBLIC_ADSENSE_SLOT_MID=
-NEXT_PUBLIC_ADSENSE_SLOT_BOTTOM=
-```
+**Email → Sanity images:** `issues/thepicklereport/`, `studio-the-pickle-report/scripts/import-email-images.mjs` (needs `SANITY_API_TOKEN` locally, not on marketing Vercel).
 
-**Cross-promo (Hookup Lists) instead of AdSense:** set `NEXT_PUBLIC_ADS_MODE=cross_promo`. Ad slots still need to be “enabled” (non-empty slot id **or** cross-promo mode fills rail/mid/bottom/sticky). Optional: `NEXT_PUBLIC_CROSS_PROMO_URL`, `NEXT_PUBLIC_CROSS_PROMO_HEADLINE`, `NEXT_PUBLIC_CROSS_PROMO_DESCRIPTION`, `NEXT_PUBLIC_CROSS_PROMO_BRAND_LABEL`, `NEXT_PUBLIC_CROSS_PROMO_LOGO_PATH`, `NEXT_PUBLIC_CROSS_PROMO_CTA`.
-
-**Email HTML → Sanity images:** source files live under `issues/thepicklereport/`; the manifest is `issues/thepicklereport/email-image-manifest.json`. Pipelines are in `studio-the-pickle-report/scripts/import-email-images.mjs`. With `SANITY_API_TOKEN` set, run from `studio-the-pickle-report`: `node scripts/import-email-images.mjs --slug=<slug>` (use `--dry-run` first). See `docs/ENVIRONMENT.md` for env vars.
-
-Then click **Redeploy**.
+Redeploy after saving env vars.
 
 ---
 
-## 4) Ensure shared `subscription-functions` has reader auth vars
+## 4) Magic Vercel project (`magic.thepicklereport.com`)
 
-Vercel -> `subscription-functions` -> **Settings -> Environment Variables**
+Deploy your magic/subscription-functions codebase to a **Pickle-only** Vercel project and attach `magic.thepicklereport.com`.
 
-### 4a) `READER_TOKEN_SECRET`
+Env paste: [`THEPICKLEREPORT_VERCEL_ENV.md`](./THEPICKLEREPORT_VERCEL_ENV.md) (section B).
 
-Generate and paste value:
+### `READER_TOKEN_SECRET`
 
 ```bash
 openssl rand -hex 32
 ```
 
-Set as:
+### `READERS_CORS_ORIGINS` (Pickle only)
 
 ```text
-READER_TOKEN_SECRET=PASTE_GENERATED_VALUE
+https://thepicklereport.com,https://www.thepicklereport.com,http://localhost:3001
 ```
 
-### 4b) `READERS_CORS_ORIGINS`
-
-Use this combined list:
-
-```text
-https://hookuplists.com,https://www.hookuplists.com,https://thepicklereport.com,https://www.thepicklereport.com,https://the90sparent.com,https://www.the90sparent.com,https://hardresets.com,https://www.hardresets.com,http://localhost:3000,http://localhost:3001
-```
-
-Redeploy `subscription-functions` after saving.
+Redeploy magic after saving.
 
 ---
 
-## 5) Domain + DNS
+## 5) Domains + DNS
 
-Cloudflare:
+**Marketing:** `thepicklereport.com` (+ optional `www`) → Pickle marketing Vercel project.
 
-- Point `thepicklereport.com` (and optionally `www`) to the Pickle Vercel project
-- SSL mode: **Full (strict)**
+**Magic:** `magic.thepicklereport.com` → Pickle magic Vercel project.
 
-Vercel:
-
-- Add custom domain(s) to the Pickle project
+Cloudflare SSL: **Full (strict)**.
 
 ---
 
-## 6) Quick verification checklist
+## 6) Verification
 
 ### Local
 
@@ -120,45 +96,29 @@ Vercel:
 pnpm exec turbo dev --filter=thepicklereport
 ```
 
-Open `http://localhost:3001` and check:
-
-- Home loads
-- `/archive` loads
-- `/?subscribed=true` redirects to `/subscribed`
+`http://localhost:3001` — home, archive, `/?subscribed=true` → `/subscribed`.
 
 ### Production
 
-1. Open `https://thepicklereport.com`
-2. Trigger a subscribe flow that posts to `/execute`
-3. In browser DevTools:
-   - Confirm `POST https://magic.hookuplists.com/execute` returns JSON (ideally includes `readerToken`)
-   - Open `/profile`
-   - Confirm `GET https://magic.hookuplists.com/api/reader-subscriptions` returns `200`
-   - Confirm response has `Access-Control-Allow-Origin` for the Pickle origin
+1. `https://thepicklereport.com`
+2. Subscribe flow → DevTools:
+   - `POST https://magic.thepicklereport.com/execute` → JSON (ideally `readerToken`)
+   - `/profile` → `GET https://magic.thepicklereport.com/api/reader-subscriptions` → `200`
+   - Response `Access-Control-Allow-Origin` matches `https://thepicklereport.com` (or your `www` origin)
 
-If profile request fails:
-
-- Recheck `READERS_CORS_ORIGINS`
-- Recheck `READER_TOKEN_SECRET`
-- Redeploy `subscription-functions`
+If profile fails: `READERS_CORS_ORIGINS`, `READER_TOKEN_SECRET`, redeploy **Pickle magic** (not Hookup Lists magic).
 
 ---
 
-## 7) Optional local `.env.local` for Pickle (copy/paste)
+## 7) Local `.env.local`
 
-Create `apps/thepicklereport/.env.local`:
+See section C in [`THEPICKLEREPORT_VERCEL_ENV.md`](./THEPICKLEREPORT_VERCEL_ENV.md).
 
 ```text
 NEXT_PUBLIC_SITE_URL=http://localhost:3001
 NEXT_PUBLIC_BRAND_ID=thepicklereport
-NEXT_PUBLIC_MAGIC_EXECUTE_URL=https://magic.hookuplists.com/execute
-NEXT_PUBLIC_MAGIC_READER_API_ORIGIN=https://magic.hookuplists.com
-
+NEXT_PUBLIC_MAGIC_EXECUTE_URL=https://magic.thepicklereport.com/execute
+NEXT_PUBLIC_MAGIC_READER_API_ORIGIN=https://magic.thepicklereport.com
 NEXT_PUBLIC_SANITY_PROJECT_ID=YOUR_PICKLE_SANITY_PROJECT_ID
 NEXT_PUBLIC_SANITY_DATASET=production
-
-NEXT_PUBLIC_SITE_DISPLAY_NAME=The Pickle Report
-NEXT_PUBLIC_SITE_DESCRIPTION=YOUR_PICKLE_DESCRIPTION
-NEXT_PUBLIC_ADSENSE_CLIENT=
-NEXT_PUBLIC_META_PIXEL_ID=
 ```
