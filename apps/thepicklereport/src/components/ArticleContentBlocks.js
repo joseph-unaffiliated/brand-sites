@@ -64,8 +64,8 @@ function parseNibblesHeading(heading) {
 
 function nibblesCtaLabel(item) {
   const label = typeof item?.ctaLabel === "string" ? item.ctaLabel.trim() : "";
-  if (label) return `${label} ›`;
-  return "Read more ›";
+  if (label) return label;
+  return "Read more";
 }
 
 function isFestivalListicleHeading(heading) {
