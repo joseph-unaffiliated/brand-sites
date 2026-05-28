@@ -27,26 +27,13 @@ export default function Header() {
     };
   }, [menuOpen]);
 
-  const ctaDesktop = isSubscribed ? (
-    <Link href="/profile" className="button button-secondary header-profile-link" aria-label="Profile">
-      <i className="fa-solid fa-user-circle" aria-hidden />
-    </Link>
-  ) : (
+  const subscribeDesktop = (
     <a className="button button-secondary" href="/#subscribe">
       Subscribe
     </a>
   );
 
-  const ctaMobile = isSubscribed ? (
-    <Link
-      href="/profile"
-      className="button button-secondary header-subscribe-mobile header-profile-link"
-      onClick={() => setMenuOpen(false)}
-      aria-label="Profile"
-    >
-      <i className="fa-solid fa-user-circle" aria-hidden />
-    </Link>
-  ) : (
+  const subscribeMobile = (
     <a
       className="button button-secondary header-subscribe-mobile"
       href="/#subscribe"
@@ -101,16 +88,16 @@ export default function Header() {
           </Link>
         </div>
         <nav className="site-nav site-nav-right header-nav-desktop" aria-label="Main">
-          {isSubscribed && isMarketing ? (
+          {isSubscribed ? (
             <Link href="/about">About</Link>
           ) : (
             <>
               <ContactCopyLink email={contactEmail}>Contact</ContactCopyLink>
-              {ctaDesktop}
+              {subscribeDesktop}
             </>
           )}
         </nav>
-        {!isSubscribed || isArticle ? ctaMobile : null}
+        {!isSubscribed ? subscribeMobile : null}
       </div>
       <div
         id="header-drawer"
@@ -131,11 +118,6 @@ export default function Header() {
             </ContactCopyLink>
             <SubmissionsCopyLink onClick={() => setMenuOpen(false)} />
             <AdvertiseCopyLink onClick={() => setMenuOpen(false)} />
-            {isSubscribed ? (
-              <Link href="/profile" onClick={() => setMenuOpen(false)}>
-                Profile
-              </Link>
-            ) : null}
             <Link href="/terms" onClick={() => setMenuOpen(false)}>
               Terms
             </Link>
