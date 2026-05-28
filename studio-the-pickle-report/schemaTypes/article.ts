@@ -69,7 +69,8 @@ export const articleType = defineType({
     defineField({
       name: 'mainImage',
       title: 'Main image',
-      description: 'Header / hero image for the issue.',
+      description:
+        'Optional header / hero for the issue. When set, shows below the byline on the article page (same placement as The ’90s Parent).',
       type: 'image',
       options: {
         hotspot: true,

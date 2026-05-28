@@ -418,7 +418,10 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset, artic
                 {block.question ? (
                   <p className={styles.voteQuestion}>{block.question}</p>
                 ) : null}
-                <ul className={styles.voteOptions}>
+                <ul
+                  className={styles.voteOptions}
+                  data-option-count={(block.options || []).length}
+                >
                   {(block.options || []).map((opt, index) => {
                     const code = getOptionCode(opt, index);
                     const label = opt.label?.trim() || "";

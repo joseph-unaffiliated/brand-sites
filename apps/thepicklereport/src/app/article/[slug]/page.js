@@ -203,20 +203,38 @@ export default async function ArticlePage({ params }) {
                   {article.authorName?.trim() ? (
                     <p className={styles.issueByline}>By {article.authorName.trim()}</p>
                   ) : null}
+                  {article.heroImage?.url ? (
+                    <div className={styles.leadImageSection}>
+                      <div className={styles.leadImageFrame}>
+                        <Image
+                          src={article.heroImage.url}
+                          alt={article.title}
+                          width={article.heroImage.width || 1200}
+                          height={article.heroImage.height || 800}
+                          priority
+                          className={styles.leadImage}
+                          sizes="(max-width: 640px) 100vw, 640px"
+                        />
+                      </div>
+                      {article.photoCredit ? (
+                        <p className={styles.leadImageCredit}>{article.photoCredit}</p>
+                      ) : null}
+                    </div>
+                  ) : null}
                 </>
               ) : (
                 <div className="spacer-4rem" />
               )}
             </div>
           </div>
-          {!showBlocks && (
+          {!showBlocks && article.heroImage?.url ? (
             <div className={styles.articleHeroImage}>
               <div className="mainimage-block">
                 <Image
-                  src={article.mainImage}
-                  alt=""
-                  width={article.mainImageWidth || 900}
-                  height={article.mainImageHeight || 600}
+                  src={article.heroImage.url}
+                  alt={article.title}
+                  width={article.heroImage.width || 900}
+                  height={article.heroImage.height || 800}
                   priority
                   className={styles.mainImage}
                 />
@@ -225,7 +243,7 @@ export default async function ArticlePage({ params }) {
                 ) : null}
               </div>
             </div>
-          )}
+          ) : null}
         </div>
         {/* Grid: copy left, rail right (rail only here, not beside hero) */}
         <div

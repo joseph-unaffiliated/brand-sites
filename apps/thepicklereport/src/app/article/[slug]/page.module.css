@@ -22,7 +22,47 @@
   padding-right: 24px;
 }
 
-/* Content-block articles: no cover image; title flows into body */
+/* Below headline / rule / byline (matches The ’90s Parent) */
+.leadImageSection {
+  margin: 3.5rem auto 2.5rem;
+  max-width: 640px;
+}
+
+.leadImageFrame {
+  border-radius: 10px;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.leadImage {
+  width: 100%;
+  height: auto;
+  display: block;
+  vertical-align: middle;
+}
+
+.leadImageCredit {
+  margin: 0.5rem 0 0;
+  font-size: 11px;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  font-weight: 300;
+  color: var(--text-muted);
+  text-align: right;
+}
+
+.issueByline {
+  margin: 3rem auto 0;
+  max-width: 640px;
+  font-size: 13px;
+  line-height: 1.35;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+/* Content-block articles: lead image optional below byline */
 .articleHeroBlockInline .articleHeroContent {
   padding-bottom: 0;
 }
@@ -35,7 +75,25 @@
 }
 
 .articleBodyGridBlocksFirst {
-  padding-top: 1.25rem;
+  padding-top: 12px;
+}
+
+.articleBodyGridBlocksFirst .articleContainerNoPadding {
+  padding-top: 12px;
+}
+
+@media (max-width: 768px) {
+  .leadImageSection {
+    margin-bottom: 0.75rem;
+  }
+
+  .articleBodyGridBlocksFirst {
+    padding-top: 0;
+  }
+
+  .articleBodyGridBlocksFirst .articleContainerNoPadding {
+    padding-top: 10px;
+  }
 }
 
 .articleHeroContent {
@@ -155,17 +213,6 @@
 
 .backLink a {
   text-decoration: none;
-}
-
-.issueByline {
-  margin: 1.5rem auto 0;
-  max-width: 640px;
-  font-size: 13px;
-  line-height: 1.35;
-  font-weight: 300;
-  letter-spacing: -0.02em;
-  text-align: center;
-  color: var(--text-muted);
 }
 
 .kicker {

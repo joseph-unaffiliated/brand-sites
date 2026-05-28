@@ -318,12 +318,9 @@
   white-space: pre-wrap;
 }
 
-/* Nibbles — poll card shell + '90s Parent Around the Web link list */
+/* Nibbles — same full-width poll card as Pickle Economics / Sexy Pic */
 .nibblesBox {
-  max-width: 480px;
   width: 100%;
-  margin-left: auto;
-  margin-right: auto;
   box-sizing: border-box;
 }
 
@@ -341,6 +338,19 @@
 
 .pickleEconomicsBox {
   margin-top: 1.25rem;
+}
+
+.pickleEconomicsBox .prose figure.proseFigure {
+  max-width: 480px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.pickleEconomicsBox .prose figure.proseFigure .blockImage {
+  max-width: 100%;
+  width: 100%;
+  height: auto;
 }
 
 .poll .eyebrow {
@@ -405,12 +415,6 @@
 }
 
 @media (min-width: 769px) {
-  .pickleEconomicsBox .prose figure.proseFigure {
-    margin-left: 1rem;
-    margin-right: 1rem;
-    box-sizing: border-box;
-  }
-
   .pickleEconomicsBox .prose ul,
   .pickleEconomicsBox .prose ol {
     padding-left: 1.75rem;
@@ -539,23 +543,70 @@
   text-align: center;
 }
 
+/* Trivia options: row layout, balanced wrap (2+2 for four choices, not 3+1) */
 .voteOptions {
   list-style: none;
   padding: 0;
   margin: 0 auto 1rem;
-  max-width: 480px;
   width: 100%;
+  max-width: 640px;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: stretch;
+  gap: 0.75rem;
 }
 
 .voteOption {
-  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
   display: flex;
   justify-content: center;
+  /* At most two per row so four options become 2×2, not 3+1 */
+  flex: 1 1 calc(50% - 0.375rem);
+  max-width: calc(50% - 0.375rem);
+  min-width: min(100%, 9.5rem);
+}
+
+@media (min-width: 540px) {
+  .voteOption {
+    flex: 1 1 calc(25% - 0.5625rem);
+    max-width: calc(25% - 0.5625rem);
+    min-width: min(100%, 7.25rem);
+  }
+
+  .voteOptions[data-option-count="3"] .voteOption {
+    flex: 1 1 calc(33.333% - 0.5rem);
+    max-width: calc(33.333% - 0.5rem);
+  }
+
+  .voteOptions[data-option-count="2"] .voteOption {
+    flex: 1 1 calc(50% - 0.375rem);
+    max-width: calc(50% - 0.375rem);
+  }
+}
+
+@media (max-width: 359px) {
+  .voteOption {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+}
+
+.voteOption .nibblesItemLink {
+  width: 100%;
+  flex-direction: row;
+  padding: 0;
   margin: 0;
+}
+
+.voteOption .nibblesCta {
+  width: 100%;
+  margin-top: 0;
+  text-align: center;
+  box-sizing: border-box;
+  white-space: normal;
+  line-height: 1.25;
 }
 
 .voteTeaser {
