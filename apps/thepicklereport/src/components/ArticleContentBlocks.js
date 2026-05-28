@@ -416,7 +416,7 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset, artic
               <aside key={key} className={styles.poll} aria-label={headingText}>
                 <p className={styles.eyebrow}>{headingText}</p>
                 {block.question ? (
-                  <p className={styles.voteQuestion}>{block.question}</p>
+                  <h2 className={styles.photoOfWeekTitle}>{block.question}</h2>
                 ) : null}
                 <ul
                   className={styles.voteOptions}

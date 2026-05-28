@@ -188,6 +188,10 @@
     padding-bottom: 0.65rem;
   }
 
+  .poll:has(.voteOptions) .photoOfWeekTitle {
+    padding-bottom: 1.25rem;
+  }
+
   .block > .prose {
     font-size: 1rem;
   }
@@ -340,17 +344,29 @@
   margin-top: 1.25rem;
 }
 
-.pickleEconomicsBox .prose figure.proseFigure {
+/* Chart + credit: 480px max, centered (beats generic .poll figure margins) */
+.poll.pickleEconomicsBox .prose figure.proseFigure {
   max-width: 480px;
   width: 100%;
   margin-left: auto;
   margin-right: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
 }
 
-.pickleEconomicsBox .prose figure.proseFigure .blockImage {
-  max-width: 100%;
+.poll.pickleEconomicsBox .prose figure.proseFigure .blockImage {
   width: 100%;
+  max-width: 480px;
   height: auto;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.poll.pickleEconomicsBox .prose figure.proseFigure .caption {
+  width: 100%;
+  text-align: center;
 }
 
 .poll .eyebrow {
@@ -536,11 +552,28 @@
   margin-top: 2rem;
 }
 
-.voteQuestion {
-  font-size: 1.1rem;
-  line-height: 1.45;
-  margin: 0 0 1rem;
-  text-align: center;
+/* Poll / trivia card — roomier vertical rhythm */
+.poll:has(.voteOptions) .eyebrow {
+  margin-bottom: 0.75rem;
+}
+
+.poll:has(.voteOptions) .photoOfWeekTitle {
+  padding-bottom: 1.5rem;
+}
+
+.poll:has(.voteOptions) .voteOptions {
+  margin-top: 0.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.poll:has(.voteOptions) .voteTeaser {
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+}
+
+.poll:has(.voteOptions) .lastWeekRecap {
+  margin-top: 1.75rem;
+  padding-top: 1.25rem;
 }
 
 /* Trivia options: row layout, balanced wrap (2+2 for four choices, not 3+1) */
