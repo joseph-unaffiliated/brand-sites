@@ -1,5 +1,4 @@
 import {articleType} from './article'
-import {sourceLinkType} from './sourceLink'
 import {proseSectionType} from './proseSection'
 import {listicleItemType, listicleSectionType} from './listicleSection'
 import {nibblesBlockType, nibblesItemType} from './nibblesBlock'
@@ -13,7 +12,6 @@ import {
 
 export const schemaTypes = [
   articleType,
-  sourceLinkType,
   proseSectionType,
   listicleSectionType,
   listicleItemType,

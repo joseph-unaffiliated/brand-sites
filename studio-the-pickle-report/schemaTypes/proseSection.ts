@@ -1,5 +1,36 @@
 import {defineArrayMember, defineField, defineType} from 'sanity'
 
+/** Short lines with bold, italic, and links (image credits, etc.) — no lists or block images. */
+export const inlineRichLineMembers = [
+  defineArrayMember({
+    type: 'block',
+    styles: [{title: 'Normal', value: 'normal'}],
+    lists: [],
+    marks: {
+      decorators: [
+        {title: 'Strong', value: 'strong'},
+        {title: 'Emphasis', value: 'em'},
+      ],
+      annotations: [
+        {
+          name: 'link',
+          type: 'object',
+          title: 'Link',
+          fields: [
+            defineField({
+              name: 'href',
+              type: 'url',
+              title: 'URL',
+              validation: (rule) =>
+                rule.uri({scheme: ['http', 'https', 'mailto', 'tel']}),
+            }),
+          ],
+        },
+      ],
+    },
+  }),
+]
+
 /** Portable text: paragraphs + inline images (same `_type: 'image'` as Sanity docs). Shared with `pickleEconomicsSection`. */
 export const proseBodyMembers = [
   defineArrayMember({
@@ -45,7 +76,13 @@ export const proseBodyMembers = [
     options: {hotspot: true},
     fields: [
       defineField({name: 'caption', title: 'Caption', type: 'string'}),
-      defineField({name: 'credit', title: 'Credit / courtesy line', type: 'string'}),
+      defineField({
+        name: 'credit',
+        title: 'Credit / courtesy line',
+        description: 'Bold, italic, and hyperlinks supported (e.g. link the publication name).',
+        type: 'array',
+        of: inlineRichLineMembers,
+      }),
     ],
   }),
 ]
@@ -54,6 +91,12 @@ export const proseSectionType = defineType({
   name: 'proseSection',
   title: 'Prose section',
   type: 'object',
+  options: {
+    canvasApp: {
+      purpose:
+        'Google Doc BODY — intro, profile sections (use H2 for lines like “Bobby Frye - CEO of…”), and closing paragraphs. Not PICKLE ECONOMICS, NIBBLES, or trivia.',
+    },
+  },
   fields: [
     defineField({name: 'heading', title: 'Heading', type: 'string'}),
     defineField({

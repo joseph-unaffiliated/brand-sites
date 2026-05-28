@@ -452,16 +452,12 @@ function toSanityDoc(parsed, filePath) {
     _type: 'article',
     slug: {_type: 'slug', current: slug},
     title: parsed.title || rawSlug,
-    kicker: 'The Pickle Report',
     subtitle: parsed.subtitle || '',
     summary: parsed.summary || '',
-    brandExplainer:
-      "The Pickle Report is a weekly email series covering the wide world of pickles: stories, culture, trends, and trivia.",
     photoCredit: parsed.photoCredit || '',
     publishedDate: now,
     authorName: parsed.byline || 'The Pickle Report',
     disclaimer: '',
-    sourceLinks,
     contentBlocks,
   }
 

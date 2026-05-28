@@ -157,6 +157,17 @@
   text-decoration: none;
 }
 
+.issueByline {
+  margin: 1.5rem auto 0;
+  max-width: 640px;
+  font-size: 13px;
+  line-height: 1.35;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  text-align: center;
+  color: var(--text-muted);
+}
+
 .kicker {
   text-transform: uppercase;
   letter-spacing: 0em;

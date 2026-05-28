@@ -257,6 +257,25 @@
   font-style: normal;
 }
 
+/* Inline PT for caption/credit (avoid <p> inside <figcaption>) */
+.captionPtLine {
+  display: inline;
+}
+
+.captionPtLine + .captionPtLine::before {
+  content: " ";
+}
+
+.credit .proseLink {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.credit .proseLink:hover {
+  opacity: 0.85;
+}
+
 .proseLink {
   color: var(--accent);
   text-decoration: underline;
@@ -299,10 +318,17 @@
   white-space: pre-wrap;
 }
 
-.nibbles {
-  padding: 1.5rem;
-  background: hsl(66 12% 90%);
-  border-radius: 8px;
+/* Nibbles — poll card shell + '90s Parent Around the Web link list */
+.nibblesBox {
+  max-width: 480px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+}
+
+.nibblesBox .photoOfWeekTitle {
+  margin-bottom: 1.5rem;
 }
 
 /* Poll-style asides — mobile-first padding/spacing; large insets only ≥769px (avoid cascade bugs with @media max-width) */
@@ -341,6 +367,10 @@
 @media (min-width: 769px) {
   .poll {
     padding: 2.5rem 2.25rem;
+  }
+
+  .nibblesBox .photoOfWeekTitle {
+    margin-bottom: 1.75rem;
   }
 
   .pickleEconomicsBox {
@@ -410,17 +440,52 @@
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1.75rem;
+}
+
+.nibblesItemLink {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  text-align: center;
+  border-radius: 6px;
+  padding: 0.35rem 0.25rem;
+  margin: -0.35rem -0.25rem;
+}
+
+.nibblesItemLink:focus-visible {
+  outline: 2px solid var(--text-primary);
+  outline-offset: 2px;
 }
 
 .nibblesTitle {
-  font-size: 1.1rem;
+  font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
+  font-size: 1.15rem;
+  line-height: 1.25;
   margin: 0 0 0.35rem;
-  font-weight: 600;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
 }
 
-.nibblesLink {
-  font-size: 0.95rem;
+.nibblesCta {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: calc(0.45rem - 2px) 0.65rem 0.45rem;
+  border: 1px solid var(--text-primary);
+  border-radius: 2px;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 200;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  transition: background 0.15s;
+}
+
+.nibblesItemLink:hover .nibblesCta {
+  background: hsl(0 0% 96%);
 }
 
 .photoOfWeekFigure {
@@ -477,19 +542,20 @@
 .voteOptions {
   list-style: none;
   padding: 0;
-  margin: 0 0 1rem;
+  margin: 0 auto 1rem;
+  max-width: 480px;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  align-items: center;
+  gap: 1rem;
 }
 
 .voteOption {
-  font-size: 1rem;
-  line-height: 1.4;
-}
-
-.voteOptionCode {
-  font-weight: 600;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 0;
 }
 
 .voteTeaser {

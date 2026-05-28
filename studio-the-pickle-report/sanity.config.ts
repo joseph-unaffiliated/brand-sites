@@ -12,6 +12,13 @@ export default defineConfig({
 
   plugins: [structureTool(), visionTool()],
 
+  apps: {
+    canvas: {
+      enabled: true,
+      fallbackStudioOrigin: 'thepicklereport.sanity.studio',
+    },
+  },
+
   schema: {
     types: schemaTypes,
   },

@@ -2,8 +2,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { PortableText } from "next-sanity";
 import { createImageUrlBuilder } from "@sanity/image-url";
-import { isTriviaBlock, normalizeChoiceCode } from "@/lib/vote-block";
+import { siteConfig } from "@/config/site";
+import { buildPollVoteUrl, getOptionCode, isTriviaBlock } from "@/lib/vote-block";
 import styles from "./ArticleContentBlocks.module.css";
+
+const siteUrl = siteConfig.siteUrl.replace(/\/$/, "");
 
 function urlForImage(projectId, dataset, source) {
   if (!projectId || !dataset || !source?.asset) return null;
@@ -44,14 +47,25 @@ function hidePartHeading(heading) {
   return /^\s*part\s+\d+\s*$/i.test(heading.trim());
 }
 
-function isPickleEconomicsProseHeading(heading) {
-  if (typeof heading !== "string") return false;
-  return /pickle economics|major pickle festivals/i.test(heading.trim());
-}
-
 function isPickleEconomicsLabelOnlyHeading(heading) {
   if (typeof heading !== "string") return false;
   return /^pickle economics$/i.test(heading.trim());
+}
+
+/** Split "Nibbles: Our Top Finds this Week" into eyebrow + subtitle (matches email + '90s Parent Around the Web). */
+function parseNibblesHeading(heading) {
+  const raw = (typeof heading === "string" && heading.trim()) || "Nibbles: Our Top Finds this Week";
+  const match = raw.match(/^Nibbles:\s*(.*)$/i);
+  if (match) {
+    return { eyebrow: "Nibbles", title: match[1].trim() || "Our Top Finds this Week" };
+  }
+  return { eyebrow: "Nibbles", title: raw };
+}
+
+function nibblesCtaLabel(item) {
+  const label = typeof item?.ctaLabel === "string" ? item.ctaLabel.trim() : "";
+  if (label) return `${label} ›`;
+  return "Read more ›";
 }
 
 function isFestivalListicleHeading(heading) {
@@ -83,6 +97,45 @@ function filterDuplicateTeaserLines(body) {
 }
 
 /** Market share chart in Pickle Addicts: intro paragraph + inline PT image. */
+function hasCredit(credit) {
+  if (typeof credit === "string") return Boolean(credit.trim());
+  return Array.isArray(credit) && credit.length > 0;
+}
+
+function captionCreditPortableTextComponents() {
+  return {
+    block: {
+      normal: ({ children }) => (
+        <span className={styles.captionPtLine}>{children}</span>
+      ),
+    },
+    marks: {
+      link: ({ children, value }) => (
+        <a
+          href={value?.href}
+          rel="noopener noreferrer"
+          target="_blank"
+          className={styles.proseLink}
+        >
+          {children}
+        </a>
+      ),
+    },
+  };
+}
+
+function renderCredit(credit) {
+  if (!hasCredit(credit)) return null;
+  if (typeof credit === "string") {
+    return <span className={styles.credit}>{credit}</span>;
+  }
+  return (
+    <span className={styles.credit}>
+      <PortableText value={credit} components={captionCreditPortableTextComponents()} />
+    </span>
+  );
+}
+
 function splitBodyAroundMarketShareChart(body) {
   if (!Array.isArray(body)) {
     return { head: [], chartIntro: null, chartImage: null, tail: [] };
@@ -104,20 +157,6 @@ function splitBodyAroundMarketShareChart(body) {
   };
 }
 
-/** Inline "💡 Pickle Economics" line in PT body — section header styled like Photo of Week + card box below. */
-function isPickleEconomicsInlineSectionParagraph(b) {
-  if (b?._type !== "block") return false;
-  const t = portableTextBlockPlainText(b).trim();
-  return /^\s*💡\s*Pickle Economics\s*$/i.test(t) || /^\s*Pickle Economics\s*$/i.test(t);
-}
-
-function findPickleEconomicsBodySplit(body) {
-  if (!Array.isArray(body)) return null;
-  const idx = body.findIndex((b) => isPickleEconomicsInlineSectionParagraph(b));
-  if (idx < 0) return null;
-  return { before: body.slice(0, idx), after: body.slice(idx + 1) };
-}
-
 function portableTextComponents(projectId, dataset) {
   return {
     types: {
@@ -135,15 +174,13 @@ function portableTextComponents(projectId, dataset) {
               className={styles.blockImage}
               sizes="(max-width: 900px) 100vw, 820px"
             />
-            {(value?.caption || value?.credit) && (
+            {(value?.caption || hasCredit(value?.credit)) && (
               <figcaption className={styles.caption}>
                 {value.caption ? <span>{value.caption}</span> : null}
-                {value.caption && value.credit ? (
+                {value.caption && hasCredit(value?.credit) ? (
                   <span className={styles.captionSep}> · </span>
                 ) : null}
-                {value.credit ? (
-                  <span className={styles.credit}>{value.credit}</span>
-                ) : null}
+                {renderCredit(value?.credit)}
               </figcaption>
             )}
           </figure>
@@ -182,8 +219,6 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset, artic
         switch (block._type) {
           case "proseSection": {
             const showHeading = block.heading && !hidePartHeading(block.heading);
-            const economics = isPickleEconomicsProseHeading(block.heading);
-            const labelOnly = isPickleEconomicsLabelOnlyHeading(block.heading);
             const ptComponents = portableTextComponents(projectId, dataset);
             const body = filterDuplicateTeaserLines(block.body ?? []);
             if (body.length === 0) {
@@ -191,60 +226,11 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset, artic
             }
             const { head, chartIntro, chartImage, tail } = splitBodyAroundMarketShareChart(body);
             const hasMarketShareModule = chartIntro && chartImage;
-            const proseBodyForEconomics = hasMarketShareModule
-              ? [...head, ...tail]
-              : body;
-            const pickleSplit =
-              !hasMarketShareModule && findPickleEconomicsBodySplit(proseBodyForEconomics);
-
-            if (pickleSplit) {
-              const showPeMainTitle =
-                typeof block.heading === "string" &&
-                block.heading.trim() &&
-                !isPickleEconomicsLabelOnlyHeading(block.heading) &&
-                !hidePartHeading(block.heading);
-              return (
-                <section key={key} className={styles.block}>
-                  {pickleSplit.before.length > 0 ? (
-                    <div className={styles.prose}>
-                      <PortableText value={pickleSplit.before} components={ptComponents} />
-                    </div>
-                  ) : null}
-                  <aside
-                    className={`${styles.poll} ${styles.pickleEconomicsBox}`}
-                    aria-label="Pickle Economics"
-                  >
-                    <p className={styles.eyebrow}>Pickle Economics</p>
-                    {showPeMainTitle ? (
-                      <h2 className={styles.photoOfWeekTitle}>{block.heading.trim()}</h2>
-                    ) : null}
-                    <div className={styles.prose}>
-                      <PortableText value={pickleSplit.after} components={ptComponents} />
-                    </div>
-                  </aside>
-                </section>
-              );
-            }
+            const proseBody = hasMarketShareModule ? [...head, ...tail] : body;
 
             return (
-              <section
-                key={key}
-                className={`${styles.block} ${economics ? styles.economicsModule : ""}`}
-              >
-                {economics ? (
-                  <div className={styles.economicsLabelRow}>
-                    <span className={styles.economicsIcon} aria-hidden>
-                      💡
-                    </span>
-                    <span className={styles.economicsLabelText}>Pickle Economics</span>
-                  </div>
-                ) : null}
-                {!economics && showHeading ? (
-                  <h2 className={styles.blockHeading}>{block.heading}</h2>
-                ) : null}
-                {economics && block.heading && !labelOnly ? (
-                  <h2 className={styles.economicsMainTitle}>{block.heading}</h2>
-                ) : null}
+              <section key={key} className={styles.block}>
+                {showHeading ? <h2 className={styles.blockHeading}>{block.heading}</h2> : null}
                 {hasMarketShareModule ? (
                   <>
                     {head.length > 0 ? (
@@ -292,14 +278,9 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset, artic
                       </div>
                     ) : null}
                   </>
-                ) : Array.isArray(proseBodyForEconomics) && proseBodyForEconomics.length > 0 ? (
-                  <div
-                    className={`${styles.prose} ${economics ? styles.economicsProse : ""}`}
-                  >
-                    <PortableText
-                      value={proseBodyForEconomics}
-                      components={ptComponents}
-                    />
+                ) : Array.isArray(proseBody) && proseBody.length > 0 ? (
+                  <div className={styles.prose}>
+                    <PortableText value={proseBody} components={ptComponents} />
                   </div>
                 ) : null}
               </section>
@@ -365,21 +346,38 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset, artic
             );
           }
           case "nibblesBlock": {
+            const { eyebrow, title: nibblesTitle } = parseNibblesHeading(block.heading);
+            const items = block.items || [];
+            if (items.length === 0) return null;
             return (
-              <section key={key} className={styles.nibbles}>
-                {block.heading ? <h2 className={styles.blockHeading}>{block.heading}</h2> : null}
-                <ul className={styles.nibblesList}>
-                  {(block.items || []).map((item) => (
-                    <li key={item._key || item.url}>
-                      {item.title ? <h3 className={styles.nibblesTitle}>{item.title}</h3> : null}
-                      {item.url ? (
-                        <Link href={item.url} rel="noopener noreferrer" target="_blank" className={styles.nibblesLink}>
-                          {item.ctaLabel || "Read more"} →
-                        </Link>
-                      ) : null}
-                    </li>
-                  ))}
-                </ul>
+              <section key={key} className={styles.block}>
+                <aside className={`${styles.poll} ${styles.nibblesBox}`} aria-label={eyebrow}>
+                  <p className={styles.eyebrow}>{eyebrow}</p>
+                  {nibblesTitle ? (
+                    <h2 className={styles.photoOfWeekTitle}>{nibblesTitle}</h2>
+                  ) : null}
+                  <ul className={styles.nibblesList}>
+                    {items.map((item) => (
+                      <li key={item._key || item.url}>
+                        {item.url ? (
+                          <Link
+                            href={item.url}
+                            rel="noopener noreferrer"
+                            target="_blank"
+                            className={styles.nibblesItemLink}
+                          >
+                            {item.title ? (
+                              <h3 className={styles.nibblesTitle}>{item.title}</h3>
+                            ) : null}
+                            <span className={styles.nibblesCta}>{nibblesCtaLabel(item)}</span>
+                          </Link>
+                        ) : (
+                          item.title ? <h3 className={styles.nibblesTitle}>{item.title}</h3> : null
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </aside>
               </section>
             );
           }
@@ -420,19 +418,45 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset, artic
                 {block.question ? (
                   <p className={styles.voteQuestion}>{block.question}</p>
                 ) : null}
-                <ol className={styles.voteOptions}>
-                  {(block.options || []).map((opt) => {
-                    const code = normalizeChoiceCode(opt?.code);
+                <ul className={styles.voteOptions}>
+                  {(block.options || []).map((opt, index) => {
+                    const code = getOptionCode(opt, index);
+                    const label = opt.label?.trim() || "";
+                    const voteUrl = buildPollVoteUrl({
+                      siteUrl,
+                      issueSlug: articleSlug,
+                      choiceCode: code,
+                      viaHome: false,
+                    });
+                    const buttonText = [
+                      code ? `${code.toUpperCase()}.` : "",
+                      label,
+                    ]
+                      .filter(Boolean)
+                      .join(" ");
                     return (
-                      <li key={opt._key || code} className={styles.voteOption}>
-                        <span className={styles.voteOptionCode}>
-                          {code ? `${code.toUpperCase()}.` : ""}
-                        </span>{" "}
-                        {opt.label}
+                      <li key={opt._key || code || index} className={styles.voteOption}>
+                        {voteUrl ? (
+                          <Link
+                            href={voteUrl}
+                            className={styles.nibblesItemLink}
+                            aria-label={
+                              buttonText
+                                ? `Vote: ${buttonText}`
+                                : code
+                                  ? `Vote option ${code.toUpperCase()}`
+                                  : "Vote"
+                            }
+                          >
+                            <span className={styles.nibblesCta}>{buttonText || "Vote"}</span>
+                          </Link>
+                        ) : (
+                          <span className={styles.nibblesCta}>{buttonText || "—"}</span>
+                        )}
                       </li>
                     );
                   })}
-                </ol>
+                </ul>
                 {block.teaserLine ? (
                   <p className={styles.voteTeaser}>{block.teaserLine}</p>
                 ) : null}
@@ -476,15 +500,13 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset, artic
                   ) : (
                     <div className={styles.photoOfWeekPlaceholder} aria-hidden />
                   )}
-                  {(block.caption || block.credit) && (
+                  {(block.caption || hasCredit(block.credit)) && (
                     <figcaption className={styles.caption}>
                       {block.caption ? <span>{block.caption}</span> : null}
-                      {block.caption && block.credit ? (
+                      {block.caption && hasCredit(block.credit) ? (
                         <span className={styles.captionSep}> · </span>
                       ) : null}
-                      {block.credit ? (
-                        <span className={styles.credit}>{block.credit}</span>
-                      ) : null}
+                      {renderCredit(block.credit)}
                     </figcaption>
                   )}
                 </figure>

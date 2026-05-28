@@ -4,6 +4,12 @@ export const nibblesBlockType = defineType({
   name: 'nibblesBlock',
   title: 'Nibbles block',
   type: 'object',
+  options: {
+    canvasApp: {
+      purpose:
+        'Google Doc “NIBBLES (secondary sources)” — Source 1/2/3 each with Blurb, Link, and Source.',
+    },
+  },
   fields: [
     defineField({name: 'heading', title: 'Heading', type: 'string', initialValue: 'Nibbles: Our Top Finds this Week'}),
     defineField({
@@ -34,12 +40,27 @@ export const nibblesItemType = defineType({
   title: 'Nibbles item',
   type: 'object',
   fields: [
-    defineField({name: 'title', title: 'Title', type: 'string', validation: (rule) => rule.required()}),
-    defineField({name: 'ctaLabel', title: 'CTA label', type: 'string'}),
+    defineField({
+      name: 'title',
+      title: 'Title',
+      type: 'string',
+      description: 'Google Doc “Blurb:” line for this source.',
+      options: {canvasApp: {purpose: 'Google Doc Nibbles “Blurb:” text (not the publication name).'}},
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'ctaLabel',
+      title: 'CTA label',
+      type: 'string',
+      description: 'Google Doc “Source:” line (e.g. Mt. Olive, Mental Floss).',
+      options: {canvasApp: {purpose: 'Google Doc Nibbles “Source:” publication name.'}},
+    }),
     defineField({
       name: 'url',
       title: 'URL',
       type: 'url',
+      description: 'Google Doc “Link:” URL.',
+      options: {canvasApp: {purpose: 'Google Doc Nibbles “Link:” URL.'}},
       validation: (rule) => rule.required().uri({scheme: ['http', 'https']}),
     }),
   ],

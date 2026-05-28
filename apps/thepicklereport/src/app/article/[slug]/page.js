@@ -15,7 +15,7 @@ import ArticleContentBlocks from "@/components/ArticleContentBlocks";
 import AdSlot from "@/components/AdSlot";
 import ArticleAdStickyBottom from "@/components/ArticleAdStickyBottom";
 import JsonLd from "@/components/JsonLd";
-import { siteConfig, siteDisplayName, siteKickerLower } from "@/config/site";
+import { siteConfig, siteDisplayName } from "@/config/site";
 import styles from "./page.module.css";
 
 const SANITY_PROJECT_ID = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
@@ -192,16 +192,18 @@ export default async function ArticlePage({ params }) {
               </div>
               <div className="spacer-3rem" />
               <div className="headline-block">
-                {article.kicker && article.kicker.trim().toLowerCase() !== siteKickerLower && (
-                  <p className={styles.kicker}>{article.kicker}</p>
-                )}
                 <h1 className="headline-text">{article.title}</h1>
                 <div className="subtitle-container">
                   <p>{article.subtitle}</p>
                 </div>
               </div>
               {showBlocks ? (
-                <hr className={styles.articleHeaderRule} aria-hidden />
+                <>
+                  <hr className={styles.articleHeaderRule} aria-hidden />
+                  {article.authorName?.trim() ? (
+                    <p className={styles.issueByline}>By {article.authorName.trim()}</p>
+                  ) : null}
+                </>
               ) : (
                 <div className="spacer-4rem" />
               )}
@@ -304,9 +306,6 @@ export default async function ArticlePage({ params }) {
                         sizes="(max-width: 640px) 100vw, 280px"
                       />
                     </div>
-                    {rec.kicker && rec.kicker.trim().toLowerCase() !== siteKickerLower && (
-                      <p className={styles.readMoreKicker}>{rec.kicker}</p>
-                    )}
                     <h3 className={styles.readMoreHeadline}>{rec.title}</h3>
                     {rec.summary && (
                       <p className={styles.readMoreDek}>{rec.summary}</p>

@@ -1,3 +1,6 @@
+/**
+ * Legacy stub — production schema is studio-the-pickle-report/schemaTypes/article.ts
+ */
 export default {
   name: "article",
   type: "document",
@@ -5,24 +8,13 @@ export default {
   fields: [
     { name: "slug", type: "slug", title: "Slug", options: { source: "title" }, validation: (Rule) => Rule.required() },
     { name: "title", type: "string", title: "Title", validation: (Rule) => Rule.required() },
-    { name: "kicker", type: "string", title: "Kicker" },
     { name: "subtitle", type: "string", title: "Subtitle" },
     { name: "summary", type: "text", title: "Summary" },
-    {
-      name: "mainImage",
-      type: "image",
-      title: "Main image",
-      options: { hotspot: true },
-    },
+    { name: "mainImage", type: "image", title: "Main image", options: { hotspot: true } },
     { name: "photoCredit", type: "string", title: "Photo credit" },
-    { name: "brandExplainer", type: "text", title: "Brand explainer" },
-    { name: "publishedDate", type: "datetime", title: "Published date" },
+    { name: "publishedDate", type: "datetime", title: "Publishing date" },
+    { name: "authorName", type: "string", title: "Author" },
     { name: "disclaimer", type: "text", title: "Disclaimer" },
+    { name: "contentBlocks", type: "array", title: "Issue sections", of: [{ type: "object" }] },
   ],
-  preview: {
-    select: { title: "title", slug: "slug.current" },
-    prepare({ title, slug }) {
-      return { title: title || slug || "Untitled" };
-    },
-  },
 };

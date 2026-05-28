@@ -11,14 +11,9 @@ export const pickleVoteOptionType = defineType({
   name: 'pickleVoteOption',
   title: 'Vote option',
   type: 'object',
+  description:
+    'Options are lettered by order in the list: 1st = A (poll=a), 2nd = B (poll=b), etc. Email links use the article slug — see POLL_EMAIL_LINKS.md.',
   fields: [
-    defineField({
-      name: 'code',
-      title: 'Code (email link)',
-      type: 'string',
-      options: {list: optionCodes},
-      validation: (rule) => rule.required(),
-    }),
     defineField({
       name: 'label',
       title: 'Label',
@@ -27,9 +22,9 @@ export const pickleVoteOptionType = defineType({
     }),
   ],
   preview: {
-    select: {code: 'code', label: 'label'},
-    prepare({code, label}) {
-      return {title: code ? `${code.toUpperCase()}. ${label || ''}` : label || 'Option'}
+    select: {label: 'label'},
+    prepare({label}) {
+      return {title: label || 'Option'}
     },
   },
 })
@@ -74,6 +69,12 @@ export const pickleVoteBlockType = defineType({
   description:
     'Trivia when Correct answer is set (revealed on vote landing). Poll when Correct answer is empty (pick + results only).',
   type: 'object',
+  options: {
+    canvasApp: {
+      purpose:
+        "Google Doc TODAY'S PICKLE TRIVIA and LAST WEEK'S PICKLE TRIVIA. Yellow highlight in doc = correct answer (set correctOptionCode a–d).",
+    },
+  },
   fields: [
     defineField({
       name: 'heading',
@@ -91,16 +92,31 @@ export const pickleVoteBlockType = defineType({
     defineField({
       name: 'options',
       title: 'Options',
+      description:
+        'Order matters: first row = A, second = B, third = C, fourth = D (email links poll=a…d use this order).',
       type: 'array',
       of: [defineArrayMember({type: 'pickleVoteOption'})],
+      options: {
+        canvasApp: {
+          purpose:
+            "TODAY'S PICKLE TRIVIA answers in doc order: 1st option = A, 2nd = B, 3rd = C, 4th = D. Only paste labels, not A:/B: prefixes.",
+        },
+      },
       validation: (rule) => rule.min(2).max(6),
     }),
     defineField({
       name: 'correctOptionCode',
       title: 'Correct answer (optional)',
-      description: 'Leave empty for opinion poll (no right answer). Set a–d for trivia.',
+      description:
+        'Google Doc answer highlighted in yellow for TODAY’S PICKLE TRIVIA (e.g. C for Claussen).',
       type: 'string',
-      options: {list: optionCodes},
+      options: {
+        list: optionCodes,
+        canvasApp: {
+          purpose:
+            "Correct option for TODAY'S PICKLE TRIVIA — match yellow highlight in Google Doc (a/b/c/d).",
+        },
+      },
     }),
     defineField({
       name: 'teaserLine',
@@ -112,8 +128,19 @@ export const pickleVoteBlockType = defineType({
       name: 'lastWeek',
       title: 'Last week recap (optional)',
       type: 'object',
+      options: {
+        canvasApp: {purpose: "Google Doc LAST WEEK'S PICKLE TRIVIA section."},
+      },
       fields: [
-        defineField({name: 'question', title: 'Question', type: 'text', rows: 2}),
+        defineField({
+          name: 'question',
+          title: 'Question',
+          type: 'text',
+          rows: 2,
+          options: {
+            canvasApp: {purpose: "LAST WEEK'S PICKLE TRIVIA question line."},
+          },
+        }),
         defineField({
           name: 'results',
           title: 'Results',

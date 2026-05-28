@@ -69,9 +69,6 @@ export default async function Home({ searchParams: searchParamsProp }) {
                     />
                   </div>
                   <div className={styles.mosaicCardBody}>
-                    {article.kicker && article.kicker.trim().toLowerCase() !== "the pickle report" && (
-                      <p className={styles.mosaicCardKicker}>{article.kicker}</p>
-                    )}
                     <h3 className={styles.mosaicCardHeadline}>{article.title}</h3>
                     {(() => {
                       const { demographic, description } = getDemographicAndDescription(article);

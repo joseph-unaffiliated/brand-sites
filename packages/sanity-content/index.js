@@ -9,6 +9,12 @@
 import { createClient } from "next-sanity";
 import { createImageUrlBuilder } from "@sanity/image-url";
 
+/** Strip whitespace/newlines from slugs (common when pasting from Google Docs). */
+export function normalizeArticleSlug(slug) {
+  if (slug == null) return "";
+  return String(slug).trim();
+}
+
 /**
  * Expand nested image references inside content blocks so listicle / examples images,
  * chart images, and portable-text images resolve in the browser (proseSection / featureSection).
@@ -26,7 +32,14 @@ const articleContentBlocksProjection = `contentBlocks[] {
         _type,
         _key,
         caption,
-        credit,
+        credit[] {
+          ...,
+          markDefs[] {
+            _key,
+            _type,
+            href
+          }
+        },
         asset->{
           _id,
           _ref,
@@ -49,7 +62,14 @@ const articleContentBlocksProjection = `contentBlocks[] {
         _type,
         _key,
         caption,
-        credit,
+        credit[] {
+          ...,
+          markDefs[] {
+            _key,
+            _type,
+            href
+          }
+        },
         asset->{
           _id,
           _ref,
@@ -165,7 +185,14 @@ const articleContentBlocksProjection = `contentBlocks[] {
     _key,
     _type,
     heading,
-    credit,
+    credit[] {
+      ...,
+      markDefs[] {
+        _key,
+        _type,
+        href
+      }
+    },
     caption,
     image {
       asset->{
@@ -214,7 +241,14 @@ const articleContentBlocksProjection = `contentBlocks[] {
         _type,
         _key,
         caption,
-        credit,
+        credit[] {
+          ...,
+          markDefs[] {
+            _key,
+            _type,
+            href
+          }
+        },
         asset->{
           _id,
           _ref,
@@ -236,7 +270,6 @@ const articleContentBlocksProjection = `contentBlocks[] {
     teaserLine,
     options[] {
       _key,
-      code,
       label
     },
     lastWeek {
@@ -494,7 +527,7 @@ export function mapArticle(raw, urlFor, fallbackImage = "/hl-photo.png") {
 
   return {
     _id: raw._id,
-    slug: raw.slug,
+    slug: normalizeArticleSlug(raw.slug),
     title: raw.title,
     kicker: raw.kicker,
     subtitle: raw.subtitle,
@@ -541,13 +574,25 @@ export function createArticleQueries(layer) {
     },
     async getArticleBySlug(slug) {
       if (!client) return null;
-      const raw = await client.fetch(articleBySlugQuery, { slug }, nextOptions);
+      const normalized = normalizeArticleSlug(slug);
+      if (!normalized) return null;
+      let raw = await client.fetch(articleBySlugQuery, { slug: normalized }, nextOptions);
+      if (!raw) {
+        raw = await client.fetch(
+          articleBySlugQuery,
+          { slug: `${normalized}\n` },
+          nextOptions,
+        );
+      }
       return map(raw);
     },
     async getArticleSlugs() {
       if (!client) return [];
       const slugs = await client.fetch(articleSlugsQuery, {}, nextOptions);
-      return (slugs ?? []).filter(Boolean).map((slug) => ({ slug }));
+      return (slugs ?? [])
+        .filter(Boolean)
+        .map((slug) => ({ slug: normalizeArticleSlug(slug) }))
+        .filter((entry) => entry.slug);
     },
   };
 }

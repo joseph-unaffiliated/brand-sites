@@ -4,6 +4,12 @@ export const listicleSectionType = defineType({
   name: 'listicleSection',
   title: 'Listicle section',
   type: 'object',
+  options: {
+    canvasApp: {
+      purpose:
+        'Alternative to proseSection for Google Doc BODY when each profile is a separate list item (title = “Name - Role”, body = paragraph).',
+    },
+  },
   fields: [
     defineField({name: 'heading', title: 'Heading', type: 'string'}),
     defineField({
