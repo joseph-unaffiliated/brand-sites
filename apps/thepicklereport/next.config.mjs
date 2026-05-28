@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
+import { LEGACY_ARTICLE_REDIRECTS } from "./legacy-article-redirects.mjs";
+
 const nextConfig = {
   /** Default cross-promo targets for this site; override in Vercel or `.env.local` if needed. */
   env: {
@@ -28,6 +30,7 @@ const nextConfig = {
   async redirects() {
     return [
       { source: "/sarah", destination: "/article/sarah", permanent: true },
+      ...LEGACY_ARTICLE_REDIRECTS,
     ];
   },
 };
