@@ -199,7 +199,6 @@ export default async function ArticlePage({ params }) {
               </div>
               {showBlocks ? (
                 <>
-                  <hr className={styles.articleHeaderRule} aria-hidden />
                   {article.authorName?.trim() ? (
                     <p className={styles.issueByline}>By {article.authorName.trim()}</p>
                   ) : null}
@@ -213,7 +212,7 @@ export default async function ArticlePage({ params }) {
                           height={article.heroImage.height || 800}
                           priority
                           className={styles.leadImage}
-                          sizes="(max-width: 840px) 100vw, 840px"
+                          sizes="(max-width: 640px) 100vw, 640px"
                         />
                       </div>
                       {article.photoCredit ? (

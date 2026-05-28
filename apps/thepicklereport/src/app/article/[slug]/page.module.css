@@ -22,10 +22,10 @@
   padding-right: 24px;
 }
 
-/* Below headline / rule / byline (matches The ’90s Parent) */
+/* Below headline / byline (matches The ’90s Parent) */
 .leadImageSection {
   margin: 3.5rem auto 2.5rem;
-  max-width: min(840px, 100%);
+  max-width: min(640px, 100%);
   width: 100%;
 }
 
@@ -71,13 +71,6 @@
 /* Content-block articles: lead image optional below byline */
 .articleHeroBlockInline .articleHeroContent {
   padding-bottom: 0;
-}
-
-.articleHeaderRule {
-  border: none;
-  border-top: 1px solid var(--border);
-  margin: 1.75rem auto 0;
-  max-width: min(100%, 640px);
 }
 
 .articleBodyGridBlocksFirst {
@@ -140,6 +133,9 @@
 
 .articleHeroImage .mainimage-block {
   width: 100%;
+  max-width: min(640px, 100%);
+  margin-left: auto;
+  margin-right: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -147,7 +143,7 @@
 
 .articleHeroImage .mainImage {
   width: 100%;
-  max-width: 100%;
+  max-width: 640px;
   height: auto;
   display: block;
   border-radius: 1rem;
@@ -270,7 +266,7 @@
 
 .mainImage {
   width: 100%;
-  max-width: 100%;
+  max-width: 640px;
   height: auto;
   display: block;
   border-radius: 1rem;

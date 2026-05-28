@@ -1,8 +1,8 @@
 /**
  * Site chrome: fonts, global ad/pixel loaders (via web-shell), header/footer.
  *
- * OneTrust + Retention: `ComplianceScripts.js` (set NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT
- * and NEXT_PUBLIC_RETENTION_SITE_ID on Vercel when IDs are ready).
+ * OneTrust + Retention: `ComplianceScripts.js` (Pickle defaults baked in; override with
+ * NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT / NEXT_PUBLIC_RETENTION_SITE_ID on Vercel if needed).
  *
  * Google Tag Manager: set `NEXT_PUBLIC_GTM_ID` on Vercel; see `GoogleTagManager.js`.
  */
