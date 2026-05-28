@@ -134,15 +134,15 @@ export default function RootLayout({ children }) {
                   <div className="footer-links">
                     <Link href="/archive">Archive</Link>
                     <Link href="/about">About</Link>
-                    <ContactCopyLink email={contactEmail}>Contact</ContactCopyLink>
-                    <SubmissionsCopyLink>Submissions</SubmissionsCopyLink>
-                    <AdvertiseCopyLink />
+                    <Link href="/terms">Terms</Link>
+                    <Link href="/privacy">Policy</Link>
                   </div>
                 </div>
                 <div>
                   <div className="footer-links">
-                    <Link href="/terms">Terms</Link>
-                    <Link href="/privacy">Privacy</Link>
+                    <ContactCopyLink email={contactEmail}>Contact</ContactCopyLink>
+                    <SubmissionsCopyLink>Submissions</SubmissionsCopyLink>
+                    <AdvertiseCopyLink />
                     <p className="footer-text">© {siteDisplayName}. 2026.</p>
                   </div>
                 </div>

@@ -16,19 +16,17 @@ export default async function PollPage({ searchParams: searchParamsProp }) {
     typeof searchParams.issue === "string" ? searchParams.issue.trim() : "";
 
   let voteBlock = null;
-  let articleTitle = null;
   let recommendations = [];
 
   if (issueSlug) {
     const article = await getArticleBySlug(issueSlug);
     if (article) {
-      articleTitle = article.title;
       voteBlock = findVoteBlock(article.contentBlocks);
     }
     const articles = await getArticles();
     recommendations = pickRandomArticles(articles, {
       excludeSlug: issueSlug,
-      count: 6,
+      count: 3,
     });
   }
 
@@ -44,7 +42,6 @@ export default async function PollPage({ searchParams: searchParamsProp }) {
         issueSlug={issueSlug}
         choice={choice}
         voteBlock={voteBlock}
-        articleTitle={articleTitle}
         recommendations={recommendations}
       />
     </Suspense>

@@ -758,10 +758,12 @@ a {
   max-width: 36em;
   margin-left: auto;
   margin-right: auto;
+  text-wrap: balance;
 }
 
 .articlebody-section .subtitle-container p {
   margin: 0;
+  text-wrap: balance;
 }
 
 .articlebody-section .mainimage-block {
@@ -822,6 +824,12 @@ a {
 .articlebody-section .articlecopy-richtext h2 {
   font-size: 1.8rem;
   margin: 1rem 0 0.5rem;
+}
+
+.articlebody-section .articlecopy-richtext blockquote,
+.articlebody-section .articlecopy-richtext blockquote p {
+  font-size: 0.8rem;
+  line-height: 1.65;
 }
 
 @media (max-width: 768px) {

@@ -188,7 +188,7 @@ export default async function ArticlePage({ params }) {
           <div className={styles.articleHero}>
             <div className={styles.articleHeroContent}>
               <div className={styles.backLink}>
-                <Link href="/archive">← Back to archive</Link>
+                <Link href="/archive">Back to archive</Link>
               </div>
               <div className="spacer-3rem" />
               <div className="headline-block">

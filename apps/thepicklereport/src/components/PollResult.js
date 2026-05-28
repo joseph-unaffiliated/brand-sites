@@ -4,49 +4,27 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import AdSlot from "@/components/AdSlot";
+import ArticleAdStickyBottom from "@/components/ArticleAdStickyBottom";
 import { executeAction, isRealBrowser } from "@/lib/subscription";
 import { recordPollAnswer } from "@/lib/trivia-points";
 import { submitVoteToMagic } from "@/lib/submit-vote";
 import {
-  formatDistributionRows,
   getOptionLabel,
   isTriviaBlock,
   normalizeChoiceCode,
   voteBlockPollKey,
 } from "@/lib/vote-block";
+import articleStyles from "@/app/article/[slug]/page.module.css";
 import styles from "./PollResult.module.css";
-
-const SLOT_MID = process.env.NEXT_PUBLIC_ADSENSE_SLOT_MID;
-
-function DistributionBar({ row, highlight }) {
-  return (
-    <div className={styles.distRow}>
-      <div className={styles.distLabel}>
-        <span className={styles.distCode}>{row.label}</span>
-        {highlight ? <span className={styles.distYou}>Your pick</span> : null}
-      </div>
-      <div className={styles.distTrack}>
-        <div
-          className={`${styles.distFill} ${highlight ? styles.distFillHighlight : ""}`}
-          style={{ width: `${Math.min(100, row.percent)}%` }}
-        />
-      </div>
-      <span className={styles.distPercent}>{row.percent > 0 ? `${row.percent}%` : "—"}</span>
-    </div>
-  );
-}
 
 export default function PollResult({
   issueSlug,
   choice: initialChoice,
   voteBlock,
-  articleTitle,
   recommendations = [],
 }) {
   const searchParams = useSearchParams();
   const [subscribeStatus, setSubscribeStatus] = useState(null);
-  const [distribution, setDistribution] = useState(null);
   const [recorded, setRecorded] = useState(false);
 
   const choice =
@@ -63,6 +41,8 @@ export default function PollResult({
   const correctLabel =
     voteBlock && correctCode ? getOptionLabel(voteBlock, correctCode) : "";
   const isCorrect = isTrivia && choice && choice === correctCode;
+
+  const recs = recommendations.slice(0, 3);
 
   useEffect(() => {
     if (typeof gtag !== "undefined") {
@@ -100,21 +80,18 @@ export default function PollResult({
       blockKey: pollKey,
       selectedCode: choice,
       email: email ? decodeURIComponent(email) : null,
-    }).then((data) => {
-      if (data?.distribution) setDistribution(data.distribution);
     });
 
     setRecorded(true);
   }, [voteBlock, issueSlug, choice, recorded, isTrivia, correctCode, email]);
 
-  const distRows = voteBlock ? formatDistributionRows(distribution, voteBlock) : [];
-  const showDistribution = distRows.some((r) => r.count > 0);
-  const heading = voteBlock?.heading || (isTrivia ? "Pickle Trivia" : "Poll");
   const hasVoteContext = Boolean(voteBlock && issueSlug && choice);
+  const fallbackHeading = isTrivia ? "Pickle Trivia" : "Poll";
 
   return (
-    <div className={styles.page}>
-      <div className={styles.resultCard}>
+    <div className={styles.pollPage}>
+      <div className={styles.page}>
+        <div className={styles.resultCard}>
         {isSubscribed && (
           <p className={styles.thanks}>
             {subscribeStatus === "success"
@@ -134,90 +111,65 @@ export default function PollResult({
           </>
         ) : (
           <>
-            <p className={styles.eyebrow}>{heading}</p>
-            {voteBlock.question ? (
-              <p className={styles.question}>{voteBlock.question}</p>
-            ) : null}
-
             <h1 className={styles.heading}>
-              {isTrivia
-                ? isCorrect
-                  ? "Correct!"
-                  : "Thanks for playing"
-                : "Thanks for voting"}
+              {voteBlock.question?.trim() || fallbackHeading}
             </h1>
 
-            {selectedLabel ? (
-              <p className={styles.yourPick}>
-                Your answer: <strong>{selectedLabel}</strong>
+            {isTrivia && isCorrect && correctLabel ? (
+              <p className={styles.correctMsg}>
+                You&apos;re right! The answer was &apos;{correctLabel}&apos;
               </p>
-            ) : null}
+            ) : (
+              <>
+                {selectedLabel ? (
+                  <p className={styles.yourPick}>
+                    Your answer: <strong>{selectedLabel}</strong>
+                  </p>
+                ) : null}
 
-            {isTrivia && !isCorrect && correctLabel ? (
-              <p className={styles.correctAnswer}>
-                The correct answer was: <strong>{correctLabel}</strong>
-              </p>
-            ) : null}
-
-            {isTrivia && isCorrect ? (
-              <p className={styles.correctMsg}>Nice work — you nailed it.</p>
-            ) : null}
-
-            {showDistribution ? (
-              <div className={styles.distribution} aria-label="Results">
-                <h2 className={styles.distHeading}>How everyone voted</h2>
-                {distRows.map((row) => (
-                  <DistributionBar
-                    key={row.code}
-                    row={row}
-                    highlight={row.code === choice}
-                  />
-                ))}
-              </div>
-            ) : null}
-
-            {issueSlug && articleTitle ? (
-              <p className={styles.backLinkWrap}>
-                <Link href={`/article/${issueSlug}`} className={styles.backLink}>
-                  Read this issue
-                </Link>
-              </p>
-            ) : null}
+                {isTrivia && !isCorrect && correctLabel ? (
+                  <p className={styles.correctAnswer}>
+                    The correct answer was: <strong>{correctLabel}</strong>
+                  </p>
+                ) : null}
+              </>
+            )}
           </>
         )}
+        </div>
       </div>
 
-      {SLOT_MID ? (
-        <div className={styles.adWrap}>
-          <AdSlot slotId={SLOT_MID} format="auto" />
+      {recs.length > 0 ? (
+        <div className={articleStyles.readMoreOuter}>
+          <section className={articleStyles.readMore} aria-label="Suggested issues">
+            <div className={articleStyles.readMoreGrid}>
+              {recs.map((article) => (
+                <Link
+                  key={article._id ?? article.slug}
+                  href={`/article/${article.slug}`}
+                  className={articleStyles.readMoreCard}
+                >
+                  <div className={articleStyles.readMoreThumb}>
+                    <Image
+                      src={article.mainImage}
+                      alt=""
+                      width={280}
+                      height={187}
+                      sizes="(max-width: 640px) 100vw, 280px"
+                    />
+                  </div>
+                  <h3 className={articleStyles.readMoreHeadline}>{article.title}</h3>
+                  {article.summary ? (
+                    <p className={articleStyles.readMoreDek}>{article.summary}</p>
+                  ) : null}
+                </Link>
+              ))}
+            </div>
+          </section>
         </div>
       ) : null}
 
-      {recommendations.length > 0 ? (
-        <section className={styles.readMore} aria-label="More issues">
-          <h2 className={styles.readMoreHeading}>More from The Pickle Report</h2>
-          <ul className={styles.readMoreList}>
-            {recommendations.map((article) => (
-              <li key={article.slug}>
-                <Link href={`/article/${article.slug}`} className={styles.readMoreItem}>
-                  {article.mainImage ? (
-                    <span className={styles.readMoreThumb}>
-                      <Image
-                        src={article.mainImage}
-                        alt=""
-                        width={120}
-                        height={80}
-                        sizes="120px"
-                      />
-                    </span>
-                  ) : null}
-                  <span className={styles.readMoreTitle}>{article.title}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </section>
-      ) : null}
+      <ArticleAdStickyBottom />
     </div>
   );
 }

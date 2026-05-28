@@ -1,7 +1,7 @@
 import { siteDisplayName } from "@/config/site";
 
 export const metadata = {
-  title: `Vote | ${siteDisplayName}`,
+  title: siteDisplayName,
   robots: { index: false, follow: false },
 };
 

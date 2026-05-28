@@ -176,6 +176,12 @@
   margin-bottom: 0;
 }
 
+.prose blockquote,
+.prose blockquote p {
+  font-size: 0.8rem;
+  line-height: 1.65;
+}
+
 @media (max-width: 768px) {
   .poll .blockHeading {
     font-size: 1.2rem;
