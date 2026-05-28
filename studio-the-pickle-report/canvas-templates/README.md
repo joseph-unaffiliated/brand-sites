@@ -6,6 +6,8 @@ Sanity **Canvas templates** are saved inside Canvas (document menu → **Save as
 |------|---------|
 | `pickle-weekly-issue-template.md` | Issue 19–shaped paste template (same labels as Google Doc export: PUBLISHED ON, PICKLE ECONOMICS TITLE, NIBBLES sources, etc.) |
 
+**Batch-converting old issues?** Drop source files in [`canvas-imports/source/`](../canvas-imports/README.md) and ask the agent to generate matching files in `canvas-imports/output/`.
+
 ## Studio not in the Canvas dropdown?
 
 See [`docs/THEPICKLEREPORT_CANVAS.md`](../../docs/THEPICKLEREPORT_CANVAS.md).

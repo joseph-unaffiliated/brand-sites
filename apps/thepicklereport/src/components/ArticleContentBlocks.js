@@ -157,13 +157,29 @@ function splitBodyAroundMarketShareChart(body) {
   };
 }
 
-function portableTextComponents(projectId, dataset) {
+/** Strip image credits from body for main column; render them in the card footer instead. */
+function splitPickleEconomicsBody(body) {
+  const filtered = filterDuplicateTeaserLines(body ?? []);
+  const credits = [];
+  const mainBody = filtered.map((item) => {
+    if (item?._type === "image" && hasCredit(item.credit)) {
+      credits.push({ caption: item.caption, credit: item.credit });
+      return { ...item, credit: undefined };
+    }
+    return item;
+  });
+  return { mainBody, credits };
+}
+
+function portableTextComponents(projectId, dataset, { omitImageCredit = false } = {}) {
   return {
     types: {
       image: ({ value }) => {
         const src = urlForImage(projectId, dataset, value);
         if (!src) return null;
         const { w, h } = dims(value);
+        const showCredit = !omitImageCredit && hasCredit(value?.credit);
+        const showCaption = Boolean(value?.caption?.trim()) || showCredit;
         return (
           <figure className={`${styles.figure} ${styles.proseFigure}`}>
             <Image
@@ -174,15 +190,15 @@ function portableTextComponents(projectId, dataset) {
               className={styles.blockImage}
               sizes="(max-width: 900px) 100vw, 820px"
             />
-            {(value?.caption || hasCredit(value?.credit)) && (
+            {showCaption ? (
               <figcaption className={styles.caption}>
                 {value.caption ? <span>{value.caption}</span> : null}
-                {value.caption && hasCredit(value?.credit) ? (
+                {value.caption && showCredit ? (
                   <span className={styles.captionSep}> · </span>
                 ) : null}
-                {renderCredit(value?.credit)}
+                {showCredit ? renderCredit(value?.credit) : null}
               </figcaption>
-            )}
+            ) : null}
           </figure>
         );
       },
@@ -382,9 +398,11 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset, artic
             );
           }
           case "pickleEconomicsSection": {
-            const ptComponents = portableTextComponents(projectId, dataset);
-            const body = filterDuplicateTeaserLines(block.body ?? []);
-            if (body.length === 0) return null;
+            const { mainBody, credits } = splitPickleEconomicsBody(block.body ?? []);
+            if (mainBody.length === 0 && credits.length === 0) return null;
+            const ptComponents = portableTextComponents(projectId, dataset, {
+              omitImageCredit: true,
+            });
             const showPeMainTitle =
               typeof block.heading === "string" &&
               block.heading.trim() &&
@@ -401,8 +419,24 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset, artic
                     <h2 className={styles.photoOfWeekTitle}>{block.heading.trim()}</h2>
                   ) : null}
                   <div className={styles.prose}>
-                    <PortableText value={body} components={ptComponents} />
+                    <PortableText value={mainBody} components={ptComponents} />
                   </div>
+                  {credits.length > 0 ? (
+                    <div className={styles.pickleEconomicsCreditFooter}>
+                      {credits.map((entry, creditIndex) => (
+                        <p
+                          key={`pe-credit-${creditIndex}`}
+                          className={styles.pickleEconomicsCreditLine}
+                        >
+                          {entry.caption ? <span>{entry.caption}</span> : null}
+                          {entry.caption && hasCredit(entry.credit) ? (
+                            <span className={styles.captionSep}> · </span>
+                          ) : null}
+                          {renderCredit(entry.credit)}
+                        </p>
+                      ))}
+                    </div>
+                  ) : null}
                 </aside>
               </section>
             );

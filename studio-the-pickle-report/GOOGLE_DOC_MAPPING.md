@@ -70,3 +70,17 @@ Doc format per source:
 **Email links:** use the article **SLUG** as `issue` and `poll=a`…`d` by position. See [`POLL_EMAIL_LINKS.md`](./POLL_EMAIL_LINKS.md).
 
 Issue 19 example: correct answer **C (Claussen)** = 3rd option in the list.
+
+## Canvas `.docx` layout (template merge rules)
+
+When converting an old issue `.docx` into the Google Doc template (see `scripts/merge-pickle-issue-into-template-docx.py`):
+
+| Area | Rule |
+|------|------|
+| **Drive lines** | `MAIN IMAGE`, `GRAPH`, and `SEXY PIC(KLE) OF THE WEEK` use the same parenthetical shape: `(Issue N … / All …)`. Swap in the issue’s Drive hyperlink text from the line below the image in the source doc. Do **not** add a second standalone `Issue N …` line under the header. |
+| **Pickle Economics** | `GRAPH INFORMATION` bullets sit **above** the `CREDIT / COURTESY LINE` label. |
+| **GRAPH INFORMATION SOURCE** | One paragraph under `CREDIT / COURTESY LINE`: comma-separated **hyperlinks**, paired in order with **GRAPH INFORMATION URL** (name → URL). |
+| **PUBLISHING DATE** | Fill manually if missing from the source export (e.g. `June 10, 2026`). |
+| **Spacing** | Same paragraph space after every paragraph (labels and body). |
+
+**Ignore in CMS:** ISSUE #, EMAIL SUBJECT LINE, EMAIL PRE-HEADER (unchanged).

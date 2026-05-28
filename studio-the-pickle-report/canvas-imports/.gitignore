@@ -1,0 +1,3 @@
+# Large issue exports stay local; use README merge commands to generate output.
+source/*.docx
+output/*.docx
