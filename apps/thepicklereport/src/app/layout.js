@@ -23,6 +23,8 @@ import {
 } from "@/config/site";
 import { OneTrustScripts, RetentionScript } from "@/components/ComplianceScripts";
 import { GoogleTagManagerNoscript, GoogleTagManagerScript } from "@/components/GoogleTagManager";
+import SubmissionsCopyLink from "@/components/SubmissionsCopyLink";
+import AdvertiseCopyLink from "@/components/AdvertiseCopyLink";
 import Header from "@/components/Header";
 import SubscribePopup from "@/components/SubscribePopup";
 import { SubscriberProvider } from "@/context/SubscriberContext";
@@ -133,6 +135,8 @@ export default function RootLayout({ children }) {
                     <Link href="/archive">Archive</Link>
                     <Link href="/about">About</Link>
                     <ContactCopyLink email={contactEmail}>Contact</ContactCopyLink>
+                    <SubmissionsCopyLink>Submissions</SubmissionsCopyLink>
+                    <AdvertiseCopyLink />
                   </div>
                 </div>
                 <div>

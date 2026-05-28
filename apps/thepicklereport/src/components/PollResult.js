@@ -179,7 +179,7 @@ export default function PollResult({
             {issueSlug && articleTitle ? (
               <p className={styles.backLinkWrap}>
                 <Link href={`/article/${issueSlug}`} className={styles.backLink}>
-                  Read this issue →
+                  Read this issue
                 </Link>
               </p>
             ) : null}

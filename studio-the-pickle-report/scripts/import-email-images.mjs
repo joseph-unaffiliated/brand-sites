@@ -5,6 +5,7 @@
  * Requires: SANITY_API_TOKEN with write access (or apps/thepicklereport/.env.local).
  * Usage:
  *   node scripts/import-email-images.mjs --slug=why-do-pickles-taste-better-at-2-am
+ *   node scripts/import-email-images.mjs --doc-id=drafts.article.how-high-should-your-pickle-bounce --slug=how-high-should-your-pickle-bounce
  *   node scripts/import-email-images.mjs --slug=hot-takes-from-the-pickle-addicts-anonymous-facebook-group --dry-run
  *   node scripts/import-email-images.mjs --list-slugs
  */
@@ -12,7 +13,7 @@
 import {createClient} from '@sanity/client'
 import {readFileSync} from 'fs'
 import {dirname, join} from 'path'
-import {fileURLToPath} from 'url'
+import {fileURLToPath, pathToFileURL} from 'url'
 import {randomBytes} from 'crypto'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -63,9 +64,38 @@ const token = process.env.SANITY_API_TOKEN
 
 function parseArgs() {
   const slug = process.argv.find((a) => a.startsWith('--slug='))?.split('=')[1]
+  const docId = process.argv.find((a) => a.startsWith('--doc-id='))?.split('=')[1]
   const dryRun = process.argv.includes('--dry-run')
   const listSlugs = process.argv.includes('--list-slugs')
-  return {slug, dryRun, listSlugs}
+  return {slug, docId, dryRun, listSlugs}
+}
+
+export async function runPipelineForArticle(client, docId, articleCfg, dryRun) {
+  const pipeline = articleCfg.pipeline
+  if (pipeline === 'whyDoPickles2Am') {
+    await pipelineWhyDoPickles2Am(client, docId, articleCfg.targets, dryRun)
+  } else if (pipeline === 'pickleAddictsFacebook') {
+    await pipelinePickleAddictsFacebook(client, docId, articleCfg.targets, dryRun)
+  } else if (pipeline === 'picklePriestBless') {
+    await pipelinePicklePriestBless(client, docId, articleCfg.targets, dryRun)
+  } else if (pipeline === 'picklePriestInterview') {
+    await pipelinePicklePriestInterview(client, docId, articleCfg.targets, dryRun)
+  } else if (pipeline === 'fiveFamousFilms') {
+    await pipelineFiveFamousFilms(client, docId, articleCfg.targets, dryRun)
+  } else if (pipeline === 'pamelaAnderson') {
+    await pipelinePamelaAnderson(client, docId, articleCfg.targets, dryRun)
+  } else if (pipeline === 'athletesPickleJuice') {
+    await pipelineAthletesPickleJuice(client, docId, articleCfg.targets, dryRun)
+  } else if (pipeline === 'koolAidPickles') {
+    await pipelineKoolAidPickles(client, docId, articleCfg.targets, dryRun)
+  } else if (pipeline === 'daddyWherePickles') {
+    await pipelineDaddyWherePickles(client, docId, articleCfg.targets, dryRun)
+  } else if (pipeline === 'howHighPickleBounce') {
+    await pipelineHowHighPickleBounce(client, docId, articleCfg.targets, dryRun)
+  } else {
+    const doc = await client.fetch(`*[_id == $id][0]{ contentBlocks }`, {id: docId})
+    await runLegacyTargets(client, docId, doc?.contentBlocks || [], articleCfg.targets, dryRun)
+  }
 }
 
 function articleSlugs(entry) {
@@ -819,7 +849,7 @@ async function runLegacyTargets(client, docId, blocks, targets, dryRun) {
 }
 
 async function main() {
-  const {slug, dryRun, listSlugs} = parseArgs()
+  const {slug, docId: docIdArg, dryRun, listSlugs} = parseArgs()
 
   const client = createClient({
     projectId,
@@ -845,37 +875,48 @@ async function main() {
     return
   }
 
-  if (!slug) {
+  if (!slug && !docIdArg) {
     console.error('Usage: node scripts/import-email-images.mjs --slug=<slug> [--dry-run]')
+    console.error('       node scripts/import-email-images.mjs --doc-id=<id> --slug=<manifest-slug>')
     console.error('       node scripts/import-email-images.mjs --list-slugs')
     process.exit(1)
   }
 
   const manifest = JSON.parse(readFileSync(MANIFEST, 'utf8'))
-  const articleCfg = manifest.articles?.find((a) => articleSlugs(a).includes(slug))
+  const lookupSlug = slug || ''
+  const articleCfg = manifest.articles?.find((a) => articleSlugs(a).includes(lookupSlug))
   if (!articleCfg) {
-    console.error(`No manifest entry includes slug "${slug}" in its slugs[] (see email-image-manifest.json).`)
+    console.error(`No manifest entry includes slug "${lookupSlug}" in its slugs[] (see email-image-manifest.json).`)
     process.exit(1)
   }
 
-  const slugCandidates = articleSlugs(articleCfg)
   let doc = null
   let matchedSlug = null
-  for (const s of slugCandidates) {
-    doc = await client.fetch(`*[_type == "article" && slug.current == $s][0]{ _id, contentBlocks }`, {s})
-    if (doc?._id) {
-      matchedSlug = s
-      break
+  if (docIdArg) {
+    doc = await client.fetch(`*[_id == $id][0]{ _id, contentBlocks }`, {id: docIdArg})
+    if (!doc?._id) {
+      console.error(`No document for --doc-id=${docIdArg}`)
+      process.exit(1)
     }
-  }
-  if (!doc?._id) {
-    console.error(
-      `No Sanity article for slugs: ${slugCandidates.join(', ')}. Run --list-slugs or add the document.`,
-    )
-    process.exit(1)
-  }
-  if (matchedSlug !== slug) {
-    console.log(`Resolved slug "${slug}" -> document with slug.current "${matchedSlug}"`)
+    matchedSlug = lookupSlug
+  } else {
+    const slugCandidates = articleSlugs(articleCfg)
+    for (const s of slugCandidates) {
+      doc = await client.fetch(`*[_type == "article" && slug.current == $s][0]{ _id, contentBlocks }`, {s})
+      if (doc?._id) {
+        matchedSlug = s
+        break
+      }
+    }
+    if (!doc?._id) {
+      console.error(
+        `No Sanity article for slugs: ${slugCandidates.join(', ')}. Run --list-slugs or add the document.`,
+      )
+      process.exit(1)
+    }
+    if (matchedSlug !== slug) {
+      console.log(`Resolved slug "${slug}" -> document with slug.current "${matchedSlug}"`)
+    }
   }
 
   const blocks = doc.contentBlocks || []
@@ -892,37 +933,19 @@ async function main() {
     process.exit(1)
   }
 
-  const pipeline = articleCfg.pipeline
-  if (pipeline === 'whyDoPickles2Am') {
-    await pipelineWhyDoPickles2Am(client, doc._id, articleCfg.targets, dryRun)
-  } else if (pipeline === 'pickleAddictsFacebook') {
-    await pipelinePickleAddictsFacebook(client, doc._id, articleCfg.targets, dryRun)
-  } else if (pipeline === 'picklePriestBless') {
-    await pipelinePicklePriestBless(client, doc._id, articleCfg.targets, dryRun)
-  } else if (pipeline === 'picklePriestInterview') {
-    await pipelinePicklePriestInterview(client, doc._id, articleCfg.targets, dryRun)
-  } else if (pipeline === 'fiveFamousFilms') {
-    await pipelineFiveFamousFilms(client, doc._id, articleCfg.targets, dryRun)
-  } else if (pipeline === 'pamelaAnderson') {
-    await pipelinePamelaAnderson(client, doc._id, articleCfg.targets, dryRun)
-  } else if (pipeline === 'athletesPickleJuice') {
-    await pipelineAthletesPickleJuice(client, doc._id, articleCfg.targets, dryRun)
-  } else if (pipeline === 'koolAidPickles') {
-    await pipelineKoolAidPickles(client, doc._id, articleCfg.targets, dryRun)
-  } else if (pipeline === 'daddyWherePickles') {
-    await pipelineDaddyWherePickles(client, doc._id, articleCfg.targets, dryRun)
-  } else if (pipeline === 'howHighPickleBounce') {
-    await pipelineHowHighPickleBounce(client, doc._id, articleCfg.targets, dryRun)
-  } else {
-    await runLegacyTargets(client, doc._id, blocks, articleCfg.targets, dryRun)
-  }
+  await runPipelineForArticle(client, doc._id, articleCfg, dryRun)
 
   if (dryRun && articleCfg.targets?.length) {
     console.log('\nDry run complete. Re-run without --dry-run to upload and patch.')
   }
 }
 
-main().catch((e) => {
-  console.error(e)
-  process.exit(1)
-})
+const isMain =
+  process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href
+
+if (isMain) {
+  main().catch((e) => {
+    console.error(e)
+    process.exit(1)
+  })
+}

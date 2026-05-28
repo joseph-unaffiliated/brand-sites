@@ -1,7 +1,7 @@
 .blocks {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 2.5rem;
 }
 
 .block {
@@ -115,6 +115,7 @@
 
 .economicsChart {
   border-radius: 12px;
+  max-height: 80vh;
 }
 
 .economicsProse {
@@ -237,11 +238,20 @@
 
 .figure {
   margin: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .blockImage {
-  width: 100%;
+  width: auto;
+  max-width: 100%;
+  max-height: 80vh;
   height: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
   border-radius: 12px;
 }
 
@@ -251,6 +261,7 @@
   margin: 0.3rem 0 0;
   text-align: center;
   line-height: 1.35;
+  align-self: stretch;
 }
 
 .captionSep {
@@ -302,6 +313,9 @@
 
 .listicleImageWrap {
   margin-bottom: 0.35rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .listicleImageWrap .caption {
@@ -322,10 +336,9 @@
   white-space: pre-wrap;
 }
 
-/* Nibbles — same full-width poll card as Pickle Economics / Sexy Pic */
-.block:has(.nibblesBox) {
-  margin-top: 2.5rem;
-  margin-bottom: 2.5rem;
+/* Issue modules (Pickle Economics, Nibbles, Sexy Pic, Trivia) — spacing from .blocks gap only */
+.issueModule {
+  margin: 0;
 }
 
 .nibblesBox {
@@ -346,9 +359,22 @@
 }
 
 .pickleEconomicsBox {
-  margin-top: 1.25rem;
   display: flex;
   flex-direction: column;
+  text-align: center;
+}
+
+.pickleEconomicsBox .prose {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.pickleEconomicsBox .prose p,
+.pickleEconomicsBox .prose h2,
+.pickleEconomicsBox .prose h3,
+.pickleEconomicsBox .prose h4 {
+  text-align: center;
 }
 
 .pickleEconomicsCreditFooter {
@@ -382,8 +408,9 @@
 }
 
 .poll.pickleEconomicsBox .prose figure.proseFigure .blockImage {
-  width: 100%;
+  width: auto;
   max-width: 480px;
+  max-height: 80vh;
   height: auto;
   margin-left: auto;
   margin-right: auto;
@@ -416,6 +443,10 @@
 }
 
 @media (min-width: 769px) {
+  .blocks {
+    gap: 3rem;
+  }
+
   .poll {
     padding: 2.5rem 2.25rem;
   }
@@ -424,18 +455,9 @@
     margin-bottom: 1.75rem;
   }
 
-  .pickleEconomicsBox {
-    margin-top: 2rem;
-  }
-
   .pickleEconomicsCreditFooter {
     margin-top: 2rem;
     padding-top: 1.5rem;
-  }
-
-  .block:has(.nibblesBox) {
-    margin-top: 3rem;
-    margin-bottom: 3rem;
   }
 
   .poll:has(.photoOfWeekFigure) .eyebrow {
@@ -453,24 +475,19 @@
   }
 }
 
-/* Pickle Economics lists: mobile-first (tighter); figures/lists get extra inset on desktop only */
+/* Pickle Economics lists — centered with bullets inside the text block */
 .pickleEconomicsBox .prose ul,
 .pickleEconomicsBox .prose ol {
-  padding-left: 1.25rem;
-  margin-left: 0.25rem;
-  list-style-position: outside;
+  padding-left: 0;
+  margin-left: auto;
+  margin-right: auto;
+  list-style-position: inside;
+  text-align: center;
 }
 
 .pickleEconomicsBox .prose li {
-  padding-left: 0.35rem;
-}
-
-@media (min-width: 769px) {
-  .pickleEconomicsBox .prose ul,
-  .pickleEconomicsBox .prose ol {
-    padding-left: 1.75rem;
-    margin-left: 0.5rem;
-  }
+  padding-left: 0;
+  text-align: center;
 }
 
 .poll .photoOfWeekFigure {
@@ -547,17 +564,6 @@
   margin-top: 0.5rem;
 }
 
-/* Tall portrait photos: cap height and center in the poll card */
-.photoOfWeekFigure .blockImage {
-  width: auto;
-  max-width: 100%;
-  max-height: 600px;
-  height: auto;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
-
 .photoOfWeekFigure .caption {
   margin-top: 0.35rem;
   margin-bottom: 1.15rem;
@@ -584,7 +590,7 @@
 }
 
 .photoOfWeekFallback {
-  margin-top: 2rem;
+  margin-top: 0;
 }
 
 /* Poll / trivia card — roomier vertical rhythm */

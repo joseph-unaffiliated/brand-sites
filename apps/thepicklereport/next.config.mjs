@@ -5,12 +5,13 @@ const nextConfig = {
     NEXT_PUBLIC_SHARED_ADS_BRAND:
       process.env.NEXT_PUBLIC_SHARED_ADS_BRAND || "thepicklereport",
     NEXT_PUBLIC_SHARED_ADS_URL_RAIL:
-      process.env.NEXT_PUBLIC_SHARED_ADS_URL_RAIL || "https://thepicklereport.com",
+      process.env.NEXT_PUBLIC_SHARED_ADS_URL_RAIL || "https://www.the90sparent.com",
     NEXT_PUBLIC_SHARED_ADS_URL_IN_ARTICLE:
       process.env.NEXT_PUBLIC_SHARED_ADS_URL_IN_ARTICLE ||
-      "https://thepicklereport.com/thepicklepriest",
+      "https://www.the90sparent.com/article/screenanxiety",
     NEXT_PUBLIC_SHARED_ADS_URL_STICKY:
-      process.env.NEXT_PUBLIC_SHARED_ADS_URL_STICKY || "https://thepicklereport.com/picklewar",
+      process.env.NEXT_PUBLIC_SHARED_ADS_URL_STICKY ||
+      "https://www.the90sparent.com/article/birthdayparties",
   },
   transpilePackages: [
     "@publication-websites/shared-ads",

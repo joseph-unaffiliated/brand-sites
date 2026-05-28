@@ -1,0 +1,68 @@
+{
+  "projectId": "3owmesrj",
+  "dataset": "production",
+  "pulledAt": "2026-05-28",
+  "summary": {
+    "publishedCount": 3,
+    "draftCount": 20,
+    "totalInSanity": 23,
+    "notInSanity": "None — all manifest issues 1–23 have a document (issue 4 is published, not draft)."
+  },
+  "published": [
+    {
+      "_id": "article.daddy-where-do-pickles-come-from",
+      "slug": "daddywheredopicklescomesfrom",
+      "manifestIssue": 4,
+      "title": "Daddy, Where Do Pickles Come From?",
+      "subtitle": "A brief history of the snack that gave America its name.",
+      "publishedDate": "2026-02-18T12:00:00.000Z",
+      "authorName": "Rachel Manson",
+      "hasContentBlocks": true
+    },
+    {
+      "_id": "b090fff7-f730-47e7-8dfb-258dccc74006",
+      "slug": "biggestplayers",
+      "manifestIssue": 19,
+      "title": "The Biggest Players in the Pickle Market",
+      "subtitle": "These pickle moguls are defining the brine of the market.",
+      "publishedDate": "2026-06-03T00:00:00.000Z",
+      "authorName": "Rachel Manson",
+      "hasContentBlocks": true,
+      "url": "https://thepicklereport.com/article/biggestplayers"
+    },
+    {
+      "_id": "f8290904-a245-4701-99bb-8e99a89f7a47",
+      "slug": "areligiousloveofpickles",
+      "manifestIssue": 20,
+      "title": "Pickles in Religion: A History",
+      "subtitle": "In the name of the barrel and the brine, amen.",
+      "publishedDate": "2026-06-10T00:00:00.000Z",
+      "authorName": "Rachel Manson",
+      "hasContentBlocks": true,
+      "url": "https://thepicklereport.com/article/areligiousloveofpickles"
+    }
+  ],
+  "drafts": [
+    { "_id": "drafts.article.how-high-should-your-pickle-bounce", "slug": "yourpicklebounce", "manifestIssue": 1, "title": "How High Should Your Pickle Bounce?", "publishedDate": "2026-01-28T12:00:00.000Z", "hasContentBlocks": true },
+    { "_id": "drafts.article.this-priest-will-bless-your-pickle-let-us-pray", "slug": "blessyourpickle", "manifestIssue": 2, "title": "This Priest Will Bless Your Pickle. Let Us Pray.", "publishedDate": "2026-02-04T12:00:00.000Z", "hasContentBlocks": true },
+    { "_id": "drafts.article.hot-takes-from-the-pickle-addicts-anonymous-facebook-group", "slug": "pickleaddictsanonymous", "manifestIssue": 3, "title": "Hot Takes from the Pickle Addicts Anonymous Facebook Group", "publishedDate": "2026-02-11T12:00:00.000Z", "hasContentBlocks": true },
+    { "_id": "drafts.article.kool-aid-pickles-and-their-place-in-southern-food-history", "slug": "koolaidpickles", "manifestIssue": 5, "title": "Kool-Aid Pickles And Their Place in Southern Food History.", "publishedDate": "2026-02-25T12:00:00.000Z", "hasContentBlocks": true },
+    { "_id": "drafts.article.exclusive-interview-with-his-holiness-the-pickle-priest", "slug": "picklepriestinterview", "manifestIssue": 6, "title": "Exclusive Interview With His Holiness The Pickle Priest", "publishedDate": "2026-03-04T12:00:00.000Z", "hasContentBlocks": true },
+    { "_id": "drafts.article.why-are-athletes-drinking-pickle-juice", "slug": "whyareathletesdrinkingpicklejuice", "manifestIssue": 7, "title": "Why Are Athletes Drinking Pickle Juice?", "publishedDate": "2026-03-11T12:00:00.000Z", "hasContentBlocks": true },
+    { "_id": "drafts.article.pamela-andersons-38-pickles-sent-me-into-an-existential-doom-spiral", "slug": "pamelaandersonspickles", "manifestIssue": 8, "title": "Pamela Anderson's $38 Pickles Sent Me Into an Existential Doom Spiral.", "publishedDate": "2026-03-18T12:00:00.000Z", "hasContentBlocks": true },
+    { "_id": "drafts.article.5-famous-pickles-in-film-and-television", "slug": "famouspicklesinfilmandtv", "manifestIssue": 9, "title": "5 Famous Pickles in Film and Television", "publishedDate": "2026-03-25T12:00:00.000Z", "hasContentBlocks": true },
+    { "_id": "drafts.article.why-do-pickles-taste-better-at-2-am", "slug": "picklestastebetterat2am", "manifestIssue": 10, "title": "Why Do Pickles Taste Better at 2 AM?", "publishedDate": "2026-04-01T12:00:00.000Z", "hasContentBlocks": true },
+    { "_id": "drafts.article.thegreatpicklewaveof2025", "slug": "thegreatpicklewaveof2025", "manifestIssue": 11, "title": "The Great Pickle Wave of 2025", "publishedDate": "2026-04-08T12:00:00.000Z", "hasContentBlocks": true },
+    { "_id": "drafts.article.nycpicklewar", "slug": "nycpicklewar", "manifestIssue": 12, "title": "New York City's Decades-Long Pickle War", "publishedDate": "2026-04-15T12:00:00.000Z", "hasContentBlocks": true },
+    { "_id": "drafts.article.ihatesweetpickles", "slug": "ihatesweetpickles", "manifestIssue": 13, "title": "I Hate Sweet Pickles and So Does the Internet. Are We the Problem?", "publishedDate": "2026-04-22T12:00:00.000Z", "hasContentBlocks": true },
+    { "_id": "drafts.article.picklerelatedcrimes", "slug": "picklerelatedcrimes", "manifestIssue": 14, "title": "5 Pickle-Related Crimes that Make You Go \"...what\"?", "publishedDate": "2026-04-29T12:00:00.000Z", "hasContentBlocks": true },
+    { "_id": "drafts.article.cheapvsexpensivepickles", "slug": "cheapvsexpensivepickles", "manifestIssue": 15, "title": "The Pickled Price: Is There a Difference Between Cheap vs. Expensive Pickles?", "publishedDate": "2026-05-06T12:00:00.000Z", "hasContentBlocks": true },
+    { "_id": "drafts.article.fermentedfeelings", "slug": "fermentedfeelings", "manifestIssue": 16, "title": "Fermented Feelings: Can Pickles Treat Your Social Anxiety?", "publishedDate": "2026-05-13T12:00:00.000Z", "hasContentBlocks": true },
+    { "_id": "drafts.article.picklesinwar", "slug": "picklesinwar", "manifestIssue": 17, "title": "The Role of Pickles in War", "publishedDate": "2026-05-20T12:00:00.000Z", "hasContentBlocks": true },
+    { "_id": "drafts.article.picklecorefashion", "slug": "picklecorefashion", "manifestIssue": 18, "title": "The Unexpected Rise of Pickle Core Fashion", "publishedDate": "2026-05-27T12:00:00.000Z", "hasContentBlocks": true },
+    { "_id": "drafts.article.saltyunderdogs", "slug": "saltyunderdogs", "manifestIssue": 21, "title": "The Salty Underdogs Making a Splash in the Pickle Industry", "publishedDate": "2026-06-17T12:00:00.000Z", "hasContentBlocks": true, "notes": "Prose only from docx — add nibbles, images, trivia in Studio (no matching email HTML)." },
+    { "_id": "drafts.article.hotgirlpickles", "slug": "hotgirlpickles", "manifestIssue": 22, "title": "The Story of Hot Girl Pickles", "publishedDate": "2026-06-24T12:00:00.000Z", "hasContentBlocks": true },
+    { "_id": "drafts.article.pickleinfluencers", "slug": "pickleinfluencers", "manifestIssue": 23, "title": "Our Favorite Pickle Influencers", "publishedDate": "2026-07-01T12:00:00.000Z", "hasContentBlocks": true, "notes": "Prose only from docx — add nibbles, images, trivia in Studio (no matching email HTML)." }
+  ],
+  "missingFromSanity": []
+}

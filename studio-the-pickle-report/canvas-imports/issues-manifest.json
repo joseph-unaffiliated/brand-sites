@@ -1,0 +1,168 @@
+{
+  "csvPath": "source/Issues-Raw.csv",
+  "sourceDir": "source",
+  "outputDir": "output",
+  "issues": [
+    {
+      "issue": 1,
+      "slug": "yourpicklebounce",
+      "releaseDate": "January 28, 2026",
+      "fullName": "How High Should Your Pickle Bounce?",
+      "sourceFile": "TPR - Issue 1 - _Does Your Pickle Bounce__.docx"
+    },
+    {
+      "issue": 2,
+      "slug": "blessyourpickle",
+      "releaseDate": "February 4, 2026",
+      "fullName": "This Priest Will Bless Your Pickle. Let Us Pray.",
+      "sourceFile": "TPR - Issue 2 - Pickle Priest Profile.docx"
+    },
+    {
+      "issue": 3,
+      "slug": "pickleaddictsanonymous",
+      "releaseDate": "February 11, 2026",
+      "fullName": "Hot Takes from the Pickle Addicts Anonymous Facebook Group",
+      "sourceFile": "TPR - Issue 3 - Hot Takes from the Pickle Addicts.docx"
+    },
+    {
+      "issue": 4,
+      "slug": "daddywheredopicklescomesfrom",
+      "releaseDate": "February 18, 2026",
+      "fullName": "Daddy, Where Do Pickles Come From",
+      "sourceFile": "TPR - Issue 4 - Daddy, Where Do Pickles Come From.docx"
+    },
+    {
+      "issue": 5,
+      "slug": "koolaidpickles",
+      "releaseDate": "February 25, 2026",
+      "fullName": "Kool-Aid Pickles And Their Place in Southern Food History.",
+      "sourceFile": "TPR - Issue 5 - Koolickles.docx"
+    },
+    {
+      "issue": 6,
+      "slug": "picklepriestinterview",
+      "releaseDate": "March 4, 2026",
+      "fullName": "Exclusive Interview With His Holiness The Pickle Priest",
+      "sourceFile": "TPR - Issue 6 - Pickle Priest Interview.docx"
+    },
+    {
+      "issue": 7,
+      "slug": "whyareathletesdrinkingpicklejuice",
+      "releaseDate": "March 11, 2026",
+      "fullName": "Why Are Athletes Drinking Pickle Juice?",
+      "sourceFile": "TPR - Issue 7 - Athletes and Pickle Juice.docx"
+    },
+    {
+      "issue": 8,
+      "slug": "pamelaandersonspickles",
+      "releaseDate": "March 18, 2026",
+      "fullName": "Pamela Anderson's $38 Pickles Sent Me Into an Existential Doom Spiral.",
+      "sourceFile": "TPR - Issue 8 - Pamela Anderson's Pickles.docx"
+    },
+    {
+      "issue": 9,
+      "slug": "famouspicklesinfilmandtv",
+      "releaseDate": "March 25, 2026",
+      "fullName": "5 Famous Pickles in Film and Television",
+      "sourceFile": "TPR - 5 Famous Pickles in Film and TV.docx"
+    },
+    {
+      "issue": 10,
+      "slug": "picklestastebetterat2am",
+      "releaseDate": "April 1, 2026",
+      "fullName": "Why Do Pickles Taste Better at 2 AM?",
+      "sourceFile": "TPR - Why do pickles taste better at 2am_.docx"
+    },
+    {
+      "issue": 11,
+      "slug": "thegreatpicklewaveof2025",
+      "releaseDate": "April 8, 2026",
+      "fullName": "The Great Pickle Wave of 2025",
+      "sourceFile": "TPR - The Great Pickle Trend of 2025.docx"
+    },
+    {
+      "issue": 12,
+      "slug": "nycpicklewar",
+      "releaseDate": "April 15, 2026",
+      "fullName": "New York City's Decades-Long Pickle War",
+      "sourceFile": "TPR - Lower East Side Pickle War.docx"
+    },
+    {
+      "issue": 13,
+      "slug": "ihatesweetpickles",
+      "releaseDate": "April 22, 2026",
+      "fullName": "I Hate Sweet Pickles and So Does the Internet. Are We the Problem?",
+      "sourceFile": "TPR - I Hate Sweet Pickles.docx"
+    },
+    {
+      "issue": 14,
+      "slug": "picklerelatedcrimes",
+      "releaseDate": "April 29, 2026",
+      "fullName": "5 Pickle-Related Crimes that Make You Go \"...what\"?",
+      "sourceFile": "TPR - 5 Pickle Related Crimes- Edited by NB.docx"
+    },
+    {
+      "issue": 15,
+      "slug": "cheapvsexpensivepickles",
+      "releaseDate": "May 6, 2026",
+      "fullName": "The Pickled Price: Is There a Difference Between Cheap vs. Expensive Pickles?",
+      "sourceFile": "TPR - Cheap V.S Expensive Pickles- Edited by NB.docx"
+    },
+    {
+      "issue": 16,
+      "slug": "fermentedfeelings",
+      "releaseDate": "May 13, 2026",
+      "fullName": "Fermented Feelings: Can Pickles Treat Your Social Anxiety?",
+      "sourceFile": "TPR - Fermented Feelings_ Can Pickles Treat Your Social Anxiety_.docx"
+    },
+    {
+      "issue": 17,
+      "slug": "picklesinwar",
+      "releaseDate": "May 20, 2026",
+      "fullName": "The Role of Pickles in War",
+      "sourceFile": "TPR - The Role of Pickles in War.docx"
+    },
+    {
+      "issue": 18,
+      "slug": "picklecorefashion",
+      "releaseDate": "May 27, 2026",
+      "fullName": "The Unexpected Rise of Pickle Core Fashion",
+      "sourceFile": "TPR_ The Unexpected Rise of Pickle Core Fashion.docx"
+    },
+    {
+      "issue": 19,
+      "slug": "biggestplayers",
+      "releaseDate": "June 3, 2026",
+      "fullName": "The Biggest Players in the Pickle Market",
+      "copyTemplate": true
+    },
+    {
+      "issue": 20,
+      "slug": "areligiousloveofpickles",
+      "releaseDate": "June 10, 2026",
+      "fullName": "A Religious Love of Pickles",
+      "sourceFile": "The Pickle Report - Issue 20.docx"
+    },
+    {
+      "issue": 21,
+      "slug": "saltyunderdogs",
+      "releaseDate": "June 17, 2026",
+      "fullName": "The Salty Underdogs Making a Splash in the Pickle Industry",
+      "sourceFile": "The Pickle Report - Issue 21.docx"
+    },
+    {
+      "issue": 22,
+      "slug": "hotgirlpickles",
+      "releaseDate": "June 24, 2026",
+      "fullName": "The Story of Hot Girl Pickles (viral pickle company that exploded with No Marketing)",
+      "sourceFile": "TPR_ Story of Hot Girls Pickles.docx"
+    },
+    {
+      "issue": 23,
+      "slug": "pickleinfluencers",
+      "releaseDate": "July 1, 2026",
+      "fullName": "Top 7 Pickle Influencers",
+      "sourceFile": "The Pickle Report - Issue 23.docx"
+    }
+  ]
+}

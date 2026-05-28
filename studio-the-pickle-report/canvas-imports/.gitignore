@@ -1,3 +1,5 @@
-# Large issue exports stay local; use README merge commands to generate output.
+# Large email HTML exports stay local; use README merge commands to generate output.
+source/
+output/
 source/*.docx
 output/*.docx

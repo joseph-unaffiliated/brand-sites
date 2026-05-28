@@ -366,7 +366,7 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset, artic
             const items = block.items || [];
             if (items.length === 0) return null;
             return (
-              <section key={key} className={styles.block}>
+              <section key={key} className={`${styles.block} ${styles.issueModule}`}>
                 <aside className={`${styles.poll} ${styles.nibblesBox}`} aria-label={eyebrow}>
                   <p className={styles.eyebrow}>{eyebrow}</p>
                   {nibblesTitle ? (
@@ -409,7 +409,7 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset, artic
               !isPickleEconomicsLabelOnlyHeading(block.heading) &&
               !hidePartHeading(block.heading);
             return (
-              <section key={key} className={styles.block}>
+              <section key={key} className={`${styles.block} ${styles.issueModule}`}>
                 <aside
                   className={`${styles.poll} ${styles.pickleEconomicsBox}`}
                   aria-label="Pickle Economics"
@@ -447,8 +447,9 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset, artic
               (isTriviaBlock(block) ? "Today's Pickle Trivia" : "Poll");
             const lastWeek = block.lastWeek;
             return (
-              <aside key={key} className={styles.poll} aria-label={headingText}>
-                <p className={styles.eyebrow}>{headingText}</p>
+              <section key={key} className={`${styles.block} ${styles.issueModule}`}>
+                <aside className={styles.poll} aria-label={headingText}>
+                  <p className={styles.eyebrow}>{headingText}</p>
                 {block.question ? (
                   <h2 className={styles.photoOfWeekTitle}>{block.question}</h2>
                 ) : null}
@@ -514,7 +515,8 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset, artic
                     </ul>
                   </div>
                 ) : null}
-              </aside>
+                </aside>
+              </section>
             );
           }
           case "photoOfWeekBlock": {
@@ -522,9 +524,10 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset, artic
             const { w, h } = block.image ? dims(block.image) : { w: 900, h: 600 };
             const headingText = block.heading?.trim() || DEFAULT_PHOTO_OF_WEEK_HEADING;
             return (
-              <aside key={key} className={styles.poll} aria-label={headingText}>
-                <p className={styles.eyebrow}>{headingText}</p>
-                <figure className={`${styles.figure} ${styles.photoOfWeekFigure}`}>
+              <section key={key} className={`${styles.block} ${styles.issueModule}`}>
+                <aside className={styles.poll} aria-label={headingText}>
+                  <p className={styles.eyebrow}>{headingText}</p>
+                  <figure className={`${styles.figure} ${styles.photoOfWeekFigure}`}>
                   {src ? (
                     <Image
                       src={src}
@@ -547,7 +550,8 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset, artic
                     </figcaption>
                   )}
                 </figure>
-              </aside>
+                </aside>
+              </section>
             );
           }
           default:
@@ -555,13 +559,15 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset, artic
         }
       })}
       {!hasPhotoOfWeekBlock ? (
-        <aside
-          className={`${styles.poll} ${styles.photoOfWeekFallback}`}
-          aria-label={DEFAULT_PHOTO_OF_WEEK_HEADING}
-        >
-          <p className={styles.eyebrow}>{DEFAULT_PHOTO_OF_WEEK_HEADING}</p>
-          <div className={styles.photoOfWeekPlaceholder} aria-hidden />
-        </aside>
+        <section className={`${styles.block} ${styles.issueModule}`}>
+          <aside
+            className={`${styles.poll} ${styles.photoOfWeekFallback}`}
+            aria-label={DEFAULT_PHOTO_OF_WEEK_HEADING}
+          >
+            <p className={styles.eyebrow}>{DEFAULT_PHOTO_OF_WEEK_HEADING}</p>
+            <div className={styles.photoOfWeekPlaceholder} aria-hidden />
+          </aside>
+        </section>
       ) : null}
     </div>
   );

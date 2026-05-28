@@ -15,7 +15,22 @@ Markdown conversion **drops inline hyperlinks** and breaks spacing. Always work 
 
 ## Convert issues to output `.docx`
 
-**Preferred:** merge each old issue into the Google Doc template (keeps labels, Drive link shape, economics layout, and hyperlinks):
+**Batch (all issues in manifest):**
+
+```bash
+python3 scripts/merge-pickle-issue-into-template-docx.py \
+  --batch \
+  --template "studio-the-pickle-report/canvas-templates/The Pickle Report - Google Doc Template.docx" \
+  --manifest studio-the-pickle-report/canvas-imports/issues-manifest.json \
+  --output-dir studio-the-pickle-report/canvas-imports/output \
+  --report studio-the-pickle-report/canvas-imports/batch-report.json
+```
+
+[`issues-manifest.json`](issues-manifest.json) maps each issue number to a `source/` filename and CSV metadata (`releaseDate`, `fullName`, `slug`). Issue 19 (`biggestplayers`) is copied from the template (no merge). Add or rename source files in the manifest only.
+
+**Email HTML (Customer.io exports):** Drop `template-*.html` files (or `…/index.html` folders) in `source/`. The batch run auto-matches them to issues by headline vs `fullName` in the manifest, then merges **Nibbles**, **Sexy Pic**, **Trivia/Poll**, **Pickle Economics**, and image URLs from the email into the Canvas docx. Google Doc `.docx` sources are still used for prose when they are longer.
+
+**Single issue:**
 
 ```bash
 python3 scripts/merge-pickle-issue-into-template-docx.py \
@@ -24,7 +39,17 @@ python3 scripts/merge-pickle-issue-into-template-docx.py \
   --output "studio-the-pickle-report/canvas-imports/output/areligiousloveofpickles.docx"
 ```
 
-Rules encoded in that script (from human-edited examples) are summarized in [`GOOGLE_DOC_MAPPING.md`](../GOOGLE_DOC_MAPPING.md#canvas-docx-layout-template-merge-rules).
+### Source format tiers
+
+| Tier | Issues (approx.) | Format |
+|------|------------------|--------|
+| Modern | 20–23 | `SLUG`, `HEADLINE`, `BODY`, labeled blocks |
+| Transitional | 9–18, 22 | `Headline:` / `Dek:` / emoji section headers |
+| Legacy | 1–8 | Transitional + `SPONSOR`, `LINKS`, etc. (dropped) |
+
+Early issues may omit Nibbles, Trivia, or Pickle Economics; the merge leaves those template slots empty. Legacy-only sections are not copied to the site.
+
+Rules encoded in the merge script are summarized in [`GOOGLE_DOC_MAPPING.md`](../GOOGLE_DOC_MAPPING.md#canvas-docx-layout-template-merge-rules).
 
 **Legacy:** label-rename only (no template merge):
 
@@ -56,10 +81,24 @@ That becomes the visual reference for new issues. The `.md` in `canvas-templates
 |--------|--------|
 | `source/The Pickle Report - Issue 20.docx` | `output/areligiousloveofpickles.docx` |
 
+## Sync existing Sanity drafts (issues 1–10)
+
+When drafts already exist in Studio with long Canvas slugs, use the email + manifest payload to patch them in place (short `slug`, `publishedDate`, prose cleanup, `nibblesBlock`, `pickleVoteBlock`, images):
+
+```bash
+node studio-the-pickle-report/scripts/sync-issue-drafts.mjs --issues=1-10
+```
+
+**Create new drafts** (issues 11–18, 21–23 — skips 19–20, which are already published):
+
+```bash
+node studio-the-pickle-report/scripts/create-issue-articles.mjs
+```
+
+Requires `SANITY_API_TOKEN` in `apps/thepicklereport/.env.local`. Payload is built by `scripts/email-issue-sanity-payload.py` from `source/` email HTML + `issues-manifest.json`. Inventory snapshot: [`sanity-articles.json`](sanity-articles.json).
+
 ## Asking the agent
 
-Add `.docx` files to `source/`, then:
-
-*“Merge everything in `canvas-imports/source/` into the template and write `.docx` files to `output/`.”*
+Add `.docx` files to `source/`, update `issues-manifest.json` if filenames change, then run the **batch** command above.
 
 Do **not** ask for `.md` output if you need links preserved.

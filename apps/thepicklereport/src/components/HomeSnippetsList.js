@@ -47,7 +47,7 @@ export default function HomeSnippetsList({ stackItems }) {
         );
       })}
       <Link href="/archive" className={styles.snippetArchive}>
-        See full archive →
+        See full archive
       </Link>
     </div>
   );

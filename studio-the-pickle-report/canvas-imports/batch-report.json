@@ -1,0 +1,441 @@
+{
+  "issues": [
+    {
+      "issue": 1,
+      "slug": "yourpicklebounce",
+      "outputPath": "studio-the-pickle-report/canvas-imports/output/yourpicklebounce.docx",
+      "success": true,
+      "modulesFound": [
+        "headline",
+        "dek",
+        "prose",
+        "main_image",
+        "nibbles",
+        "sexy_pic",
+        "trivia",
+        "email_html"
+      ],
+      "modulesSkipped": [],
+      "warnings": [],
+      "emailHtml": "studio-the-pickle-report/canvas-imports/source/TPR - Issue 1 [Copy 1769459857] 2/index.html"
+    },
+    {
+      "issue": 2,
+      "slug": "blessyourpickle",
+      "outputPath": "studio-the-pickle-report/canvas-imports/output/blessyourpickle.docx",
+      "success": true,
+      "modulesFound": [
+        "headline",
+        "dek",
+        "prose",
+        "main_image",
+        "nibbles",
+        "sexy_pic",
+        "trivia",
+        "email_html"
+      ],
+      "modulesSkipped": [],
+      "warnings": [],
+      "emailHtml": "studio-the-pickle-report/canvas-imports/source/template-89.html"
+    },
+    {
+      "issue": 3,
+      "slug": "pickleaddictsanonymous",
+      "outputPath": "studio-the-pickle-report/canvas-imports/output/pickleaddictsanonymous.docx",
+      "success": true,
+      "modulesFound": [
+        "headline",
+        "dek",
+        "prose",
+        "main_image",
+        "nibbles",
+        "sexy_pic",
+        "trivia",
+        "email_html"
+      ],
+      "modulesSkipped": [],
+      "warnings": [],
+      "emailHtml": "studio-the-pickle-report/canvas-imports/source/template-95.html"
+    },
+    {
+      "issue": 4,
+      "slug": "daddywheredopicklescomesfrom",
+      "outputPath": "studio-the-pickle-report/canvas-imports/output/daddywheredopicklescomesfrom.docx",
+      "success": true,
+      "modulesFound": [
+        "headline",
+        "dek",
+        "prose",
+        "main_image",
+        "nibbles",
+        "sexy_pic",
+        "trivia",
+        "email_html"
+      ],
+      "modulesSkipped": [],
+      "warnings": [],
+      "emailHtml": "studio-the-pickle-report/canvas-imports/source/template-103.html"
+    },
+    {
+      "issue": 5,
+      "slug": "koolaidpickles",
+      "outputPath": "studio-the-pickle-report/canvas-imports/output/koolaidpickles.docx",
+      "success": true,
+      "modulesFound": [
+        "headline",
+        "dek",
+        "prose",
+        "main_image",
+        "nibbles",
+        "sexy_pic",
+        "trivia",
+        "email_html"
+      ],
+      "modulesSkipped": [],
+      "warnings": [],
+      "emailHtml": "studio-the-pickle-report/canvas-imports/source/template-104.html"
+    },
+    {
+      "issue": 6,
+      "slug": "picklepriestinterview",
+      "outputPath": "studio-the-pickle-report/canvas-imports/output/picklepriestinterview.docx",
+      "success": true,
+      "modulesFound": [
+        "headline",
+        "prose",
+        "main_image",
+        "nibbles",
+        "sexy_pic",
+        "trivia",
+        "email_html"
+      ],
+      "modulesSkipped": [],
+      "warnings": [],
+      "emailHtml": "studio-the-pickle-report/canvas-imports/source/template-116.html"
+    },
+    {
+      "issue": 7,
+      "slug": "whyareathletesdrinkingpicklejuice",
+      "outputPath": "studio-the-pickle-report/canvas-imports/output/whyareathletesdrinkingpicklejuice.docx",
+      "success": true,
+      "modulesFound": [
+        "headline",
+        "dek",
+        "prose",
+        "main_image",
+        "pickle_economics",
+        "nibbles",
+        "sexy_pic",
+        "trivia",
+        "email_html"
+      ],
+      "modulesSkipped": [],
+      "warnings": [],
+      "emailHtml": "studio-the-pickle-report/canvas-imports/source/template-151.html"
+    },
+    {
+      "issue": 8,
+      "slug": "pamelaandersonspickles",
+      "outputPath": "studio-the-pickle-report/canvas-imports/output/pamelaandersonspickles.docx",
+      "success": true,
+      "modulesFound": [
+        "headline",
+        "dek",
+        "prose",
+        "main_image",
+        "pickle_economics",
+        "nibbles",
+        "sexy_pic",
+        "trivia",
+        "email_html"
+      ],
+      "modulesSkipped": [],
+      "warnings": [],
+      "emailHtml": "studio-the-pickle-report/canvas-imports/source/template-155.html"
+    },
+    {
+      "issue": 9,
+      "slug": "famouspicklesinfilmandtv",
+      "outputPath": "studio-the-pickle-report/canvas-imports/output/famouspicklesinfilmandtv.docx",
+      "success": true,
+      "modulesFound": [
+        "headline",
+        "dek",
+        "prose",
+        "main_image",
+        "pickle_economics",
+        "nibbles",
+        "sexy_pic",
+        "trivia",
+        "email_html"
+      ],
+      "modulesSkipped": [],
+      "warnings": [],
+      "emailHtml": "studio-the-pickle-report/canvas-imports/source/template-170.html"
+    },
+    {
+      "issue": 10,
+      "slug": "picklestastebetterat2am",
+      "outputPath": "studio-the-pickle-report/canvas-imports/output/picklestastebetterat2am.docx",
+      "success": true,
+      "modulesFound": [
+        "headline",
+        "dek",
+        "prose",
+        "main_image",
+        "pickle_economics",
+        "nibbles",
+        "sexy_pic",
+        "trivia",
+        "email_html"
+      ],
+      "modulesSkipped": [],
+      "warnings": [],
+      "emailHtml": "studio-the-pickle-report/canvas-imports/source/template-171.html"
+    },
+    {
+      "issue": 11,
+      "slug": "thegreatpicklewaveof2025",
+      "outputPath": "studio-the-pickle-report/canvas-imports/output/thegreatpicklewaveof2025.docx",
+      "success": true,
+      "modulesFound": [
+        "headline",
+        "dek",
+        "prose",
+        "main_image",
+        "pickle_economics",
+        "nibbles",
+        "sexy_pic",
+        "trivia",
+        "email_html"
+      ],
+      "modulesSkipped": [],
+      "warnings": [],
+      "emailHtml": "studio-the-pickle-report/canvas-imports/source/template-188.html"
+    },
+    {
+      "issue": 12,
+      "slug": "nycpicklewar",
+      "outputPath": "studio-the-pickle-report/canvas-imports/output/nycpicklewar.docx",
+      "success": true,
+      "modulesFound": [
+        "headline",
+        "dek",
+        "prose",
+        "main_image",
+        "pickle_economics",
+        "nibbles",
+        "sexy_pic",
+        "trivia",
+        "email_html"
+      ],
+      "modulesSkipped": [],
+      "warnings": [],
+      "emailHtml": "studio-the-pickle-report/canvas-imports/source/template-190.html"
+    },
+    {
+      "issue": 13,
+      "slug": "ihatesweetpickles",
+      "outputPath": "studio-the-pickle-report/canvas-imports/output/ihatesweetpickles.docx",
+      "success": true,
+      "modulesFound": [
+        "headline",
+        "dek",
+        "prose",
+        "main_image",
+        "pickle_economics",
+        "nibbles",
+        "sexy_pic",
+        "trivia",
+        "email_html"
+      ],
+      "modulesSkipped": [],
+      "warnings": [],
+      "emailHtml": "studio-the-pickle-report/canvas-imports/source/template-191.html"
+    },
+    {
+      "issue": 14,
+      "slug": "picklerelatedcrimes",
+      "outputPath": "studio-the-pickle-report/canvas-imports/output/picklerelatedcrimes.docx",
+      "success": true,
+      "modulesFound": [
+        "headline",
+        "dek",
+        "prose",
+        "main_image",
+        "pickle_economics",
+        "nibbles",
+        "sexy_pic",
+        "trivia",
+        "email_html"
+      ],
+      "modulesSkipped": [],
+      "warnings": [],
+      "emailHtml": "studio-the-pickle-report/canvas-imports/source/template-192.html"
+    },
+    {
+      "issue": 15,
+      "slug": "cheapvsexpensivepickles",
+      "outputPath": "studio-the-pickle-report/canvas-imports/output/cheapvsexpensivepickles.docx",
+      "success": true,
+      "modulesFound": [
+        "headline",
+        "dek",
+        "prose",
+        "main_image",
+        "pickle_economics",
+        "nibbles",
+        "sexy_pic",
+        "trivia",
+        "email_html"
+      ],
+      "modulesSkipped": [],
+      "warnings": [],
+      "emailHtml": "studio-the-pickle-report/canvas-imports/source/template-202.html"
+    },
+    {
+      "issue": 16,
+      "slug": "fermentedfeelings",
+      "outputPath": "studio-the-pickle-report/canvas-imports/output/fermentedfeelings.docx",
+      "success": true,
+      "modulesFound": [
+        "headline",
+        "dek",
+        "prose",
+        "main_image",
+        "pickle_economics",
+        "nibbles",
+        "sexy_pic",
+        "trivia",
+        "email_html"
+      ],
+      "modulesSkipped": [],
+      "warnings": [],
+      "emailHtml": "studio-the-pickle-report/canvas-imports/source/template-203.html"
+    },
+    {
+      "issue": 17,
+      "slug": "picklesinwar",
+      "outputPath": "studio-the-pickle-report/canvas-imports/output/picklesinwar.docx",
+      "success": true,
+      "modulesFound": [
+        "headline",
+        "dek",
+        "prose",
+        "main_image",
+        "pickle_economics",
+        "nibbles",
+        "sexy_pic",
+        "trivia",
+        "email_html"
+      ],
+      "modulesSkipped": [],
+      "warnings": [],
+      "emailHtml": "studio-the-pickle-report/canvas-imports/source/template-204.html"
+    },
+    {
+      "issue": 18,
+      "slug": "picklecorefashion",
+      "outputPath": "studio-the-pickle-report/canvas-imports/output/picklecorefashion.docx",
+      "success": true,
+      "modulesFound": [
+        "headline",
+        "dek",
+        "prose",
+        "main_image",
+        "pickle_economics",
+        "nibbles",
+        "sexy_pic",
+        "trivia",
+        "email_html"
+      ],
+      "modulesSkipped": [],
+      "warnings": [],
+      "emailHtml": "studio-the-pickle-report/canvas-imports/source/template-211.html"
+    },
+    {
+      "issue": 19,
+      "slug": "biggestplayers",
+      "outputPath": "studio-the-pickle-report/canvas-imports/output/biggestplayers.docx",
+      "success": true,
+      "tier": "template_copy",
+      "modulesFound": [
+        "template"
+      ],
+      "modulesSkipped": [],
+      "warnings": []
+    },
+    {
+      "issue": 20,
+      "slug": "areligiousloveofpickles",
+      "outputPath": "studio-the-pickle-report/canvas-imports/output/areligiousloveofpickles.docx",
+      "success": true,
+      "modulesFound": [
+        "headline",
+        "dek",
+        "prose",
+        "main_image",
+        "pickle_economics",
+        "nibbles",
+        "sexy_pic",
+        "trivia",
+        "email_html"
+      ],
+      "modulesSkipped": [],
+      "warnings": [],
+      "emailHtml": "studio-the-pickle-report/canvas-imports/source/template-218.html"
+    },
+    {
+      "issue": 21,
+      "slug": "saltyunderdogs",
+      "outputPath": "studio-the-pickle-report/canvas-imports/output/saltyunderdogs.docx",
+      "success": true,
+      "modulesFound": [
+        "headline",
+        "prose",
+        "main_image",
+        "pickle_economics",
+        "nibbles",
+        "trivia"
+      ],
+      "modulesSkipped": [],
+      "warnings": []
+    },
+    {
+      "issue": 22,
+      "slug": "hotgirlpickles",
+      "outputPath": "studio-the-pickle-report/canvas-imports/output/hotgirlpickles.docx",
+      "success": true,
+      "modulesFound": [
+        "headline",
+        "dek",
+        "prose",
+        "main_image",
+        "pickle_economics",
+        "nibbles",
+        "sexy_pic",
+        "trivia",
+        "email_html"
+      ],
+      "modulesSkipped": [],
+      "warnings": [],
+      "emailHtml": "studio-the-pickle-report/canvas-imports/source/template-219.html"
+    },
+    {
+      "issue": 23,
+      "slug": "pickleinfluencers",
+      "outputPath": "studio-the-pickle-report/canvas-imports/output/pickleinfluencers.docx",
+      "success": true,
+      "modulesFound": [
+        "headline",
+        "prose",
+        "nibbles",
+        "trivia"
+      ],
+      "modulesSkipped": [],
+      "warnings": [
+        "no_main_image"
+      ]
+    }
+  ]
+}

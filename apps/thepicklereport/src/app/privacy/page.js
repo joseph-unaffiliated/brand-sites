@@ -4,6 +4,7 @@ import styles from "../basic-page.module.css";
 export const metadata = {
   title: "Privacy Policy | The Pickle Report",
   description: "Privacy Policy for The Pickle Report and Unaffiliated Inc. services.",
+  alternates: { canonical: "/privacy" },
 };
 
 export default function PrivacyPage() {

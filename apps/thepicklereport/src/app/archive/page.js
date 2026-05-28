@@ -32,10 +32,6 @@ export default async function ArchivePage() {
           <div>
             <p className={styles.kicker}>Archive</p>
             <h1>Past issues</h1>
-            <p>
-              Browse the full library of The Pickle Report issues. Each entry
-              includes a summary, themes, and links.
-            </p>
           </div>
         </header>
 
@@ -68,7 +64,7 @@ export default async function ArchivePage() {
                       article.summary ||
                       article.subtitle}
                   </p>
-                  <span className={styles.issueCta}>Read issue →</span>
+                  <span className={styles.issueCta}>Read issue</span>
                 </div>
               </Link>
             </article>
@@ -83,7 +79,7 @@ export default async function ArchivePage() {
                     New issues drop weekly. Subscribe to get them in your inbox.
                   </p>
                   <a className={styles.issueCta} href="/#subscribe">
-                    Subscribe →
+                    Subscribe
                   </a>
                 </div>
               </div>

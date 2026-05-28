@@ -8,6 +8,8 @@ import BrandLogoMark from "@/components/BrandLogoMark";
 import BrandLogoMarkLarge from "@/components/BrandLogoMarkLarge";
 import BrandWordmark from "@/components/BrandWordmark";
 import { ContactCopyLink } from "@publication-websites/web-shell/contact-copy";
+import SubmissionsCopyLink from "@/components/SubmissionsCopyLink";
+import AdvertiseCopyLink from "@/components/AdvertiseCopyLink";
 import { contactEmail, siteDisplayName } from "@/config/site";
 
 export default function Header() {
@@ -76,7 +78,12 @@ export default function Header() {
         </button>
         <nav className="site-nav site-nav-left header-nav-desktop" aria-label="Main">
           <Link href="/archive">Archive</Link>
-          {!isSubscribed && <Link href="/about">About</Link>}
+          {!isSubscribed && (
+            <>
+              <Link href="/about">About</Link>
+              <SubmissionsCopyLink />
+            </>
+          )}
         </nav>
         <div className="brand">
           <Link
@@ -122,6 +129,8 @@ export default function Header() {
             <ContactCopyLink email={contactEmail} onClick={() => setMenuOpen(false)}>
               Contact
             </ContactCopyLink>
+            <SubmissionsCopyLink onClick={() => setMenuOpen(false)} />
+            <AdvertiseCopyLink onClick={() => setMenuOpen(false)} />
             {isSubscribed ? (
               <Link href="/profile" onClick={() => setMenuOpen(false)}>
                 Profile

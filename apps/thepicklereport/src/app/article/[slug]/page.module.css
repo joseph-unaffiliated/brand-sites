@@ -25,30 +25,36 @@
 /* Below headline / rule / byline (matches The ’90s Parent) */
 .leadImageSection {
   margin: 3.5rem auto 2.5rem;
-  max-width: 640px;
+  max-width: min(840px, 100%);
+  width: 100%;
 }
 
 .leadImageFrame {
-  border-radius: 10px;
+  border-radius: 1rem;
   overflow: hidden;
   line-height: 0;
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
 
 .leadImage {
   width: 100%;
+  max-width: 100%;
   height: auto;
   display: block;
   vertical-align: middle;
 }
 
 .leadImageCredit {
-  margin: 0.5rem 0 0;
-  font-size: 11px;
-  line-height: 1.15;
-  letter-spacing: -0.02em;
+  margin: 0.65rem 0 0;
+  font-size: 0.8rem;
+  line-height: 1.35;
+  letter-spacing: 0.01em;
   font-weight: 300;
+  font-style: italic;
   color: var(--text-muted);
-  text-align: right;
+  text-align: center;
 }
 
 .issueByline {
@@ -134,6 +140,9 @@
 
 .articleHeroImage .mainimage-block {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .articleHeroImage .mainImage {
@@ -141,6 +150,7 @@
   max-width: 100%;
   height: auto;
   display: block;
+  border-radius: 1rem;
 }
 
 /* Article copy — column 1, no side padding */
@@ -260,8 +270,10 @@
 
 .mainImage {
   width: 100%;
+  max-width: 100%;
   height: auto;
   display: block;
+  border-radius: 1rem;
 }
 
 .heroPhotoCredit {

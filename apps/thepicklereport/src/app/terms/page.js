@@ -3,6 +3,7 @@ import styles from "../basic-page.module.css";
 export const metadata = {
   title: "Terms of Use | The Pickle Report",
   description: "Terms of Use for The Pickle Report and Unaffiliated Inc. services.",
+  alternates: { canonical: "/terms" },
 };
 
 export default function TermsPage() {

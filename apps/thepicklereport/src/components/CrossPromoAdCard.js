@@ -41,7 +41,7 @@ export default function CrossPromoAdCard({ format = "rectangle", className }) {
           </div>
           <h3 className="cross-promo-card-headline">{HEADLINE}</h3>
           <p className="cross-promo-card-desc">{DESCRIPTION}</p>
-          <span className="cross-promo-card-cta">{CTA} →</span>
+          <span className="cross-promo-card-cta">{CTA}</span>
         </div>
       </Link>
     </div>

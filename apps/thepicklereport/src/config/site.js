@@ -36,6 +36,8 @@ export const siteHeroTagline =
   process.env.NEXT_PUBLIC_SITE_HERO_TAGLINE ||
   "The world's leading pickle news source.";
 
+export const siteKickerLower = siteDisplayName.toLowerCase();
+
 export const contactEmail =
   process.env.NEXT_PUBLIC_CONTACT_EMAIL || "contact@thepicklereport.com";
 

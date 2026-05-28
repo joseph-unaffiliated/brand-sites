@@ -296,8 +296,12 @@ const articleSeoProjection = `seoTitle,
   tags,
   _updatedAt`;
 
+/** GROQ filter: published documents only (excludes `drafts.*` IDs and future-dated issues). */
+export const publishedArticleFilter =
+  `_type == "article" && !(_id in path("drafts.**")) && (!defined(publishedDate) || publishedDate <= now())`;
+
 /** All articles, for list/archive. */
-export const articlesQuery = `*[_type == "article"] | order(publishedDate desc, _updatedAt desc) {
+export const articlesQuery = `*[${publishedArticleFilter}] | order(publishedDate desc, _updatedAt desc) {
   _id,
   "slug": slug.current,
   title,
@@ -319,7 +323,7 @@ export const articlesQuery = `*[_type == "article"] | order(publishedDate desc, 
 }`;
 
 /** One article by slug. */
-export const articleBySlugQuery = `*[_type == "article" && slug.current == $slug][0] {
+export const articleBySlugQuery = `*[${publishedArticleFilter} && slug.current == $slug][0] {
   _id,
   "slug": slug.current,
   title,
@@ -341,7 +345,7 @@ export const articleBySlugQuery = `*[_type == "article" && slug.current == $slug
 }`;
 
 /** Slugs only, for generateStaticParams. */
-export const articleSlugsQuery = `*[_type == "article"].slug.current`;
+export const articleSlugsQuery = `*[${publishedArticleFilter}].slug.current`;
 
 /**
  * @param {{ projectId?: string | null; dataset?: string }} opts
@@ -349,7 +353,7 @@ export const articleSlugsQuery = `*[_type == "article"].slug.current`;
 export function createSanityLayer(opts) {
   const projectId = opts.projectId ?? null;
   const dataset = opts.dataset ?? "production";
-  /** Server-only. Required for documents whose _id contains `.` (sub-path / "private" IDs in Content Lake); see https://www.sanity.io/docs/ids */
+  /** Server-only. Required for documents whose _id contains `.` (sub-path IDs in Content Lake). */
   const token = process.env.SANITY_API_TOKEN;
   const useCdn = token ? false : process.env.NODE_ENV === "production";
 
@@ -359,6 +363,7 @@ export function createSanityLayer(opts) {
         dataset,
         apiVersion: "2024-01-01",
         useCdn,
+        perspective: "published",
         ...(token ? { token } : {}),
       })
     : null;
