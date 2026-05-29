@@ -176,6 +176,28 @@
   margin-bottom: 0;
 }
 
+.prose strong,
+.prose strong strong {
+  font-weight: 500;
+}
+
+.prose h4 {
+  font-family: "halyard-display", "Helvetica Neue", Arial, sans-serif;
+  font-size: 1.3rem;
+  font-weight: 300;
+  line-height: 1.45;
+  margin: 0 0 0.75rem;
+  color: var(--text-secondary);
+  text-wrap: balance;
+}
+
+.prose p:empty {
+  margin: 0 0 1.25rem;
+  padding: 0;
+  height: 0;
+  overflow: hidden;
+}
+
 .prose blockquote,
 .prose blockquote p {
   font-size: 0.8rem;
@@ -195,7 +217,9 @@
     padding-bottom: 0.65rem;
   }
 
-  .poll:has(.voteOptions) .photoOfWeekTitle {
+  .poll:has(.voteOptions) .photoOfWeekTitle,
+  .poll:has(.voteOptionsQuad) .photoOfWeekTitle {
+    line-height: 1.15;
     padding-bottom: 1.25rem;
   }
 
@@ -207,12 +231,24 @@
     font-size: 1rem;
   }
 
+  .prose h4 {
+    font-size: 1.05rem;
+  }
+
   .poll .prose {
     font-size: 1rem;
   }
 
   .poll .prose p {
     font-size: 1rem;
+  }
+
+  .nibblesTitle {
+    font-size: 1rem;
+  }
+
+  .voteOption .nibblesCta {
+    font-size: 0.875rem;
   }
 }
 
@@ -374,6 +410,8 @@
   margin-left: auto;
   margin-right: auto;
   text-align: center;
+  font-size: 0.875rem;
+  line-height: 1.7;
 }
 
 .pickleEconomicsBox .prose p,
@@ -381,6 +419,17 @@
 .pickleEconomicsBox .prose h3,
 .pickleEconomicsBox .prose h4 {
   text-align: center;
+}
+
+.pickleEconomicsBox .prose h2,
+.pickleEconomicsBox .prose h3,
+.pickleEconomicsBox .prose h4 {
+  line-height: 1.25;
+}
+
+.pickleEconomicsBox .prose p {
+  font-size: 0.875rem;
+  line-height: 1.7;
 }
 
 .pickleEconomicsCreditFooter {
@@ -407,10 +456,17 @@
   width: 100%;
   margin-left: auto;
   margin-right: auto;
+  margin-top: 0;
+  padding-top: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   box-sizing: border-box;
+}
+
+.poll.pickleEconomicsBox .prose p + figure.proseFigure {
+  margin-top: 0.65rem;
+  padding-top: 0.65rem;
 }
 
 .poll.pickleEconomicsBox .prose figure.proseFigure .blockImage {
@@ -425,6 +481,15 @@
 .poll.pickleEconomicsBox .prose figure.proseFigure .caption {
   width: 100%;
   text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.poll.pickleEconomicsBox .prose figure.proseFigure + :is(h2, h3, h4) {
+  padding-top: 1rem;
+}
+
+.poll.pickleEconomicsBox .prose figure.proseFigure + p {
+  padding-top: 1.75rem;
 }
 
 .poll .eyebrow {
@@ -461,9 +526,55 @@
     margin-bottom: 1.75rem;
   }
 
+  .nibblesBox .nibblesList {
+    margin: 1.75rem auto;
+  }
+
+  .pickleEconomicsBox .prose {
+    font-size: 1rem;
+  }
+
+  .pickleEconomicsBox .prose p {
+    font-size: 1rem;
+    line-height: 1.75;
+  }
+
+  .pickleEconomicsBox .prose h2,
+  .pickleEconomicsBox .prose h3,
+  .pickleEconomicsBox .prose h4 {
+    line-height: 1.3;
+  }
+
+  .pickleEconomicsBox .prose ul,
+  .pickleEconomicsBox .prose ol {
+    font-size: 1rem;
+    line-height: 1.75;
+  }
+
   .pickleEconomicsCreditFooter {
     margin-top: 2rem;
     padding-top: 1.5rem;
+  }
+
+  .poll.pickleEconomicsBox .prose figure.proseFigure .blockImage {
+    max-height: 50vh;
+  }
+
+  .poll.pickleEconomicsBox .prose figure.proseFigure .caption {
+    margin-bottom: 1.75rem;
+  }
+
+  .poll.pickleEconomicsBox .prose figure.proseFigure + :is(h2, h3, h4) {
+    padding-top: 1.25rem;
+  }
+
+  .poll.pickleEconomicsBox .prose figure.proseFigure + p {
+    padding-top: 2rem;
+  }
+
+  .poll.pickleEconomicsBox .prose p + figure.proseFigure {
+    margin-top: 1rem;
+    padding-top: 1rem;
   }
 
   .poll:has(.photoOfWeekFigure) .eyebrow {
@@ -489,6 +600,8 @@
   margin-right: auto;
   list-style-position: inside;
   text-align: center;
+  font-size: 0.875rem;
+  line-height: 1.7;
 }
 
 .pickleEconomicsBox .prose li {
@@ -500,9 +613,17 @@
   margin-top: 0;
   margin-bottom: 0;
   width: 100%;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
+  box-sizing: border-box;
+}
+
+.poll .photoOfWeekFigure .blockImage {
+  max-width: 480px;
 }
 
 .eyebrow {
@@ -519,6 +640,11 @@
   display: flex;
   flex-direction: column;
   gap: 1.75rem;
+}
+
+.nibblesBox .nibblesList {
+  max-width: min(320px, 100%);
+  margin: 1.25rem auto;
 }
 
 .nibblesItemLink {
@@ -539,13 +665,12 @@
 }
 
 .nibblesTitle {
-  font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
-  font-size: 1.15rem;
-  line-height: 1.25;
+  font-family: "halyard-display", "Helvetica Neue", Arial, sans-serif;
+  font-size: 1.2rem;
+  line-height: 1.35;
   margin: 0 0 0.35rem;
-  font-weight: 400;
-  letter-spacing: -0.02em;
-  color: var(--text-primary);
+  font-weight: 300;
+  color: var(--text-secondary);
 }
 
 .nibblesCta {
@@ -600,25 +725,31 @@
 }
 
 /* Poll / trivia card — roomier vertical rhythm */
-.poll:has(.voteOptions) .eyebrow {
+.poll:has(.voteOptions) .eyebrow,
+.poll:has(.voteOptionsQuad) .eyebrow {
   margin-bottom: 0.75rem;
 }
 
-.poll:has(.voteOptions) .photoOfWeekTitle {
+.poll:has(.voteOptions) .photoOfWeekTitle,
+.poll:has(.voteOptionsQuad) .photoOfWeekTitle {
+  line-height: 1.2;
   padding-bottom: 1.5rem;
 }
 
-.poll:has(.voteOptions) .voteOptions {
+.poll:has(.voteOptions) .voteOptions,
+.poll:has(.voteOptionsQuad) .voteOptionsQuad {
   margin-top: 0.25rem;
   margin-bottom: 1.5rem;
 }
 
-.poll:has(.voteOptions) .voteTeaser {
+.poll:has(.voteOptions) .voteTeaser,
+.poll:has(.voteOptionsQuad) .voteTeaser {
   margin-top: 0.5rem;
   margin-bottom: 0;
 }
 
-.poll:has(.voteOptions) .lastWeekRecap {
+.poll:has(.voteOptions) .lastWeekRecap,
+.poll:has(.voteOptionsQuad) .lastWeekRecap {
   margin-top: 1.75rem;
   padding-top: 1.25rem;
 }
@@ -632,6 +763,28 @@
   max-width: 640px;
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Four options: two rows, equal gaps, buttons hug content */
+.voteOptionsQuad {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto 1rem;
+}
+
+.voteOptionsRow {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: nowrap;
   justify-content: center;
   align-items: center;
   gap: 0.75rem;
@@ -660,7 +813,11 @@
   text-align: center;
   box-sizing: border-box;
   white-space: normal;
-  line-height: 1.25;
+  font-size: 1rem;
+  line-height: 1.5;
+  font-weight: 300;
+  letter-spacing: normal;
+  color: var(--text-secondary);
 }
 
 .voteTeaser {

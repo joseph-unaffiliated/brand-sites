@@ -91,9 +91,39 @@ function shouldDropDuplicateTeaserBlock(b) {
   return DROPPED_FEATURE_LINE_PATTERNS.some((re) => re.test(t));
 }
 
-function filterDuplicateTeaserLines(body) {
+function isEmptyPortableTextBlock(b) {
+  if (b?._type !== "block") return false;
+  return !portableTextBlockPlainText(b).trim();
+}
+
+function trimPortableTextBlock(b) {
+  if (b?._type !== "block" || !Array.isArray(b.children) || b.children.length === 0) {
+    return b;
+  }
+  const children = b.children.map((child, index) => {
+    if (typeof child.text !== "string") return child;
+    let text = child.text;
+    if (index === 0) text = text.replace(/^\s+/, "");
+    if (index === b.children.length - 1) text = text.replace(/\s+$/, "");
+    return text === child.text ? child : { ...child, text };
+  });
+  const changed = children.some((child, index) => child !== b.children[index]);
+  return changed ? { ...b, children } : b;
+}
+
+function filterPortableTextBody(body, { dropEmpty = false } = {}) {
   if (!Array.isArray(body)) return [];
-  return body.filter((b) => !shouldDropDuplicateTeaserBlock(b));
+  let result = body
+    .map(trimPortableTextBlock)
+    .filter((b) => !shouldDropDuplicateTeaserBlock(b));
+  if (dropEmpty) {
+    result = result.filter((b) => !isEmptyPortableTextBlock(b));
+  }
+  return result;
+}
+
+function filterDuplicateTeaserLines(body) {
+  return filterPortableTextBody(body);
 }
 
 /** Market share chart in Pickle Addicts: intro paragraph + inline PT image. */
@@ -157,13 +187,13 @@ function splitBodyAroundMarketShareChart(body) {
   };
 }
 
-/** Strip image credits from body for main column; render them in the card footer instead. */
+/** Pickle Economics: image caption stays under chart; credit (sources) → card footer. */
 function splitPickleEconomicsBody(body) {
-  const filtered = filterDuplicateTeaserLines(body ?? []);
+  const filtered = filterPortableTextBody(body ?? [], { dropEmpty: true });
   const credits = [];
   const mainBody = filtered.map((item) => {
     if (item?._type === "image" && hasCredit(item.credit)) {
-      credits.push({ caption: item.caption, credit: item.credit });
+      credits.push(item.credit);
       return { ...item, credit: undefined };
     }
     return item;
@@ -219,6 +249,39 @@ function portableTextComponents(projectId, dataset, { omitImageCredit = false } 
 }
 
 const DEFAULT_PHOTO_OF_WEEK_HEADING = "Sexy Pic(kle) of the Week";
+
+function renderPickleVoteOption(opt, index, { siteUrl, articleSlug }) {
+  const code = getOptionCode(opt, index);
+  const label = opt.label?.trim() || "";
+  const voteUrl = buildPollVoteUrl({
+    siteUrl,
+    issueSlug: articleSlug,
+    choiceCode: code,
+    viaHome: false,
+  });
+  const buttonText = [code ? `${code.toUpperCase()}.` : "", label].filter(Boolean).join(" ");
+  return (
+    <li key={opt._key || code || index} className={styles.voteOption}>
+      {voteUrl ? (
+        <Link
+          href={voteUrl}
+          className={styles.nibblesItemLink}
+          aria-label={
+            buttonText
+              ? `Vote: ${buttonText}`
+              : code
+                ? `Vote option ${code.toUpperCase()}`
+                : "Vote"
+          }
+        >
+          <span className={styles.nibblesCta}>{buttonText || "Vote"}</span>
+        </Link>
+      ) : (
+        <span className={styles.nibblesCta}>{buttonText || "—"}</span>
+      )}
+    </li>
+  );
+}
 
 export default function ArticleContentBlocks({ blocks, projectId, dataset, articleSlug = "" }) {
   const list = Array.isArray(blocks) ? blocks : [];
@@ -423,16 +486,12 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset, artic
                   </div>
                   {credits.length > 0 ? (
                     <div className={styles.pickleEconomicsCreditFooter}>
-                      {credits.map((entry, creditIndex) => (
+                      {credits.map((credit, creditIndex) => (
                         <p
                           key={`pe-credit-${creditIndex}`}
                           className={styles.pickleEconomicsCreditLine}
                         >
-                          {entry.caption ? <span>{entry.caption}</span> : null}
-                          {entry.caption && hasCredit(entry.credit) ? (
-                            <span className={styles.captionSep}> · </span>
-                          ) : null}
-                          {renderCredit(entry.credit)}
+                          {renderCredit(credit)}
                         </p>
                       ))}
                     </div>
@@ -453,48 +512,30 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset, artic
                 {block.question ? (
                   <h2 className={styles.photoOfWeekTitle}>{block.question}</h2>
                 ) : null}
-                <ul
-                  className={styles.voteOptions}
-                  data-option-count={(block.options || []).length}
-                >
-                  {(block.options || []).map((opt, index) => {
-                    const code = getOptionCode(opt, index);
-                    const label = opt.label?.trim() || "";
-                    const voteUrl = buildPollVoteUrl({
-                      siteUrl,
-                      issueSlug: articleSlug,
-                      choiceCode: code,
-                      viaHome: false,
-                    });
-                    const buttonText = [
-                      code ? `${code.toUpperCase()}.` : "",
-                      label,
-                    ]
-                      .filter(Boolean)
-                      .join(" ");
+                {(() => {
+                  const options = block.options || [];
+                  const voteOpts = options.map((opt, index) =>
+                    renderPickleVoteOption(opt, index, { siteUrl, articleSlug }),
+                  );
+                  if (options.length === 4) {
                     return (
-                      <li key={opt._key || code || index} className={styles.voteOption}>
-                        {voteUrl ? (
-                          <Link
-                            href={voteUrl}
-                            className={styles.nibblesItemLink}
-                            aria-label={
-                              buttonText
-                                ? `Vote: ${buttonText}`
-                                : code
-                                  ? `Vote option ${code.toUpperCase()}`
-                                  : "Vote"
-                            }
-                          >
-                            <span className={styles.nibblesCta}>{buttonText || "Vote"}</span>
-                          </Link>
-                        ) : (
-                          <span className={styles.nibblesCta}>{buttonText || "—"}</span>
-                        )}
-                      </li>
+                      <div className={styles.voteOptionsQuad}>
+                        <ul className={styles.voteOptionsRow} aria-label="Vote options">
+                          {voteOpts.slice(0, 2)}
+                        </ul>
+                        <ul className={styles.voteOptionsRow}>{voteOpts.slice(2, 4)}</ul>
+                      </div>
                     );
-                  })}
-                </ul>
+                  }
+                  return (
+                    <ul
+                      className={styles.voteOptions}
+                      data-option-count={options.length}
+                    >
+                      {voteOpts}
+                    </ul>
+                  );
+                })()}
                 {block.teaserLine ? (
                   <p className={styles.voteTeaser}>{block.teaserLine}</p>
                 ) : null}

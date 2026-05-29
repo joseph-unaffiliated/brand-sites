@@ -34,7 +34,7 @@ export const siteFooterTagline =
 
 export const siteHeroTagline =
   process.env.NEXT_PUBLIC_SITE_HERO_TAGLINE ||
-  "The world's leading pickle news source.";
+  "All the pickle news you'll ever need";
 
 export const siteKickerLower = siteDisplayName.toLowerCase();
 

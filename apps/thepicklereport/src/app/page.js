@@ -112,27 +112,27 @@ export default async function Home({ searchParams: searchParamsProp }) {
   };
 
   return (
-    <div className={styles.page}>
-      <JsonLd data={websiteJsonLd} />
-      <JsonLd data={organizationJsonLd} />
-      {/* Hero line */}
-      <section className={styles.hero}>
-        <div className="container">
-          <p className={styles.heroTagline}>{siteHeroTagline}</p>
-          {totalCount > 0 && (
-            <p className={styles.heroMeta}>
-              {totalCount} list{totalCount !== 1 ? "s" : ""} in the archive
-              {" · "}
-              <HideWhenSubscribed>
-                <a href="/#subscribe">Get the next one in your inbox</a>
-              </HideWhenSubscribed>
-            </p>
-          )}
-        </div>
-      </section>
+    <>
+      <p className={styles.heroTagline}>{siteHeroTagline}</p>
+      <div className={styles.page}>
+        <JsonLd data={websiteJsonLd} />
+        <JsonLd data={organizationJsonLd} />
+        <section className={styles.hero}>
+          <div className="container">
+            {totalCount > 0 && (
+              <p className={styles.heroMeta}>
+                {totalCount} list{totalCount !== 1 ? "s" : ""} in the archive
+                {" · "}
+                <HideWhenSubscribed>
+                  <a href="/#subscribe">Get the next one in your inbox</a>
+                </HideWhenSubscribed>
+              </p>
+            )}
+          </div>
+        </section>
 
-      {/* Atlantic mosaic: 2 left | 1 center | right stack + subscribe */}
-      <section className={styles.mosaic} id="subscribe">
+        {/* Atlantic mosaic: 2 left | 1 center | right stack + subscribe */}
+        <section className={styles.mosaic} id="subscribe">
         <div className={styles.mosaicContainer}>
           {/* Left column: exactly two cards */}
           <div className={styles.mosaicLeft}>
@@ -222,5 +222,6 @@ export default async function Home({ searchParams: searchParamsProp }) {
       {/* More about (always visible; copy and Subscribe link vary by sign-in) */}
       <HomeAboutSection totalCount={totalCount} />
     </div>
+    </>
   );
 }

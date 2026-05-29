@@ -14,7 +14,6 @@ export default {
     { name: "photoCredit", type: "string", title: "Photo credit" },
     { name: "publishedDate", type: "datetime", title: "Publishing date" },
     { name: "authorName", type: "string", title: "Author" },
-    { name: "disclaimer", type: "text", title: "Disclaimer" },
     { name: "contentBlocks", type: "array", title: "Issue sections", of: [{ type: "object" }] },
   ],
 };

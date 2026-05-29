@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useMemo, useState, useEffect } from "react";
+import { createContext, useCallback, useContext, useMemo, useState, useEffect } from "react";
 import { siteConfig } from "@/config/site";
 
 const BRAND = siteConfig.brandId;
@@ -31,12 +31,14 @@ export function SubscriberProvider({ children }) {
     return () => window.removeEventListener("storage", handleStorage);
   }, []);
 
+  const refresh = useCallback(() => setState(getStoredState()), []);
+
   const value = useMemo(
     () => ({
       ...state,
-      refresh: () => setState(getStoredState()),
+      refresh,
     }),
-    [state.isSubscribed, state.email, state.subscribedAt]
+    [state.isSubscribed, state.email, state.subscribedAt, refresh]
   );
 
   return (

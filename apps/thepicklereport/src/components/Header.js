@@ -17,6 +17,7 @@ export default function Header() {
   const isArticle = pathname.startsWith("/article/");
   const isMarketing = !isArticle;
   const [menuOpen, setMenuOpen] = useState(false);
+  const [headerHidden, setHeaderHidden] = useState(false);
   const { isSubscribed } = useSubscriber();
 
   useEffect(() => {
@@ -26,6 +27,43 @@ export default function Header() {
       document.body.style.overflow = "";
     };
   }, [menuOpen]);
+
+  useEffect(() => {
+    if (!isArticle) {
+      setHeaderHidden(false);
+      return;
+    }
+
+    const topOffset = 64;
+    const scrollDelta = 6;
+    let lastY = window.scrollY;
+    let ticking = false;
+
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const y = window.scrollY;
+        const delta = y - lastY;
+
+        if (menuOpen) {
+          setHeaderHidden(false);
+        } else if (y <= topOffset) {
+          setHeaderHidden(false);
+        } else if (delta > scrollDelta) {
+          setHeaderHidden(true);
+        } else if (delta < -scrollDelta) {
+          setHeaderHidden(false);
+        }
+
+        lastY = y;
+        ticking = false;
+      });
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [isArticle, menuOpen]);
 
   const subscribeDesktop = (
     <a className="button button-secondary" href="/#subscribe">
@@ -45,7 +83,7 @@ export default function Header() {
 
   return (
     <header
-      className={`site-header ${isArticle ? "site-header--article" : "site-header--marketing"}`}
+      className={`site-header ${isArticle ? "site-header--article" : "site-header--marketing"}${isArticle && headerHidden ? " site-header--scroll-hidden" : ""}`}
     >
       <div
         className={`header-row-1 ${isArticle ? "container" : `container-wide header-row-marketing${isSubscribed ? " header-row-marketing--subscribed" : ""}`}`}

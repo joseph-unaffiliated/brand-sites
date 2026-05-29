@@ -110,12 +110,6 @@ export const articleType = defineType({
       },
     }),
     defineField({
-      name: 'disclaimer',
-      title: 'Disclaimer',
-      type: 'text',
-      options: {canvasApp: {exclude: true}},
-    }),
-    defineField({
       name: 'contentBlocks',
       title: 'Issue sections',
       description:

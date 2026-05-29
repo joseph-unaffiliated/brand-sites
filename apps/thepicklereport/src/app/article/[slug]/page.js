@@ -187,9 +187,6 @@ export default async function ArticlePage({ params }) {
         >
           <div className={styles.articleHero}>
             <div className={styles.articleHeroContent}>
-              <div className={styles.backLink}>
-                <Link href="/archive">Back to archive</Link>
-              </div>
               <div className="spacer-3rem" />
               <div className="headline-block">
                 <h1 className="headline-text">{article.title}</h1>
@@ -272,11 +269,6 @@ export default async function ArticlePage({ params }) {
                     </>
                   ) : null}
                 </div>
-                {article.disclaimer && (
-                  <div className="articlecopy-richtext">
-                    <p className={styles.disclaimer}>{article.disclaimer}</p>
-                  </div>
-                )}
               </div>
               {SHOW_BOTTOM && (
                 <div className={styles.adBottom}>

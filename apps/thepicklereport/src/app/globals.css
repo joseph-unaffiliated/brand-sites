@@ -36,7 +36,7 @@
   --text-dek: 13px;
   --text-body: 14px;
   --text-lead: 15px;
-  --text-hero-tagline: 21px;
+  --text-hero-tagline: 32px;
   --text-card-headline: 24px;
   --text-section-headline: 28px;
 }
@@ -145,6 +145,26 @@ a {
   border-bottom: none;
 }
 
+/* Article pages: sticky header hides on scroll down, reappears on scroll up */
+.site-header--article {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  transition: transform 0.25s ease;
+  will-change: transform;
+}
+
+.site-header--article.site-header--scroll-hidden {
+  transform: translateY(-100%);
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-header--article {
+    transition: none;
+  }
+}
+
 .header-row-1 {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
@@ -166,8 +186,8 @@ a {
   grid-column: 1;
   justify-self: start;
   align-self: center;
-  width: 44px;
-  height: 44px;
+  width: 36px;
+  height: 36px;
   margin: 0;
   padding: 0;
   border: none;
@@ -181,14 +201,14 @@ a {
 .header-hamburger-line {
   display: block;
   flex-shrink: 0;
-  width: 22px;
+  width: 18px;
   height: 2px;
   border-radius: 1px;
   background: var(--text-primary);
   /* One bar + two shadows avoids subpixel mismatch between three separate boxes */
-  box-shadow: 0 7px 0 var(--text-primary), 0 14px 0 var(--text-primary);
+  box-shadow: 0 5px 0 var(--text-primary), 0 10px 0 var(--text-primary);
   /* Shadows don't affect layout; nudge so the three-bar glyph is vertically centered in the tap target */
-  transform: translateY(-7px);
+  transform: translateY(-5px);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -260,9 +280,9 @@ a {
     --header-mark-h: calc(var(--header-mark-w) * 24 / 33);
     --logo-line-pad-x: 34px;
     --logo-line-gap: calc(var(--header-mark-w) + 2 * var(--logo-line-pad-x));
-    padding-top: 14px;
+    padding-top: 24px;
     padding-bottom: calc(var(--header-mark-h) * 0.32 + 26px);
-    min-height: calc(14px + var(--header-mark-h) / 2 + 26px);
+    min-height: calc(24px + var(--header-mark-h) / 2 + 26px);
   }
 
   .site-header--marketing .header-row-marketing::before {
@@ -270,7 +290,7 @@ a {
     position: absolute;
     left: calc(50% - 50vw);
     width: calc(50vw - var(--logo-line-gap) / 2);
-    top: calc(20px + var(--header-mark-h) / 2);
+    top: calc(30px + var(--header-mark-h) / 2);
     height: 1px;
     background: var(--border);
     pointer-events: none;
@@ -282,7 +302,7 @@ a {
     position: absolute;
     right: calc(50% - 50vw);
     width: calc(50vw - var(--logo-line-gap) / 2);
-    top: calc(20px + var(--header-mark-h) / 2);
+    top: calc(30px + var(--header-mark-h) / 2);
     height: 1px;
     background: var(--border);
     pointer-events: none;
@@ -292,7 +312,7 @@ a {
   .site-header--marketing .header-row-marketing .brand {
     position: absolute;
     left: 50%;
-    top: 14px;
+    top: 24px;
     transform: translateX(-50%);
     z-index: 2;
     grid-column: unset;
@@ -422,7 +442,6 @@ a {
 .brand-name {
   font-size: 18px;
   display: inline-block;
-  padding-top: 8px;
   max-width: 100%;
 }
 
@@ -454,6 +473,7 @@ a {
     max-width: 100%;
     height: auto;
     max-height: none;
+    padding-top: 10px;
     color: var(--text-primary);
     object-fit: contain;
   }
@@ -582,7 +602,11 @@ a {
   display: grid;
   gap: 48px;
   grid-template-columns: 1fr auto auto;
-  align-items: center;
+  align-items: start;
+}
+
+.footer-grid > * {
+  align-self: start;
 }
 
 .footer-title {
@@ -600,15 +624,18 @@ a {
 .footer-brand {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: 4px;
-  margin-bottom: 16px;
+  margin: 0;
+  padding: 0;
+}
+
+.footer-brand .footer-logo,
+.footer-brand .footer-text {
+  margin: 0;
 }
 
 @media (max-width: 768px) {
-  .footer-grid {
-    align-items: start;
-  }
-
   .footer-tagline {
     display: none;
   }
@@ -637,16 +664,16 @@ a {
 
 @media (min-width: 769px) {
   .footer-logo {
-    max-width: min(160px, 28vw);
+    max-width: min(180px, 30vw);
   }
 
   .footer-logo-wordmark {
     display: block;
     box-sizing: border-box;
-    width: min(160px, 28vw);
+    width: min(180px, 30vw);
     max-width: 100%;
     height: auto;
-    max-height: 32px;
+    max-height: 36px;
     color: var(--footer-text);
     filter: none;
     object-fit: contain;
@@ -659,6 +686,12 @@ a {
 
 .footer-logo-img {
   object-fit: contain;
+}
+
+@media (min-width: 769px) {
+  .footer-logo-img.footer-logo-mark {
+    display: none;
+  }
 }
 
 .footer-logo path {
@@ -1038,6 +1071,79 @@ a {
     padding: 6px 12px;
   }
 
+  /* Marketing mobile: hairline gaps + white chip behind mark; tighter below header. */
+  .site-header--marketing .header-row-marketing {
+    position: relative;
+    --header-mark-w: min(120px, 36vw);
+    --header-mark-h: calc(var(--header-mark-w) * 24 / 33);
+    --logo-line-pad-x: 24px;
+    --logo-line-gap: calc(var(--header-mark-w) + 2 * var(--logo-line-pad-x));
+    padding-top: 24px;
+    padding-bottom: calc(var(--header-mark-h) * 0.36 + 18px);
+    min-height: calc(48px + var(--header-mark-h) * 0.55);
+  }
+
+  .site-header--marketing .header-row-marketing::before {
+    content: "";
+    position: absolute;
+    left: calc(50% - 50vw);
+    width: calc(50vw - var(--logo-line-gap) / 2);
+    right: auto;
+    top: calc(42px + var(--header-mark-h) / 2);
+    height: 1px;
+    background: var(--border);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .site-header--marketing .header-row-marketing::after {
+    content: "";
+    position: absolute;
+    right: calc(50% - 50vw);
+    width: calc(50vw - var(--logo-line-gap) / 2);
+    left: auto;
+    top: calc(42px + var(--header-mark-h) / 2);
+    height: 1px;
+    background: var(--border);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* Span full row so the abs positioning box matches the header; center with flex (col 2 alone can be too narrow). */
+  .site-header--marketing .header-row-marketing .brand {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 20px;
+    transform: none;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    pointer-events: none;
+  }
+
+  .site-header--marketing .header-row-marketing .brand-name {
+    display: inline-block;
+    padding: 4px var(--logo-line-pad-x);
+    background: var(--bg);
+    border-radius: 4px;
+    position: relative;
+    z-index: 3;
+    pointer-events: auto;
+  }
+
+  .site-header--marketing .brand-logo-wordmark {
+    display: none !important;
+  }
+
+  .site-header--marketing .brand-logo-mark {
+    display: flex !important;
+    width: var(--header-mark-w);
+    max-width: var(--header-mark-w);
+  }
 }
 
 

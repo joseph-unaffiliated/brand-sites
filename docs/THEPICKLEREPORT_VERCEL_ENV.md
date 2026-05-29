@@ -34,7 +34,7 @@ After saving: **Redeploy** Production (and Preview if you added vars there).
 | `NEXT_PUBLIC_SITE_DESCRIPTION` | Your meta description |
 | `NEXT_PUBLIC_SITE_OG_IMAGE` | `/tpr-photo.png` |
 | `NEXT_PUBLIC_SITE_FOOTER_TAGLINE` | `The world's leading pickle news source. Delivered weekly.` |
-| `NEXT_PUBLIC_SITE_HERO_TAGLINE` | `The world's leading pickle news source.` |
+| `NEXT_PUBLIC_SITE_HERO_TAGLINE` | `All the Pickle news you'll ever need` |
 | `NEXT_PUBLIC_CONTACT_EMAIL` | `contact@thepicklereport.com` |
 | `NEXT_PUBLIC_SUBSCRIBE_CARD_TITLE` | `Get The Pickle Report` |
 | `NEXT_PUBLIC_SUBSCRIBE_CARD_DEK` | Subscribe card blurb |
@@ -92,7 +92,7 @@ NEXT_PUBLIC_SITE_DISPLAY_NAME=The Pickle Report
 NEXT_PUBLIC_SITE_DESCRIPTION=The Wide World of Pickles
 NEXT_PUBLIC_SITE_OG_IMAGE=/tpr-photo.png
 NEXT_PUBLIC_SITE_FOOTER_TAGLINE=The world's leading pickle news source. Delivered weekly.
-NEXT_PUBLIC_SITE_HERO_TAGLINE=The world's leading pickle news source.
+NEXT_PUBLIC_SITE_HERO_TAGLINE=All the Pickle news you'll ever need
 NEXT_PUBLIC_CONTACT_EMAIL=contact@thepicklereport.com
 NEXT_PUBLIC_SUBSCRIBE_CARD_TITLE=Get The Pickle Report
 NEXT_PUBLIC_SUBSCRIBE_CARD_DEK=Join the newsletter for weekly pickle news, trivia, and more—delivered straight to your inbox.

@@ -33,11 +33,21 @@ export default function SubscriptionSuccessRecs({ email }) {
               <p className={actions.recDek}>{row.description}</p>
               <div className={actions.recActions}>
                 {email && magicHref ? (
-                  <a className={actions.btn} href={magicHref}>
+                  <a
+                    className={actions.btn}
+                    href={magicHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     Add to Inbox
                   </a>
                 ) : null}
-                <a className={actions.recVisit} href={`${visitBase}${visitQuery}`}>
+                <a
+                  className={actions.recVisit}
+                  href={`${visitBase}${visitQuery}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   visit site
                 </a>
               </div>

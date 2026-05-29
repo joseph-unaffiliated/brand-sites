@@ -172,3 +172,14 @@
 .cardWide {
   max-width: min(100%, 1040px);
 }
+
+/* Article “Keep reading” grid nested inside subscription success card */
+.articleRecsOuter {
+  max-width: 100%;
+  padding: 0;
+  margin-top: 0;
+}
+
+.articleRecs {
+  text-align: left;
+}
