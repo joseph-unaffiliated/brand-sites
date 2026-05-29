@@ -22,6 +22,11 @@
   text-wrap: balance;
 }
 
+/* Signed-in header is shorter — pull tagline closer */
+.heroTaglineSubscribed {
+  padding-top: 24px;
+}
+
 /* Archive meta line above mosaic */
 .hero {
   padding: 0 0 40px;
@@ -84,6 +89,10 @@
     line-height: 1.22;
   }
 
+  .heroTaglineSubscribed {
+    padding-top: 28px;
+  }
+
   .hero {
     padding: 0 0 28px;
   }
@@ -98,7 +107,7 @@
       "center"
       "right"
       "left";
-    padding: 0 16px;
+    padding: 0 24px;
     gap: 24px;
   }
   .mosaicLeft { grid-area: left; }
@@ -195,10 +204,27 @@
   margin: 0;
 }
 
-/* Center: big feature */
 .mosaicCenter {
   min-width: 0;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+@media (max-width: 1024px) and (min-width: 641px) {
+  .mosaicCenter {
+    align-items: center;
+  }
+
+  .mosaicCenter .featuredCard:nth-child(2) {
+    display: none;
+  }
+
+  .mosaicCenter .featuredCard:first-child {
+    max-width: 640px;
+    width: 100%;
+  }
 }
 
 .featuredCard {
@@ -237,7 +263,7 @@
   text-transform: uppercase;
   letter-spacing: 0;
   color: var(--text-muted);
-  margin: 0 0 8px;
+  margin: 0 0 14px;
 }
 
 .featuredHeadline {
@@ -249,10 +275,10 @@
 }
 
 .featuredDek {
-  font-size: var(--text-dek);
+  font-size: var(--text-lead);
   line-height: 1.45;
   color: var(--text-muted);
-  margin: 0 0 24px;
+  margin: 0 0 12px;
 }
 
 .featuredEntryPreview {

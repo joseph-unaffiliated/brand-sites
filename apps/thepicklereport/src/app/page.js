@@ -8,12 +8,12 @@ import SubscribeBlock from "@/components/SubscribeBlock";
 import HideWhenSubscribed from "@/components/HideWhenSubscribed";
 import HomeSnippetsList from "@/components/HomeSnippetsList";
 import HomeAboutSection from "@/components/HomeAboutSection";
+import HomeHeroTagline from "@/components/HomeHeroTagline";
 import JsonLd from "@/components/JsonLd";
 import {
   siteConfig,
   siteDefaultDescription,
   siteDisplayName,
-  siteHeroTagline,
 } from "@/config/site";
 import styles from "./page.module.css";
 
@@ -28,8 +28,9 @@ function absoluteSiteUrl(path) {
   return path.startsWith("http") ? path : `${base}${path.startsWith("/") ? "" : "/"}${path}`;
 }
 
-/** Atlantic-style: 1 center, 2 left, N in right stack. No article repeated. */
-const LEFT_COUNT = 2;
+/** Atlantic-style: 2 center, 4 left, N in right stack. No article repeated. */
+const CENTER_COUNT = 2;
+const LEFT_COUNT = 4;
 /** Max items for "More issues" (client shows 2 when signed out, 5 when signed in). */
 const STACK_COUNT_MAX = 5;
 
@@ -74,10 +75,12 @@ export default async function Home({ searchParams: searchParamsProp }) {
   const articles = await getArticles();
   const totalCount = articles.length;
 
-  const featured = articles[0] ?? null;
-  const leftCards = articles.slice(1, 1 + LEFT_COUNT);
-  const stackItems = articles.slice(1 + LEFT_COUNT, 1 + LEFT_COUNT + STACK_COUNT_MAX);
-  const featuredDemographic = featured ? getDemographicAndDescription(featured).demographic : "";
+  const featuredArticles = articles.slice(0, CENTER_COUNT);
+  const leftCards = articles.slice(CENTER_COUNT, CENTER_COUNT + LEFT_COUNT);
+  const stackItems = articles.slice(
+    CENTER_COUNT + LEFT_COUNT,
+    CENTER_COUNT + LEFT_COUNT + STACK_COUNT_MAX,
+  );
 
   const homeUrl = absoluteSiteUrl("/");
   const ogImageUrl = absoluteSiteUrl(SITE_OG_IMAGE_PATH);
@@ -113,7 +116,7 @@ export default async function Home({ searchParams: searchParamsProp }) {
 
   return (
     <>
-      <p className={styles.heroTagline}>{siteHeroTagline}</p>
+      <HomeHeroTagline />
       <div className={styles.page}>
         <JsonLd data={websiteJsonLd} />
         <JsonLd data={organizationJsonLd} />
@@ -121,20 +124,24 @@ export default async function Home({ searchParams: searchParamsProp }) {
           <div className="container">
             {totalCount > 0 && (
               <p className={styles.heroMeta}>
-                {totalCount} list{totalCount !== 1 ? "s" : ""} in the archive
-                {" · "}
+                {totalCount} issue{totalCount !== 1 ? "s" : ""} in the archive
+                {" • "}
+                <Link href="/archive">browse &gt;</Link>
                 <HideWhenSubscribed>
-                  <a href="/#subscribe">Get the next one in your inbox</a>
+                  <>
+                    {" • "}
+                    <a href="/#subscribe">Get the next one in your inbox</a>
+                  </>
                 </HideWhenSubscribed>
               </p>
             )}
           </div>
         </section>
 
-        {/* Atlantic mosaic: 2 left | 1 center | right stack + subscribe */}
+        {/* Atlantic mosaic: 4 left | 2 center | right stack + subscribe */}
         <section className={styles.mosaic} id="subscribe">
         <div className={styles.mosaicContainer}>
-          {/* Left column: exactly two cards */}
+          {/* Left column */}
           <div className={styles.mosaicLeft}>
             {leftCards.map((article) => (
               <article className={styles.mosaicCard} key={article._id ?? article.slug}>
@@ -172,41 +179,45 @@ export default async function Home({ searchParams: searchParamsProp }) {
             ))}
           </div>
 
-          {/* Center: one featured */}
+          {/* Center: featured issues */}
           <div className={styles.mosaicCenter}>
-            {featured && (
-              <Link
-                href={`/article/${featured.slug}`}
-                className={styles.featuredCard}
-              >
-                <div className={styles.featuredImage}>
-                  <Image
-                    src={featured.mainImage}
-                    alt=""
-                    width={featured.mainImageWidth || 900}
-                    height={featured.mainImageHeight || 600}
-                    priority
-                    sizes="(max-width: 900px) 100vw, 560px"
-                  />
-                </div>
-                <div className={styles.featuredBody}>
-                  <p className={styles.featuredKicker}>Latest issue</p>
-                  <h2 className={styles.featuredHeadline}>{featured.title}</h2>
-                  {featuredDemographic && (
-                    <p className={styles.featuredDek}>{featuredDemographic}</p>
-                  )}
-                  {(() => {
-                    const preview = featuredPreviewFromArticle(featured);
-                    return preview ? (
+            {featuredArticles.map((article, index) => {
+              const { demographic } = getDemographicAndDescription(article);
+              const preview = featuredPreviewFromArticle(article);
+              return (
+                <Link
+                  key={article._id ?? article.slug}
+                  href={`/article/${article.slug}`}
+                  className={styles.featuredCard}
+                >
+                  <div className={styles.featuredImage}>
+                    <Image
+                      src={article.mainImage}
+                      alt=""
+                      width={article.mainImageWidth || 900}
+                      height={article.mainImageHeight || 600}
+                      priority={index === 0}
+                      sizes="(max-width: 900px) 100vw, 560px"
+                    />
+                  </div>
+                  <div className={styles.featuredBody}>
+                    {index === 0 && (
+                      <p className={styles.featuredKicker}>Latest issue</p>
+                    )}
+                    <h2 className={styles.featuredHeadline}>{article.title}</h2>
+                    {demographic && (
+                      <p className={styles.featuredDek}>{demographic}</p>
+                    )}
+                    {preview ? (
                       <div className={styles.featuredEntryPreview}>
                         <p className={styles.featuredEntrySnippet}>{preview}</p>
                       </div>
-                    ) : null;
-                  })()}
-                  <span className={styles.featuredLink}>Read more</span>
-                </div>
-              </Link>
-            )}
+                    ) : null}
+                    <span className={styles.featuredLink}>Read more</span>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
 
           {/* Right column: stack (snippets with thumb) then subscribe at bottom */}
