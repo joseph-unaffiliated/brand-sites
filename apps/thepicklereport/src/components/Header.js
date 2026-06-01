@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { usePathname } from "next/navigation";
 import { useSubscriber } from "@/context/SubscriberContext";
 import BrandLogoMark from "@/components/BrandLogoMark";
@@ -18,7 +19,16 @@ export default function Header() {
   const isMarketing = !isArticle;
   const [menuOpen, setMenuOpen] = useState(false);
   const [headerHidden, setHeaderHidden] = useState(false);
+  const [drawerMounted, setDrawerMounted] = useState(false);
   const { isSubscribed } = useSubscriber();
+
+  useEffect(() => {
+    setDrawerMounted(true);
+  }, []);
+
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [pathname]);
 
   useEffect(() => {
     if (menuOpen) document.body.style.overflow = "hidden";
@@ -27,6 +37,18 @@ export default function Header() {
       document.body.style.overflow = "";
     };
   }, [menuOpen]);
+
+  const closeMenu = () => setMenuOpen(false);
+
+  const openMenu = () => {
+    setHeaderHidden(false);
+    setMenuOpen(true);
+  };
+
+  const toggleMenu = () => {
+    if (menuOpen) closeMenu();
+    else openMenu();
+  };
 
   useEffect(() => {
     if (!isArticle) {
@@ -75,15 +97,58 @@ export default function Header() {
     <a
       className="button button-secondary header-subscribe-mobile"
       href="/#subscribe"
-      onClick={() => setMenuOpen(false)}
+      onClick={closeMenu}
     >
       Subscribe
     </a>
   );
 
+  const mobileDrawer = (
+    <div
+      id="header-drawer"
+      className={`header-drawer ${menuOpen ? "header-drawer-open" : ""}`}
+      aria-hidden={!menuOpen}
+    >
+      <div className="header-drawer-backdrop" onClick={closeMenu} aria-hidden />
+      <div className="header-drawer-panel">
+        <nav className="header-drawer-nav" aria-label="Mobile menu">
+          <Link href="/archive" onClick={closeMenu}>
+            Archive
+          </Link>
+          <Link href="/about" onClick={closeMenu}>
+            About
+          </Link>
+          <ContactCopyLink email={contactEmail} onClick={closeMenu}>
+            Contact
+          </ContactCopyLink>
+          <SubmissionsCopyLink onClick={closeMenu} />
+          <AdvertiseCopyLink onClick={closeMenu} />
+          <Link href="/terms" onClick={closeMenu}>
+            Terms
+          </Link>
+          <Link href="/privacy" onClick={closeMenu}>
+            Privacy
+          </Link>
+        </nav>
+        {!isSubscribed ? (
+          <div className="header-drawer-bottom">
+            <a
+              className="button button-primary header-drawer-primary-cta"
+              href="/#subscribe"
+              onClick={closeMenu}
+            >
+              Subscribe
+            </a>
+          </div>
+        ) : null}
+      </div>
+    </div>
+  );
+
   return (
+    <>
     <header
-      className={`site-header ${isArticle ? "site-header--article" : "site-header--marketing"}${isArticle && headerHidden ? " site-header--scroll-hidden" : ""}`}
+      className={`site-header ${isArticle ? "site-header--article" : "site-header--marketing"}${menuOpen ? " site-header--menu-open" : ""}${isArticle && headerHidden && !menuOpen ? " site-header--scroll-hidden" : ""}`}
     >
       <div
         className={`header-row-1 ${isArticle ? "container" : `container-wide header-row-marketing${isSubscribed ? " header-row-marketing--subscribed" : ""}`}`}
@@ -97,7 +162,7 @@ export default function Header() {
           aria-expanded={menuOpen}
           aria-controls="header-drawer"
           aria-label="Toggle menu"
-          onClick={() => setMenuOpen((o) => !o)}
+          onClick={toggleMenu}
         >
           <span className="header-hamburger-line" aria-hidden />
         </button>
@@ -114,7 +179,7 @@ export default function Header() {
           <Link
             href="/"
             className="brand-name"
-            onClick={() => setMenuOpen(false)}
+            onClick={closeMenu}
             aria-label={siteDisplayName}
           >
             <BrandWordmark className="brand-logo-img brand-logo-wordmark" />
@@ -137,45 +202,8 @@ export default function Header() {
         </nav>
         {!isSubscribed ? subscribeMobile : null}
       </div>
-      <div
-        id="header-drawer"
-        className={`header-drawer ${menuOpen ? "header-drawer-open" : ""}`}
-        aria-hidden={!menuOpen}
-      >
-        <div className="header-drawer-backdrop" onClick={() => setMenuOpen(false)} />
-        <div className="header-drawer-panel">
-          <nav className="header-drawer-nav" aria-label="Mobile menu">
-            <Link href="/archive" onClick={() => setMenuOpen(false)}>
-              Archive
-            </Link>
-            <Link href="/about" onClick={() => setMenuOpen(false)}>
-              About
-            </Link>
-            <ContactCopyLink email={contactEmail} onClick={() => setMenuOpen(false)}>
-              Contact
-            </ContactCopyLink>
-            <SubmissionsCopyLink onClick={() => setMenuOpen(false)} />
-            <AdvertiseCopyLink onClick={() => setMenuOpen(false)} />
-            <Link href="/terms" onClick={() => setMenuOpen(false)}>
-              Terms
-            </Link>
-            <Link href="/privacy" onClick={() => setMenuOpen(false)}>
-              Privacy
-            </Link>
-          </nav>
-          {!isSubscribed ? (
-            <div className="header-drawer-bottom">
-              <a
-                className="button button-primary header-drawer-primary-cta"
-                href="/#subscribe"
-                onClick={() => setMenuOpen(false)}
-              >
-                Subscribe
-              </a>
-            </div>
-          ) : null}
-        </div>
-      </div>
     </header>
+    {drawerMounted ? createPortal(mobileDrawer, document.body) : null}
+    </>
   );
 }
