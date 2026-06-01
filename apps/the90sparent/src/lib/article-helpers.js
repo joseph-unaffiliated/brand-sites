@@ -155,3 +155,17 @@ export function dedupeSubtitleInContentBlocks(blocks, subtitle, title) {
     return next;
   });
 }
+
+/** Strip a leading "By " from imported/Sanity author names so UI can prefix once. */
+export function authorDisplayName(name) {
+  if (typeof name !== "string") return "";
+  const trimmed = name.trim();
+  if (!trimmed) return "";
+  return trimmed.replace(/^by\s+/i, "");
+}
+
+/** "By Jane Doe" for article chrome; empty when no usable name. */
+export function authorBylineText(name) {
+  const display = authorDisplayName(name);
+  return display ? `By ${display}` : "";
+}

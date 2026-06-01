@@ -4,12 +4,15 @@
   gap: 2rem;
 }
 
-/* Tighter transition from feature prose → examples block (match in-flow p → h4 ~1.5rem) */
-.blocks > .block:has(+ .examplesBlock) > .feature {
+/*
+ * Consecutive feature/prose blocks (including the last feature → examples):
+ * match in-flow p → h4 rhythm (~1.5rem), not gap (2rem) + feature margin (1.75rem).
+ */
+.blocks > .block:has(+ .block) > .feature {
   margin-bottom: 0;
 }
 
-.blocks > .block + .examplesBlock {
+.blocks > .block + .block {
   margin-top: -0.5rem;
 }
 
@@ -57,11 +60,11 @@
 }
 
 /*
- * Examples block title + author name above bio — same as `.feature :global(h4)` (PT subheads).
- * Must override global `.site h4` on examples heading (serif / weight 300).
+ * Section subheads (Examples title, Feature PT h4) — sans Halyard like the original
+ * Examples heading. Scoped under article copy so we beat `.site h4` (serif / 300).
  */
-.examplesBlock .examplesSectionHeading,
-.authorCard .authorCardByline {
+:global(.articlebody-section) :global(.articlecopy-richtext) h4.examplesSectionHeading,
+:global(.articlebody-section) :global(.articlecopy-richtext) .feature :global(h4) {
   font-family: "halyard-display", "Helvetica Neue", Arial, sans-serif;
   font-size: 1.1rem;
   line-height: 1.85;
@@ -71,8 +74,29 @@
   text-wrap: balance;
 }
 
-.examplesBlock .examplesSectionHeading {
+.examplesBlock h4.examplesSectionHeading,
+.block > h4.examplesSectionHeading {
   margin: 0 0 1.75rem;
+}
+
+.feature h4.examplesSectionHeading,
+.feature :global(h4) {
+  margin: 1.5rem 0 1rem;
+}
+
+.feature h4.examplesSectionHeading:first-child,
+.feature :global(h4):first-child {
+  margin-top: 0;
+}
+
+.authorCard .authorCardByline {
+  font-family: "halyard-display", "Helvetica Neue", Arial, sans-serif;
+  font-size: 1.1rem;
+  line-height: 1.85;
+  letter-spacing: -0.02em;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-wrap: balance;
 }
 
 .authorCard .authorCardByline {
@@ -300,25 +324,8 @@
   margin-top: 0;
 }
 
-/* PT subheads (h4): medium weight vs body */
-.feature :global(h4) {
-  font-family: inherit;
-  font-size: 1.2rem;
-  line-height: 1.85;
-  letter-spacing: -0.02em;
-  font-weight: 500;
-  color: var(--text-secondary);
-  margin: 1.5rem 0 1rem;
-}
-
-.feature :global(h4):first-child {
-  margin-top: 0;
-}
-
 /*
- * Portable Text feature headings: `.site h1–h4` in globals.css ties on specificity with
- * `.feature h*`; production chunk order can let globals win. Scope under article copy so
- * these rules always beat `.site h*` (same idea as `.aroundTheWebSectionTitle`).
+ * Portable Text h2/h3 in feature body (larger serif subheads — not Examples-style h4).
  */
 :global(.articlebody-section) :global(.articlecopy-richtext) .feature :global(h2),
 :global(.articlebody-section) :global(.articlecopy-richtext) .feature :global(h3) {
@@ -332,20 +339,6 @@
 
 :global(.articlebody-section) :global(.articlecopy-richtext) .feature :global(h2):first-child,
 :global(.articlebody-section) :global(.articlecopy-richtext) .feature :global(h3):first-child {
-  margin-top: 0;
-}
-
-:global(.articlebody-section) :global(.articlecopy-richtext) .feature :global(h4) {
-  font-family: inherit;
-  font-size: 1.2rem;
-  line-height: 1.85;
-  letter-spacing: -0.02em;
-  font-weight: 500;
-  color: var(--text-secondary);
-  margin: 1.5rem 0 1rem;
-}
-
-:global(.articlebody-section) :global(.articlecopy-richtext) .feature :global(h4):first-child {
   margin-top: 0;
 }
 
@@ -374,15 +367,8 @@
     font-size: 1rem;
   }
 
-  .block > .feature :global(h4) {
-    font-size: 1rem;
-  }
-
-  :global(.articlebody-section) :global(.articlecopy-richtext) .block > .feature :global(h4) {
-    font-size: 1rem;
-  }
-
-  .examplesBlock .examplesSectionHeading,
+  :global(.articlebody-section) :global(.articlecopy-richtext) h4.examplesSectionHeading,
+  :global(.articlebody-section) :global(.articlecopy-richtext) .feature :global(h4),
   .authorCard .authorCardByline {
     font-size: 1rem;
   }
@@ -433,17 +419,6 @@
     text-align: center;
   }
 
-  .examplesBlock .exampleItemRichBody :global(h4) {
-    font-size: 1rem;
-  }
-
-  :global(.articlebody-section)
-    :global(.articlecopy-richtext)
-    .examplesBlock
-    .exampleItemRichBody
-    :global(h4) {
-    font-size: 1rem;
-  }
 
   .poll .feature {
     font-size: 1rem;

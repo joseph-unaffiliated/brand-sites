@@ -7,6 +7,7 @@ import {
   getArticles,
   dedupeSubtitleInContentBlocks,
 } from "@/lib/articles";
+import { authorBylineText } from "@/lib/article-helpers";
 import { pickRandomArticles } from "@/lib/pickRandomArticles";
 import RecordArticleView from "@/components/RecordArticleView";
 import ArticleContentBlocks from "@/components/ArticleContentBlocks";
@@ -130,6 +131,8 @@ export default async function ArticlePage({ params }) {
     ? dedupeSubtitleInContentBlocks(contentBlocks, article.subtitle, article.title)
     : contentBlocks;
 
+  const authorByline = authorBylineText(article.authorName);
+
   const canonicalArticleUrl = `${siteConfig.siteUrl.replace(/\/$/, "")}/article/${slug}`;
   const heroImageUrl =
     article.socialImage?.url || article.heroImage?.url || article.mainImage || null;
@@ -200,8 +203,8 @@ export default async function ArticlePage({ params }) {
               </div>
               {showBlocks ? (
                 <>
-                  {article.authorName?.trim() ? (
-                    <p className={styles.issueByline}>By {article.authorName.trim()}</p>
+                  {authorByline ? (
+                    <p className={styles.issueByline}>{authorByline}</p>
                   ) : null}
                   {article.heroImage?.url ? (
                     <div className={styles.leadImageSection}>

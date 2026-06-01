@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { PortableText } from "next-sanity";
 import { createImageUrlBuilder } from "@sanity/image-url";
+import { authorBylineText } from "@/lib/article-helpers";
 import styles from "./ArticleContentBlocks.module.css";
 
 function urlForImage(projectId, dataset, source) {
@@ -151,6 +152,11 @@ function captionCreditPortableTextComponents(projectId, dataset) {
 
 function portableTextComponents(projectId, dataset) {
   return {
+    block: {
+      h4: ({ children }) => (
+        <h4 className={styles.examplesSectionHeading}>{children}</h4>
+      ),
+    },
     types: {
       image: ({ value }) => {
         const src = urlForImage(projectId, dataset, value);
@@ -264,7 +270,7 @@ function renderContentBlock(block, projectId, dataset) {
                   </div>
                 ) : null}
                 {!economics && showHeading ? (
-                  <h2 className={styles.blockHeading}>{block.heading}</h2>
+                  <h4 className={styles.examplesSectionHeading}>{block.heading}</h4>
                 ) : null}
                 {economics && block.heading && !labelOnly ? (
                   <h2 className={styles.economicsMainTitle}>{block.heading}</h2>
@@ -588,7 +594,7 @@ export default function ArticleContentBlocks({
   if (!Array.isArray(blocks) || blocks.length === 0) return null;
 
   const bioTrim = typeof bio === "string" ? bio.trim() : "";
-  const authorNameTrim = typeof authorName === "string" ? authorName.trim() : "";
+  const authorByline = authorBylineText(authorName);
   const showAuthorCard = Boolean(bioTrim);
   const { core, nostalgia, atw } = partitionArticleBlocks(blocks);
 
@@ -612,8 +618,8 @@ export default function ArticleContentBlocks({
               className={styles.authorCard}
               aria-label="About the author"
             >
-              {authorNameTrim ? (
-                <p className={styles.authorCardByline}>By {authorNameTrim}</p>
+              {authorByline ? (
+                <p className={styles.authorCardByline}>{authorByline}</p>
               ) : null}
               <p className={styles.authorCardBio}>{bioTrim}</p>
             </aside>
