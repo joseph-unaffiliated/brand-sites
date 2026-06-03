@@ -56,8 +56,10 @@ function ArticleMagicLinkLandingInner({ brand, executeUrl, onLocalStateUpdated }
   if (!visible) return null;
 
   return (
-    <div className="magic-article-subscribe-toast" role="status" aria-live="polite">
-      <p className="magic-article-subscribe-toast-text">{message}</p>
+    <div className="magic-article-subscribe-toast-anchor" aria-hidden="false">
+      <div className="magic-article-subscribe-toast" role="status" aria-live="polite">
+        <p className="magic-article-subscribe-toast-text">{message}</p>
+      </div>
     </div>
   );
 }
