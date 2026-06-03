@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
@@ -8,8 +7,10 @@ import {
   dedupeSubtitleInContentBlocks,
 } from "@/lib/articles";
 import { authorBylineText } from "@/lib/article-helpers";
+import SanityMedia from "@/components/SanityMedia";
 import { pickRandomArticles } from "@/lib/pickRandomArticles";
 import RecordArticleView from "@/components/RecordArticleView";
+import NavLogoImageSync from "@/components/NavLogoImageSync";
 import ArticleContentBlocks from "@/components/ArticleContentBlocks";
 import AdSlot from "@/components/AdSlot";
 import ArticleStickyBottom from "@/components/ArticleStickyBottom";
@@ -184,6 +185,7 @@ export default async function ArticlePage({ params }) {
       <JsonLd data={articleJsonLd} />
       <JsonLd data={breadcrumbJsonLd} />
       <RecordArticleView slug={slug} />
+      <NavLogoImageSync image={article.mainImage} />
       <section className="articlebody-section">
         {/* Centered hero: headline + optional cover image when not using content blocks */}
         <div
@@ -209,7 +211,7 @@ export default async function ArticlePage({ params }) {
                   {article.heroImage?.url ? (
                     <div className={styles.leadImageSection}>
                       <div className={styles.leadImageFrame}>
-                        <Image
+                        <SanityMedia
                           src={article.heroImage.url}
                           alt={article.title}
                           width={article.heroImage.width || 1200}
@@ -233,7 +235,7 @@ export default async function ArticlePage({ params }) {
           {!showBlocks && (
             <div className={styles.articleHeroImage}>
               <div className="mainimage-block">
-                <Image
+                <SanityMedia
                   src={article.mainImage}
                   alt={article.title}
                   width={article.mainImageWidth || 900}
@@ -309,7 +311,7 @@ export default async function ArticlePage({ params }) {
                     className={styles.readMoreCard}
                   >
                     <div className={styles.readMoreThumb}>
-                      <Image
+                      <SanityMedia
                         src={rec.mainImage}
                         alt={rec.title}
                         width={280}

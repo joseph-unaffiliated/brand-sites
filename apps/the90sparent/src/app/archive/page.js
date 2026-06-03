@@ -1,6 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
 import { getArticles, ensureDescriptionOnly } from "@/lib/articles";
+import SanityMedia from "@/components/SanityMedia";
 import HideWhenSubscribed from "@/components/HideWhenSubscribed";
 import { siteDisplayName } from "@/config/site";
 import styles from "./page.module.css";
@@ -57,7 +57,7 @@ export default async function ArchivePage() {
             <article className={styles.issueCard} key={article._id ?? article.slug}>
               <Link href={`/article/${article.slug}`} className={styles.issueCardLink}>
                 <div className={styles.issueCardImage}>
-                  <Image
+                  <SanityMedia
                     src={article.mainImage}
                     alt={article.title}
                     width={400}

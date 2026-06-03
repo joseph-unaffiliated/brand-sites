@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import Image from "next/image";
+import SanityMedia from "@/components/SanityMedia";
 import Link from "next/link";
 import { PortableText } from "next-sanity";
 import { createImageUrlBuilder } from "@sanity/image-url";
@@ -164,7 +164,7 @@ function portableTextComponents(projectId, dataset) {
         const { w, h } = dims(value);
         return (
           <figure className={`${styles.figure} ${styles.featureFigure}`}>
-            <Image
+            <SanityMedia
               src={src}
               alt=""
               width={w}
@@ -304,7 +304,7 @@ function renderContentBlock(block, projectId, dataset) {
                         const { w, h } = dims(chartImage);
                         return (
                           <div className={styles.economicsChartWrap}>
-                            <Image
+                            <SanityMedia
                               src={src}
                               alt=""
                               width={w}
@@ -377,7 +377,7 @@ function renderContentBlock(block, projectId, dataset) {
                       <article key={ik} className={styles.listicleItem}>
                         {imgSrc ? (
                           <div className={styles.listicleImageWrap}>
-                            <Image
+                            <SanityMedia
                               src={imgSrc}
                               alt=""
                               width={Math.min(w, 900)}
@@ -543,7 +543,7 @@ function renderContentBlock(block, projectId, dataset) {
                 <h2 className={styles.nostalgiaSectionTitle}>{headingText}</h2>
                 <figure className={`${styles.figure} ${styles.nostalgiaOfWeekFigure}`}>
                   {src ? (
-                    <Image
+                    <SanityMedia
                       src={src}
                       alt=""
                       width={w}

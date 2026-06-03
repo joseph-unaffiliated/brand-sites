@@ -1,9 +1,9 @@
-import Image from "next/image";
 import Link from "next/link";
 import {
   getArticles,
   getDemographicAndDescription,
 } from "@/lib/articles";
+import SanityMedia from "@/components/SanityMedia";
 import SubscribeBlock from "@/components/SubscribeBlock";
 import HideWhenSubscribed from "@/components/HideWhenSubscribed";
 import HomeSnippetsList from "@/components/HomeSnippetsList";
@@ -146,7 +146,7 @@ export default async function Home({ searchParams: searchParamsProp }) {
                   className={styles.mosaicCardLink}
                 >
                   <div className={styles.mosaicCardImage}>
-                    <Image
+                    <SanityMedia
                       src={article.mainImage}
                       alt={article.title}
                       width={400}
@@ -186,7 +186,7 @@ export default async function Home({ searchParams: searchParamsProp }) {
                 className={styles.featuredCard}
               >
                 <div className={styles.featuredImage}>
-                  <Image
+                  <SanityMedia
                     src={featured.mainImage}
                     alt={featured.title}
                     width={featured.mainImageWidth || 900}

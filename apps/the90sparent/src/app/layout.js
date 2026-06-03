@@ -28,10 +28,13 @@ import {
 import { OneTrustScripts, RetentionScript } from "@/components/ComplianceScripts";
 import { GoogleTagManagerNoscript, GoogleTagManagerScript } from "@/components/GoogleTagManager";
 import Header from "@/components/Header";
+import { getArticles, getArticleBySlug } from "@/lib/articles";
+import { NavLogoImageProvider } from "@/context/NavLogoImageContext";
 import SubscribePopup from "@/components/SubscribePopup";
 import SubmissionsCopyLink from "@/components/SubmissionsCopyLink";
 import AdvertiseCopyLink from "@/components/AdvertiseCopyLink";
 import { SubscriberProvider } from "@/context/SubscriberContext";
+import { headers } from "next/headers";
 import "./globals.css";
 
 const ADSENSE_CLIENT =
@@ -106,7 +109,27 @@ export const metadata = {
   },
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  let latestIssueImage = null;
+  let initialPageFillImage = null;
+  try {
+    const articles = await getArticles();
+    latestIssueImage = articles[0]?.mainImage ?? null;
+  } catch {
+    /* Sanity optional in dev */
+  }
+
+  try {
+    const requestHeaders = await headers();
+    const articleSlug = requestHeaders.get("x-article-slug");
+    if (articleSlug) {
+      const article = await getArticleBySlug(articleSlug);
+      initialPageFillImage = article?.mainImage ?? null;
+    }
+  } catch {
+    /* Article nav fill optional in dev */
+  }
+
   return (
     <html lang="en">
       <head>
@@ -120,6 +143,10 @@ export default function RootLayout({ children }) {
         <GoogleTagManagerNoscript />
         <MarketingScripts adsenseClient={ADSENSE_CLIENT} metaPixelId={META_PIXEL_ID} />
         <SubscriberProvider>
+          <NavLogoImageProvider
+            defaultFillImage={latestIssueImage}
+            initialPageFillImage={initialPageFillImage}
+          >
           <div className="site">
             <Header />
             <Suspense fallback={null}>
@@ -160,6 +187,7 @@ export default function RootLayout({ children }) {
             </div>
           </footer>
           </div>
+          </NavLogoImageProvider>
         </SubscriberProvider>
       </body>
     </html>
