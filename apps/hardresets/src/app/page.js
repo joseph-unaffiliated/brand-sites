@@ -21,7 +21,7 @@ import styles from "./page.module.css";
 const SITE_DESCRIPTION =
   process.env.NEXT_PUBLIC_SITE_DESCRIPTION || siteDefaultDescription;
 const SITE_OG_IMAGE_PATH =
-  process.env.NEXT_PUBLIC_SITE_OG_IMAGE || "/tnp-photo.gif";
+  process.env.NEXT_PUBLIC_SITE_OG_IMAGE || "/hr-phone.png";
 
 function absoluteSiteUrl(path) {
   const base = siteConfig.siteUrl.replace(/\/$/, "");

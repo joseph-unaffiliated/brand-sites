@@ -52,11 +52,11 @@ const siteUrl = siteConfig.siteUrl;
 
 const siteDescription =
   process.env.NEXT_PUBLIC_SITE_DESCRIPTION || siteDefaultDescription;
-/** Defaults match `public/tnp-*` brand assets (override per env on Vercel if needed). */
-const ogImagePath = process.env.NEXT_PUBLIC_SITE_OG_IMAGE || "/hr-phone.avif";
-const faviconIco = process.env.NEXT_PUBLIC_SITE_FAVICON || "/hr-wordmark-black.png";
-const faviconPng = process.env.NEXT_PUBLIC_SITE_FAVICON_PNG || "/hr-wordmark-black.png";
-const appleIconPath = process.env.NEXT_PUBLIC_SITE_APPLE_ICON || "/hr-phone.avif";
+/** Defaults match `public/hr-*` brand assets (override per env on Vercel if needed). */
+const ogImagePath = process.env.NEXT_PUBLIC_SITE_OG_IMAGE || "/hr-phone.png";
+const faviconIco = process.env.NEXT_PUBLIC_SITE_FAVICON || "/hr-webclip.png";
+const faviconPng = process.env.NEXT_PUBLIC_SITE_FAVICON_PNG || "/hr-webclip.png";
+const appleIconPath = process.env.NEXT_PUBLIC_SITE_APPLE_ICON || "/hr-webclip.png";
 
 function safeUrl(value) {
   try {
@@ -131,8 +131,14 @@ export default function RootLayout({ children }) {
             <div className="container footer-grid">
               <div className="footer-brand">
                 <Link href="/" className="footer-logo" aria-label={siteDisplayName}>
-                  <BrandWordmark className="footer-logo-img footer-logo-wordmark" />
-                  <BrandLogoMark className="footer-logo-img footer-logo-mark" />
+                  <BrandWordmark
+                    variant="white"
+                    className="footer-logo-img footer-logo-wordmark"
+                  />
+                  <BrandLogoMark
+                    variant="white"
+                    className="footer-logo-img footer-logo-mark"
+                  />
                 </Link>
                 <p className="footer-text footer-tagline">
                   {siteFooterTagline}

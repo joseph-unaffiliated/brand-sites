@@ -19,6 +19,10 @@ NEXT_PUBLIC_SANITY_DATASET=production
 3. `pnpm exec turbo dev --filter=hardresets`
 4. Vercel **Root Directory**: `apps/hardresets`
 
+## Brand assets
+
+Header/footer logos live in `public/hr-*` (wordmark + H|R mark, black and white). Favicon / Apple touch: `hr-webclip.png`. OG/social preview: `hr-phone.png`.
+
 ## CMS
 
 Sanity Studio: [hardresets.sanity.studio](https://hardresets.sanity.studio)  

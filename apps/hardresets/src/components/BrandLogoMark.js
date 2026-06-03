@@ -1,13 +1,15 @@
 import Image from "next/image";
 
-/** Compact mark for footer / small placements. */
-export default function BrandLogoMark({ className }) {
+/** H|R mark for mobile header / footer (`public/hr-logo-*.png`). */
+export default function BrandLogoMark({ className, variant = "black" }) {
+  const src = variant === "white" ? "/hr-logo-white.png" : "/hr-logo-black.png";
+
   return (
     <Image
-      src="/hr-wordmark-black.png"
+      src={src}
       alt=""
-      width={120}
-      height={15}
+      width={48}
+      height={34}
       className={className}
       aria-hidden
     />
