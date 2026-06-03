@@ -248,7 +248,17 @@ importers:
         specifier: 16.1.1
         version: 16.1.1(eslint@9.39.4(jiti@2.6.1))(typescript@5.9.3)
 
-  packages/magic-client: {}
+  packages/magic-client:
+    dependencies:
+      next:
+        specifier: '>=14'
+        version: 16.1.1(@babel/core@7.29.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      react:
+        specifier: '>=18'
+        version: 19.2.3
+      react-dom:
+        specifier: '>=18'
+        version: 19.2.3(react@19.2.3)
 
   packages/platform-redirects:
     dependencies:
