@@ -1,9 +1,28 @@
 {
   "folders": [
-    { "path": ".", "name": "brand-sites (root)" },
-    { "path": "apps/hookuplists", "name": "app: hookuplists" },
-    { "path": "apps/thepicklereport", "name": "app: thepicklereport" },
-    { "path": "packages", "name": "packages" }
+    {
+      "path": ".",
+      "name": "brand-sites (root)"
+    },
+    {
+      "path": "apps/hookuplists",
+      "name": "app: hookuplists"
+    },
+    {
+      "path": "apps/thepicklereport",
+      "name": "app: thepicklereport"
+    },
+    {
+      "path": "apps/hardresets",
+      "name": "app: hardresets"
+    },
+    {
+      "path": "packages",
+      "name": "packages"
+    },
+    {
+      "path": "../subscription-functions"
+    }
   ],
   "settings": {}
 }

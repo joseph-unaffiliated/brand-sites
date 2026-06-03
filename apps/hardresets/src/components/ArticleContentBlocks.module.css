@@ -1,0 +1,911 @@
+.blocks {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/*
+ * Consecutive feature/prose blocks (including the last feature → examples):
+ * match in-flow p → h4 rhythm (~1.5rem), not gap (2rem) + feature margin (1.75rem).
+ */
+.blocks > .block:has(+ .block) > .feature {
+  margin-bottom: 0;
+}
+
+.blocks > .block + .block {
+  margin-top: -0.5rem;
+}
+
+.blocks > .examplesBlock + .block {
+  margin-top: 0.75rem;
+}
+
+/* Tighter handoff into author card (avoid gap + feature margin + author margin stacking) */
+.blocks > .block:has(+ .authorCard) > .feature {
+  margin-bottom: 0;
+}
+
+.blocks > .block + .authorCard {
+  margin-top: .5rem;
+}
+
+.blocks > .block + .secondarySources {
+  margin-top: -0.5rem;
+}
+
+.block {
+  margin: 0;
+}
+
+/* Space below lead / section feature column before the next element in the same block or the next block */
+.block > .feature {
+  margin-bottom: 1.75rem;
+}
+
+.blockHeading {
+  font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
+  font-size: 1.35rem;
+  font-weight: 400;
+  margin: 0;
+  padding-bottom: 1.25rem;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+/*
+ * Section subheads (Examples title, Feature PT h4) — sans Halyard like the original
+ * Examples heading. Scoped under article copy so we beat `.site h4` (serif / 300).
+ */
+:global(.articlebody-section) :global(.articlecopy-richtext) h4.examplesSectionHeading,
+:global(.articlebody-section) :global(.articlecopy-richtext) .feature :global(h4) {
+  font-family: "halyard-display", "Helvetica Neue", Arial, sans-serif;
+  font-size: 1.1rem;
+  line-height: 1.85;
+  letter-spacing: -0.02em;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-wrap: balance;
+}
+
+.examplesBlock h4.examplesSectionHeading,
+.block > h4.examplesSectionHeading {
+  margin: 0 0 1.75rem;
+}
+
+.feature h4.examplesSectionHeading,
+.feature :global(h4) {
+  margin: 1.5rem 0 1rem;
+}
+
+.feature h4.examplesSectionHeading:first-child,
+.feature :global(h4):first-child {
+  margin-top: 0;
+}
+
+.authorCard .authorCardByline {
+  font-family: "halyard-display", "Helvetica Neue", Arial, sans-serif;
+  font-size: 1.1rem;
+  line-height: 1.85;
+  letter-spacing: -0.02em;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-wrap: balance;
+}
+
+.authorCard .authorCardByline {
+  margin: 0 0 0.25rem;
+}
+
+.authorCard {
+  margin: 0 0 2.5rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--border);
+  max-width: min(640px, 100%);
+}
+
+.authorCardBio {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.5;
+  letter-spacing: -0.02em;
+  font-weight: 300;
+  color: var(--text-muted);
+}
+
+.examplesBlock .listicleItem {
+  margin: 0;
+}
+
+@media (min-width: 600px) {
+  .examplesBlock .listicleItem {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr);
+    gap: 1.25rem 1.5rem;
+    align-items: start;
+  }
+}
+
+@media (min-width: 769px) {
+  .examplesBlock .listicleCopy {
+    padding-top: 32px;
+    box-sizing: border-box;
+  }
+
+  /* Tighter headline → body (half of the default 0.5rem from .exampleItemRichBody / .listicleBody) */
+  .examplesBlock .listicleCopy > .exampleItemRichBody,
+  .examplesBlock .listicleCopy > .listicleBody {
+    margin-top: 0.25rem;
+  }
+}
+
+/* Pickle Economics module (email-style card) */
+.economicsModule {
+  padding: 1.75rem 1.5rem 2rem;
+  background: hsl(252 12% 90%);
+  border-radius: 12px;
+  text-align: center;
+}
+
+.economicsLabelRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  margin: 0 0 0.75rem;
+}
+
+.economicsIcon {
+  font-size: 1.1rem;
+  line-height: 1;
+  filter: saturate(1.2);
+}
+
+.economicsLabelText {
+  font-family: "halyard-display", "Helvetica Neue", Arial, sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.economicsMainTitle {
+  font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
+  font-size: clamp(1.35rem, 3.5vw, 1.65rem);
+  font-weight: 300;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin: 0;
+  padding-bottom: 1.25rem;
+  color: var(--text-primary);
+}
+
+.economicsIntro {
+  font-family: "halyard-display", "Helvetica Neue", Arial, sans-serif;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--text-secondary);
+  margin: 0 auto 1.25rem;
+  max-width: 38em;
+  text-align: center;
+}
+
+/* Did you know / market share chart (split from Portable Text — matches email card) */
+.marketShareModule {
+  margin: 1.75rem 0;
+  text-align: left;
+}
+
+.marketShareModule .economicsLabelRow {
+  justify-content: flex-start;
+}
+
+.marketShareModule .economicsMainTitle {
+  text-align: left;
+  margin-bottom: 0;
+  padding-bottom: 1.15rem;
+}
+
+.marketShareIntro {
+  font-family: "halyard-display", "Helvetica Neue", Arial, sans-serif;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  margin: 0 0 1rem;
+  text-align: left;
+  max-width: none;
+}
+
+.marketShareIntro :global(p) {
+  margin: 0 0 0.5rem;
+  text-align: left;
+}
+
+.marketShareIntro :global(p:last-child) {
+  margin-bottom: 0;
+}
+
+.economicsChartWrap {
+  margin: 0 auto;
+  max-width: 100%;
+}
+
+.economicsChart {
+  border-radius: 12px;
+}
+
+.economicsFeature {
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.economicsFeature :global(p) {
+  text-align: center;
+}
+
+.economicsFeature :global(ul),
+.economicsFeature :global(ol) {
+  text-align: left;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 100%;
+}
+
+/* Festival list below map: left-aligned, underlined serif titles */
+.economicsFestivalList {
+  text-align: left;
+}
+
+.economicsFestivalList .blockHeading {
+  text-align: center;
+  font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
+  font-weight: 300;
+  font-size: 1.35rem;
+}
+
+.economicsFestivalList .listicle {
+  margin-top: 0.5rem;
+}
+
+.festivalItemTitle {
+  font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
+  font-weight: 400;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Match The Pickle Report `.prose` (ArticleContentBlocks) sizing */
+.feature {
+  line-height: 1.65;
+  font-size: 1.2rem;
+  width: 100%;
+  max-width: min(640px, 100%);
+}
+
+.feature p {
+  margin: 0 0 1.25rem;
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+  line-height: 1.85;
+  font-weight: 300;
+}
+
+.feature p:last-child {
+  margin-bottom: 0;
+}
+
+/* Beat `:where(.site) p` / `.site` paragraph rules when global CSS order varies (Pickle parity). */
+:global(.articlebody-section) :global(.articlecopy-richtext) .feature p {
+  font-size: 1.2rem;
+  line-height: 1.85;
+  font-weight: 300;
+  color: var(--text-secondary);
+}
+
+.feature :global(h2),
+.feature :global(h3) {
+  font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
+  font-size: 1.35rem;
+  font-weight: 600;
+  margin: 2rem 0 1rem;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+.feature :global(h2):first-child,
+.feature :global(h3):first-child {
+  margin-top: 0;
+}
+
+/*
+ * Portable Text h2/h3 in feature body (larger serif subheads — not Examples-style h4).
+ */
+:global(.articlebody-section) :global(.articlecopy-richtext) .feature :global(h2),
+:global(.articlebody-section) :global(.articlecopy-richtext) .feature :global(h3) {
+  font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
+  font-size: 1.35rem;
+  font-weight: 600;
+  margin: 2rem 0 1rem;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+:global(.articlebody-section) :global(.articlecopy-richtext) .feature :global(h2):first-child,
+:global(.articlebody-section) :global(.articlecopy-richtext) .feature :global(h3):first-child {
+  margin-top: 0;
+}
+
+@media (max-width: 768px) {
+  .poll .blockHeading {
+    font-size: 1.2rem;
+    line-height: 1.15;
+    padding-bottom: 0.65rem;
+  }
+
+  .poll .nostalgiaOfWeekTitle {
+    font-size: 1.2rem;
+    line-height: 1.15;
+    padding-bottom: 0.65rem;
+  }
+
+  .block > .feature {
+    font-size: 1rem;
+  }
+
+  .block > .feature p {
+    font-size: 1rem;
+  }
+
+  :global(.articlebody-section) :global(.articlecopy-richtext) .block > .feature p {
+    font-size: 1rem;
+  }
+
+  :global(.articlebody-section) :global(.articlecopy-richtext) h4.examplesSectionHeading,
+  :global(.articlebody-section) :global(.articlecopy-richtext) .feature :global(h4),
+  .authorCard .authorCardByline {
+    font-size: 1rem;
+  }
+
+  /* Examples only, mobile: more air between stacked listicle items (copy → next image) */
+  .examplesBlock .listicle {
+    gap: 3rem;
+  }
+
+  /* Examples only, mobile: inset copy under full-bleed photo; center body + caption + credit */
+  .examplesBlock .listicleCopy {
+    padding-left: 0.875rem;
+    padding-right: 0.875rem;
+    box-sizing: border-box;
+    text-align: center;
+  }
+
+  .examplesBlock .exampleItemRichBody {
+    text-align: center;
+  }
+
+  .examplesBlock .exampleItemCaptionBelow,
+  .examplesBlock .exampleItemCredit {
+    text-align: center;
+  }
+
+  /* Examples listicle PT: nested `.feature`, not `.block > .feature`, so match main body mobile sizing */
+  .examplesBlock .exampleItemRichBody.feature {
+    font-size: 1rem;
+    line-height: 1.65;
+  }
+
+  .examplesBlock .exampleItemRichBody :global(p) {
+    font-size: 1rem;
+    line-height: 1.85;
+    font-weight: 300;
+    text-align: center;
+  }
+
+  :global(.articlebody-section)
+    :global(.articlecopy-richtext)
+    .examplesBlock
+    .exampleItemRichBody
+    :global(p) {
+    font-size: 1rem;
+    line-height: 1.85;
+    font-weight: 300;
+    text-align: center;
+  }
+
+
+  .poll .feature {
+    font-size: 1rem;
+  }
+
+  .poll .feature p {
+    font-size: 1rem;
+  }
+
+  .poll .feature :global(h4) {
+    font-size: 1rem;
+  }
+
+  :global(.articlebody-section) :global(.articlecopy-richtext) .poll .feature :global(h4) {
+    font-size: 1rem;
+  }
+
+  :global(.articlebody-section) :global(.articlecopy-richtext) .poll .feature p {
+    font-size: 1rem;
+  }
+}
+
+/* Inline images: use padding-top (not margin-top) so space *adds* to the previous <p> margin.
+   Otherwise margin collapses with the paragraph and the gap stays ~1.25rem. */
+.featureFigure {
+  margin-top: 0;
+  padding-top: 1rem;
+  margin-bottom: 1rem;
+  box-sizing: border-box;
+}
+
+/* Explicit gap after body copy before the next image (e.g. "2. Cup O' Noodles…" → donuts) */
+.feature p + .featureFigure {
+  padding-top: 1.5rem;
+}
+
+.feature > .featureFigure:first-child {
+  padding-top: 0;
+}
+
+.featureFigure:has(.caption) {
+  margin-bottom: 0;
+}
+
+.featureFigure .caption {
+  margin-bottom: 1.15rem;
+}
+
+.figure {
+  margin: 0;
+}
+
+.blockImage {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+}
+
+.caption {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin: 0.3rem 0 0;
+  text-align: center;
+  line-height: 1.35;
+}
+
+.captionSep {
+  opacity: 0.7;
+}
+
+.credit {
+  font-style: normal;
+}
+
+.featureLink {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.featureLink:visited {
+  color: inherit;
+}
+
+.featureLink:hover {
+  color: inherit;
+}
+
+.listicle {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.listicleItem {
+  margin: 0;
+}
+
+.listicleImageWrap {
+  margin-bottom: 0.35rem;
+}
+
+.listicleImageWrap .caption {
+  margin-top: 0.3rem;
+  margin-bottom: 1rem;
+}
+
+/* Inline PT for caption/credit (avoid <p> inside <p>) */
+.captionPtLine {
+  display: inline;
+}
+
+.captionPtLine + .captionPtLine::before {
+  content: " ";
+}
+
+.listicleCopy {
+  line-height: 1.55;
+}
+
+.itemNum {
+  font-weight: 600;
+}
+
+.listicleBody {
+  margin: 0.5rem 0 0;
+  white-space: pre-wrap;
+}
+
+/* Portable Text in example cards (links, lists — not pre-wrap) */
+.exampleItemRichBody {
+  margin: 0.5rem 0 0;
+}
+
+.exampleItemRichBody :global(p) {
+  text-wrap: balance;
+}
+
+/* Photo caption + credit — below body copy, not under the thumbnail (examples section) */
+.exampleItemCaptionBelow {
+  margin-top: 1.25rem;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  line-height: 1.35;
+  text-align: left;
+}
+
+.exampleItemCaptionBelow + .exampleItemCredit {
+  margin-top: 0.5rem;
+}
+
+/* Credit-only row: match caption spacing from body */
+.exampleItemRichBody + .exampleItemCredit {
+  margin-top: 1.25rem;
+}
+
+.exampleItemCredit {
+  margin-top: 0.75rem;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  line-height: 1.35;
+  text-align: left;
+}
+
+.exampleItemCredit .credit {
+  color: inherit;
+}
+
+.aroundTheWeb {
+  max-width: 480px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+  padding: 1rem 1rem 2rem;
+  padding-top: 0.875rem;
+  background: var(--bg);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+/*
+ * Portable Text headline rule in globals.css targets `.articlecopy-richtext h2` with
+ * margin + font-size; it beats a lone `.aroundTheWebSectionTitle` class. Scope under
+ * article + richtext + `.aroundTheWeb` so these styles win.
+ */
+:global(.articlebody-section) :global(.articlecopy-richtext) .aroundTheWeb h2.aroundTheWebSectionTitle {
+  font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
+  font-size: 2rem;
+  font-weight: 300;
+  line-height: 1.25;
+  text-align: center;
+  letter-spacing: -0.02em;
+  margin: 2rem 0 2.75rem;
+}
+
+.nostalgiaCard {
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 10px;
+  border: 1px solid var(--text-muted);
+  background: var(--bg);
+}
+
+/* Tighter top inset than generic `.poll` (desktop uses 2.5rem all sides) */
+.poll.nostalgiaCard {
+  padding-top: 0.875rem;
+}
+
+.nostalgiaSectionTitle {
+  font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
+  font-size: 2rem;
+  font-weight: 300;
+  line-height: 1.25;
+  text-align: center;
+  letter-spacing: -0.02em;
+  margin: 0 0 1.5rem;
+}
+
+/* Poll-style asides — mobile-first padding/spacing; large insets only ≥769px (avoid cascade bugs with @media max-width) */
+.poll {
+  padding: 1rem 1rem;
+  background: var(--bg);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+.pickleEconomicsBox {
+  margin-top: 1.25rem;
+}
+
+.poll .eyebrow {
+  text-align: center;
+}
+
+.poll:has(.nostalgiaOfWeekFigure) .eyebrow {
+  margin-bottom: 0.5rem;
+}
+
+.poll:has(.nostalgiaOfWeekFigure) .nostalgiaSectionTitle {
+  margin-bottom: 1.25rem;
+}
+
+/* Inline figures inside poll-style boxes (Pickle Economics body, etc.) */
+.poll .feature figure.featureFigure {
+  margin-left: 0;
+  margin-right: 0;
+  margin-top: 0.65rem;
+  margin-bottom: 0.65rem;
+  padding-top: 0.65rem;
+}
+
+.poll .feature p + figure.featureFigure {
+  padding-top: 0.65rem;
+}
+
+@media (min-width: 769px) {
+  .aroundTheWeb {
+    padding: 1.25rem 2.25rem 3rem;
+  }
+
+  .poll {
+    padding: 2.5rem 2.25rem;
+  }
+
+  .poll.nostalgiaCard,
+  .poll.nostalgiaOfWeekFallback {
+    padding: 1.25rem 2.25rem 2.5rem;
+  }
+
+  .pickleEconomicsBox {
+    margin-top: 2rem;
+  }
+
+  .poll:has(.nostalgiaOfWeekFigure) .eyebrow {
+    margin-bottom: 0.65rem;
+  }
+
+  .poll:has(.nostalgiaOfWeekFigure) .nostalgiaSectionTitle {
+    margin-bottom: 1.5rem;
+  }
+
+  .poll .feature figure.featureFigure {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    padding-top: 1rem;
+  }
+
+  .poll .feature p + figure.featureFigure {
+    padding-top: 1rem;
+  }
+}
+
+/* Pickle Economics lists: mobile-first (tighter); figures/lists get extra inset on desktop only */
+.pickleEconomicsBox .feature ul,
+.pickleEconomicsBox .feature ol {
+  padding-left: 1.25rem;
+  margin-left: 0.25rem;
+  list-style-position: outside;
+}
+
+.pickleEconomicsBox .feature li {
+  padding-left: 0.35rem;
+}
+
+@media (min-width: 769px) {
+  .pickleEconomicsBox .feature figure.featureFigure {
+    margin-left: 1rem;
+    margin-right: 1rem;
+    box-sizing: border-box;
+  }
+
+  .pickleEconomicsBox .feature ul,
+  .pickleEconomicsBox .feature ol {
+    padding-left: 1.75rem;
+    margin-left: 0.5rem;
+  }
+}
+
+.poll .nostalgiaOfWeekFigure {
+  margin-top: 0;
+  margin-bottom: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.eyebrow {
+  font-size: 0.85rem;
+  text-transform: none;
+  margin: 0 0 0.5rem;
+  opacity: 0.85;
+}
+
+.aroundTheWebList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.aroundTheWebItemLink {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  text-align: center;
+  border-radius: 6px;
+  padding: 0.35rem 0.25rem;
+  margin: -0.35rem -0.25rem;
+}
+
+.aroundTheWebItemLink:focus-visible {
+  outline: 2px solid var(--text-primary);
+  outline-offset: 2px;
+}
+
+.aroundTheWebTitle {
+  font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
+  font-size: 1.15rem;
+  line-height: 1.25;
+  margin: 0 0 0.35rem;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+.aroundTheWebLink {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: calc(0.45rem - 2px) 0.65rem 0.45rem;
+  border: 1px solid var(--text-primary);
+  border-radius: 2px;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 200;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  transition: background 0.15s;
+}
+
+.aroundTheWebLink:hover {
+  background: hsl(0 0% 96%);
+}
+
+.nostalgiaOfWeekFigure {
+  margin-top: 0.5rem;
+}
+
+/* Tall portrait images: cap height and center in the poll card */
+.nostalgiaOfWeekFigure .blockImage {
+  width: auto;
+  max-width: 100%;
+  max-height: 600px;
+  height: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.nostalgiaOfWeekFigure .caption {
+  margin-top: 0.35rem;
+  margin-bottom: 1.15rem;
+  width: 100%;
+}
+
+.nostalgiaOfWeekTitle {
+  font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
+  font-size: 1.35rem;
+  font-weight: 300;
+  text-align: center;
+  margin: 0;
+  padding-bottom: 1.15rem;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+.nostalgiaOfWeekPlaceholder {
+  width: 100%;
+  min-height: 140px;
+  border-radius: 12px;
+  border: 1px dashed var(--border);
+  background: hsl(252 8% 97%);
+}
+
+.nostalgiaOfWeekFallback {
+  margin-top: 0;
+}
+
+.sectionDivider {
+  text-align: center;
+  margin: 1.875rem 0;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.pullQuote {
+  font-style: italic;
+  margin: 1rem 0;
+}
+
+.secondarySources {
+  max-width: 640px;
+  margin: 3.75rem auto 0;
+  padding-top: 3.75rem;
+  border-top: 1px solid #0b0202;
+}
+
+.secondarySourcesList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.secondarySourcesItem {
+  padding: 0 0 1.875rem;
+  margin: 0 0 1.875rem;
+  border-bottom: 1px solid #d9d9d9;
+}
+
+.secondarySourcesItem:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.secondarySourcesHeadlineLink {
+  text-decoration: none;
+  color: inherit;
+}
+
+.secondarySourcesHeadline {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.5rem;
+  line-height: 1.35;
+}
+
+.secondarySourcesDescription {
+  font-size: 15px;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  margin: 0;
+  line-height: 1.85;
+}
+
+.secondarySourcesCta {
+  color: inherit;
+  text-decoration: underline;
+  font-weight: 300;
+}

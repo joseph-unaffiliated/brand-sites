@@ -1,0 +1,178 @@
+/**
+ * Outlined + one mild-fill CTA; symmetric vertical padding.
+ * Scoped so global `.button` (e.g. header) is unchanged.
+ */
+.actionRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1.75rem;
+}
+
+/** One row, no max-width wrap — use on /unsubscribed (three CTAs) */
+.actionRowNowrap {
+  flex-wrap: nowrap;
+  gap: 0.5rem;
+  align-items: center;
+  flex-shrink: 0;
+  min-width: 0;
+  max-width: 100%;
+  justify-content: center;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 2px; /* room for focus ring / scrollbar */
+}
+
+.actionRowNowrap .btn,
+.actionRowNowrap .btnPrimary {
+  white-space: nowrap;
+  flex: 0 0 auto;
+  max-width: none;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-height: 0;
+  margin: 0;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  background: transparent;
+  font-size: 14px;
+  font-weight: 300;
+  font-family: "halyard-display", "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.25;
+  padding: 0.65rem 1.125rem;
+  text-decoration: none;
+  transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--text-primary);
+}
+
+.btnPrimary {
+  border-color: var(--accent);
+  color: var(--text-primary);
+  background: var(--surface-muted);
+}
+
+.btnPrimary:hover {
+  background: hsl(252, 20%, 92%);
+  border-color: var(--accent-strong);
+}
+
+.recs {
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  width: 100%;
+}
+
+/* Match subscribed page .body (Thanks for subscribing…) */
+.recsTitle {
+  font-size: 1.125rem;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+  font-weight: 300;
+  font-family: "halyard-display", "Helvetica Neue", Arial, sans-serif;
+  margin: 0 0 1.5rem;
+  text-align: center;
+}
+
+.recsList {
+  list-style: none;
+  margin: 0 auto;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: stretch;
+  gap: 0.5rem;
+  width: fit-content;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 4px;
+}
+
+.rec {
+  display: flex;
+  flex-direction: column;
+  /* stretch so copy gets full card width and can wrap (center was shrink-to-fit → one line / clip) */
+  align-items: stretch;
+  text-align: center;
+  gap: 0.35rem;
+  flex: 0 0 auto;
+  /* Narrow measure so deck lines wrap to ~two lines */
+  width: min(100%, 12rem);
+  max-width: 12rem;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.recName {
+  font-size: 1.55rem;
+  font-weight: 300;
+  color: var(--text-primary);
+  font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
+  line-height: 1.25;
+  text-wrap: balance;
+  width: 100%;
+  box-sizing: border-box;
+  /* Extra space below title before deck (in addition to .rec gap) */
+  margin-bottom: 0.45rem;
+}
+
+.recDek {
+  font-size: 0.9375rem;
+  line-height: 1.4;
+  color: var(--text-muted);
+  font-weight: 300;
+  text-align: center;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  white-space: normal;
+  text-wrap: balance;
+}
+
+.recActions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.35rem;
+  margin-top: 0.85rem;
+  width: 100%;
+}
+
+.recVisit {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.recVisit:hover {
+  color: var(--text-primary);
+}
+
+.cardWide {
+  max-width: min(100%, 1040px);
+}

@@ -181,6 +181,18 @@ const articleContentBlocksProjection = `contentBlocks[] {
       ctaLabel
     }
   },
+  _type == "secondarySourcesBlock" => {
+    _key,
+    _type,
+    heading,
+    items[] {
+      _key,
+      headline,
+      description,
+      url,
+      ctaLabel
+    }
+  },
   _type == "photoOfWeekBlock" => {
     _key,
     _type,
@@ -318,6 +330,8 @@ export const articlesQuery = `*[${publishedArticleFilter}] | order(publishedDate
   disclaimer,
   bio,
   authorName,
+  subjectName,
+  subjectIcon,
   ${articleSeoProjection},
   ${articleContentBlocksProjection}
 }`;
@@ -340,6 +354,8 @@ export const articleBySlugQuery = `*[${publishedArticleFilter} && slug.current =
   disclaimer,
   bio,
   authorName,
+  subjectName,
+  subjectIcon,
   ${articleSeoProjection},
   ${articleContentBlocksProjection}
 }`;
@@ -530,6 +546,25 @@ export function mapArticle(raw, urlFor, fallbackImage = "/hl-photo.png") {
     }
   }
 
+  let subjectIcon = null;
+  if (raw.subjectIcon) {
+    const iconBuilder = urlFor(raw.subjectIcon);
+    if (iconBuilder) {
+      try {
+        const url = iconBuilder.width(80).url();
+        if (url) {
+          subjectIcon = {
+            url,
+            width: raw.subjectIcon?.asset?.metadata?.dimensions?.width ?? 40,
+            height: raw.subjectIcon?.asset?.metadata?.dimensions?.height ?? 40,
+          };
+        }
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+
   return {
     _id: raw._id,
     slug: normalizeArticleSlug(raw.slug),
@@ -537,6 +572,8 @@ export function mapArticle(raw, urlFor, fallbackImage = "/hl-photo.png") {
     kicker: raw.kicker,
     subtitle: raw.subtitle,
     summary: raw.summary,
+    subjectName: raw.subjectName ?? null,
+    subjectIcon,
     mainImage,
     mainImageWidth,
     mainImageHeight,
