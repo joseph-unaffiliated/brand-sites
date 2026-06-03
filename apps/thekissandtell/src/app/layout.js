@@ -51,7 +51,8 @@ const siteUrl = siteConfig.siteUrl;
 const siteDescription =
   process.env.NEXT_PUBLIC_SITE_DESCRIPTION || siteDefaultDescription;
 const ogImagePath = process.env.NEXT_PUBLIC_SITE_OG_IMAGE || "/tkat-phone.png";
-const faviconPath = process.env.NEXT_PUBLIC_SITE_FAVICON || "/tkat-favicon.png";
+const faviconIco = process.env.NEXT_PUBLIC_SITE_FAVICON || "/favicon.ico";
+const faviconPng = process.env.NEXT_PUBLIC_SITE_FAVICON_PNG || "/tkat-favicon.png";
 const appleIconPath = process.env.NEXT_PUBLIC_SITE_APPLE_ICON || "/tkat-webclip.png";
 
 function safeUrl(value) {
@@ -73,7 +74,10 @@ export const metadata = {
   formatDetection: { telephone: false },
   alternates: { canonical: "/" },
   icons: {
-    icon: faviconPath,
+    icon: [
+      { url: faviconIco },
+      { url: faviconPng, type: "image/png" },
+    ],
     ...(appleIconPath ? { apple: appleIconPath } : {}),
   },
   openGraph: {

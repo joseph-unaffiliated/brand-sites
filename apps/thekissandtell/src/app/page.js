@@ -46,7 +46,7 @@ function featuredPreviewFromArticle(article) {
   const entries = Array.isArray(article?.entries) ? article.entries : [];
   const firstBody = entries.find((entry) => typeof entry?.body === "string" && entry.body.trim())?.body ?? "";
   const fallback = (article?.summary || article?.subtitle || "").trim();
-  return firstWordsWithEllipsis(firstBody || fallback, 150);
+  return firstWordsWithEllipsis(firstBody || fallback, 220);
 }
 
 export default async function Home({ searchParams: searchParamsProp }) {

@@ -282,15 +282,14 @@ a {
     align-items: center;
     position: relative;
     gap: 16px 28px;
-    --header-mark-w: min(132px, 16vw);
+    --header-mark-w: min(100px, 12.5vw);
     --header-mark-h: calc(var(--header-mark-w) * 32 / 25);
     --logo-line-pad-x: 34px;
     --logo-line-gap: calc(var(--header-mark-w) + 2 * var(--logo-line-pad-x));
     --brand-top: 24px;
     --brand-chip-pad-y: 5px;
-    --hairline-mark-ratio: 0.56;
     --hairline-y: calc(
-      var(--brand-top) + var(--brand-chip-pad-y) + var(--header-mark-h) * var(--hairline-mark-ratio)
+      var(--brand-top) + var(--brand-chip-pad-y) + var(--header-mark-h) / 2
     );
     --logo-mark-center-y: calc(
       var(--brand-top) + var(--brand-top) + var(--brand-chip-pad-y) + var(--header-mark-h) / 2
@@ -513,8 +512,8 @@ a {
   .site-header--marketing .brand-logo-mark,
   .site-header--marketing .brand-logo-mark-fill {
     display: block;
-    width: var(--header-mark-w, min(132px, 16vw));
-    max-width: min(132px, 16vw);
+    width: var(--header-mark-w, min(100px, 12.5vw));
+    max-width: min(100px, 12.5vw);
     height: var(--header-mark-h);
     color: var(--text-primary);
     object-fit: contain;
@@ -543,9 +542,9 @@ a {
   position: relative;
   display: block;
   flex-shrink: 0;
-  width: var(--header-mark-w, min(132px, 16vw));
-  max-width: min(132px, 16vw);
-  height: var(--header-mark-h, calc(var(--header-mark-w, 132px) * 32 / 25));
+  width: var(--header-mark-w, min(100px, 12.5vw));
+  max-width: min(100px, 12.5vw);
+  height: var(--header-mark-h, calc(var(--header-mark-w, 100px) * 32 / 25));
   -webkit-mask-image: url(/tkat-logo-mask.svg);
   mask-image: url(/tkat-logo-mask.svg);
   -webkit-mask-size: contain;
@@ -1174,17 +1173,14 @@ a {
   /* Marketing mobile: hairline gaps + white chip behind mark; tighter below header. */
   .site-header--marketing .header-row-marketing {
     position: relative;
-    --header-mark-w: min(96px, 28vw);
+    --header-mark-w: min(72px, 21vw);
     --header-mark-h: calc(var(--header-mark-w) * 32 / 25);
     --logo-line-pad-x: 24px;
     --logo-line-gap: calc(var(--header-mark-w) + 2 * var(--logo-line-pad-x));
     --brand-top: 14px;
     --brand-chip-pad-y: 4px;
-    --hairline-mark-ratio: 0.72;
-    /* Hairline stays put when nudging mark up on mobile (desktop uses brand-top for both). */
-    --hairline-anchor-top: 20px;
     --hairline-y: calc(
-      var(--hairline-anchor-top) + var(--brand-chip-pad-y) + var(--header-mark-h) * var(--hairline-mark-ratio)
+      var(--brand-top) + var(--brand-chip-pad-y) + var(--header-mark-h) / 2
     );
     --logo-mark-center-y: calc(
       var(--brand-top) + var(--brand-top) + var(--brand-chip-pad-y) + var(--header-mark-h) / 2
