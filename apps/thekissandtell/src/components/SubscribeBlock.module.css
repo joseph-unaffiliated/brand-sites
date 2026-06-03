@@ -20,9 +20,11 @@
   justify-content: space-between;
   gap: 1.25rem;
   padding: 1rem 1.5rem;
-  width: max-content;
+  width: 100%;
   max-width: min(1100px, calc(100vw - 48px));
+  min-width: 0;
   margin: 0 auto;
+  box-sizing: border-box;
   border-radius: var(--radius);
   box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.2), 0 8px 24px rgba(0, 0, 0, 0.25);
 }
@@ -36,10 +38,14 @@
   overflow-wrap: break-word;
 }
 
+.rootBanner .form {
+  margin-top: 0;
+}
+
 .bannerText {
-  flex-shrink: 0;
-  width: min-content;
-  min-width: 560px;
+  flex: 1 1 280px;
+  min-width: 0;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -50,21 +56,26 @@
 }
 
 .bannerForm {
-  flex-shrink: 0;
+  flex: 0 1 380px;
+  min-width: 0;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
   gap: 6px;
-  min-width: 380px;
 }
 
 .formRow {
   position: relative;
   display: flex;
   align-items: stretch;
+  min-width: 0;
+  width: 100%;
 }
 
 .formRow input {
   flex: 1;
+  min-width: 0;
+  max-width: 100%;
   padding-right: 44px;
   border-radius: 8px;
 }
@@ -127,6 +138,8 @@
   flex-direction: column;
   gap: 4px;
   margin-top: 1rem;
+  min-width: 0;
+  width: 100%;
 }
 
 .form input {
@@ -157,8 +170,8 @@
   color: rgba(255, 255, 255, 0.8);
 }
 
-/* Banner: stack text above form on mobile, smaller type and tighter button */
-@media (max-width: 768px) {
+/* Banner: stack text above form when side-by-side gets too tight */
+@media (max-width: 1024px) {
   .rootBanner {
     flex-direction: column;
     align-items: stretch;
@@ -188,12 +201,12 @@
   }
 
   .bannerText {
+    flex: none;
     width: 100%;
-    min-width: 0;
   }
 
   .bannerForm {
-    min-width: 0;
+    flex: none;
     width: 100%;
   }
 }

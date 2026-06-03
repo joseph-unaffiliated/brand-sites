@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { getArticleBySlug, getArticleSlugs, getArticles } from "@/lib/articles";
 import HideWhenSubscribed from "@/components/HideWhenSubscribed";
 import RecordArticleView from "@/components/RecordArticleView";
+import NavLogoImageSync from "@/components/NavLogoImageSync";
 import ArticleSubscribeForm from "@/components/ArticleSubscribeForm";
 import AdSlot from "@/components/AdSlot";
 import ArticleAdStickyBottom from "@/components/ArticleAdStickyBottom";
@@ -55,6 +56,7 @@ export default async function ArticlePage({ params }) {
 
   return (
     <div className={styles.page}>
+      <NavLogoImageSync image={article.mainImage} />
       <RecordArticleView slug={slug} />
       <section className="articlebody-section">
         <div className={styles.articleHeroBlock}>

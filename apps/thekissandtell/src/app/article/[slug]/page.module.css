@@ -164,6 +164,23 @@
   display: block;
 }
 
+.readMoreOuter {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px 64px;
+  box-sizing: border-box;
+  container-type: inline-size;
+}
+
+@media (min-width: 769px) {
+  .readMoreOuter {
+    max-width: min(100%, 1200px);
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
+
 .readMore {
   margin-top: 3rem;
   padding-top: 2.5rem;

@@ -1,8 +1,19 @@
 import Image from "next/image";
+import BrandLogoImageFill from "@/components/BrandLogoImageFill";
 import { siteDisplayName } from "@/config/site";
 
 /** Wordmark image; use variant="light" on dark backgrounds (footer). */
-export default function BrandWordmark({ className, variant = "dark" }) {
+export default function BrandWordmark({ className, variant = "dark", fillImageUrl }) {
+  if (fillImageUrl) {
+    return (
+      <BrandLogoImageFill
+        className={className}
+        fillClassName="brand-logo-wordmark-fill"
+        fillImageUrl={fillImageUrl}
+      />
+    );
+  }
+
   const src =
     variant === "light" ? "/tkat-wordmark-white.png" : "/tkat-wordmark-black.png";
 
