@@ -4,9 +4,9 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { useSubscriber } from "@/context/SubscriberContext";
-import BrandLogoMark from "@/components/BrandLogoMark";
 import BrandLogoMarkLarge from "@/components/BrandLogoMarkLarge";
 import BrandWordmark from "@/components/BrandWordmark";
+import { useNavLogoFillImage } from "@/context/NavLogoImageContext";
 import { ContactCopyLink } from "@publication-websites/web-shell/contact-copy";
 import SubmissionsCopyLink from "@/components/SubmissionsCopyLink";
 import AdvertiseCopyLink from "@/components/AdvertiseCopyLink";
@@ -15,6 +15,7 @@ import { contactEmail, siteDisplayName } from "@/config/site";
 export default function Header() {
   const pathname = usePathname() || "";
   const isArticle = pathname.startsWith("/article/");
+  const logomarkFillImage = useNavLogoFillImage(pathname);
   const [menuOpen, setMenuOpen] = useState(false);
   const { isSubscribed } = useSubscriber();
 
@@ -78,11 +79,16 @@ export default function Header() {
             onClick={() => setMenuOpen(false)}
             aria-label={siteDisplayName}
           >
-            <BrandWordmark className="brand-logo-img brand-logo-wordmark" />
             {isArticle ? (
-              <BrandLogoMark className="brand-logo-img brand-logo-mark" />
+              <BrandWordmark
+                className="brand-logo-img brand-logo-wordmark"
+                fillImageUrl={logomarkFillImage}
+              />
             ) : (
-              <BrandLogoMarkLarge className="brand-logo-img brand-logo-mark brand-logo-mark-large" />
+              <BrandLogoMarkLarge
+                className="brand-logo-img brand-logo-mark brand-logo-mark-large"
+                fillImageUrl={logomarkFillImage}
+              />
             )}
           </Link>
         </div>

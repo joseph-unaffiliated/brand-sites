@@ -261,10 +261,21 @@ a {
     position: relative;
     gap: 16px 28px;
     --header-mark-w: min(168px, 20vw);
-    /* Large mark viewBox is 46×24 (BrandLogoMarkLarge). */
-    --header-mark-h: calc(var(--header-mark-w) * 24 / 46);
+    /* HR logomark SVG viewBox is 34×24 (same 17:12 ratio as legacy 136×96 PNG export). */
+    --header-mark-h: calc(var(--header-mark-w) * 24 / 34);
     --logo-line-pad-x: 34px;
     --logo-line-gap: calc(var(--header-mark-w) + 2 * var(--logo-line-pad-x));
+    --brand-top: 14px;
+    --brand-chip-pad-y: 5px;
+    /* Mark box padding; optical center sits below geometric 50%. */
+    --hairline-mark-ratio: 0.56;
+    --hairline-y: calc(
+      var(--brand-top) + var(--brand-chip-pad-y) + var(--header-mark-h) * var(--hairline-mark-ratio)
+    );
+    /* Viewport Y of logomark vertical center (row pad + brand offset + chip + half mark). */
+    --logo-mark-center-y: calc(
+      var(--brand-top) + var(--brand-top) + var(--brand-chip-pad-y) + var(--header-mark-h) / 2
+    );
     padding-top: 14px;
     /* Extra 4px below accounts for logomark + hairline shifted down without growing min-height (avoids moving centered nav). */
     padding-bottom: calc(var(--header-mark-h) * 0.32 + 26px);
@@ -278,7 +289,7 @@ a {
     left: calc(50% - 50vw);
     width: calc(50vw - var(--logo-line-gap) / 2);
     right: auto;
-    top: calc(20px + var(--header-mark-h) / 2);
+    top: var(--hairline-y);
     height: 1px;
     background: var(--border);
     pointer-events: none;
@@ -291,20 +302,26 @@ a {
     right: calc(50% - 50vw);
     width: calc(50vw - var(--logo-line-gap) / 2);
     left: auto;
-    top: calc(20px + var(--header-mark-h) / 2);
+    top: var(--hairline-y);
     height: 1px;
     background: var(--border);
     pointer-events: none;
     z-index: 1;
   }
 
+  /* Full-row centering without transform so fixed logo fill is viewport-relative (Chrome). */
   .site-header--marketing .header-row-marketing .brand {
     position: absolute;
-    left: 50%;
+    left: 0;
+    right: 0;
     top: 14px;
-    transform: translateX(-50%);
+    transform: none;
     z-index: 2;
     grid-column: unset;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    pointer-events: none;
   }
 
   .site-header--marketing .header-row-marketing .brand-name {
@@ -314,6 +331,7 @@ a {
     border-radius: 4px;
     position: relative;
     z-index: 3;
+    pointer-events: auto;
   }
 
   .site-header--marketing .header-row-marketing .site-nav-left,
@@ -387,7 +405,7 @@ a {
     background: transparent;
   }
 
-  /* Article: equal-width side rails so the wordmark stays centered in the container. */
+  /* Article: equal-width side rails; large photo logomark like marketing. */
   .site-header--article .header-row-1 {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
@@ -397,6 +415,11 @@ a {
     padding-top: 22px;
     padding-bottom: 22px;
     min-height: 0;
+    --header-mark-w: min(168px, 20vw);
+    --header-mark-h: calc(var(--header-mark-w) * 24 / 34);
+    --header-wordmark-w: min(200px, 32vw);
+    --header-wordmark-h: calc(var(--header-wordmark-w) * 89 / 712);
+    --logo-mark-center-y: calc(22px + var(--header-wordmark-h) / 2);
   }
 
   .site-header--article .header-hamburger {
@@ -469,35 +492,92 @@ a {
 }
 
 @media (min-width: 769px) {
-  /* Article: full wordmark (default desktop). */
-  .site-header--article .brand-logo-wordmark {
-    display: block;
-    box-sizing: border-box;
-    width: min(200px, 32vw);
-    max-width: 100%;
-    height: auto;
-    max-height: none;
-    color: var(--text-primary);
-    object-fit: contain;
-  }
-
-  .site-header--article .brand-logo-mark {
+  /* Marketing: large H|R photo logomark only. */
+  .site-header--marketing .brand-logo-wordmark,
+  .site-header--marketing .brand-logo-wordmark-fill {
     display: none;
   }
 
-  /* Marketing / utility: large logomark only. */
-  .site-header--marketing .brand-logo-wordmark {
-    display: none;
-  }
-
-  .site-header--marketing .brand-logo-mark {
+  .site-header--marketing .brand-logo-mark,
+  .site-header--marketing .brand-logo-mark-fill {
     display: block;
     width: var(--header-mark-w, min(168px, 20vw));
     max-width: min(168px, 20vw);
-    height: auto;
+    height: var(--header-mark-h);
     color: var(--text-primary);
     object-fit: contain;
   }
+
+  /* Article: full wordmark with photo fill. */
+  .site-header--article .brand-logo-mark,
+  .site-header--article .brand-logo-mark-fill {
+    display: none !important;
+  }
+
+  .site-header--article .brand-logo-wordmark,
+  .site-header--article .brand-logo-wordmark-fill {
+    display: block;
+    box-sizing: border-box;
+    width: var(--header-wordmark-w, min(200px, 32vw));
+    max-width: 100%;
+    height: var(--header-wordmark-h);
+    color: var(--text-primary);
+    object-fit: contain;
+  }
+
+}
+
+/* Viewport-sized photo through H|R mask (marketing pages). */
+.site-header--marketing .brand-logo-mark-fill {
+  position: relative;
+  display: block;
+  flex-shrink: 0;
+  width: var(--header-mark-w, min(120px, 36vw));
+  max-width: min(168px, 20vw);
+  height: var(--header-mark-h, calc(var(--header-mark-w, 120px) * 24 / 34));
+  -webkit-mask-image: url(/hr-logo-mask.svg);
+  mask-image: url(/hr-logo-mask.svg);
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+/* Viewport-sized photo through wordmark mask (article pages). */
+.site-header--article .brand-logo-wordmark-fill {
+  position: relative;
+  display: block;
+  flex-shrink: 0;
+  width: var(--header-wordmark-w, min(200px, 32vw));
+  max-width: min(200px, 32vw);
+  height: var(--header-wordmark-h, calc(var(--header-wordmark-w, 200px) * 89 / 712));
+  -webkit-mask-image: url(/hr-wordmark-mask.svg);
+  mask-image: url(/hr-wordmark-mask.svg);
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+.site-header--marketing .brand-logo-mark-fill::before,
+.site-header--article .brand-logo-wordmark-fill::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: var(--header-mark-bg-image);
+  background-size: cover;
+  /* Align image vertical center with logomark (not viewport center). */
+  background-position: 50% calc(50% + (var(--logo-mark-center-y, 50vh) - 50vh));
+  background-repeat: no-repeat;
+  filter: blur(5px);
+  pointer-events: none;
 }
 
 .brand-tag {
@@ -888,7 +968,7 @@ main.site-main > [data-subscription-landing] {
   flex-flow: column;
   align-items: flex-start;
   gap: 1rem;
-  background: var(--footer-bg);
+  background: var(--article-subscribe-bg, var(--footer-bg));
   background-image: linear-gradient(rgba(0, 0, 0, 0.66), transparent);
   border-radius: 0.5rem;
   padding: 1rem 1.5rem;
@@ -1145,13 +1225,23 @@ main.site-main > [data-subscription-landing] {
     padding: 6px 12px;
   }
 
-  /* Marketing mobile: hairline gaps + white chip behind mark; tighter below header. */
+  /* Marketing mobile: hairline through logomark center; white chip on .brand-name masks the gap. */
   .site-header--marketing .header-row-marketing {
     position: relative;
     --header-mark-w: min(120px, 36vw);
-    --header-mark-h: calc(var(--header-mark-w) * 24 / 46);
+    --header-mark-h: calc(var(--header-mark-w) * 24 / 34);
     --logo-line-pad-x: 24px;
     --logo-line-gap: calc(var(--header-mark-w) + 2 * var(--logo-line-pad-x));
+    --brand-top: 12px;
+    --brand-chip-pad-y: 4px;
+    /* Optical center of H|R sits below the mark box midpoint. */
+    --hairline-mark-ratio: 0.72;
+    --hairline-y: calc(
+      var(--brand-top) + var(--brand-chip-pad-y) + var(--header-mark-h) * var(--hairline-mark-ratio)
+    );
+    --logo-mark-center-y: calc(
+      16px + var(--brand-top) + var(--brand-chip-pad-y) + var(--header-mark-h) / 2
+    );
     padding-top: 16px;
     padding-bottom: calc(var(--header-mark-h) * 0.36 + 18px);
     min-height: calc(48px + var(--header-mark-h) * 0.55);
@@ -1163,7 +1253,7 @@ main.site-main > [data-subscription-landing] {
     left: calc(50% - 50vw);
     width: calc(50vw - var(--logo-line-gap) / 2);
     right: auto;
-    top: calc(34px + var(--header-mark-h) / 2);
+    top: var(--hairline-y);
     height: 1px;
     background: var(--border);
     pointer-events: none;
@@ -1176,7 +1266,7 @@ main.site-main > [data-subscription-landing] {
     right: calc(50% - 50vw);
     width: calc(50vw - var(--logo-line-gap) / 2);
     left: auto;
-    top: calc(34px + var(--header-mark-h) / 2);
+    top: var(--hairline-y);
     height: 1px;
     background: var(--border);
     pointer-events: none;
@@ -1217,6 +1307,35 @@ main.site-main > [data-subscription-landing] {
     display: flex !important;
     width: var(--header-mark-w);
     max-width: var(--header-mark-w);
+    height: var(--header-mark-h);
+  }
+
+  .site-header--marketing .brand-logo-mark-fill {
+    display: block !important;
+    width: var(--header-mark-w);
+    max-width: var(--header-mark-w);
+    height: var(--header-mark-h);
+  }
+
+  .site-header--article .header-row-1 {
+    --header-mark-w: min(120px, 36vw);
+    --header-mark-h: calc(var(--header-mark-w) * 24 / 34);
+    --header-wordmark-w: min(200px, 72vw);
+    --header-wordmark-h: calc(var(--header-wordmark-w) * 89 / 712);
+    --logo-mark-center-y: calc(20px + var(--header-wordmark-h) / 2);
+  }
+
+  .site-header--article .brand-logo-mark,
+  .site-header--article .brand-logo-mark-fill {
+    display: none !important;
+  }
+
+  .site-header--article .brand-logo-wordmark,
+  .site-header--article .brand-logo-wordmark-fill {
+    display: block !important;
+    width: var(--header-wordmark-w);
+    max-width: var(--header-wordmark-w);
+    height: var(--header-wordmark-h);
   }
 }
 

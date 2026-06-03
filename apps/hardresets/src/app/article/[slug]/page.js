@@ -8,8 +8,10 @@ import {
   dedupeSubtitleInContentBlocks,
 } from "@/lib/articles";
 import { authorBylineText } from "@/lib/article-helpers";
+import { subjectThemeRootCss } from "@/lib/subject-theme";
 import { pickRandomArticles } from "@/lib/pickRandomArticles";
 import RecordArticleView from "@/components/RecordArticleView";
+import NavLogoImageSync from "@/components/NavLogoImageSync";
 import ArticleContentBlocks from "@/components/ArticleContentBlocks";
 import AdSlot from "@/components/AdSlot";
 import ArticleStickyBottom from "@/components/ArticleStickyBottom";
@@ -161,6 +163,8 @@ export default async function ArticlePage({ params }) {
     ...(article.noIndex ? { isAccessibleForFree: true } : {}),
   };
 
+  const articleThemeCss = subjectThemeRootCss(article.subjectColor);
+
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -182,6 +186,10 @@ export default async function ArticlePage({ params }) {
 
   return (
     <div className={styles.page}>
+      <NavLogoImageSync image={article.mainImage} />
+      {articleThemeCss ? (
+        <style dangerouslySetInnerHTML={{ __html: articleThemeCss }} />
+      ) : null}
       <JsonLd data={articleJsonLd} />
       <JsonLd data={breadcrumbJsonLd} />
       <RecordArticleView slug={slug} />
@@ -215,7 +223,12 @@ export default async function ArticlePage({ params }) {
                   ) : null}
                   <div className={`headline-block ${styles.headlineBlockIssue}`}>
                     {article.subjectName ? (
-                      <p className={styles.subjectName}>{article.subjectName}</p>
+                      <p
+                        className={styles.subjectName}
+                        style={article.subjectColor ? { color: article.subjectColor } : undefined}
+                      >
+                        {article.subjectName}
+                      </p>
                     ) : null}
                     <h1 className={`headline-text ${styles.issueHeadline}`}>{article.title}</h1>
                   </div>

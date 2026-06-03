@@ -15,6 +15,72 @@ export function normalizeArticleSlug(slug) {
   return String(slug).trim();
 }
 
+/** GROQ fragment: subject icon with Sanity palette (for per-issue subject name color). */
+const subjectIconProjection = `subjectIcon {
+  asset->{
+    _id,
+    url,
+    metadata {
+      dimensions { width, height },
+      palette
+    }
+  }
+}`;
+
+/**
+ * Pick a display color from Sanity's image palette (matches email subject-name hues).
+ * Prefers saturated swatches; skips gray dominants when a richer tone exists.
+ */
+export function subjectColorFromPalette(palette) {
+  if (!palette) return null;
+
+  function saturation(hex) {
+    const raw = hex.replace("#", "");
+    if (raw.length !== 6) return 0;
+    const r = parseInt(raw.slice(0, 2), 16) / 255;
+    const g = parseInt(raw.slice(2, 4), 16) / 255;
+    const b = parseInt(raw.slice(4, 6), 16) / 255;
+    const max = Math.max(r, g, b);
+    const min = Math.min(r, g, b);
+    if (max === min) return 0;
+    const l = (max + min) / 2;
+    return l > 0.5 ? (max - min) / (2 - max - min) : (max - min) / (max + min);
+  }
+
+  function luminance(hex) {
+    const raw = hex.replace("#", "");
+    if (raw.length !== 6) return 0;
+    const r = parseInt(raw.slice(0, 2), 16) / 255;
+    const g = parseInt(raw.slice(2, 4), 16) / 255;
+    const b = parseInt(raw.slice(4, 6), 16) / 255;
+    return (Math.max(r, g, b) + Math.min(r, g, b)) / 2;
+  }
+
+  const swatches = [
+    palette.dominant,
+    palette.muted,
+    palette.darkVibrant,
+    palette.vibrant,
+  ];
+
+  for (const swatch of swatches) {
+    const hex = swatch?.background;
+    if (!hex) continue;
+    const sat = saturation(hex);
+    const lum = luminance(hex);
+    // Email subject names use mid-tone hues, not gray dominants or neon vibrant.
+    if (sat >= 0.18 && lum >= 0.28 && lum <= 0.62) return hex;
+  }
+
+  return (
+    palette.muted?.background ??
+    palette.dominant?.background ??
+    palette.darkVibrant?.background ??
+    palette.vibrant?.background ??
+    null
+  );
+}
+
 /**
  * Expand nested image references inside content blocks so listicle / examples images,
  * chart images, and portable-text images resolve in the browser (proseSection / featureSection).
@@ -331,7 +397,7 @@ export const articlesQuery = `*[${publishedArticleFilter}] | order(publishedDate
   bio,
   authorName,
   subjectName,
-  subjectIcon,
+  ${subjectIconProjection},
   ${articleSeoProjection},
   ${articleContentBlocksProjection}
 }`;
@@ -355,7 +421,7 @@ export const articleBySlugQuery = `*[${publishedArticleFilter} && slug.current =
   bio,
   authorName,
   subjectName,
-  subjectIcon,
+  ${subjectIconProjection},
   ${articleSeoProjection},
   ${articleContentBlocksProjection}
 }`;
@@ -547,6 +613,7 @@ export function mapArticle(raw, urlFor, fallbackImage = "/hl-photo.png") {
   }
 
   let subjectIcon = null;
+  let subjectColor = null;
   if (raw.subjectIcon) {
     const iconBuilder = urlFor(raw.subjectIcon);
     if (iconBuilder) {
@@ -563,6 +630,7 @@ export function mapArticle(raw, urlFor, fallbackImage = "/hl-photo.png") {
         /* ignore */
       }
     }
+    subjectColor = subjectColorFromPalette(raw.subjectIcon?.asset?.metadata?.palette);
   }
 
   return {
@@ -574,6 +642,7 @@ export function mapArticle(raw, urlFor, fallbackImage = "/hl-photo.png") {
     summary: raw.summary,
     subjectName: raw.subjectName ?? null,
     subjectIcon,
+    subjectColor,
     mainImage,
     mainImageWidth,
     mainImageHeight,

@@ -70,6 +70,12 @@
   .mosaicRight { grid-area: right; }
 }
 
+@media (max-width: 768px) {
+  .hero {
+    padding-top: 20px;
+  }
+}
+
 @media (max-width: 640px) {
   .hero {
     padding: 20px 0 28px;

@@ -113,7 +113,15 @@
 
 /* Content-block articles: headline and rule first; lead image below (Pickle-style) */
 .articleHeroBlockInline .articleHeroContent {
-  padding-bottom: 0;
+  padding-bottom: 4rem;
+}
+
+.articleHeroBlockInline .leadImageSection {
+  margin-bottom: 4.5rem;
+}
+
+.articleHeroBlockInline .headlineBlockIssue {
+  margin-top: 2rem;
 }
 
 .articleHeroContent {
@@ -152,13 +160,13 @@
   }
 }
 
-/* After hero + lead image, pull prose up (must follow .articleBodyGrid so it wins the cascade) */
+/* After hero: air before first body block (must follow .articleBodyGrid so it wins the cascade) */
 .articleBodyGridBlocksFirst {
-  padding-top: 12px;
+  padding-top: 2.5rem;
 }
 
 .articleBodyGridBlocksFirst .articleContainerNoPadding {
-  padding-top: 12px;
+  padding-top: 1.5rem;
 }
 
 /* Hero photo credit → first body paragraph: margin + grid + container padding stack on narrow viewports */
@@ -167,12 +175,28 @@
     margin-bottom: 0.75rem;
   }
 
+  .articleHeroBlockInline .leadImageSection {
+    margin-bottom: 2.5rem;
+  }
+
+  .articleHeroBlockInline .headlineBlockIssue {
+    margin-top: 1.25rem;
+  }
+
+  .articleHeroBlockInline .articleHeroContent {
+    padding-bottom: 2.75rem;
+  }
+
   .articleBodyGridBlocksFirst {
-    padding-top: 0;
+    padding-top: 1.75rem;
   }
 
   .articleBodyGridBlocksFirst .articleContainerNoPadding {
-    padding-top: 10px;
+    padding-top: 1.25rem;
+  }
+
+  .articleHeroBlockInline .articleHeroContent {
+    padding-bottom: 3.25rem;
   }
 }
 

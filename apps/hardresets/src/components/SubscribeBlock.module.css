@@ -14,13 +14,6 @@
   gap: 4px;
 }
 
-/* Mosaic / in-page stack card: punchier indigo than global defaults (popup banner keeps :root tokens). */
-.root:not(.rootBanner) {
-  --subscribe-overlay: hsla(252, 58%, 9%, 0.42);
-  --subscribe-grad-top: hsl(252, 58%, 24%);
-  --subscribe-grad-bottom: hsl(252, 62%, 13%);
-}
-
 .rootBanner {
   flex-direction: row;
   align-items: flex-start;

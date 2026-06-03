@@ -14,7 +14,11 @@ import {fileURLToPath} from 'url'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
 function loadLocalEnv() {
-  for (const p of [join(__dirname, '../.env.local'), join(__dirname, '../../apps/hardresets/.env.local')]) {
+  for (const p of [
+    join(__dirname, '../.env.local'),
+    join(__dirname, '../../apps/hardresets/.env.local'),
+    join(__dirname, '../../.env.local'),
+  ]) {
     try {
       const raw = readFileSync(p, 'utf8')
       for (const line of raw.split('\n')) {
@@ -29,7 +33,6 @@ function loadLocalEnv() {
         }
         if (!process.env[key]) process.env[key] = val
       }
-      break
     } catch {
       /* try next */
     }

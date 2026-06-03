@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  margin-bottom: 4rem;
 }
 
 /*
@@ -282,7 +283,8 @@
   max-width: min(640px, 100%);
 }
 
-.feature p {
+.feature p,
+.secondarySources .feature p {
   margin: 0 0 1.25rem;
   color: var(--text-secondary);
   font-size: 1.2rem;
@@ -290,12 +292,14 @@
   font-weight: 300;
 }
 
-.feature p:last-child {
+.feature p:last-child,
+.secondarySources .feature p:last-child {
   margin-bottom: 0;
 }
 
 /* Beat `:where(.site) p` / `.site` paragraph rules when global CSS order varies (Pickle parity). */
-:global(.articlebody-section) :global(.articlecopy-richtext) .feature p {
+:global(.articlebody-section) :global(.articlecopy-richtext) .feature p,
+:global(.articlebody-section) :global(.articlecopy-richtext) .secondarySources .feature p {
   font-size: 1.2rem;
   line-height: 1.85;
   font-weight: 300;
@@ -348,15 +352,18 @@
     padding-bottom: 0.65rem;
   }
 
-  .block > .feature {
+  .block > .feature,
+  .secondarySources .feature {
     font-size: 1rem;
   }
 
-  .block > .feature p {
+  .block > .feature p,
+  .secondarySources .feature p {
     font-size: 1rem;
   }
 
-  :global(.articlebody-section) :global(.articlecopy-richtext) .block > .feature p {
+  :global(.articlebody-section) :global(.articlecopy-richtext) .block > .feature p,
+  :global(.articlebody-section) :global(.articlecopy-richtext) .secondarySources .feature p {
     font-size: 1rem;
   }
 
@@ -859,8 +866,9 @@
 }
 
 .secondarySources {
-  max-width: 640px;
-  margin: 3.75rem auto 0;
+  width: 100%;
+  max-width: min(640px, 100%);
+  margin: 3.75rem 0 0;
   padding-top: 3.75rem;
   border-top: 1px solid #0b0202;
 }
@@ -886,22 +894,6 @@
 .secondarySourcesHeadlineLink {
   text-decoration: none;
   color: inherit;
-}
-
-.secondarySourcesHeadline {
-  font-size: 15px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  margin: 0 0 0.5rem;
-  line-height: 1.35;
-}
-
-.secondarySourcesDescription {
-  font-size: 15px;
-  font-weight: 300;
-  letter-spacing: -0.02em;
-  margin: 0;
-  line-height: 1.85;
 }
 
 .secondarySourcesCta {

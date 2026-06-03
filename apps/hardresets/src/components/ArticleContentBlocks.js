@@ -120,34 +120,40 @@ function renderSecondarySourcesBlock(block) {
       <ul className={styles.secondarySourcesList}>
         {items.map((item) => (
           <li key={item._key || item.url} className={styles.secondarySourcesItem}>
-            {item.url ? (
-              <Link
-                href={item.url}
-                rel="noopener noreferrer"
-                target="_blank"
-                className={styles.secondarySourcesHeadlineLink}
-              >
-                <h3 className={styles.secondarySourcesHeadline}>{item.headline}</h3>
-              </Link>
-            ) : item.headline ? (
-              <h3 className={styles.secondarySourcesHeadline}>{item.headline}</h3>
-            ) : null}
-            {item.description ? (
-              <p className={styles.secondarySourcesDescription}>
-                {item.description}{" "}
-                {item.url && item.ctaLabel ? (
-                  <Link
-                    href={item.url}
-                    rel="noopener noreferrer"
-                    target="_blank"
-                    className={styles.secondarySourcesCta}
-                  >
-                    <strong>{item.ctaLabel}</strong>
-                  </Link>
-                ) : null}
-                {item.ctaLabel ? " >" : null}
-              </p>
-            ) : null}
+            <div className={styles.feature}>
+              {item.headline ? (
+                <p>
+                  {item.url ? (
+                    <Link
+                      href={item.url}
+                      rel="noopener noreferrer"
+                      target="_blank"
+                      className={styles.secondarySourcesHeadlineLink}
+                    >
+                      <strong>{item.headline}</strong>
+                    </Link>
+                  ) : (
+                    <strong>{item.headline}</strong>
+                  )}
+                </p>
+              ) : null}
+              {item.description ? (
+                <p>
+                  {item.description}{" "}
+                  {item.url && item.ctaLabel ? (
+                    <Link
+                      href={item.url}
+                      rel="noopener noreferrer"
+                      target="_blank"
+                      className={styles.secondarySourcesCta}
+                    >
+                      <strong>{item.ctaLabel}</strong>
+                    </Link>
+                  ) : null}
+                  {item.ctaLabel ? " >" : null}
+                </p>
+              ) : null}
+            </div>
           </li>
         ))}
       </ul>

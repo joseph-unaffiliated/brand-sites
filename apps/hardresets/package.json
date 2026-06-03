@@ -9,10 +9,10 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@publication-websites/shared-ads": "workspace:*",
     "@publication-websites/magic-client": "workspace:*",
     "@publication-websites/platform-redirects": "workspace:*",
     "@publication-websites/sanity-content": "workspace:*",
+    "@publication-websites/shared-ads": "workspace:*",
     "@publication-websites/web-shell": "workspace:*",
     "@sanity/image-url": "^2.0.3",
     "next": "16.1.1",
