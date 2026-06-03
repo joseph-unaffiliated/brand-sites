@@ -30,6 +30,7 @@ import { getArticles, getArticleBySlug } from "@/lib/articles";
 import { NavLogoImageProvider } from "@/context/NavLogoImageContext";
 import SubscribePopup from "@/components/SubscribePopup";
 import { SubscriberProvider } from "@/context/SubscriberContext";
+import { ReaderEventsInit } from "@publication-websites/reader-events";
 import { headers } from "next/headers";
 import "./globals.css";
 
@@ -137,6 +138,10 @@ export default async function RootLayout({ children }) {
         <GoogleTagManagerNoscript />
         <MarketingScripts adsenseClient={ADSENSE_CLIENT} metaPixelId={META_PIXEL_ID} />
         <SubscriberProvider>
+          <ReaderEventsInit
+            brandId={siteConfig.brandId}
+            apiOrigin={siteConfig.magicReaderApiOrigin}
+          />
           <NavLogoImageProvider
             defaultFillImage={latestIssueImage}
             initialPageFillImage={initialPageFillImage}

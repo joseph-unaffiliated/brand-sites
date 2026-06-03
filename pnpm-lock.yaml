@@ -195,6 +195,12 @@ importers:
       '@publication-websites/platform-redirects':
         specifier: workspace:*
         version: link:../../packages/platform-redirects
+      '@publication-websites/reader-events':
+        specifier: workspace:*
+        version: link:../../packages/reader-events
+      '@publication-websites/reader-profile':
+        specifier: workspace:*
+        version: link:../../packages/reader-profile
       '@publication-websites/sanity-content':
         specifier: workspace:*
         version: link:../../packages/sanity-content
