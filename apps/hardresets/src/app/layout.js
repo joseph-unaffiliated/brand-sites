@@ -34,6 +34,7 @@ import SubscribePopup from "@/components/SubscribePopup";
 import SubmissionsCopyLink from "@/components/SubmissionsCopyLink";
 import AdvertiseCopyLink from "@/components/AdvertiseCopyLink";
 import { SubscriberProvider } from "@/context/SubscriberContext";
+import { ReaderEventsInit } from "@publication-websites/reader-events";
 import "./globals.css";
 
 const ADSENSE_CLIENT =
@@ -130,6 +131,10 @@ export default async function RootLayout({ children }) {
         <GoogleTagManagerNoscript />
         <MarketingScripts adsenseClient={ADSENSE_CLIENT} metaPixelId={META_PIXEL_ID} />
         <SubscriberProvider>
+          <ReaderEventsInit
+            brandId={siteConfig.brandId}
+            apiOrigin={siteConfig.magicReaderApiOrigin}
+          />
           <NavLogoImageProvider defaultFillImage={latestIssueImage}>
           <div className="site">
             <Header />

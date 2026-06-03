@@ -9,7 +9,7 @@ import {
 import { authorBylineText } from "@/lib/article-helpers";
 import SanityMedia from "@/components/SanityMedia";
 import { pickRandomArticles } from "@/lib/pickRandomArticles";
-import RecordArticleView from "@/components/RecordArticleView";
+import SubscribedArticleView from "@/components/SubscribedArticleView";
 import NavLogoImageSync from "@/components/NavLogoImageSync";
 import ArticleContentBlocks from "@/components/ArticleContentBlocks";
 import AdSlot from "@/components/AdSlot";
@@ -184,7 +184,7 @@ export default async function ArticlePage({ params }) {
     <div className={styles.page}>
       <JsonLd data={articleJsonLd} />
       <JsonLd data={breadcrumbJsonLd} />
-      <RecordArticleView slug={slug} />
+      <SubscribedArticleView slug={slug} />
       <NavLogoImageSync image={article.mainImage} />
       <section className="articlebody-section">
         {/* Centered hero: headline + optional cover image when not using content blocks */}

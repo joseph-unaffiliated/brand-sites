@@ -10,7 +10,7 @@ import {
 import { authorBylineText } from "@/lib/article-helpers";
 import { subjectThemeRootCss } from "@/lib/subject-theme";
 import { pickRandomArticles } from "@/lib/pickRandomArticles";
-import RecordArticleView from "@/components/RecordArticleView";
+import SubscribedArticleView from "@/components/SubscribedArticleView";
 import NavLogoImageSync from "@/components/NavLogoImageSync";
 import ArticleContentBlocks from "@/components/ArticleContentBlocks";
 import AdSlot from "@/components/AdSlot";
@@ -192,7 +192,7 @@ export default async function ArticlePage({ params }) {
       ) : null}
       <JsonLd data={articleJsonLd} />
       <JsonLd data={breadcrumbJsonLd} />
-      <RecordArticleView slug={slug} />
+      <SubscribedArticleView slug={slug} />
       <section className="articlebody-section">
         {/* Centered hero: headline + optional cover image when not using content blocks */}
         <div
