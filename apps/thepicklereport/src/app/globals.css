@@ -419,7 +419,7 @@ a {
     --header-wordmark-w: min(200px, 32vw);
     --header-wordmark-h: calc(var(--header-wordmark-w) * 31 / 229);
     /* Optical center: R descender hangs below cap height. */
-    --header-wordmark-offset-y: 4px;
+    --header-wordmark-offset-y: 8px;
     --logo-mark-center-y: calc(
       22px + var(--header-wordmark-offset-y) + var(--header-wordmark-h) / 2
     );
@@ -473,6 +473,11 @@ a {
   max-width: 100%;
 }
 
+/* Nudge on wrapper — not the fill span — so fixed ::before stays viewport-relative. */
+.site-header--article .brand-name {
+  margin-top: var(--header-wordmark-offset-y, 8px);
+}
+
 .brand-logo-img {
   display: block;
   height: auto;
@@ -482,7 +487,6 @@ a {
 .site-header--article .brand-logo-wordmark,
 .site-header--article .brand-logo-wordmark-fill {
   height: var(--header-wordmark-h);
-  transform: translateY(var(--header-wordmark-offset-y, 4px));
 }
 
 /* Mobile: pickle mark only; desktop: horizontal wordmark */
@@ -529,7 +533,6 @@ a {
     width: var(--header-wordmark-w, min(200px, 32vw));
     max-width: 100%;
     height: var(--header-wordmark-h);
-    transform: translateY(var(--header-wordmark-offset-y, 4px));
     color: var(--text-primary);
     object-fit: contain;
   }
@@ -575,12 +578,14 @@ a {
 .site-header--article .brand-logo-wordmark-fill::before {
   content: "";
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
+  top: -32px;
+  left: -32px;
+  width: calc(100vw + 64px);
+  height: calc(100vh + 64px);
+  background-color: var(--bg);
   background-image: var(--header-mark-bg-image);
   background-size: cover;
+  /* Align image center with logomark (not viewport center). */
   background-position: 50% calc(50% + (var(--logo-mark-center-y, 50vh) - 50vh));
   background-repeat: no-repeat;
   filter: blur(5px);
@@ -1262,7 +1267,7 @@ a {
   .site-header--article .header-row-1 {
     --header-wordmark-w: min(200px, 72vw);
     --header-wordmark-h: calc(var(--header-wordmark-w) * 31 / 229);
-    --header-wordmark-offset-y: 4px;
+    --header-wordmark-offset-y: 8px;
     --logo-mark-center-y: calc(
       20px + var(--header-wordmark-offset-y) + var(--header-wordmark-h) / 2
     );
@@ -1280,7 +1285,6 @@ a {
     width: var(--header-wordmark-w);
     max-width: var(--header-wordmark-w);
     height: var(--header-wordmark-h);
-    transform: translateY(var(--header-wordmark-offset-y, 4px));
   }
 }
 
