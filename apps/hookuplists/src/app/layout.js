@@ -14,6 +14,7 @@ import { contactEmail, siteConfig } from "@/config/site";
 import Header from "@/components/Header";
 import SubscribePopup from "@/components/SubscribePopup";
 import { SubscriberProvider } from "@/context/SubscriberContext";
+import { ReaderEventsInit } from "@publication-websites/reader-events";
 import "./globals.css";
 
 const ADSENSE_CLIENT =
@@ -75,6 +76,10 @@ export default function RootLayout({ children }) {
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <MarketingScripts adsenseClient={ADSENSE_CLIENT} metaPixelId={META_PIXEL_ID} />
         <SubscriberProvider>
+          <ReaderEventsInit
+            brandId={siteConfig.brandId}
+            apiOrigin={siteConfig.magicReaderApiOrigin}
+          />
           <div className="site">
             <Header />
             <Suspense fallback={null}>

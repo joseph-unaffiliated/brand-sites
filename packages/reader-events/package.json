@@ -1,0 +1,17 @@
+{
+  "name": "@publication-websites/reader-events",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
+  "dependencies": {
+    "@publication-websites/magic-client": "workspace:*"
+  }
+}

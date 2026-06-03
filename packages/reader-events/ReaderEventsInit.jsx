@@ -1,0 +1,17 @@
+"use client";
+
+import { useEffect } from "react";
+import { initReaderEventsCollector } from "./collector.js";
+import { isReaderEventsEnabled } from "./constants.js";
+
+/**
+ * Initialize reader-events collector once per app (inside SubscriberProvider).
+ */
+export default function ReaderEventsInit({ brandId, apiOrigin }) {
+  useEffect(() => {
+    if (!isReaderEventsEnabled()) return;
+    initReaderEventsCollector({ brandId, apiOrigin });
+  }, [brandId, apiOrigin]);
+
+  return null;
+}

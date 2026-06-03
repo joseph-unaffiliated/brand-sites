@@ -1,0 +1,110 @@
+/**
+ * Batch reader events to magic POST /api/reader-events.
+ */
+
+import { getReaderToken } from "@publication-websites/magic-client";
+import { hasAnalyticsConsent } from "./consent.js";
+import { isReaderEventsEnabled } from "./constants.js";
+
+let config = {
+  brandId: "",
+  apiOrigin: "",
+};
+
+let queue = [];
+let flushTimer = null;
+const FLUSH_INTERVAL_MS = 5000;
+const MAX_QUEUE = 50;
+
+export function initReaderEventsCollector({ brandId, apiOrigin }) {
+  if (!isReaderEventsEnabled()) return;
+  config = { brandId, apiOrigin: (apiOrigin || "").replace(/\/$/, "") };
+  if (typeof window === "undefined") return;
+
+  const onHidden = () => {
+    if (document.visibilityState === "hidden") flush(true);
+  };
+  document.addEventListener("visibilitychange", onHidden);
+  window.addEventListener("pagehide", () => flush(true));
+}
+
+function getSessionId() {
+  try {
+    let id = sessionStorage.getItem("reader_session_id");
+    if (!id) {
+      id = `sess_${crypto.randomUUID()}`;
+      sessionStorage.setItem("reader_session_id", id);
+    }
+    return id;
+  } catch {
+    return `sess_${Date.now()}`;
+  }
+}
+
+export function enqueueEvent(eventType, properties = {}) {
+  if (!isReaderEventsEnabled()) return;
+  if (!hasAnalyticsConsent()) return;
+
+  const token = getReaderToken();
+  if (!token) return;
+
+  const { articleSlug, ...restProps } = properties;
+
+  queue.push({
+    eventID: crypto.randomUUID(),
+    eventType,
+    brand: config.brandId,
+    articleSlug: articleSlug || null,
+    url: typeof window !== "undefined" ? window.location.href : "",
+    referrer: typeof document !== "undefined" ? document.referrer || "" : "",
+    sessionID: getSessionId(),
+    clientTimestamp: new Date().toISOString(),
+    properties: Object.keys(restProps).length ? restProps : null,
+  });
+
+  if (queue.length >= MAX_QUEUE) {
+    flush(false);
+    return;
+  }
+  if (!flushTimer) {
+    flushTimer = setTimeout(() => flush(false), FLUSH_INTERVAL_MS);
+  }
+}
+
+export function flush(useBeacon = false) {
+  if (!isReaderEventsEnabled() || !config.apiOrigin) return;
+  if (flushTimer) {
+    clearTimeout(flushTimer);
+    flushTimer = null;
+  }
+  if (!queue.length) return;
+
+  const token = getReaderToken();
+  if (!token) {
+    queue = [];
+    return;
+  }
+
+  const events = queue.splice(0, MAX_QUEUE);
+  const url = `${config.apiOrigin}/api/reader-events`;
+  const body = JSON.stringify({ readerToken: token, events });
+
+  if (useBeacon && navigator.sendBeacon) {
+    const blob = new Blob([body], { type: "application/json" });
+    navigator.sendBeacon(url, blob);
+    return;
+  }
+
+  fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body,
+    credentials: "omit",
+    keepalive: useBeacon,
+  }).catch(() => {
+    /* best effort */
+  });
+}

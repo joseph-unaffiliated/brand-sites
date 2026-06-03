@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getArticleBySlug, getArticleSlugs, getArticles, ensureDescriptionOnly } from "@/lib/articles";
 import HideWhenSubscribed from "@/components/HideWhenSubscribed";
-import RecordArticleView from "@/components/RecordArticleView";
+import SubscribedArticleView from "@/components/SubscribedArticleView";
 import ArticleSubscribeForm from "@/components/ArticleSubscribeForm";
 import AdUnit from "@/components/AdUnit";
 import ArticleAdStickyBottom from "@/components/ArticleAdStickyBottom";
@@ -47,7 +47,7 @@ export default async function ArticlePage({ params }) {
 
   return (
     <div className={styles.page}>
-      <RecordArticleView slug={slug} />
+      <SubscribedArticleView slug={slug} />
       <section className="articlebody-section">
         {/* Centered hero block: headline + image (no rail beside) */}
         <div className={styles.articleHeroBlock}>

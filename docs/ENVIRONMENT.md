@@ -8,6 +8,9 @@
 | `NEXT_PUBLIC_BRAND_ID` | yes | Slug sent to `/execute` (e.g. `hookuplists`). |
 | `NEXT_PUBLIC_MAGIC_EXECUTE_URL` | yes | Full URL to POST (`https://magic….com/execute`). |
 | `NEXT_PUBLIC_MAGIC_READER_API_ORIGIN` | optional | Magic **origin** for profile API (defaults from execute URL). |
+| `NEXT_PUBLIC_READER_EVENTS_ENABLED` | yes | Set to `true` to send `article_view` (and future events) to magic `/api/reader-events`. **Default off** — omit or leave unset in production until Phase 0 magic is deployed. |
+| `NEXT_PUBLIC_READER_PROFILE_V2` | yes | Set to `true` to load full profile from magic `/api/reader-profile` (cross-brand read history). Falls back to `/api/reader-subscriptions` when off or on error. **Default off**. |
+| `NEXT_PUBLIC_READER_EVENTS_REQUIRE_CONSENT` | optional | When not `false`, reader-events waits for OneTrust analytics consent (`C0002`) before sending. |
 | `NEXT_PUBLIC_SANITY_PROJECT_ID` | yes | Sanity project. |
 | `NEXT_PUBLIC_SANITY_DATASET` | yes | Usually `production`. |
 | `NEXT_PUBLIC_ADSENSE_CLIENT` | yes | AdSense client id. |

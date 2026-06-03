@@ -38,7 +38,7 @@ export function storeReaderTokenFromResponse(data) {
   const token = /** @type {{ readerToken?: string }} */ (data).readerToken;
   if (token && typeof token === "string") {
     try {
-      localStorage.setItem("magic_reader_token", token);
+      localStorage.setItem(READER_TOKEN_STORAGE_KEY, token);
     } catch {
       /* ignore quota / private mode */
     }
@@ -81,4 +81,24 @@ export async function executeAction(cfg, searchParams, action) {
     storeReaderTokenFromResponse(data);
   }
   return data;
+}
+
+export const READER_TOKEN_STORAGE_KEY = "magic_reader_token";
+
+export function getReaderToken() {
+  if (typeof window === "undefined") return null;
+  try {
+    return localStorage.getItem(READER_TOKEN_STORAGE_KEY);
+  } catch {
+    return null;
+  }
+}
+
+export function clearReaderToken() {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.removeItem(READER_TOKEN_STORAGE_KEY);
+  } catch {
+    /* ignore */
+  }
 }

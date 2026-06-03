@@ -10,7 +10,12 @@ import Link from "next/link";
 import { siteConfig } from "@/config/site";
 import { useSubscriber } from "@/context/SubscriberContext";
 import { BRAND } from "@/lib/subscription";
-import { clearReaderToken, fetchVerifiedSubscriptions, getReaderToken } from "@/lib/reader-profile";
+import {
+  clearReaderToken,
+  fetchReaderProfileForSite,
+  getReaderToken,
+  isReaderProfileV2Enabled,
+} from "@/lib/reader-profile";
 import {
   networkBrands,
   discoverMoreSubscribeIds,
@@ -20,7 +25,7 @@ import styles from "./page.module.css";
 
 const READ_ARTICLES_KEY = `read_articles_${BRAND}`;
 
-function getReadSlugs() {
+function getLocalReadSlugs() {
   if (typeof window === "undefined") return [];
   try {
     const raw = localStorage.getItem(READ_ARTICLES_KEY);
@@ -32,12 +37,52 @@ function getReadSlugs() {
   }
 }
 
+function articleUrlForBrand(brandId, slug, brandById, currentBrandId) {
+  if (brandId === currentBrandId) return `/article/${slug}`;
+  const brand = brandById[brandId];
+  if (!brand?.signupUrl) return null;
+  try {
+    const host = new URL(brand.signupUrl).hostname.replace(/^magic\./, "");
+    return `https://${host}/article/${encodeURIComponent(slug)}`;
+  } catch {
+    return null;
+  }
+}
+
+function buildReadingItems(readArticles, localSlugs, brandById, currentBrandId) {
+  if (isReaderProfileV2Enabled() && readArticles && typeof readArticles === "object") {
+    const items = [];
+    for (const [brandId, slugs] of Object.entries(readArticles)) {
+      if (!Array.isArray(slugs) || !slugs.length) continue;
+      const brandName = brandById[brandId]?.displayName ?? brandById[brandId]?.name ?? brandId;
+      for (const slug of slugs.slice().reverse()) {
+        items.push({
+          key: `${brandId}:${slug}`,
+          brandId,
+          brandName,
+          slug,
+          href: articleUrlForBrand(brandId, slug, brandById, currentBrandId),
+        });
+      }
+    }
+    if (items.length) return items;
+  }
+  return localSlugs.slice().reverse().map((slug) => ({
+    key: slug,
+    brandId: currentBrandId,
+    brandName: null,
+    slug,
+    href: `/article/${slug}`,
+  }));
+}
+
 export default function ProfilePage() {
   const { isSubscribed, email, subscribedAt } = useSubscriber();
   const [subscribedBrands, setSubscribedBrands] = useState([]);
   const [loading, setLoading] = useState(true);
   const [apiError, setApiError] = useState(false);
-  const [readSlugs, setReadSlugs] = useState([]);
+  const [readArticles, setReadArticles] = useState(null);
+  const [readingItems, setReadingItems] = useState([]);
 
   useEffect(() => {
     if (!isSubscribed || !email) {
@@ -56,17 +101,20 @@ export default function ProfilePage() {
       setLoading(false);
       return;
     }
-    fetchVerifiedSubscriptions(token)
+    fetchReaderProfileForSite(token)
       .then((data) => {
         setSubscribedBrands(data.subscribedBrands?.length ? data.subscribedBrands : [siteConfig.brandId]);
+        setReadArticles(data.readArticles ?? {});
       })
       .catch(() => fallbackLocal())
       .finally(() => setLoading(false));
   }, [isSubscribed, email]);
 
   useEffect(() => {
-    setReadSlugs(getReadSlugs());
-  }, []);
+    const brandById = Object.fromEntries(networkBrands.map((b) => [b.id, b]));
+    const localSlugs = getLocalReadSlugs();
+    setReadingItems(buildReadingItems(readArticles, localSlugs, brandById, siteConfig.brandId));
+  }, [readArticles]);
 
   if (!isSubscribed && !loading) {
     return (
@@ -206,13 +254,26 @@ export default function ProfilePage() {
 
       <section className={styles.section}>
         <h2 className={styles.sectionTitle}>Articles you&apos;ve read</h2>
-        {readSlugs.length === 0 ? (
+        {readingItems.length === 0 ? (
           <p className={styles.empty}>No reading history yet.</p>
         ) : (
           <ul className={styles.readingList}>
-            {readSlugs.slice().reverse().map((slug) => (
-              <li key={slug} className={styles.readingItem}>
-                <Link href={`/article/${slug}`}>{slug.replace(/-/g, " ")}</Link>
+            {readingItems.map((item) => (
+              <li key={item.key} className={styles.readingItem}>
+                {item.href ? (
+                  item.brandId === siteConfig.brandId ? (
+                    <Link href={item.href}>{item.slug.replace(/-/g, " ")}</Link>
+                  ) : (
+                    <a href={item.href} target="_blank" rel="noopener noreferrer">
+                      {item.brandName}: {item.slug.replace(/-/g, " ")}
+                    </a>
+                  )
+                ) : (
+                  <span>
+                    {item.brandName ? `${item.brandName}: ` : ""}
+                    {item.slug.replace(/-/g, " ")}
+                  </span>
+                )}
               </li>
             ))}
           </ul>
