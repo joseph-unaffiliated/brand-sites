@@ -5,7 +5,6 @@
  * displayName: optional; used in Discover more when different from name.
  */
 export const networkBrands = [
-  { id: "hookuplists", name: "Hookup Lists", signupUrl: "https://magic.hookuplists.com/" },
   { id: "thekissandtell", name: "The Kiss and Tell", signupUrl: "https://magic.thekissandtell.com/" },
   { id: "thepicklereport", name: "The Pickle Report", signupUrl: "https://magic.thepicklereport.com/" },
   { id: "themixedhome", name: "The Mixed Home", signupUrl: "https://magic.themixedhome.com/" },

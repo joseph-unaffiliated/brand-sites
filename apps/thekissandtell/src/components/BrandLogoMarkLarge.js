@@ -3,7 +3,7 @@ import BrandLogoMark from "@/components/BrandLogoMark";
 
 /**
  * Large marketing-header logomark.
- * Default: PNG circle-K mark. With `fillImageUrl`, a full-viewport photo shows through the mask.
+ * Default: inline SVG K mark. With `fillImageUrl`, a full-viewport photo shows through the mask.
  */
 export default function BrandLogoMarkLarge({ className, fillImageUrl }) {
   if (fillImageUrl) {

@@ -283,7 +283,7 @@ a {
     position: relative;
     gap: 16px 28px;
     --header-mark-w: min(132px, 16vw);
-    --header-mark-h: var(--header-mark-w);
+    --header-mark-h: calc(var(--header-mark-w) * 32 / 25);
     --logo-line-pad-x: 34px;
     --logo-line-gap: calc(var(--header-mark-w) + 2 * var(--logo-line-pad-x));
     --brand-top: 24px;
@@ -417,7 +417,7 @@ a {
     padding-bottom: 22px;
     min-height: 0;
     --header-wordmark-w: min(200px, 32vw);
-    --header-wordmark-h: calc(var(--header-wordmark-w) * 36 / 220);
+    --header-wordmark-h: calc(var(--header-wordmark-w) * 29 / 209);
     /* Optical center: R descender hangs below cap height. */
     --header-wordmark-offset-y: 8px;
     --logo-mark-center-y: calc(
@@ -545,11 +545,9 @@ a {
   flex-shrink: 0;
   width: var(--header-mark-w, min(132px, 16vw));
   max-width: min(132px, 16vw);
-  height: var(--header-mark-h, var(--header-mark-w, 132px));
-  -webkit-mask-image: url(/tkat-logo.png);
-  mask-image: url(/tkat-logo.png);
-  -webkit-mask-mode: luminance;
-  mask-mode: luminance;
+  height: var(--header-mark-h, calc(var(--header-mark-w, 132px) * 32 / 25));
+  -webkit-mask-image: url(/tkat-logo-mask.svg);
+  mask-image: url(/tkat-logo-mask.svg);
   -webkit-mask-size: contain;
   mask-size: contain;
   -webkit-mask-repeat: no-repeat;
@@ -565,11 +563,9 @@ a {
   flex-shrink: 0;
   width: var(--header-wordmark-w, min(200px, 32vw));
   max-width: min(200px, 32vw);
-  height: var(--header-wordmark-h, calc(var(--header-wordmark-w, 200px) * 36 / 220));
-  -webkit-mask-image: url(/tkat-wordmark-black.png);
-  mask-image: url(/tkat-wordmark-black.png);
-  -webkit-mask-mode: luminance;
-  mask-mode: luminance;
+  height: var(--header-wordmark-h, calc(var(--header-wordmark-w, 200px) * 29 / 209));
+  -webkit-mask-image: url(/tkat-wordmark-mask.svg);
+  mask-image: url(/tkat-wordmark-mask.svg);
   -webkit-mask-size: contain;
   mask-size: contain;
   -webkit-mask-repeat: no-repeat;
@@ -1179,7 +1175,7 @@ a {
   .site-header--marketing .header-row-marketing {
     position: relative;
     --header-mark-w: min(96px, 28vw);
-    --header-mark-h: var(--header-mark-w);
+    --header-mark-h: calc(var(--header-mark-w) * 32 / 25);
     --logo-line-pad-x: 24px;
     --logo-line-gap: calc(var(--header-mark-w) + 2 * var(--logo-line-pad-x));
     --brand-top: 14px;
@@ -1270,7 +1266,7 @@ a {
 
   .site-header--article .header-row-1 {
     --header-wordmark-w: min(200px, 72vw);
-    --header-wordmark-h: calc(var(--header-wordmark-w) * 36 / 220);
+    --header-wordmark-h: calc(var(--header-wordmark-w) * 29 / 209);
     --header-wordmark-offset-y: 8px;
     --logo-mark-center-y: calc(
       20px + var(--header-wordmark-offset-y) + var(--header-wordmark-h) / 2

@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import "./CrossPromoImageAd.css";
 
-const DEFAULT_URL = process.env.NEXT_PUBLIC_CROSS_PROMO_URL || "https://hookuplists.com";
+const DEFAULT_URL = process.env.NEXT_PUBLIC_CROSS_PROMO_URL || "https://thepicklereport.com";
 
 /** Per-placement URLs; unset values fall back to `NEXT_PUBLIC_CROSS_PROMO_URL`. */
 function urlForPlacement(placement) {
@@ -35,9 +35,17 @@ function layout2x(intrinsic) {
 /**
  * Image-based cross-promo using `@publication-websites/shared-ads` creatives.
  */
-export default function CrossPromoImageAd({ format = "rectangle", className, creatives }) {
+export default function CrossPromoImageAd({
+  format = "rectangle",
+  className,
+  creatives,
+  promoUrl,
+}) {
   const placement = placementFromFormat(format);
-  const stickyUrl = urlForPlacement("sticky");
+  const stickyUrl =
+    typeof promoUrl === "string" && promoUrl.trim()
+      ? promoUrl.trim()
+      : urlForPlacement("sticky");
 
   if (placement === "sticky") {
     const d = creatives.stickyDesktop;
@@ -85,7 +93,10 @@ export default function CrossPromoImageAd({ format = "rectangle", className, cre
   const img = placement === "rail" ? creatives.rail : creatives.inArticle;
   if (!img) return null;
 
-  const href = urlForPlacement(placement);
+  const href =
+    typeof promoUrl === "string" && promoUrl.trim()
+      ? promoUrl.trim()
+      : urlForPlacement(placement);
   const lay = layout2x(img);
 
   return (
@@ -107,7 +118,7 @@ export default function CrossPromoImageAd({ format = "rectangle", className, cre
           sizes={
             placement === "rail"
               ? `${lay.width}px`
-              : `(max-width: 640px) 100vw, ${lay.width}px`
+              : "(max-width: 640px) 100vw, 480px"
           }
         />
       </Link>

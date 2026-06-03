@@ -82,7 +82,7 @@ export default function SubscribeFormWithTurnstile({ initialEmail, layout = "sta
                 aria-label="Subscribe"
                 disabled={!verified || loading}
               >
-                {loading ? "…" : "→"}
+                {loading ? "…" : "Join"}
               </button>
             </div>
             {showTurnstile && (

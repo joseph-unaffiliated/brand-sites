@@ -380,7 +380,7 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset, artic
                       {item.title ? <h3 className={styles.nibblesTitle}>{item.title}</h3> : null}
                       {item.url ? (
                         <Link href={item.url} rel="noopener noreferrer" target="_blank" className={styles.nibblesLink}>
-                          {item.ctaLabel || "Read more"} →
+                          {item.ctaLabel || "Read more"}
                         </Link>
                       ) : null}
                     </li>

@@ -50,7 +50,7 @@ export default async function ArchivePage() {
                       article.summary ||
                       article.subtitle}
                   </p>
-                  <span className={styles.issueCta}>Read issue →</span>
+                  <span className={styles.issueCta}>Read issue</span>
                 </div>
               </Link>
             </article>
@@ -65,7 +65,7 @@ export default async function ArchivePage() {
                     New issues drop weekly. Subscribe to get them in your inbox.
                   </p>
                   <a className={styles.issueCta} href="/#subscribe">
-                    Subscribe →
+                    Subscribe
                   </a>
                 </div>
               </div>

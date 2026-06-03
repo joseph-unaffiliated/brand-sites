@@ -9,6 +9,7 @@ import ArticleSubscribeForm from "@/components/ArticleSubscribeForm";
 import AdSlot from "@/components/AdSlot";
 import ArticleAdStickyBottom from "@/components/ArticleAdStickyBottom";
 import { siteDisplayName, siteKickerLower } from "@/config/site";
+import { crossPromoForSlot } from "@/config/crossPromoAds";
 import styles from "./page.module.css";
 
 const SLOT_RAIL = process.env.NEXT_PUBLIC_ADSENSE_SLOT_RAIL;
@@ -63,7 +64,7 @@ export default async function ArticlePage({ params }) {
           <div className={styles.articleHero}>
             <div className={styles.articleHeroContent}>
               <div className={styles.backLink}>
-                <Link href="/archive">← Back to archive</Link>
+                <Link href="/archive">Back to archive</Link>
               </div>
               <div className="spacer-1-5rem" />
               <div className="headline-block">
@@ -105,7 +106,7 @@ export default async function ArticlePage({ params }) {
                   ))}
                   {SHOW_MID && midIndex > 0 && (
                     <div className={styles.adMid}>
-                      <AdSlot slotId={SLOT_MID} format="rectangle" />
+                      <AdSlot slotId={SLOT_MID} format="rectangle" {...crossPromoForSlot("mid")} />
                     </div>
                   )}
                   {entries.slice(midIndex).map((entry) => (
@@ -124,7 +125,7 @@ export default async function ArticlePage({ params }) {
               </div>
               {SHOW_BOTTOM && (
                 <div className={styles.adBottom}>
-                  <AdSlot slotId={SLOT_BOTTOM} format="rectangle" />
+                  <AdSlot slotId={SLOT_BOTTOM} format="rectangle" {...crossPromoForSlot("bottom")} />
                 </div>
               )}
               <div className="spacer-4rem" />
@@ -175,7 +176,7 @@ export default async function ArticlePage({ params }) {
           </div>
           {SHOW_RAIL && (
             <div className={styles.articleRail}>
-              <AdSlot slotId={SLOT_RAIL} format="vertical" />
+              <AdSlot slotId={SLOT_RAIL} format="vertical" {...crossPromoForSlot("rail")} />
             </div>
           )}
         </div>

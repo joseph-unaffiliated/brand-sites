@@ -3,18 +3,16 @@
 import Image from "next/image";
 import Link from "next/link";
 
-const URL = process.env.NEXT_PUBLIC_CROSS_PROMO_URL || "https://hookuplists.com";
-const HEADLINE = process.env.NEXT_PUBLIC_CROSS_PROMO_HEADLINE || "Hookup Lists";
+const URL = process.env.NEXT_PUBLIC_CROSS_PROMO_URL || "https://thepicklereport.com";
+const HEADLINE = process.env.NEXT_PUBLIC_CROSS_PROMO_HEADLINE || "The Pickle Report";
 const DESCRIPTION =
   process.env.NEXT_PUBLIC_CROSS_PROMO_DESCRIPTION ||
-  "Curated lists and stories from our sister publication.";
-const BRAND = process.env.NEXT_PUBLIC_CROSS_PROMO_BRAND_LABEL || "Hookup Lists";
+  "Weekly pickle news, trivia, and more from our sister publication.";
+const BRAND = process.env.NEXT_PUBLIC_CROSS_PROMO_BRAND_LABEL || "The Pickle Report";
 const CTA = process.env.NEXT_PUBLIC_CROSS_PROMO_CTA || "Read the story";
 const LOGO = process.env.NEXT_PUBLIC_CROSS_PROMO_LOGO_PATH || "/cross-promo-hl.svg";
 
-/**
- * Branded promo card for Hookup Lists when NEXT_PUBLIC_ADS_MODE=cross_promo.
- */
+/** Fallback branded promo card when shared-ads creatives are unavailable. */
 export default function CrossPromoAdCard({ format = "rectangle", className }) {
   const isVertical = format === "vertical";
 
@@ -41,7 +39,7 @@ export default function CrossPromoAdCard({ format = "rectangle", className }) {
           </div>
           <h3 className="cross-promo-card-headline">{HEADLINE}</h3>
           <p className="cross-promo-card-desc">{DESCRIPTION}</p>
-          <span className="cross-promo-card-cta">{CTA} →</span>
+          <span className="cross-promo-card-cta">{CTA}</span>
         </div>
       </Link>
     </div>
