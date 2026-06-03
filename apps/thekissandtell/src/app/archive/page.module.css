@@ -92,6 +92,13 @@
   font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
 }
 
+.issueDemographic {
+  font-size: 12px;
+  line-height: 1.35;
+  color: var(--text-muted);
+  margin: 0 0 8px;
+}
+
 .issueDek {
   color: var(--text-secondary);
   line-height: 1.4;
