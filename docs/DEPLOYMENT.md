@@ -8,11 +8,12 @@
 4. **Environment variables:** see `docs/ENVIRONMENT.md` for that app.
 5. If the GitHub repo or URL changes, confirm the Vercel Git integration still points at the correct repo (re-link if needed).
 
-## Magic (`subscription-functions-copy`)
+## Magic (`subscription-functions`)
 
-- Deploy a **separate Vercel project** per `magic.<brand>` (or multi-domain—see plan).
-- Ensure **`READER_TOKEN_SECRET`** and **`READERS_CORS_ORIGINS`** are set for profile API.
-- Route **`/api/reader-subscriptions`** is provided by `api/reader-subscriptions.js` (see `subscription-functions-copy/docs/READER_SUBSCRIPTIONS_API.md`).
+- Deploy a **separate Vercel project** per `magic.<brand>` from the **`subscription-functions`** repo (branch `main`, root `/`).
+- Topology inventory (hosts, env, reader rollout): [`subscription-functions/docs/MAGIC_DEPLOY_TOPOLOGY.md`](https://github.com/joseph-unaffiliated/subscription-functions/blob/main/docs/MAGIC_DEPLOY_TOPOLOGY.md) (also under `../subscription-functions/docs/` locally).
+- Ensure **`READER_TOKEN_SECRET`** and **`READERS_CORS_ORIGINS`** are set for profile / reader APIs.
+- Reader routes: `/api/reader-health`, `/api/reader-events`, `/api/reader-profile`, `/api/reader-subscriptions`.
 
 ## Cloudflare (per brand)
 
