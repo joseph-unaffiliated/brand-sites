@@ -1,21 +1,16 @@
 .magic-article-subscribe-toast {
-  position: fixed;
-  z-index: 9999;
-  left: 50%;
-  bottom: 1.5rem;
-  transform: translateX(-50%);
-  max-width: min(24rem, calc(100vw - 2rem));
-  padding: 0.65rem 1.15rem;
-  border-radius: 1rem;
-  background-color: #f4f4f4;
-  box-shadow: 0 4px 20px rgb(0 0 0 / 12%);
-  pointer-events: none;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0.75rem 1.25rem;
+  background-color: #ececec;
+  border-bottom: 1px solid #dedede;
+  text-align: center;
 }
 
 .magic-article-subscribe-toast-text {
   margin: 0;
   font-size: 0.9rem;
   line-height: 1.45;
-  text-align: center;
   color: #1a1a1a;
 }
