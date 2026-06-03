@@ -1,7 +1,7 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
+import SanityMedia from "@/components/SanityMedia";
 import { useSubscriber } from "@/context/SubscriberContext";
 import { getDemographicAndDescription } from "@/lib/articles";
 import styles from "../app/page.module.css";
@@ -35,7 +35,7 @@ export default function HomeSnippetsList({ stackItems }) {
               )}
             </span>
             <span className={styles.snippetThumb}>
-              <Image
+              <SanityMedia
                 src={article.mainImage}
                 alt=""
                 width={72}

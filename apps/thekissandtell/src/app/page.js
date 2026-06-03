@@ -1,5 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
+import SanityMedia from "@/components/SanityMedia";
 import {
   getArticles,
   getDemographicAndDescription,
@@ -59,7 +59,7 @@ export default async function Home({ searchParams: searchParamsProp }) {
                   className={styles.mosaicCardLink}
                 >
                   <div className={styles.mosaicCardImage}>
-                    <Image
+                    <SanityMedia
                       src={article.mainImage}
                       alt=""
                       width={400}
@@ -99,7 +99,7 @@ export default async function Home({ searchParams: searchParamsProp }) {
                 className={styles.featuredCard}
               >
                 <div className={styles.featuredImage}>
-                  <Image
+                  <SanityMedia
                     src={featured.mainImage}
                     alt=""
                     width={featured.mainImageWidth || 900}

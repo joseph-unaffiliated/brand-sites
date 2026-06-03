@@ -34,7 +34,7 @@ export const siteFooterTagline =
 
 export const siteHeroTagline =
   process.env.NEXT_PUBLIC_SITE_HERO_TAGLINE ||
-  "True stories on dating, relationships, and what happens after the first date.";
+  "Anonymous dating stories, honest confessions, and the details you'd only tell your closest friend.";
 
 export const contactEmail =
   process.env.NEXT_PUBLIC_CONTACT_EMAIL || "contact@thekissandtell.com";

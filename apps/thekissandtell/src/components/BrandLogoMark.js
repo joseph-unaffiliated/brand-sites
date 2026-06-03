@@ -1,10 +1,15 @@
-import { siteMonogram } from "@/config/site";
+import Image from "next/image";
 
-/** Circular monogram placeholder until a custom mark ships. */
+/** Gradient K mark (mobile header / footer fallback). */
 export default function BrandLogoMark({ className }) {
   return (
-    <span className={`brand-monogram ${className ?? ""}`} aria-hidden>
-      {siteMonogram}
-    </span>
+    <Image
+      src="/tkat-logo.png"
+      alt=""
+      width={48}
+      height={48}
+      className={className}
+      aria-hidden
+    />
   );
 }

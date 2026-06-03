@@ -1,30 +1,21 @@
-import Image from "next/image";
 import Link from "next/link";
+import SanityMedia from "@/components/SanityMedia";
 import { notFound } from "next/navigation";
-import {
-  getArticleBySlug,
-  getArticleSlugs,
-  getArticles,
-  dedupeSubtitleInContentBlocks,
-} from "@/lib/articles";
+import { getArticleBySlug, getArticleSlugs, getArticles } from "@/lib/articles";
 import HideWhenSubscribed from "@/components/HideWhenSubscribed";
 import RecordArticleView from "@/components/RecordArticleView";
 import ArticleSubscribeForm from "@/components/ArticleSubscribeForm";
-import ArticleContentBlocks from "@/components/ArticleContentBlocks";
 import AdSlot from "@/components/AdSlot";
 import ArticleAdStickyBottom from "@/components/ArticleAdStickyBottom";
 import { siteDisplayName, siteKickerLower } from "@/config/site";
 import styles from "./page.module.css";
 
-const SANITY_PROJECT_ID = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
-const SANITY_DATASET = process.env.NEXT_PUBLIC_SANITY_DATASET ?? "production";
-
-const ADS_MODE = (process.env.NEXT_PUBLIC_ADS_MODE || "cross_promo").toLowerCase();
-const CROSS_PROMO = ADS_MODE === "cross_promo";
-
 const SLOT_RAIL = process.env.NEXT_PUBLIC_ADSENSE_SLOT_RAIL;
 const SLOT_MID = process.env.NEXT_PUBLIC_ADSENSE_SLOT_MID;
 const SLOT_BOTTOM = process.env.NEXT_PUBLIC_ADSENSE_SLOT_BOTTOM;
+
+const ADS_MODE = (process.env.NEXT_PUBLIC_ADS_MODE || "cross_promo").toLowerCase();
+const CROSS_PROMO = ADS_MODE === "cross_promo";
 
 const SHOW_RAIL = CROSS_PROMO || !!SLOT_RAIL;
 const SHOW_MID = CROSS_PROMO || !!SLOT_MID;
@@ -59,30 +50,20 @@ export default async function ArticlePage({ params }) {
     .filter((a) => a.slug !== slug)
     .slice(0, READ_MORE_COUNT);
 
-  const contentBlocks = article.contentBlocks ?? [];
-  const showBlocks =
-    Array.isArray(contentBlocks) &&
-    contentBlocks.length > 0 &&
-    Boolean(SANITY_PROJECT_ID);
-
-  const contentBlocksForRender = showBlocks
-    ? dedupeSubtitleInContentBlocks(contentBlocks, article.subtitle, article.title)
-    : contentBlocks;
+  const entries = article.entries ?? [];
+  const midIndex = Math.floor(entries.length / 2);
 
   return (
     <div className={styles.page}>
       <RecordArticleView slug={slug} />
       <section className="articlebody-section">
-        {/* Centered hero: headline + optional cover image when not using content blocks */}
-        <div
-          className={`${styles.articleHeroBlock} ${showBlocks ? styles.articleHeroBlockInline : ""}`}
-        >
+        <div className={styles.articleHeroBlock}>
           <div className={styles.articleHero}>
             <div className={styles.articleHeroContent}>
               <div className={styles.backLink}>
                 <Link href="/archive">← Back to archive</Link>
               </div>
-              <div className="spacer-3rem" />
+              <div className="spacer-1-5rem" />
               <div className="headline-block">
                 {article.kicker && article.kicker.trim().toLowerCase() !== siteKickerLower && (
                   <p className={styles.kicker}>{article.kicker}</p>
@@ -92,58 +73,46 @@ export default async function ArticlePage({ params }) {
                   <p>{article.subtitle}</p>
                 </div>
               </div>
-              {showBlocks ? (
-                <hr className={styles.articleHeaderRule} aria-hidden />
-              ) : (
-                <div className="spacer-4rem" />
-              )}
+              <div className="spacer-4rem" />
             </div>
           </div>
-          {!showBlocks && (
-            <div className={styles.articleHeroImage}>
-              <div className="mainimage-block">
-                <Image
-                  src={article.mainImage}
-                  alt=""
-                  width={article.mainImageWidth || 900}
-                  height={article.mainImageHeight || 600}
-                  priority
-                  className={styles.mainImage}
-                />
-                {article.photoCredit ? (
-                  <p className={styles.heroPhotoCredit}>{article.photoCredit}</p>
-                ) : null}
-              </div>
+          <div className={styles.articleHeroImage}>
+            <div className="mainimage-block">
+              <SanityMedia
+                src={article.mainImage}
+                alt=""
+                width={article.mainImageWidth || 900}
+                height={article.mainImageHeight || 600}
+                priority
+                className={styles.mainImage}
+              />
             </div>
-          )}
+          </div>
         </div>
-        {/* Grid: copy left, rail right (rail only here, not beside hero) */}
-        <div
-          className={`${styles.articleBodyGrid} ${showBlocks ? styles.articleBodyGridBlocksFirst : ""}`}
-        >
-        <div className={styles.articleMain}>
-          <div className={styles.articleContainerNoPadding}>
-            <div className="articlecopy-wrapper">
+        <div className={styles.articleBodyGrid}>
+          <div className={styles.articleMain}>
+            <div className={styles.articleContainerNoPadding}>
+              <div className="articlecopy-wrapper">
                 <div className="articlecopy-richtext">
-                  {showBlocks && SANITY_PROJECT_ID ? (
-                    <ArticleContentBlocks
-                      blocks={contentBlocksForRender}
-                      projectId={SANITY_PROJECT_ID}
-                      dataset={SANITY_DATASET}
-                      articleSlug={slug}
-                    />
-                  ) : article.summary ? (
-                    <>
-                      <article className={styles.entry}>
-                        <p>{article.summary}</p>
-                      </article>
-                      {SHOW_MID && (
-                        <div className={styles.adMid}>
-                          <AdSlot slotId={SLOT_MID} format="rectangle" />
-                        </div>
-                      )}
-                    </>
-                  ) : null}
+                  {entries.slice(0, midIndex).map((entry) => (
+                    <article key={entry.title} className={styles.entry}>
+                      <p className={styles.age}>{entry.age}</p>
+                      <h2>{entry.title}</h2>
+                      <p>{entry.body}</p>
+                    </article>
+                  ))}
+                  {SHOW_MID && midIndex > 0 && (
+                    <div className={styles.adMid}>
+                      <AdSlot slotId={SLOT_MID} format="rectangle" />
+                    </div>
+                  )}
+                  {entries.slice(midIndex).map((entry) => (
+                    <article key={entry.title} className={styles.entry}>
+                      <p className={styles.age}>{entry.age}</p>
+                      <h2>{entry.title}</h2>
+                      <p>{entry.body}</p>
+                    </article>
+                  ))}
                 </div>
                 {article.disclaimer && (
                   <div className="articlecopy-richtext">
@@ -156,59 +125,58 @@ export default async function ArticlePage({ params }) {
                   <AdSlot slotId={SLOT_BOTTOM} format="rectangle" />
                 </div>
               )}
+              <div className="spacer-4rem" />
               <HideWhenSubscribed>
-            <section className="newslettercta-section">
-              <div className="newslettercta-block">
-                <div className="newslettercta-prompt">
-                  <span>Subscribe for more from </span>
-                  <span>{siteDisplayName}</span>
-                  <span className="italic">, weekly in your inbox</span>
-                </div>
-                <ArticleSubscribeForm />
-              </div>
-            </section>
-          </HideWhenSubscribed>
-          </div>
-        </div>
-        {SHOW_RAIL && (
-          <div className={styles.articleRail}>
-            <AdSlot slotId={SLOT_RAIL} format="vertical" />
-          </div>
-        )}
-        </div>
-        {readMore.length > 0 && (
-          <div className={styles.readMoreOuter}>
-            <section className={styles.readMore} aria-label="Keep reading">
-              <h2 className={styles.readMoreTitle}>Keep reading</h2>
-              <div className={styles.readMoreGrid}>
-                {readMore.map((rec) => (
-                  <Link
-                    key={rec._id ?? rec.slug}
-                    href={`/article/${rec.slug}`}
-                    className={styles.readMoreCard}
-                  >
-                    <div className={styles.readMoreThumb}>
-                      <Image
-                        src={rec.mainImage}
-                        alt=""
-                        width={280}
-                        height={187}
-                        sizes="(max-width: 640px) 100vw, 280px"
-                      />
+                <section className="newslettercta-section">
+                  <div className="newslettercta-block">
+                    <div className="newslettercta-prompt">
+                      <span>Subscribe for more from </span>
+                      <span>{siteDisplayName}</span>
+                      <span className="italic">, weekly in your inbox</span>
                     </div>
-                    {rec.kicker && rec.kicker.trim().toLowerCase() !== siteKickerLower && (
-                      <p className={styles.readMoreKicker}>{rec.kicker}</p>
-                    )}
-                    <h3 className={styles.readMoreHeadline}>{rec.title}</h3>
-                    {rec.summary && (
-                      <p className={styles.readMoreDek}>{rec.summary}</p>
-                    )}
-                  </Link>
-                ))}
-              </div>
-            </section>
+                    <ArticleSubscribeForm />
+                  </div>
+                </section>
+              </HideWhenSubscribed>
+              {readMore.length > 0 && (
+                <section className={styles.readMore} aria-label="Keep reading">
+                  <h2 className={styles.readMoreTitle}>Keep reading</h2>
+                  <div className={styles.readMoreGrid}>
+                    {readMore.map((rec) => (
+                      <Link
+                        key={rec._id ?? rec.slug}
+                        href={`/article/${rec.slug}`}
+                        className={styles.readMoreCard}
+                      >
+                        <div className={styles.readMoreThumb}>
+                          <SanityMedia
+                            src={rec.mainImage}
+                            alt=""
+                            width={280}
+                            height={187}
+                            sizes="(max-width: 640px) 100vw, 280px"
+                          />
+                        </div>
+                        {rec.kicker && rec.kicker.trim().toLowerCase() !== siteKickerLower && (
+                          <p className={styles.readMoreKicker}>{rec.kicker}</p>
+                        )}
+                        <h3 className={styles.readMoreHeadline}>{rec.title}</h3>
+                        {rec.summary && (
+                          <p className={styles.readMoreDek}>{rec.summary}</p>
+                        )}
+                      </Link>
+                    ))}
+                  </div>
+                </section>
+              )}
+            </div>
           </div>
-        )}
+          {SHOW_RAIL && (
+            <div className={styles.articleRail}>
+              <AdSlot slotId={SLOT_RAIL} format="vertical" />
+            </div>
+          )}
+        </div>
       </section>
       <ArticleAdStickyBottom />
     </div>

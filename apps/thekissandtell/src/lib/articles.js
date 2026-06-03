@@ -3,7 +3,6 @@ import {
   ensureDescriptionOnly,
   getDemographicAndDescription,
   stripLeadingDuplicate,
-  dedupeSubtitleInContentBlocks,
 } from "./article-helpers.js";
 
 const layer = createSanityLayer({
@@ -13,15 +12,10 @@ const layer = createSanityLayer({
 
 const queries = createArticleQueries({
   ...layer,
-  fallbackImage: process.env.NEXT_PUBLIC_SITE_OG_IMAGE || "/next.svg",
+  fallbackImage: process.env.NEXT_PUBLIC_SITE_OG_IMAGE || "/tkat-phone.png",
 });
 
-export {
-  ensureDescriptionOnly,
-  getDemographicAndDescription,
-  stripLeadingDuplicate,
-  dedupeSubtitleInContentBlocks,
-};
+export { ensureDescriptionOnly, getDemographicAndDescription, stripLeadingDuplicate };
 
 export async function getArticles() {
   return queries.getArticles();

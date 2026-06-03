@@ -2,40 +2,19 @@
   display: flex;
   flex-direction: column;
   padding-bottom: 0;
-  /* Lets the article column use the full main width (avoids flex min-width:auto quirks). */
-  min-width: 0;
-  width: 100%;
 }
 
-/* Bottom slack so the sticky ad can scroll off above the footer (ad lives after read-more in the page column) */
 .page:has(.article-ad-sticky-bottom) {
-  padding-bottom: 112px;
+  padding-bottom: 100px;
 }
 
-/* Centered hero block: headline + image, no rail beside (align with article grid width) */
 .articleHeroBlock {
-  max-width: min(100%, 840px);
+  max-width: 720px;
   margin-left: auto;
   margin-right: auto;
   padding-top: 1.5rem;
   padding-left: 24px;
   padding-right: 24px;
-}
-
-/* Content-block articles: no cover image; title flows into body */
-.articleHeroBlockInline .articleHeroContent {
-  padding-bottom: 0;
-}
-
-.articleHeaderRule {
-  border: none;
-  border-top: 1px solid var(--border);
-  margin: 1.75rem auto 0;
-  max-width: min(100%, 640px);
-}
-
-.articleBodyGridBlocksFirst {
-  padding-top: 1.25rem;
 }
 
 .articleHeroContent {
@@ -46,7 +25,6 @@
   margin-bottom: 0;
 }
 
-/* Grid: copy left, rail right — tight and centered, 40px gap */
 .articleBodyGrid {
   display: grid;
   grid-template-columns: 1fr;
@@ -58,19 +36,14 @@
   padding-right: 24px;
 }
 
-@media (min-width: 769px) {
-  /* 640px prose + 40px gap + 160px rail = 840px; fixed gap, whole block centered */
+@media (min-width: 1024px) {
   .articleBodyGrid {
-    grid-template-columns: 640px 160px;
-    gap: 40px;
-    width: min(840px, 100%);
-    max-width: 840px;
-    margin-left: auto;
-    margin-right: auto;
+    grid-template-columns: minmax(0, 540px) 300px;
+    gap: 0 40px;
+    max-width: 880px;
     padding-left: 0;
     padding-right: 0;
     align-items: start;
-    box-sizing: border-box;
   }
 }
 
@@ -85,7 +58,6 @@
   display: block;
 }
 
-/* Article copy — column 1, no side padding */
 .articleMain {
   grid-column: 1;
   min-width: 0;
@@ -93,26 +65,18 @@
 
 .articleContainerNoPadding {
   padding-top: 24px;
-  padding-bottom: 0;
+  padding-bottom: 64px;
   padding-left: 1rem;
   padding-right: 0;
-}
-
-@media (min-width: 769px) {
-  .articleContainerNoPadding {
-    padding-left: 0;
-  }
 }
 
 .articleRail {
   position: sticky;
   top: 24px;
-  align-self: start;
   margin-top: 1.5rem;
-  box-sizing: border-box;
 }
 
-@media (min-width: 769px) {
+@media (min-width: 1024px) {
   .articleRail {
     grid-column: 2;
   }
@@ -122,15 +86,9 @@
   min-height: 0;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1023px) {
   .articleRail {
     display: none;
-  }
-
-  /* Body grid already has 24px horizontal padding; don't double with inner inset */
-  .articleContainerNoPadding {
-    padding-left: 0;
-    padding-right: 0;
   }
 }
 
@@ -206,39 +164,10 @@
   display: block;
 }
 
-.heroPhotoCredit {
-  font-size: 0.8rem;
-  font-style: italic;
-  color: var(--text-muted);
-  text-align: center;
-  margin: 0.65rem 0 0;
-  line-height: 1.35;
-  letter-spacing: 0.01em;
-}
-
-/* Full-width band below article + rail; rail sticky does not extend beside this */
-.readMoreOuter {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 24px 64px;
-  box-sizing: border-box;
-}
-
-@media (min-width: 769px) {
-  .readMoreOuter {
-    max-width: min(100%, 1200px);
-    padding-left: 24px;
-    padding-right: 24px;
-  }
-}
-
-/* Read more module */
 .readMore {
-  margin-top: 2.5rem;
+  margin-top: 3rem;
   padding-top: 2.5rem;
   border-top: 1px solid var(--border);
-  max-width: none;
 }
 
 .readMoreTitle {
@@ -268,7 +197,7 @@
 
 .readMoreCard:hover {
   border-color: var(--accent);
-  box-shadow: 0 4px 12px rgba(2, 30, 21, 0.08);
+  box-shadow: 0 4px 12px rgba(26, 10, 36, 0.08);
 }
 
 .readMoreThumb {
@@ -298,7 +227,7 @@
   font-size: var(--text-card-headline);
   font-weight: 300;
   line-height: 1.25;
-  margin: 1rem 1rem .5rem 1rem;
+  margin: 1rem 1rem 0.5rem 1rem;
 }
 
 .readMoreDek {

@@ -1,6 +1,19 @@
+import Image from "next/image";
 import { siteDisplayName } from "@/config/site";
 
-/** Text wordmark; replace with custom SVG in public/ when brand assets are ready. */
-export default function BrandWordmark({ className }) {
-  return <span className={`brand-text-wordmark ${className ?? ""}`}>{siteDisplayName}</span>;
+/** Wordmark image; use variant="light" on dark backgrounds (footer). */
+export default function BrandWordmark({ className, variant = "dark" }) {
+  const src =
+    variant === "light" ? "/tkat-wordmark-white.png" : "/tkat-wordmark-black.png";
+
+  return (
+    <Image
+      src={src}
+      alt={siteDisplayName}
+      width={220}
+      height={36}
+      priority
+      className={className}
+    />
+  );
 }

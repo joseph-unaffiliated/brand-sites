@@ -1,23 +1,23 @@
 :root {
-  /* Chromatic palette: hue 66° (same as brand #474F00); only saturation/lightness vary. */
   --bg: #ffffff;
   --surface: #ffffff;
-  --surface-muted: hsl(66, 9%, 96%);
-  --surface-gradient-end: hsl(66, 10%, 92%);
-  --text-primary: hsl(66, 38%, 9%);
-  --text-secondary: hsl(66, 28%, 14%);
-  --text-muted: hsl(66, 14%, 44%);
-  --text-muted-light: hsl(66, 8%, 58%);
-  --accent: #474f00;
-  --accent-strong: hsl(66, 100%, 26%);
-  --border: hsl(66, 10%, 88%);
-  --footer-bg: hsl(66, 42%, 7%);
-  --footer-text: hsl(66, 16%, 90%);
-  --footer-accent: hsl(66, 22%, 68%);
-  --text-on-dark: hsl(66, 12%, 92%);
-  --subscribe-overlay: hsla(66, 45%, 8%, 0.45);
-  --subscribe-grad-top: hsl(66, 46%, 22%);
-  --subscribe-grad-bottom: hsl(66, 50%, 11%);
+  --surface-muted: #f8f4fc;
+  --surface-gradient-end: #f0e8f8;
+  --text-primary: #1a0a24;
+  --text-secondary: #2d1438;
+  --text-muted: #6b5578;
+  --text-muted-light: #9a8aa8;
+  --brand-gradient: linear-gradient(180deg, #9048e0 0%, #a03080 100%);
+  --accent: #9048e0;
+  --accent-strong: #7a38c8;
+  --border: #e8dff0;
+  --footer-bg: #1a0a24;
+  --footer-text: #f5eef8;
+  --footer-accent: #c9b8d8;
+  --text-on-dark: #f5eef8;
+  --subscribe-overlay: hsla(280, 45%, 8%, 0.45);
+  --subscribe-grad-top: #9048e0;
+  --subscribe-grad-bottom: #a03080;
   --max-width: 960px;
   --radius: 12px;
 
@@ -507,12 +507,12 @@ a {
 }
 
 .button-primary {
-  background: var(--accent);
+  background: var(--brand-gradient);
   color: #ffffff;
 }
 
 .button-primary:hover {
-  background: var(--accent-strong);
+  filter: brightness(1.06);
 }
 
 .button-secondary {
@@ -637,8 +637,7 @@ a {
   }
 }
 
-/* Legacy list-style articles use .entry p (page.module.css). Do not zero all <p> here —
-   it overrides Portable Text in ArticleContentBlocks and collapses paragraph spacing. */
+/* List-style article entries use .entry p (page.module.css). */
 
 .articlebody-section .newslettercta-section {
   display: flex;
@@ -653,7 +652,7 @@ a {
   align-items: flex-start;
   gap: 1rem;
   background: var(--footer-bg);
-  background-image: linear-gradient(rgba(0, 0, 0, 0.66), transparent);
+  background-image: var(--brand-gradient);
   border-radius: 0.5rem;
   padding: 1rem 1.5rem;
   width: 100%;
@@ -705,6 +704,7 @@ a {
   text-decoration: underline;
 }
 
+.articlebody-section .spacer-1-5rem { height: 1.5rem; }
 .articlebody-section .spacer-3rem { height: 3rem; }
 .articlebody-section .spacer-4rem { height: 4rem; }
 
@@ -785,7 +785,7 @@ a {
 }
 
 .article-ad-sticky-dismiss:focus-visible {
-  outline: 2px solid var(--accent, #474f00);
+  outline: 2px solid var(--accent, #9048e0);
   outline-offset: 2px;
 }
 
