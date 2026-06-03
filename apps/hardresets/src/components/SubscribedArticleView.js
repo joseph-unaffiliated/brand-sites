@@ -1,16 +1,18 @@
 "use client";
 
 import { useEffect } from "react";
+import ArticleMagicLinkLanding from "@publication-websites/magic-client/article-magic-link";
 import { ArticleViewTracker } from "@publication-websites/reader-events";
+import { siteConfig } from "@/config/site";
 import { useSubscriber } from "@/context/SubscriberContext";
 import { BRAND } from "@/lib/subscription";
 
 const READ_ARTICLES_KEY = `read_articles_${BRAND}`;
 const MAX_ITEMS = 200;
 
-/** Tracks article_view via reader-events API and dual-writes localStorage read list. */
+/** Magic-link toast + article_view tracking when subscribed. */
 export default function SubscribedArticleView({ slug }) {
-  const { isSubscribed } = useSubscriber();
+  const { isSubscribed, refresh } = useSubscriber();
 
   useEffect(() => {
     if (!isSubscribed || !slug || typeof window === "undefined") return;
@@ -37,5 +39,14 @@ export default function SubscribedArticleView({ slug }) {
     }
   }, [isSubscribed, slug]);
 
-  return <ArticleViewTracker slug={slug} enabled={isSubscribed} />;
+  return (
+    <>
+      <ArticleMagicLinkLanding
+        brand={BRAND}
+        executeUrl={siteConfig.magicExecuteUrl}
+        onLocalStateUpdated={refresh}
+      />
+      <ArticleViewTracker slug={slug} enabled={isSubscribed} />
+    </>
+  );
 }

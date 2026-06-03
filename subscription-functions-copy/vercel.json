@@ -21,6 +21,10 @@
       "destination": "/api/magic-link"
     },
     {
+      "source": "/article/:path*",
+      "destination": "/api/magic-link"
+    },
+    {
       "source": "/retention",
       "destination": "/api/retention-webhook"
     }
