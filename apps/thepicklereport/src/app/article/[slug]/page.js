@@ -10,6 +10,7 @@ import {
 import { pickRandomArticles } from "@/lib/pickRandomArticles";
 import HideWhenSubscribed from "@/components/HideWhenSubscribed";
 import RecordArticleView from "@/components/RecordArticleView";
+import NavLogoImageSync from "@/components/NavLogoImageSync";
 import ArticleSubscribeForm from "@/components/ArticleSubscribeForm";
 import ArticleContentBlocks from "@/components/ArticleContentBlocks";
 import AdSlot from "@/components/AdSlot";
@@ -180,6 +181,7 @@ export default async function ArticlePage({ params }) {
       <JsonLd data={articleJsonLd} />
       <JsonLd data={breadcrumbJsonLd} />
       <RecordArticleView slug={slug} />
+      <NavLogoImageSync image={article.mainImage} />
       <section className="articlebody-section">
         {/* Centered hero: headline + optional cover image when not using content blocks */}
         <div

@@ -282,10 +282,19 @@ a {
     align-items: center;
     position: relative;
     gap: 16px 28px;
-    --header-mark-w: min(168px, 20vw);
+    --header-mark-w: min(132px, 16vw);
     --header-mark-h: calc(var(--header-mark-w) * 24 / 33);
     --logo-line-pad-x: 34px;
     --logo-line-gap: calc(var(--header-mark-w) + 2 * var(--logo-line-pad-x));
+    --brand-top: 24px;
+    --brand-chip-pad-y: 5px;
+    --hairline-mark-ratio: 0.56;
+    --hairline-y: calc(
+      var(--brand-top) + var(--brand-chip-pad-y) + var(--header-mark-h) * var(--hairline-mark-ratio)
+    );
+    --logo-mark-center-y: calc(
+      var(--brand-top) + var(--brand-top) + var(--brand-chip-pad-y) + var(--header-mark-h) / 2
+    );
     padding-top: 24px;
     padding-bottom: calc(var(--header-mark-h) * 0.32 + 26px);
     min-height: calc(24px + var(--header-mark-h) / 2 + 26px);
@@ -296,7 +305,7 @@ a {
     position: absolute;
     left: calc(50% - 50vw);
     width: calc(50vw - var(--logo-line-gap) / 2);
-    top: calc(30px + var(--header-mark-h) / 2);
+    top: var(--hairline-y);
     height: 1px;
     background: var(--border);
     pointer-events: none;
@@ -308,7 +317,7 @@ a {
     position: absolute;
     right: calc(50% - 50vw);
     width: calc(50vw - var(--logo-line-gap) / 2);
-    top: calc(30px + var(--header-mark-h) / 2);
+    top: var(--hairline-y);
     height: 1px;
     background: var(--border);
     pointer-events: none;
@@ -317,20 +326,26 @@ a {
 
   .site-header--marketing .header-row-marketing .brand {
     position: absolute;
-    left: 50%;
-    top: 24px;
-    transform: translateX(-50%);
+    left: 0;
+    right: 0;
+    top: var(--brand-top);
+    transform: none;
     z-index: 2;
     grid-column: unset;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    pointer-events: none;
   }
 
   .site-header--marketing .header-row-marketing .brand-name {
     display: inline-block;
-    padding: 5px var(--logo-line-pad-x);
+    padding: var(--brand-chip-pad-y) var(--logo-line-pad-x);
     background: var(--bg);
     border-radius: 4px;
     position: relative;
     z-index: 3;
+    pointer-events: auto;
   }
 
   .site-header--marketing .header-row-marketing .site-nav-left,
@@ -401,6 +416,13 @@ a {
     padding-top: 22px;
     padding-bottom: 22px;
     min-height: 0;
+    --header-wordmark-w: min(200px, 32vw);
+    --header-wordmark-h: calc(var(--header-wordmark-w) * 31 / 229);
+    /* Optical center: R descender hangs below cap height. */
+    --header-wordmark-offset-y: 4px;
+    --logo-mark-center-y: calc(
+      22px + var(--header-wordmark-offset-y) + var(--header-wordmark-h) / 2
+    );
   }
 
   .site-header--article .header-hamburger {
@@ -457,6 +479,12 @@ a {
   object-fit: contain;
 }
 
+.site-header--article .brand-logo-wordmark,
+.site-header--article .brand-logo-wordmark-fill {
+  height: var(--header-wordmark-h);
+  transform: translateY(var(--header-wordmark-offset-y, 4px));
+}
+
 /* Mobile: pickle mark only; desktop: horizontal wordmark */
 .brand-logo-wordmark {
   display: none;
@@ -472,34 +500,91 @@ a {
 }
 
 @media (min-width: 769px) {
-  .site-header--article .brand-logo-wordmark {
+  /* Marketing: large PR photo logomark only. */
+  .site-header--marketing .brand-logo-wordmark,
+  .site-header--marketing .brand-logo-wordmark-fill {
+    display: none;
+  }
+
+  .site-header--marketing .brand-logo-mark,
+  .site-header--marketing .brand-logo-mark-fill {
+    display: block;
+    width: var(--header-mark-w, min(132px, 16vw));
+    max-width: min(132px, 16vw);
+    height: var(--header-mark-h);
+    color: var(--text-primary);
+    object-fit: contain;
+  }
+
+  /* Article: full wordmark with photo fill. */
+  .site-header--article .brand-logo-mark,
+  .site-header--article .brand-logo-mark-fill {
+    display: none !important;
+  }
+
+  .site-header--article .brand-logo-wordmark,
+  .site-header--article .brand-logo-wordmark-fill {
     display: block;
     box-sizing: border-box;
-    width: min(200px, 32vw);
+    width: var(--header-wordmark-w, min(200px, 32vw));
     max-width: 100%;
-    height: auto;
-    max-height: none;
-    padding-top: 10px;
+    height: var(--header-wordmark-h);
+    transform: translateY(var(--header-wordmark-offset-y, 4px));
     color: var(--text-primary);
     object-fit: contain;
   }
+}
 
-  .site-header--article .brand-logo-mark {
-    display: none;
-  }
+/* Viewport-sized photo through PR mark mask (marketing pages). */
+.site-header--marketing .brand-logo-mark-fill {
+  position: relative;
+  display: block;
+  flex-shrink: 0;
+  width: var(--header-mark-w, min(132px, 16vw));
+  max-width: min(132px, 16vw);
+  height: var(--header-mark-h, calc(var(--header-mark-w, 132px) * 24 / 33));
+  -webkit-mask-image: url(/tpr-logo-mask.svg);
+  mask-image: url(/tpr-logo-mask.svg);
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
 
-  .site-header--marketing .brand-logo-wordmark {
-    display: none;
-  }
+/* Viewport-sized photo through wordmark mask (article pages). */
+.site-header--article .brand-logo-wordmark-fill {
+  position: relative;
+  display: block;
+  flex-shrink: 0;
+  width: var(--header-wordmark-w, min(200px, 32vw));
+  max-width: min(200px, 32vw);
+  height: var(--header-wordmark-h, calc(var(--header-wordmark-w, 200px) * 31 / 229));
+  -webkit-mask-image: url(/tpr-wordmark-mask.svg);
+  mask-image: url(/tpr-wordmark-mask.svg);
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
 
-  .site-header--marketing .brand-logo-mark {
-    display: block;
-    width: var(--header-mark-w, min(168px, 20vw));
-    max-width: min(168px, 20vw);
-    height: auto;
-    color: var(--text-primary);
-    object-fit: contain;
-  }
+.site-header--marketing .brand-logo-mark-fill::before,
+.site-header--article .brand-logo-wordmark-fill::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: var(--header-mark-bg-image);
+  background-size: cover;
+  background-position: 50% calc(50% + (var(--logo-mark-center-y, 50vh) - 50vh));
+  background-repeat: no-repeat;
+  filter: blur(5px);
+  pointer-events: none;
 }
 
 .brand-tag {
@@ -1084,10 +1169,21 @@ a {
   /* Marketing mobile: hairline gaps + white chip behind mark; tighter below header. */
   .site-header--marketing .header-row-marketing {
     position: relative;
-    --header-mark-w: min(120px, 36vw);
+    --header-mark-w: min(96px, 28vw);
     --header-mark-h: calc(var(--header-mark-w) * 24 / 33);
     --logo-line-pad-x: 24px;
     --logo-line-gap: calc(var(--header-mark-w) + 2 * var(--logo-line-pad-x));
+    --brand-top: 14px;
+    --brand-chip-pad-y: 4px;
+    --hairline-mark-ratio: 0.72;
+    /* Hairline stays put when nudging mark up on mobile (desktop uses brand-top for both). */
+    --hairline-anchor-top: 20px;
+    --hairline-y: calc(
+      var(--hairline-anchor-top) + var(--brand-chip-pad-y) + var(--header-mark-h) * var(--hairline-mark-ratio)
+    );
+    --logo-mark-center-y: calc(
+      var(--brand-top) + var(--brand-top) + var(--brand-chip-pad-y) + var(--header-mark-h) / 2
+    );
     padding-top: 24px;
     padding-bottom: calc(var(--header-mark-h) * 0.36 + 18px);
     min-height: calc(48px + var(--header-mark-h) * 0.55);
@@ -1099,7 +1195,7 @@ a {
     left: calc(50% - 50vw);
     width: calc(50vw - var(--logo-line-gap) / 2);
     right: auto;
-    top: calc(42px + var(--header-mark-h) / 2);
+    top: var(--hairline-y);
     height: 1px;
     background: var(--border);
     pointer-events: none;
@@ -1112,7 +1208,7 @@ a {
     right: calc(50% - 50vw);
     width: calc(50vw - var(--logo-line-gap) / 2);
     left: auto;
-    top: calc(42px + var(--header-mark-h) / 2);
+    top: var(--hairline-y);
     height: 1px;
     background: var(--border);
     pointer-events: none;
@@ -1126,7 +1222,7 @@ a {
     position: absolute;
     left: 0;
     right: 0;
-    top: 20px;
+    top: var(--brand-top);
     transform: none;
     z-index: 2;
     display: flex;
@@ -1137,7 +1233,7 @@ a {
 
   .site-header--marketing .header-row-marketing .brand-name {
     display: inline-block;
-    padding: 4px var(--logo-line-pad-x);
+    padding: var(--brand-chip-pad-y) var(--logo-line-pad-x);
     background: var(--bg);
     border-radius: 4px;
     position: relative;
@@ -1153,6 +1249,38 @@ a {
     display: flex !important;
     width: var(--header-mark-w);
     max-width: var(--header-mark-w);
+    height: var(--header-mark-h);
+  }
+
+  .site-header--marketing .brand-logo-mark-fill {
+    display: block !important;
+    width: var(--header-mark-w);
+    max-width: var(--header-mark-w);
+    height: var(--header-mark-h);
+  }
+
+  .site-header--article .header-row-1 {
+    --header-wordmark-w: min(200px, 72vw);
+    --header-wordmark-h: calc(var(--header-wordmark-w) * 31 / 229);
+    --header-wordmark-offset-y: 4px;
+    --logo-mark-center-y: calc(
+      20px + var(--header-wordmark-offset-y) + var(--header-wordmark-h) / 2
+    );
+  }
+
+  .site-header--article .brand-logo-mark,
+  .site-header--article .brand-logo-mark-fill {
+    display: none !important;
+  }
+
+  .site-header--article .brand-logo-wordmark,
+  .site-header--article .brand-logo-wordmark-fill {
+    display: block !important;
+    box-sizing: border-box;
+    width: var(--header-wordmark-w);
+    max-width: var(--header-wordmark-w);
+    height: var(--header-wordmark-h);
+    transform: translateY(var(--header-wordmark-offset-y, 4px));
   }
 }
 

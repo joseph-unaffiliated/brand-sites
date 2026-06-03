@@ -1,5 +1,17 @@
+import BrandLogoImageFill from "@/components/BrandLogoImageFill";
+
 /** Inline wordmark (public/tpr-wordmark.svg). Color via CSS currentColor. */
-export default function BrandWordmark({ className }) {
+export default function BrandWordmark({ className, fillImageUrl }) {
+  if (fillImageUrl) {
+    return (
+      <BrandLogoImageFill
+        className={className}
+        fillClassName="brand-logo-wordmark-fill"
+        fillImageUrl={fillImageUrl}
+      />
+    );
+  }
+
   return (
     <svg
       className={className}

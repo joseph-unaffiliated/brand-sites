@@ -5,9 +5,9 @@ import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { usePathname } from "next/navigation";
 import { useSubscriber } from "@/context/SubscriberContext";
-import BrandLogoMark from "@/components/BrandLogoMark";
 import BrandLogoMarkLarge from "@/components/BrandLogoMarkLarge";
 import BrandWordmark from "@/components/BrandWordmark";
+import { useNavLogoFillImage } from "@/context/NavLogoImageContext";
 import { ContactCopyLink } from "@publication-websites/web-shell/contact-copy";
 import SubmissionsCopyLink from "@/components/SubmissionsCopyLink";
 import AdvertiseCopyLink from "@/components/AdvertiseCopyLink";
@@ -17,6 +17,7 @@ export default function Header() {
   const pathname = usePathname() || "";
   const isArticle = pathname.startsWith("/article/");
   const isMarketing = !isArticle;
+  const logomarkFillImage = useNavLogoFillImage(pathname);
   const [menuOpen, setMenuOpen] = useState(false);
   const [headerHidden, setHeaderHidden] = useState(false);
   const [drawerMounted, setDrawerMounted] = useState(false);
@@ -182,11 +183,16 @@ export default function Header() {
             onClick={closeMenu}
             aria-label={siteDisplayName}
           >
-            <BrandWordmark className="brand-logo-img brand-logo-wordmark" />
             {isArticle ? (
-              <BrandLogoMark className="brand-logo-img brand-logo-mark" />
+              <BrandWordmark
+                className="brand-logo-img brand-logo-wordmark"
+                fillImageUrl={logomarkFillImage}
+              />
             ) : (
-              <BrandLogoMarkLarge className="brand-logo-img brand-logo-mark brand-logo-mark-large" />
+              <BrandLogoMarkLarge
+                className="brand-logo-img brand-logo-mark brand-logo-mark-large"
+                fillImageUrl={logomarkFillImage}
+              />
             )}
           </Link>
         </div>

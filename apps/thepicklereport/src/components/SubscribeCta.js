@@ -8,8 +8,8 @@ export default function SubscribeCta() {
   if (isSubscribed) {
     return (
       <p>
-        You can read past issues in our <Link href="/archive">archive</Link>.
-        Manage your subscription in your <Link href="/profile">profile</Link>.
+        You can read past issues in our <Link href="/archive">archive</Link>. New
+        issues arrive in your inbox.
       </p>
     );
   }
