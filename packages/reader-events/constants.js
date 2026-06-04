@@ -20,3 +20,13 @@ export const MAX_READ_SLUGS_PER_BRAND = 200;
 export function isReaderEventsEnabled() {
   return process.env.NEXT_PUBLIC_READER_EVENTS_ENABLED === "true";
 }
+
+/** Funnel events allowed without readerToken (sessionID only → BQ). */
+export const SESSION_ONLY_EVENT_TYPES = new Set([
+  "subscribe_form_start",
+  "subscribe_form_submit",
+]);
+
+export function isSessionOnlyEventType(eventType) {
+  return SESSION_ONLY_EVENT_TYPES.has(eventType);
+}

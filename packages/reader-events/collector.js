@@ -4,7 +4,7 @@
 
 import { getReaderToken } from "@publication-websites/magic-client";
 import { hasAnalyticsConsent } from "./consent.js";
-import { isReaderEventsEnabled } from "./constants.js";
+import { isReaderEventsEnabled, isSessionOnlyEventType } from "./constants.js";
 
 let config = {
   brandId: "",
@@ -45,8 +45,8 @@ export function enqueueEvent(eventType, properties = {}) {
   if (!isReaderEventsEnabled()) return;
   if (!hasAnalyticsConsent()) return;
 
-  const token = getReaderToken();
-  if (!token) return;
+  const sessionOnly = isSessionOnlyEventType(eventType);
+  if (!sessionOnly && !getReaderToken()) return;
 
   const { articleSlug, ...restProps } = properties;
 
@@ -71,6 +71,30 @@ export function enqueueEvent(eventType, properties = {}) {
   }
 }
 
+function postEvents(events, token, useBeacon) {
+  const url = `${config.apiOrigin}/api/reader-events`;
+  const body = JSON.stringify({ readerToken: token || undefined, events });
+
+  if (useBeacon && navigator.sendBeacon) {
+    const blob = new Blob([body], { type: "application/json" });
+    navigator.sendBeacon(url, blob);
+    return;
+  }
+
+  const headers = { "Content-Type": "application/json" };
+  if (token) headers.Authorization = `Bearer ${token}`;
+
+  fetch(url, {
+    method: "POST",
+    headers,
+    body,
+    credentials: "omit",
+    keepalive: useBeacon,
+  }).catch(() => {
+    /* best effort */
+  });
+}
+
 export function flush(useBeacon = false) {
   if (!isReaderEventsEnabled() || !config.apiOrigin) return;
   if (flushTimer) {
@@ -79,32 +103,21 @@ export function flush(useBeacon = false) {
   }
   if (!queue.length) return;
 
+  const batch = queue.splice(0, MAX_QUEUE);
   const token = getReaderToken();
-  if (!token) {
-    queue = [];
-    return;
+
+  const sessionEvents = batch.filter((ev) => isSessionOnlyEventType(ev.eventType));
+  const identifiedEvents = batch.filter((ev) => !isSessionOnlyEventType(ev.eventType));
+
+  if (sessionEvents.length) {
+    postEvents(sessionEvents, null, useBeacon);
   }
 
-  const events = queue.splice(0, MAX_QUEUE);
-  const url = `${config.apiOrigin}/api/reader-events`;
-  const body = JSON.stringify({ readerToken: token, events });
-
-  if (useBeacon && navigator.sendBeacon) {
-    const blob = new Blob([body], { type: "application/json" });
-    navigator.sendBeacon(url, blob);
-    return;
+  if (identifiedEvents.length) {
+    if (token) {
+      postEvents(identifiedEvents, token, useBeacon);
+    } else {
+      queue.unshift(...identifiedEvents);
+    }
   }
-
-  fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body,
-    credentials: "omit",
-    keepalive: useBeacon,
-  }).catch(() => {
-    /* best effort */
-  });
 }
