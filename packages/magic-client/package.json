@@ -6,7 +6,8 @@
   "main": "index.js",
   "exports": {
     ".": "./index.js",
-    "./article-magic-link": "./ArticleMagicLinkLanding.jsx"
+    "./article-magic-link": "./ArticleMagicLinkLanding.jsx",
+    "./email-click-session": "./EmailClickSession.jsx"
   },
   "peerDependencies": {
     "next": ">=14",

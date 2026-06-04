@@ -28,7 +28,13 @@ export function SubscriberProvider({ children }) {
     setState(getStoredState());
     const handleStorage = () => setState(getStoredState());
     window.addEventListener("storage", handleStorage);
-    return () => window.removeEventListener("storage", handleStorage);
+    window.addEventListener("magic-subscriber-updated", handleStorage);
+    window.addEventListener("magic-reader-token-updated", handleStorage);
+    return () => {
+      window.removeEventListener("storage", handleStorage);
+      window.removeEventListener("magic-subscriber-updated", handleStorage);
+      window.removeEventListener("magic-reader-token-updated", handleStorage);
+    };
   }, []);
 
   const refresh = useCallback(() => setState(getStoredState()), []);

@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import ArticleMagicLinkLanding from "@publication-websites/magic-client/article-magic-link";
 import { ArticleViewTracker } from "@publication-websites/reader-events";
+import { getReaderToken } from "@publication-websites/magic-client";
 import { siteConfig } from "@/config/site";
 import { useSubscriber } from "@/context/SubscriberContext";
 import { BRAND } from "@/lib/subscription";
@@ -10,12 +11,24 @@ import { BRAND } from "@/lib/subscription";
 const READ_ARTICLES_KEY = `read_articles_${BRAND}`;
 const MAX_ITEMS = 200;
 
-/** Magic-link toast + article_view tracking when subscribed. */
+/** Magic-link toast + article_view tracking when subscribed or reader token present. */
 export default function SubscribedArticleView({ slug }) {
   const { isSubscribed, refresh } = useSubscriber();
+  const [trackingEnabled, setTrackingEnabled] = useState(false);
 
   useEffect(() => {
-    if (!isSubscribed || !slug || typeof window === "undefined") return;
+    const sync = () => setTrackingEnabled(isSubscribed || !!getReaderToken());
+    sync();
+    window.addEventListener("magic-reader-token-updated", sync);
+    window.addEventListener("magic-subscriber-updated", sync);
+    return () => {
+      window.removeEventListener("magic-reader-token-updated", sync);
+      window.removeEventListener("magic-subscriber-updated", sync);
+    };
+  }, [isSubscribed]);
+
+  useEffect(() => {
+    if (!trackingEnabled || !slug || typeof window === "undefined") return;
     try {
       const raw = localStorage.getItem(READ_ARTICLES_KEY);
       let list = [];
@@ -37,7 +50,7 @@ export default function SubscribedArticleView({ slug }) {
     } catch {
       /* ignore */
     }
-  }, [isSubscribed, slug]);
+  }, [trackingEnabled, slug]);
 
   return (
     <>
@@ -46,7 +59,7 @@ export default function SubscribedArticleView({ slug }) {
         executeUrl={siteConfig.magicExecuteUrl}
         onLocalStateUpdated={refresh}
       />
-      <ArticleViewTracker slug={slug} enabled={isSubscribed} />
+      <ArticleViewTracker slug={slug} enabled={trackingEnabled} />
     </>
   );
 }

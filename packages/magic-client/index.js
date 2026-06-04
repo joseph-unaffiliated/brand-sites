@@ -39,6 +39,7 @@ export function storeReaderTokenFromResponse(data) {
   if (token && typeof token === "string") {
     try {
       localStorage.setItem(READER_TOKEN_STORAGE_KEY, token);
+      window.dispatchEvent(new CustomEvent("magic-reader-token-updated"));
     } catch {
       /* ignore quota / private mode */
     }

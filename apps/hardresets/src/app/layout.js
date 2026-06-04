@@ -35,6 +35,7 @@ import SubmissionsCopyLink from "@/components/SubmissionsCopyLink";
 import AdvertiseCopyLink from "@/components/AdvertiseCopyLink";
 import { SubscriberProvider } from "@/context/SubscriberContext";
 import { ReaderEventsInit } from "@publication-websites/reader-events";
+import EmailClickSession from "@publication-websites/magic-client/email-click-session";
 import "./globals.css";
 
 const ADSENSE_CLIENT =
@@ -133,6 +134,10 @@ export default async function RootLayout({ children }) {
         <SubscriberProvider>
           <ReaderEventsInit
             brandId={siteConfig.brandId}
+            apiOrigin={siteConfig.magicReaderApiOrigin}
+          />
+          <EmailClickSession
+            brand={siteConfig.brandId}
             apiOrigin={siteConfig.magicReaderApiOrigin}
           />
           <NavLogoImageProvider defaultFillImage={latestIssueImage}>

@@ -31,6 +31,7 @@ import { NavLogoImageProvider } from "@/context/NavLogoImageContext";
 import SubscribePopup from "@/components/SubscribePopup";
 import { SubscriberProvider } from "@/context/SubscriberContext";
 import { ReaderEventsInit } from "@publication-websites/reader-events";
+import EmailClickSession from "@publication-websites/magic-client/email-click-session";
 import { headers } from "next/headers";
 import "./globals.css";
 
@@ -140,6 +141,10 @@ export default async function RootLayout({ children }) {
         <SubscriberProvider>
           <ReaderEventsInit
             brandId={siteConfig.brandId}
+            apiOrigin={siteConfig.magicReaderApiOrigin}
+          />
+          <EmailClickSession
+            brand={siteConfig.brandId}
             apiOrigin={siteConfig.magicReaderApiOrigin}
           />
           <NavLogoImageProvider
