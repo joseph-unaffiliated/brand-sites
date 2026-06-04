@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import ArticleMagicLinkLanding from "@publication-websites/magic-client/article-magic-link";
-import { ArticleViewTracker } from "@publication-websites/reader-events";
+import { ArticleViewTracker, ScrollDepthTracker } from "@publication-websites/reader-events";
 import { getReaderToken } from "@publication-websites/magic-client";
 import { siteConfig } from "@/config/site";
 import { useSubscriber } from "@/context/SubscriberContext";
@@ -60,6 +60,7 @@ export default function SubscribedArticleView({ slug }) {
         onLocalStateUpdated={refresh}
       />
       <ArticleViewTracker slug={slug} enabled={trackingEnabled} />
+      <ScrollDepthTracker slug={slug} enabled={trackingEnabled} />
     </>
   );
 }

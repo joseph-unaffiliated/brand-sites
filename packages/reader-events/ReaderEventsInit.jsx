@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { initReaderEventsCollector } from "./collector.js";
 import { isReaderEventsEnabled } from "./constants.js";
+import PageViewTracker from "./PageViewTracker.jsx";
 
 /**
  * Initialize reader-events collector once per app (inside SubscriberProvider).
@@ -13,5 +14,7 @@ export default function ReaderEventsInit({ brandId, apiOrigin }) {
     initReaderEventsCollector({ brandId, apiOrigin });
   }, [brandId, apiOrigin]);
 
-  return null;
+  if (!isReaderEventsEnabled()) return null;
+
+  return <PageViewTracker />;
 }
