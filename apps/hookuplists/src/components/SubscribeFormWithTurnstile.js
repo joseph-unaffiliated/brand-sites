@@ -2,7 +2,12 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Turnstile } from "next-turnstile";
+import {
+  trackSubscribeFormStart,
+  trackSubscribeFormSubmit,
+} from "@publication-websites/reader-events";
 import styles from "./SubscribeBlock.module.css";
 
 const MAGIC_BASE = "https://magic.hookuplists.com/";
@@ -13,20 +18,38 @@ function isLocalhost() {
   return window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
 }
 
+function articleSlugFromPath(pathname) {
+  if (!pathname?.startsWith("/article/")) return undefined;
+  return pathname.split("/").filter(Boolean)[1] || undefined;
+}
+
 export default function SubscribeFormWithTurnstile({ initialEmail, layout = "stack" }) {
+  const pathname = usePathname();
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(false);
   const [mounted, setMounted] = useState(false);
   const emailRef = useRef(null);
+  const funnelStartedRef = useRef(false);
   const isBanner = layout === "banner";
+  const funnelProps = {
+    placement: layout,
+    ...(articleSlugFromPath(pathname) ? { articleSlug: articleSlugFromPath(pathname) } : {}),
+  };
 
   useEffect(() => setMounted(true), []);
+
+  const handleEmailFocus = () => {
+    if (funnelStartedRef.current) return;
+    funnelStartedRef.current = true;
+    trackSubscribeFormStart(funnelProps);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const email = emailRef.current?.value?.trim();
     if (!email) return;
     if (TURNSTILE_SITE_KEY && !token && !(mounted && isLocalhost())) return;
+    trackSubscribeFormSubmit(funnelProps);
     setLoading(true);
     const params = new URLSearchParams();
     params.set("email", email);
@@ -74,6 +97,7 @@ export default function SubscribeFormWithTurnstile({ initialEmail, layout = "sta
                 required
                 defaultValue={initialEmail}
                 disabled={loading}
+                onFocus={handleEmailFocus}
               />
               <button
                 type="submit"
@@ -106,6 +130,7 @@ export default function SubscribeFormWithTurnstile({ initialEmail, layout = "sta
               required
               defaultValue={initialEmail}
               disabled={loading}
+              onFocus={handleEmailFocus}
             />
             {showTurnstile && (
               <div className={styles.turnstileWrap}>

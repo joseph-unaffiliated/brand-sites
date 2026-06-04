@@ -11,10 +11,14 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { FontAwesomeStylesheet, MarketingScripts, TypekitStylesheet } from "@publication-websites/web-shell";
 import { ContactCopyLink, ContactCopyToast } from "@publication-websites/web-shell/contact-copy";
 import { contactEmail, siteConfig } from "@/config/site";
+import { OneTrustScripts, RetentionScript } from "@/components/ComplianceScripts";
+import { GoogleTagManagerNoscript, GoogleTagManagerScript } from "@/components/GoogleTagManager";
 import Header from "@/components/Header";
 import SubscribePopup from "@/components/SubscribePopup";
 import { SubscriberProvider } from "@/context/SubscriberContext";
 import { ReaderEventsInit } from "@publication-websites/reader-events";
+import EmailClickSession from "@publication-websites/magic-client/email-click-session";
+import SubscriberSessionBootstrap from "@publication-websites/magic-client/subscriber-session-bootstrap";
 import "./globals.css";
 
 const ADSENSE_CLIENT =
@@ -70,14 +74,26 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
+        <GoogleTagManagerScript />
+        <OneTrustScripts />
         <TypekitStylesheet kitId={siteConfig.typekitKitId} />
         <FontAwesomeStylesheet />
+        <RetentionScript />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
+        <GoogleTagManagerNoscript />
         <MarketingScripts adsenseClient={ADSENSE_CLIENT} metaPixelId={META_PIXEL_ID} />
         <SubscriberProvider>
           <ReaderEventsInit
             brandId={siteConfig.brandId}
+            apiOrigin={siteConfig.magicReaderApiOrigin}
+          />
+          <EmailClickSession
+            brand={siteConfig.brandId}
+            apiOrigin={siteConfig.magicReaderApiOrigin}
+          />
+          <SubscriberSessionBootstrap
+            brand={siteConfig.brandId}
             apiOrigin={siteConfig.magicReaderApiOrigin}
           />
           <div className="site">

@@ -5,7 +5,11 @@ export {
   SESSION_ONLY_EVENT_TYPES,
   isSessionOnlyEventType,
 } from "./constants.js";
-export { hasAnalyticsConsent } from "./consent.js";
+export {
+  ANALYTICS_CONSENT_EVENT,
+  hasAnalyticsConsent,
+  subscribeAnalyticsConsent,
+} from "./consent.js";
 export { initReaderEventsCollector, enqueueEvent, flush } from "./collector.js";
 export { track } from "./track.js";
 export { useArticleView, useScrollDepth } from "./hooks.js";
@@ -13,4 +17,6 @@ export { default as ReaderEventsInit } from "./ReaderEventsInit.jsx";
 export { default as ArticleViewTracker } from "./ArticleViewTracker.jsx";
 export { default as ScrollDepthTracker } from "./ScrollDepthTracker.jsx";
 export { trackSubscribeFormStart, trackSubscribeFormSubmit } from "./subscribe-funnel.js";
+export { trackAdImpression, trackAdClick } from "./ad-events.js";
+export { useAdImpression } from "./useAdImpression.js";
 export { default as PageViewTracker } from "./PageViewTracker.jsx";

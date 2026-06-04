@@ -36,6 +36,7 @@ import AdvertiseCopyLink from "@/components/AdvertiseCopyLink";
 import { SubscriberProvider } from "@/context/SubscriberContext";
 import { ReaderEventsInit } from "@publication-websites/reader-events";
 import EmailClickSession from "@publication-websites/magic-client/email-click-session";
+import SubscriberSessionBootstrap from "@publication-websites/magic-client/subscriber-session-bootstrap";
 import "./globals.css";
 
 const ADSENSE_CLIENT =
@@ -137,6 +138,10 @@ export default async function RootLayout({ children }) {
             apiOrigin={siteConfig.magicReaderApiOrigin}
           />
           <EmailClickSession
+            brand={siteConfig.brandId}
+            apiOrigin={siteConfig.magicReaderApiOrigin}
+          />
+          <SubscriberSessionBootstrap
             brand={siteConfig.brandId}
             apiOrigin={siteConfig.magicReaderApiOrigin}
           />

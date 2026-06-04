@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect } from "react";
+import { getReaderToken } from "@publication-websites/magic-client";
+import { ANALYTICS_CONSENT_EVENT, hasAnalyticsConsent } from "./consent.js";
 import { SCROLL_MILESTONES } from "./constants.js";
 import { track } from "./track.js";
 
@@ -10,7 +12,21 @@ import { track } from "./track.js";
 export function useArticleView(slug, enabled = true) {
   useEffect(() => {
     if (!enabled || !slug) return;
-    track("article_view", { articleSlug: slug });
+
+    let tracked = false;
+    const tryTrack = () => {
+      if (tracked || !getReaderToken() || !hasAnalyticsConsent()) return;
+      track("article_view", { articleSlug: slug });
+      tracked = true;
+    };
+
+    tryTrack();
+    window.addEventListener("magic-reader-token-updated", tryTrack);
+    window.addEventListener(ANALYTICS_CONSENT_EVENT, tryTrack);
+    return () => {
+      window.removeEventListener("magic-reader-token-updated", tryTrack);
+      window.removeEventListener(ANALYTICS_CONSENT_EVENT, tryTrack);
+    };
   }, [enabled, slug]);
 }
 
@@ -60,8 +76,16 @@ export function useScrollDepth(slug, enabled = true) {
       }
     };
 
+    const onReady = () => onScroll();
+
     window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("magic-reader-token-updated", onReady);
+    window.addEventListener(ANALYTICS_CONSENT_EVENT, onReady);
     onScroll();
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("magic-reader-token-updated", onReady);
+      window.removeEventListener(ANALYTICS_CONSENT_EVENT, onReady);
+    };
   }, [enabled, slug]);
 }

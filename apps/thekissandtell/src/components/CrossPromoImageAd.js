@@ -1,10 +1,13 @@
 "use client";
 
+import { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { trackAdClick, useAdImpression } from "@publication-websites/reader-events";
 import "./CrossPromoImageAd.css";
 
-const DEFAULT_URL = process.env.NEXT_PUBLIC_CROSS_PROMO_URL || "https://thepicklereport.com";
+const DEFAULT_URL = process.env.NEXT_PUBLIC_CROSS_PROMO_URL || "https://hookuplists.com";
+const CREATIVE_BRAND = (process.env.NEXT_PUBLIC_SHARED_ADS_BRAND || "").trim();
 
 /** Per-placement URLs; unset values fall back to `NEXT_PUBLIC_CROSS_PROMO_URL`. */
 function urlForPlacement(placement) {
@@ -32,20 +35,36 @@ function layout2x(intrinsic) {
   };
 }
 
+function TrackedPromoLink({ href, placement, className, children }) {
+  const ref = useRef(null);
+  const trackProps = {
+    placement,
+    adType: "cross_promo",
+    destinationUrl: href,
+    ...(CREATIVE_BRAND ? { creativeBrand: CREATIVE_BRAND } : {}),
+  };
+  useAdImpression(ref, trackProps);
+  return (
+    <div ref={ref}>
+      <Link
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer sponsored"
+        className={className}
+        onClick={() => trackAdClick(trackProps)}
+      >
+        {children}
+      </Link>
+    </div>
+  );
+}
+
 /**
  * Image-based cross-promo using `@publication-websites/shared-ads` creatives.
  */
-export default function CrossPromoImageAd({
-  format = "rectangle",
-  className,
-  creatives,
-  promoUrl,
-}) {
+export default function CrossPromoImageAd({ format = "rectangle", className, creatives }) {
   const placement = placementFromFormat(format);
-  const stickyUrl =
-    typeof promoUrl === "string" && promoUrl.trim()
-      ? promoUrl.trim()
-      : urlForPlacement("sticky");
+  const stickyUrl = urlForPlacement("sticky");
 
   if (placement === "sticky") {
     const d = creatives.stickyDesktop;
@@ -56,10 +75,9 @@ export default function CrossPromoImageAd({
 
     return (
       <div className={`cross-promo-image-sticky ${className || ""}`}>
-        <Link
+        <TrackedPromoLink
           href={stickyUrl}
-          target="_blank"
-          rel="noopener noreferrer sponsored"
+          placement="sticky"
           className="cross-promo-image-sticky-link cross-promo-image-sticky-desktop"
         >
           <Image
@@ -70,11 +88,10 @@ export default function CrossPromoImageAd({
             className="cross-promo-image-sticky-img cross-promo-image-sticky-img-desktop"
             sizes="(min-width: 769px) 728px, 1px"
           />
-        </Link>
-        <Link
+        </TrackedPromoLink>
+        <TrackedPromoLink
           href={stickyUrl}
-          target="_blank"
-          rel="noopener noreferrer sponsored"
+          placement="sticky"
           className="cross-promo-image-sticky-link cross-promo-image-sticky-mobile"
         >
           <Image
@@ -85,7 +102,7 @@ export default function CrossPromoImageAd({
             className="cross-promo-image-sticky-img cross-promo-image-sticky-img-mobile"
             sizes="(max-width: 768px) 320px, 1px"
           />
-        </Link>
+        </TrackedPromoLink>
       </div>
     );
   }
@@ -93,22 +110,14 @@ export default function CrossPromoImageAd({
   const img = placement === "rail" ? creatives.rail : creatives.inArticle;
   if (!img) return null;
 
-  const href =
-    typeof promoUrl === "string" && promoUrl.trim()
-      ? promoUrl.trim()
-      : urlForPlacement(placement);
+  const href = urlForPlacement(placement);
   const lay = layout2x(img);
 
   return (
     <div
       className={`cross-promo-image-ad cross-promo-image-ad-${placement} ${className || ""}`}
     >
-      <Link
-        href={href}
-        target="_blank"
-        rel="noopener noreferrer sponsored"
-        className="cross-promo-image-ad-link"
-      >
+      <TrackedPromoLink href={href} placement={placement} className="cross-promo-image-ad-link">
         <Image
           src={img}
           alt=""
@@ -118,10 +127,10 @@ export default function CrossPromoImageAd({
           sizes={
             placement === "rail"
               ? `${lay.width}px`
-              : "(max-width: 640px) 100vw, 480px"
+              : `(max-width: 640px) 100vw, ${lay.width}px`
           }
         />
-      </Link>
+      </TrackedPromoLink>
     </div>
   );
 }

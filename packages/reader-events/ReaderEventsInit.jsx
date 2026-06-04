@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { initReaderEventsCollector } from "./collector.js";
+import { subscribeAnalyticsConsent } from "./consent.js";
 import { isReaderEventsEnabled } from "./constants.js";
 import PageViewTracker from "./PageViewTracker.jsx";
 
@@ -12,6 +13,7 @@ export default function ReaderEventsInit({ brandId, apiOrigin }) {
   useEffect(() => {
     if (!isReaderEventsEnabled()) return;
     initReaderEventsCollector({ brandId, apiOrigin });
+    return subscribeAnalyticsConsent();
   }, [brandId, apiOrigin]);
 
   if (!isReaderEventsEnabled()) return null;

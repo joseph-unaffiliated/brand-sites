@@ -132,6 +132,17 @@ export default function PrivacyPage() {
           used to infer your email address or to otherwise identify you.
         </p>
         <p>
+          <strong>First-party reader analytics.</strong> When you accept Performance
+          cookies in our consent banner, we collect first-party engagement data on
+          our Sites—such as pages viewed, articles read, scroll depth, newsletter
+          signup interactions, poll responses, and ad interactions—through our
+          secure reader platform (hosted at a magic subdomain for each publication).
+          This data is linked to your subscriber profile using an opaque token, not
+          your password. You can opt out by declining Performance cookies in our
+          cookie preference center or by sending a Global Privacy Control signal
+          where supported.
+        </p>
+        <p>
           <strong>c. Information From Third Parties</strong>
         </p>
         <p>

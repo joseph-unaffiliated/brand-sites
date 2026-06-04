@@ -11,6 +11,7 @@ import { BRAND } from "@/lib/subscription";
 const READ_ARTICLES_KEY = `read_articles_${BRAND}`;
 const MAX_ITEMS = 200;
 
+/** Magic-link toast + article_view + scroll_depth when subscribed or reader token present. */
 export default function SubscribedArticleView({ slug }) {
   const { isSubscribed, refresh } = useSubscriber();
   const [trackingEnabled, setTrackingEnabled] = useState(false);

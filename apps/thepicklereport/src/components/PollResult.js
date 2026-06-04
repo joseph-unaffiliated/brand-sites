@@ -8,6 +8,7 @@ import ArticleAdStickyBottom from "@/components/ArticleAdStickyBottom";
 import { executeAction, isRealBrowser } from "@/lib/subscription";
 import { recordPollAnswer } from "@/lib/trivia-points";
 import { submitVoteToMagic } from "@/lib/submit-vote";
+import { track, flush } from "@publication-websites/reader-events";
 import {
   getOptionLabel,
   isTriviaBlock,
@@ -51,6 +52,9 @@ export default function PollResult({
         event_label: issueSlug || "unknown_issue",
       });
     }
+    if (issueSlug) {
+      track("poll_view", { articleSlug: issueSlug, issueSlug });
+    }
   }, [issueSlug]);
 
   useEffect(() => {
@@ -73,17 +77,32 @@ export default function PollResult({
         selectedCode: choice,
         correctCode,
       });
+      track("trivia_answer", {
+        articleSlug: issueSlug,
+        issueSlug,
+        blockKey: pollKey,
+        selectedCode: choice,
+        correct: isCorrect,
+      });
+    } else {
+      track("poll_vote", {
+        articleSlug: issueSlug,
+        issueSlug,
+        blockKey: pollKey,
+        selectedCode: choice,
+      });
     }
+    flush(true);
 
     submitVoteToMagic({
       issueSlug,
       blockKey: pollKey,
       selectedCode: choice,
-      email: email ? decodeURIComponent(email) : null,
+      correctOptionCode: isTrivia ? correctCode : null,
     });
 
     setRecorded(true);
-  }, [voteBlock, issueSlug, choice, recorded, isTrivia, correctCode, email]);
+  }, [voteBlock, issueSlug, choice, recorded, isTrivia, correctCode, isCorrect]);
 
   const hasVoteContext = Boolean(voteBlock && issueSlug && choice);
   const fallbackHeading = isTrivia ? "Pickle Trivia" : "Poll";

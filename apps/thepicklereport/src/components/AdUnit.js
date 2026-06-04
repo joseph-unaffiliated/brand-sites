@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { trackAdImpression } from "@publication-websites/reader-events";
 
 const UNFILLED_COLLAPSE_DELAY_MS = 5000;
 const MIN_FILLED_HEIGHT = 20;
@@ -33,6 +34,7 @@ function getPlaceholderMinHeight(format) {
 export default function AdUnit({ slotId, format = "auto", className, onCollapse }) {
   const insRef = useRef(null);
   const pushed = useRef(false);
+  const impressionSent = useRef(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isUnfilled, setIsUnfilled] = useState(false);
 
@@ -59,9 +61,18 @@ export default function AdUnit({ slotId, format = "auto", className, onCollapse 
     const checkFilled = () => {
       if (!ins.isConnected) return false;
       const iframe = ins.querySelector("iframe");
-      if (iframe && iframe.offsetHeight >= MIN_FILLED_HEIGHT) return true;
-      if (ins.offsetHeight >= MIN_FILLED_HEIGHT) return true;
-      return false;
+      const filled =
+        (iframe && iframe.offsetHeight >= MIN_FILLED_HEIGHT) ||
+        ins.offsetHeight >= MIN_FILLED_HEIGHT;
+      if (filled && !impressionSent.current) {
+        impressionSent.current = true;
+        trackAdImpression({
+          placement: format,
+          adType: "adsense",
+          slotId: String(slotId),
+        });
+      }
+      return filled;
     };
 
     const observer = new MutationObserver(() => {
