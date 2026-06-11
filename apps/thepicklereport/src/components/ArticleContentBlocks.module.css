@@ -111,11 +111,14 @@
 .economicsChartWrap {
   margin: 0 auto;
   max-width: 100%;
+  width: 100%;
+  min-width: 0;
 }
 
 .economicsChart {
   border-radius: 12px;
   max-height: 80vh;
+  object-fit: contain;
 }
 
 .economicsProse {
@@ -287,14 +290,14 @@
 }
 
 .blockImage {
-  width: auto;
+  width: 100%;
   max-width: 100%;
-  max-height: 80vh;
   height: auto;
   display: block;
   margin-left: auto;
   margin-right: auto;
   border-radius: 12px;
+  box-sizing: border-box;
 }
 
 .caption {
@@ -398,6 +401,10 @@
   background: var(--bg);
   border-radius: 8px;
   border: 1px solid var(--border);
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: clip;
 }
 
 .pickleEconomicsBox {
@@ -412,6 +419,9 @@
   text-align: center;
   font-size: 0.875rem;
   line-height: 1.7;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
 }
 
 .pickleEconomicsBox .prose p,
@@ -452,7 +462,7 @@
 
 /* Chart + credit: 480px max, centered (beats generic .poll figure margins) */
 .poll.pickleEconomicsBox .prose figure.proseFigure {
-  max-width: 480px;
+  max-width: min(480px, 100%);
   width: 100%;
   margin-left: auto;
   margin-right: auto;
@@ -462,6 +472,7 @@
   flex-direction: column;
   align-items: center;
   box-sizing: border-box;
+  min-width: 0;
 }
 
 .poll.pickleEconomicsBox .prose p + figure.proseFigure {
@@ -470,12 +481,13 @@
 }
 
 .poll.pickleEconomicsBox .prose figure.proseFigure .blockImage {
-  width: auto;
-  max-width: 480px;
+  width: 100%;
+  max-width: 100%;
   max-height: 80vh;
   height: auto;
   margin-left: auto;
   margin-right: auto;
+  object-fit: contain;
 }
 
 .poll.pickleEconomicsBox .prose figure.proseFigure .caption {
@@ -613,17 +625,20 @@
   margin-top: 0;
   margin-bottom: 0;
   width: 100%;
-  max-width: 480px;
+  max-width: min(480px, 100%);
   margin-left: auto;
   margin-right: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   box-sizing: border-box;
+  min-width: 0;
 }
 
 .poll .photoOfWeekFigure .blockImage {
-  max-width: 480px;
+  width: 100%;
+  max-width: 100%;
+  object-fit: contain;
 }
 
 .eyebrow {
