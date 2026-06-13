@@ -51,6 +51,7 @@ After saving: **Redeploy** Production (and Preview if you added vars there).
 | `NEXT_PUBLIC_SHARED_ADS_URL_STICKY` | `https://www.the90sparent.com/article/birthdayparties` |
 | `NEXT_PUBLIC_SHARED_ADS_URL_RAIL` | `https://www.the90sparent.com` |
 | `NEXT_PUBLIC_GTM_ID` | Same GTM container as other Unaffiliated sites (view source on the90sparent.com → search `GTM-`) |
+| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | `G-ZLQN0SDVL2` — do not also fire this ID from GTM |
 | `NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT` | `019a7160-715f-710a-9141-d7af1513ef88` |
 | `NEXT_PUBLIC_RETENTION_SITE_ID` | `X2JHJ4WE` |
 | `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` | Optional — Search Console token when ready |
@@ -103,6 +104,7 @@ NEXT_PUBLIC_TYPEKIT_KIT_ID=xon1hcs
 
 # --- Analytics & verification (⚠️ UPDATE GTM; optional Search Console / Bing) ---
 NEXT_PUBLIC_GTM_ID=GTM-XXXXXXX
+NEXT_PUBLIC_GA_MEASUREMENT_ID=G-ZLQN0SDVL2
 NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION=
 NEXT_PUBLIC_BING_SITE_VERIFICATION=
 NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT=019a7160-715f-710a-9141-d7af1513ef88

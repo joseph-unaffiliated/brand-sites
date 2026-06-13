@@ -5,6 +5,7 @@
  * NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT / NEXT_PUBLIC_RETENTION_SITE_ID on Vercel if needed).
  *
  * Google Tag Manager: set `NEXT_PUBLIC_GTM_ID` on Vercel; see `GoogleTagManager.js`.
+ * GA4: set `NEXT_PUBLIC_GA_MEASUREMENT_ID` (e.g. `G-XXXX`) on Vercel; see `GoogleAnalytics.js`.
  */
 
 import Link from "next/link";
@@ -22,6 +23,7 @@ import {
   siteFooterTagline,
 } from "@/config/site";
 import { OneTrustScripts, RetentionScript } from "@/components/ComplianceScripts";
+import { GoogleAnalyticsScript } from "@/components/GoogleAnalytics";
 import { GoogleTagManagerNoscript, GoogleTagManagerScript } from "@/components/GoogleTagManager";
 import SubmissionsCopyLink from "@/components/SubmissionsCopyLink";
 import AdvertiseCopyLink from "@/components/AdvertiseCopyLink";
@@ -131,6 +133,7 @@ export default async function RootLayout({ children }) {
     <html lang="en">
       <head>
         <GoogleTagManagerScript />
+        <GoogleAnalyticsScript />
         <OneTrustScripts />
         <TypekitStylesheet kitId={siteConfig.typekitKitId} />
         <FontAwesomeStylesheet />
