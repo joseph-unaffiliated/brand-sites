@@ -237,14 +237,6 @@
   text-decoration: none;
 }
 
-.kicker {
-  text-transform: uppercase;
-  letter-spacing: 0em;
-  font-size: var(--text-label);
-  color: var(--text-muted);
-  margin: 0;
-}
-
 .entry {
   margin-bottom: 3rem;
 }
@@ -362,15 +354,6 @@
   height: 100%;
   object-fit: cover;
   display: block;
-}
-
-.readMoreKicker {
-  font-size: var(--text-label);
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
-  color: var(--text-muted);
-  margin: 0;
-  padding: 0.75rem 1rem 0 1rem;
 }
 
 .readMoreHeadline {

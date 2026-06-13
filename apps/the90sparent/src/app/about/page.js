@@ -5,7 +5,7 @@ import styles from "../basic-page.module.css";
 import aboutStyles from "./page.module.css";
 import articleStyles from "../article/[slug]/page.module.css";
 import AboutOutreach from "./AboutOutreach";
-import { siteDisplayName, siteKickerLower } from "@/config/site";
+import { siteDisplayName } from "@/config/site";
 import { getArticles } from "@/lib/articles";
 import { pickRandomArticles } from "@/lib/pickRandomArticles";
 
@@ -150,10 +150,6 @@ export default async function AboutPage() {
                       sizes="(max-width: 640px) 100vw, 280px"
                     />
                   </div>
-                  {rec.kicker &&
-                  rec.kicker.trim().toLowerCase() !== siteKickerLower ? (
-                    <p className={articleStyles.readMoreKicker}>{rec.kicker}</p>
-                  ) : null}
                   <h3 className={articleStyles.readMoreHeadline}>
                     {rec.title}
                   </h3>

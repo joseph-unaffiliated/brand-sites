@@ -14,7 +14,6 @@ import {
   siteDefaultDescription,
   siteDisplayName,
   siteHeroTagline,
-  siteKickerLower,
 } from "@/config/site";
 import styles from "./page.module.css";
 
@@ -155,9 +154,6 @@ export default async function Home({ searchParams: searchParamsProp }) {
                     />
                   </div>
                   <div className={styles.mosaicCardBody}>
-                    {article.kicker && article.kicker.trim().toLowerCase() !== siteKickerLower && (
-                      <p className={styles.mosaicCardKicker}>{article.kicker}</p>
-                    )}
                     <h3 className={styles.mosaicCardHeadline}>{article.title}</h3>
                     {(() => {
                       const { demographic, description } = getDemographicAndDescription(article);

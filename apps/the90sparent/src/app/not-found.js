@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { getArticles } from "@/lib/articles";
 import { pickRandomArticles } from "@/lib/pickRandomArticles";
-import { siteKickerLower } from "@/config/site";
 import articleStyles from "./article/[slug]/page.module.css";
 import styles from "./not-found.module.css";
 
@@ -51,9 +50,6 @@ export default async function NotFound() {
                         sizes="(max-width: 640px) 100vw, 280px"
                       />
                     </div>
-                    {rec.kicker && rec.kicker.trim().toLowerCase() !== siteKickerLower && (
-                      <p className={articleStyles.readMoreKicker}>{rec.kicker}</p>
-                    )}
                     <h3 className={articleStyles.readMoreHeadline}>{rec.title}</h3>
                     {rec.summary && <p className={articleStyles.readMoreDek}>{rec.summary}</p>}
                   </Link>

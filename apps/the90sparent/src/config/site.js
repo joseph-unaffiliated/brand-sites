@@ -39,9 +39,6 @@ export const siteHeroTagline =
 export const contactEmail =
   process.env.NEXT_PUBLIC_CONTACT_EMAIL || "contact@the90sparent.com";
 
-/** Lowercase publication name: hide duplicate kicker when it matches the masthead. */
-export const siteKickerLower = siteDisplayName.toLowerCase();
-
 export const subscribeCardTitle =
   process.env.NEXT_PUBLIC_SUBSCRIBE_CARD_TITLE ||
   "We're Bringing Back the Old School";

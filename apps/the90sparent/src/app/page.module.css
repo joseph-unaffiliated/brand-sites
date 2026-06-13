@@ -163,14 +163,6 @@
   overflow: hidden;
 }
 
-.mosaicCardBody .mosaicCardKicker {
-  font-size: var(--text-label);
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
-  color: var(--text-muted);
-  margin: 0 0 4px;
-}
-
 .mosaicCardBody .mosaicCardDemographic {
   font-size: 12px;
   line-height: 1.35;
