@@ -1,13 +1,13 @@
 import { siteConfig } from "@/config/site";
 
-const SITE_URL = siteConfig.siteUrl.replace(/\/$/, "");
+const SITE_URL = siteConfig.siteUrl.replace(/\/$/, "").replace(/^http:/, "https:");
 
 export default function robots() {
   return {
     rules: [
       {
         userAgent: "*",
-        allow: "/",
+        allow: ["/", "/ads.txt"],
         disallow: [
           "/api/",
           "/dev/",
