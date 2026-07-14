@@ -1,0 +1,63 @@
+/**
+ * Per-site identity: The Eyeballer's Cookbook.
+ * Set Sanity, magic hosts, and public copy via env; tune defaults below for this brand.
+ */
+
+function defaultMagicOrigin() {
+  const u = process.env.NEXT_PUBLIC_MAGIC_EXECUTE_URL;
+  if (u) {
+    try {
+      return new URL(u).origin;
+    } catch {
+      /* invalid URL */
+    }
+  }
+  return "https://magic.theeyeballerscookbook.com";
+}
+
+function defaultMagicSubscribeBase() {
+  const exec =
+    process.env.NEXT_PUBLIC_MAGIC_EXECUTE_URL ||
+    "https://magic.theeyeballerscookbook.com/execute";
+  return exec.replace(/\/execute\/?$/, "/");
+}
+
+export const siteDisplayName =
+  process.env.NEXT_PUBLIC_SITE_DISPLAY_NAME || "The Eyeballer's Cookbook";
+
+export const siteDefaultDescription =
+  process.env.NEXT_PUBLIC_SITE_DESCRIPTION ||
+  "Recipes without measurements. One simple, eyeballed recipe a week, delivered to your inbox.";
+
+export const siteFooterTagline =
+  process.env.NEXT_PUBLIC_SITE_FOOTER_TAGLINE ||
+  "Recipes without measurements. Delivered weekly.";
+
+export const siteHeroTagline =
+  process.env.NEXT_PUBLIC_SITE_HERO_TAGLINE || "Recipes Without Measurements";
+
+export const siteKickerLower = siteDisplayName.toLowerCase();
+
+export const contactEmail =
+  process.env.NEXT_PUBLIC_CONTACT_EMAIL || "contact@theeyeballerscookbook.com";
+
+export const subscribeCardTitle =
+  process.env.NEXT_PUBLIC_SUBSCRIBE_CARD_TITLE || "Get The Eyeballer's Cookbook";
+
+export const subscribeCardDek =
+  process.env.NEXT_PUBLIC_SUBSCRIBE_CARD_DEK ||
+  "Join the newsletter for one relaxed, no-measuring-cups recipe a week—delivered straight to your inbox.";
+
+export const siteConfig = {
+  brandId: process.env.NEXT_PUBLIC_BRAND_ID || "theeyeballerscookbook",
+  magicExecuteUrl:
+    process.env.NEXT_PUBLIC_MAGIC_EXECUTE_URL ||
+    "https://magic.theeyeballerscookbook.com/execute",
+  magicReaderApiOrigin: process.env.NEXT_PUBLIC_MAGIC_READER_API_ORIGIN || defaultMagicOrigin(),
+  magicSubscribeBase:
+    process.env.NEXT_PUBLIC_MAGIC_SUBSCRIBE_BASE || defaultMagicSubscribeBase(),
+  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || "https://theeyeballerscookbook.com",
+  typekitKitId: process.env.NEXT_PUBLIC_TYPEKIT_KIT_ID || "xon1hcs",
+};
+
+export const BRAND = siteConfig.brandId;

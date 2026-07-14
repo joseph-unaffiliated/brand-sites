@@ -3,7 +3,7 @@
 ## Vercel (per publication)
 
 1. **Connect** the **`brand-sites`** Git repo.
-2. **Root Directory:** `apps/hookuplists`, `apps/thepicklereport`, `apps/thekissandtell`, `apps/the90sparent`, etc. (one Vercel project per app).
+2. **Root Directory:** `apps/hookuplists`, `apps/thepicklereport`, `apps/thekissandtell`, `apps/the90sparent`, `apps/theeyeballerscookbook`, etc. (one Vercel project per app).
 3. **Production branch:** your default branch (`main` / `master`).
 4. **Environment variables:** see `docs/ENVIRONMENT.md` for that app.
 5. If the GitHub repo or URL changes, confirm the Vercel Git integration still points at the correct repo (re-link if needed).
@@ -24,6 +24,6 @@
 ## Smoke checks (per marketing deploy)
 
 - `/` with `?subscribed=true` → `/subscribed` (middleware).
-- Article listing and `/article/[slug]` load from Sanity.
+- Article listing and `/article/[slug]` load from Sanity (for theeyeballerscookbook: `/recipes` and `/recipe/[slug]`).
 - Poll / subscribed flows POST to correct `NEXT_PUBLIC_MAGIC_EXECUTE_URL`.
 - Profile: with token from subscribe flow, network list loads from magic; without token, at least current brand from local state.

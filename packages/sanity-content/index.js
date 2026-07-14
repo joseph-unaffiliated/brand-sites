@@ -707,3 +707,172 @@ export function createArticleQueries(layer) {
     },
   };
 }
+
+/* ------------------------------------------------------------------------- *
+ * Recipes (The Eyeballer's Cookbook)
+ *
+ * Recipes are deliberately loose: ingredients are plain strings with no
+ * quantity/unit structure ("A few glugs of soy sauce"), steps are short plain
+ * paragraphs, and there are no prep/cook times or difficulty ratings.
+ * That mirrors the brand ("Recipes Without Measurements") and the emails
+ * the content comes from.
+ * ------------------------------------------------------------------------- */
+
+/** GROQ filter: published recipes only (excludes drafts and future-dated). */
+export const publishedRecipeFilter =
+  `_type == "recipe" && !(_id in path("drafts.**")) && (!defined(publishedDate) || publishedDate <= now())`;
+
+const recipeProjection = `_id,
+  "slug": slug.current,
+  title,
+  issueNumber,
+  description,
+  mainImage,
+  "mainImageWidth": mainImage.asset->metadata.dimensions.width,
+  "mainImageHeight": mainImage.asset->metadata.dimensions.height,
+  publishedDate,
+  equipment,
+  ingredients,
+  steps,
+  authorName,
+  authorBio,
+  funFact,
+  furtherReading[] { _key, label, sourceName, url },
+  "category": category->{ _id, title, "slug": slug.current },
+  ${articleSeoProjection}`;
+
+/** All recipes, newest first (the first one is the "recipe of the week"). */
+export const recipesQuery = `*[${publishedRecipeFilter}] | order(publishedDate desc, _updatedAt desc) {
+  ${recipeProjection}
+}`;
+
+/** One recipe by slug. */
+export const recipeBySlugQuery = `*[${publishedRecipeFilter} && slug.current == $slug][0] {
+  ${recipeProjection}
+}`;
+
+/** Slugs only, for generateStaticParams. */
+export const recipeSlugsQuery = `*[${publishedRecipeFilter}].slug.current`;
+
+/** All categories, editor-ordered. */
+export const categoriesQuery = `*[_type == "category" && !(_id in path("drafts.**"))] | order(coalesce(sortOrder, 999) asc, title asc) {
+  _id,
+  title,
+  "slug": slug.current,
+  description,
+  sortOrder
+}`;
+
+/**
+ * @param {unknown} raw
+ * @param {(source: unknown) => unknown} urlFor
+ * @param {string} [fallbackImage]
+ */
+export function mapRecipe(raw, urlFor, fallbackImage = "/tec-logo.svg") {
+  if (!raw) return null;
+
+  const imageBuilder = urlFor(raw.mainImage);
+  let heroImage = null;
+  if (imageBuilder) {
+    try {
+      const url = imageBuilder.width(1200).url();
+      if (url) {
+        heroImage = {
+          url,
+          width: raw.mainImageWidth ?? 1200,
+          height: raw.mainImageHeight ?? 800,
+        };
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+
+  let socialImage = null;
+  if (raw.socialImage) {
+    const socialBuilder = urlFor(raw.socialImage);
+    if (socialBuilder) {
+      try {
+        const url = socialBuilder.width(1200).url();
+        if (url) {
+          socialImage = {
+            url,
+            width: raw.socialImageWidth ?? 1200,
+            height: raw.socialImageHeight ?? 630,
+          };
+        }
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+
+  return {
+    _id: raw._id,
+    slug: normalizeArticleSlug(raw.slug),
+    title: raw.title,
+    issueNumber: raw.issueNumber ?? null,
+    description: raw.description ?? null,
+    mainImage: heroImage?.url ?? fallbackImage,
+    mainImageWidth: heroImage?.width ?? 1200,
+    mainImageHeight: heroImage?.height ?? 800,
+    heroImage,
+    publishedDate: raw.publishedDate ?? null,
+    equipment: raw.equipment ?? null,
+    ingredients: Array.isArray(raw.ingredients) ? raw.ingredients.filter(Boolean) : [],
+    steps: Array.isArray(raw.steps) ? raw.steps.filter(Boolean) : [],
+    authorName: raw.authorName ?? null,
+    authorBio: raw.authorBio ?? null,
+    funFact: raw.funFact ?? null,
+    furtherReading: Array.isArray(raw.furtherReading) ? raw.furtherReading : [],
+    category: raw.category ?? null,
+    tags: Array.isArray(raw.tags) ? raw.tags : [],
+    seoTitle: raw.seoTitle ?? null,
+    seoDescription: raw.seoDescription ?? null,
+    socialImage,
+    noIndex: Boolean(raw.noIndex),
+    dateModified: raw.dateModified ?? raw._updatedAt ?? null,
+  };
+}
+
+/**
+ * @param {{ client: import("next-sanity").SanityClient | null; urlFor: (s: unknown) => unknown; fallbackImage?: string }} layer
+ */
+export function createRecipeQueries(layer) {
+  const { client, urlFor, fallbackImage } = layer;
+  const map = (raw) => mapRecipe(raw, urlFor, fallbackImage);
+
+  return {
+    async getRecipes() {
+      if (!client) return [];
+      const raw = await client.fetch(recipesQuery, {}, nextOptions);
+      const mapped = (raw ?? []).map(map).filter(Boolean);
+      const bySlug = new Map();
+      for (const r of mapped) {
+        if (!r?.slug || bySlug.has(r.slug)) continue;
+        bySlug.set(r.slug, r);
+      }
+      return [...bySlug.values()];
+    },
+    async getRecipeBySlug(slug) {
+      if (!client) return null;
+      const normalized = normalizeArticleSlug(slug);
+      if (!normalized) return null;
+      const raw = await client.fetch(recipeBySlugQuery, { slug: normalized }, nextOptions);
+      return map(raw);
+    },
+    async getRecipeSlugs() {
+      if (!client) return [];
+      const slugs = await client.fetch(recipeSlugsQuery, {}, nextOptions);
+      return (slugs ?? [])
+        .filter(Boolean)
+        .map((slug) => ({ slug: normalizeArticleSlug(slug) }))
+        .filter((entry) => entry.slug);
+    },
+    async getCategories() {
+      if (!client) return [];
+      const raw = await client.fetch(categoriesQuery, {}, nextOptions);
+      return (raw ?? []).filter((c) => c?.slug && c?.title);
+    },
+  };
+}

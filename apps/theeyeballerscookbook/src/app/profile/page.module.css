@@ -1,0 +1,172 @@
+.wrap {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 4rem;
+}
+
+.heading {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+
+.section {
+  margin-bottom: 2.5rem;
+}
+
+.sectionTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+.accountLine {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.signOutButton {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  font-family: inherit;
+}
+
+.signOutButton:hover {
+  color: var(--text-primary);
+}
+
+.brandList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.brandItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.brandItem:last-child {
+  border-bottom: none;
+}
+
+.brandName {
+  font-weight: 500;
+}
+
+.brandActions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.brandActions a {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  text-decoration: underline;
+}
+
+.brandActions a:hover {
+  color: var(--text-primary);
+}
+
+.recommendLink {
+  display: inline-block;
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.recommendLink:hover {
+  color: var(--accent-strong);
+}
+
+.preSubscribeLink {
+  display: inline-block;
+  margin-top: 0.125rem;
+  font-size: 0.8125rem;
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.preSubscribeLink:hover {
+  color: var(--accent-strong);
+}
+
+.brandItemPreSubscribe {
+  padding: 0.5rem 0;
+}
+
+/* Gap between Subscribe group and Pre-subscribe group */
+.brandItem:not(.brandItemPreSubscribe) + .brandItemPreSubscribe {
+  margin-top: 1rem;
+}
+
+.brandItemPreSubscribe .brandName {
+  font-size: 0.9375rem;
+}
+
+.readingList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.readingItem {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.readingItem a {
+  color: var(--text-secondary);
+  text-decoration: none;
+}
+
+.readingItem a:hover {
+  color: var(--text-primary);
+  text-decoration: underline;
+}
+
+.empty {
+  color: var(--text-muted);
+  font-size: 0.9375rem;
+}
+
+.needSubscribe {
+  text-align: center;
+  padding: 4rem 1.5rem;
+}
+
+.needSubscribe p {
+  margin-bottom: 1rem;
+  color: var(--text-secondary);
+}
+
+.needSubscribe a {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.loading {
+  color: var(--text-muted);
+  font-size: 0.9375rem;
+}
+
+.error {
+  color: var(--text-muted);
+  font-size: 0.9375rem;
+}
