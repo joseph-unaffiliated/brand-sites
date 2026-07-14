@@ -798,8 +798,10 @@
   list-style: none;
   padding: 0;
   margin: 0;
+  max-width: 100%;
   display: flex;
-  flex-wrap: nowrap;
+  /* Let a pair stack (one per row) when the labels are too long to sit side by side */
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   gap: 0.75rem;
@@ -810,12 +812,15 @@
   margin: 0;
   display: flex;
   justify-content: center;
+  /* No shrink: buttons keep their natural width and stack instead of squishing;
+     max-width lets the label text wrap only when a single option exceeds the card width */
   flex: 0 0 auto;
   max-width: 100%;
 }
 
 .voteOption .nibblesItemLink {
   width: auto;
+  max-width: 100%;
   flex-direction: row;
   padding: 0;
   margin: 0;
