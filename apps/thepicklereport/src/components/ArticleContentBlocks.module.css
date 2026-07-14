@@ -739,6 +739,21 @@
   margin-top: 0;
 }
 
+/* Vote / trivia cards: keep options off the card edge at every width */
+.poll:has(.voteOptions),
+.poll:has(.voteOptionsQuad) {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+@media (min-width: 769px) {
+  .poll:has(.voteOptions),
+  .poll:has(.voteOptionsQuad) {
+    padding-left: 2.75rem;
+    padding-right: 2.75rem;
+  }
+}
+
 /* Poll / trivia card — roomier vertical rhythm */
 .poll:has(.voteOptions) .eyebrow,
 .poll:has(.voteOptionsQuad) .eyebrow {
@@ -776,6 +791,7 @@
   margin: 0 auto 1rem;
   width: 100%;
   max-width: 640px;
+  box-sizing: border-box;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -798,7 +814,10 @@
   list-style: none;
   padding: 0;
   margin: 0;
+  /* Definite width so flex-wrap measures against the card, not the buttons' min-content */
+  width: 100%;
   max-width: 100%;
+  box-sizing: border-box;
   display: flex;
   /* Let a pair stack (one per row) when the labels are too long to sit side by side */
   flex-wrap: wrap;
@@ -815,12 +834,14 @@
   /* No shrink: buttons keep their natural width and stack instead of squishing;
      max-width lets the label text wrap only when a single option exceeds the card width */
   flex: 0 0 auto;
+  min-width: 0;
   max-width: 100%;
 }
 
 .voteOption .nibblesItemLink {
   width: auto;
   max-width: 100%;
+  min-width: 0;
   flex-direction: row;
   padding: 0;
   margin: 0;
@@ -829,10 +850,12 @@
 
 .voteOption .nibblesCta {
   width: auto;
+  max-width: 100%;
   margin-top: 0;
   text-align: center;
   box-sizing: border-box;
   white-space: normal;
+  overflow-wrap: anywhere;
   font-size: 1rem;
   line-height: 1.5;
   font-weight: 300;
