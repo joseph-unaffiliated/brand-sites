@@ -107,6 +107,9 @@ export const metadata = {
     ...(googleSiteVerification ? { google: googleSiteVerification } : {}),
     ...(bingSiteVerification ? { other: { "msvalidate.01": bingSiteVerification } } : {}),
   },
+  other: {
+    "google-adsense-account": "ca-pub-2963525366468863",
+  },
 };
 
 export default async function RootLayout({ children }) {
