@@ -1,0 +1,533 @@
+.page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 0;
+  /* Lets the word column use the full main width (avoids flex min-width:auto quirks). */
+  min-width: 0;
+  width: 100%;
+}
+
+/* Bottom slack so the sticky ad can scroll off above the footer (ad lives after read-more in the page column) */
+.page:has(.article-ad-sticky-bottom) {
+  padding-bottom: 112px;
+}
+
+/* Centered hero block: headline + image, no rail beside (align with word grid width) */
+.articleHeroBlock {
+  max-width: min(100%, 840px);
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 1.5rem;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+.pronunciation {
+  margin: 0.5rem auto 0;
+  max-width: 640px;
+  font-size: 1.05rem;
+  font-style: italic;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+/* Below headline / byline */
+.leadImageSection {
+  margin: 2.5rem auto 2.5rem;
+  max-width: min(640px, 100%);
+  width: 100%;
+}
+
+.leadImageFrame {
+  border-radius: 1rem;
+  overflow: hidden;
+  line-height: 0;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.leadImage {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  display: block;
+  vertical-align: middle;
+}
+
+.leadImageCredit {
+  margin: 0.65rem 0 0;
+  font-size: 0.8rem;
+  line-height: 1.35;
+  letter-spacing: 0.01em;
+  font-weight: 300;
+  color: var(--text-muted);
+  text-align: center;
+  text-wrap: balance;
+}
+
+.issueByline {
+  margin: 3rem auto 0;
+  max-width: 640px;
+  font-size: 13px;
+  line-height: 1.35;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.wordMetaRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin: 1.5rem auto 0;
+  flex-wrap: wrap;
+}
+
+.wordMetaItem {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.articleHeroContent {
+  padding-bottom: 0;
+}
+
+.articleBodyGridBlocksFirst {
+  padding-top: 12px;
+}
+
+.articleBodyGridBlocksFirst .articleContainerNoPadding {
+  padding-top: 12px;
+}
+
+@media (max-width: 768px) {
+  .leadImageSection {
+    margin-bottom: 0.75rem;
+  }
+
+  .articleBodyGridBlocksFirst {
+    padding-top: 0;
+  }
+
+  .articleBodyGridBlocksFirst .articleContainerNoPadding {
+    padding-top: 10px;
+  }
+}
+
+/* Grid: copy left, rail right — tight and centered, 40px gap */
+.articleBodyGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-top: 48px;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+@media (min-width: 769px) {
+  /* 640px prose + 40px gap + 160px rail = 840px; fixed gap, whole block centered */
+  .articleBodyGrid {
+    grid-template-columns: 640px 160px;
+    gap: 40px;
+    width: min(840px, 100%);
+    max-width: 840px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 0;
+    padding-right: 0;
+    align-items: start;
+    box-sizing: border-box;
+  }
+}
+
+/* Word copy — column 1, no side padding */
+.articleMain {
+  grid-column: 1;
+  min-width: 0;
+}
+
+.articleContainerNoPadding {
+  padding-top: 24px;
+  padding-bottom: 0;
+  padding-left: 1rem;
+  padding-right: 0;
+}
+
+@media (min-width: 769px) {
+  .articleContainerNoPadding {
+    padding-left: 0;
+  }
+}
+
+.articleRail {
+  position: sticky;
+  top: 24px;
+  align-self: start;
+  margin-top: 1.5rem;
+  box-sizing: border-box;
+}
+
+@media (min-width: 769px) {
+  .articleRail {
+    grid-column: 2;
+  }
+}
+
+.articleRail :global(.adsbygoogle) {
+  min-height: 0;
+}
+
+@media (max-width: 768px) {
+  .articleRail {
+    display: none;
+  }
+
+  /* Body grid already has 24px horizontal padding; don't double with inner inset */
+  .articleContainerNoPadding {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+.adMid,
+.adBottom {
+  margin: 2rem 0;
+  min-height: 0;
+}
+
+.kicker {
+  text-transform: uppercase;
+  letter-spacing: 0em;
+  font-size: var(--text-label);
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.entry {
+  margin-bottom: 3rem;
+}
+
+.entry:last-of-type {
+  margin-bottom: 0;
+}
+
+.entry h2 {
+  margin: 8px 0 12px;
+  font-size: 1.35rem;
+  font-weight: 300;
+}
+
+.entry p {
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.mainImage {
+  width: 100%;
+  max-width: 640px;
+  height: auto;
+  display: block;
+  border-radius: 1rem;
+}
+
+.heroPhotoCredit {
+  font-size: 0.8rem;
+  font-style: italic;
+  color: var(--text-muted);
+  text-align: center;
+  margin: 0.65rem 0 0;
+  line-height: 1.35;
+  letter-spacing: 0.01em;
+}
+
+/* --- Word-specific content --- */
+
+.wordBody {
+  max-width: 100%;
+}
+
+.thinkLine {
+  font-size: 1.2rem;
+  line-height: 1.5;
+  margin: 0 0 2.5rem;
+}
+
+.thinkLabel {
+  font-weight: 600;
+}
+
+.inUseSection {
+  margin-bottom: 2.5rem;
+}
+
+.inUseHeading {
+  font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
+  font-size: 1.35rem;
+  font-weight: 300;
+  margin: 0 0 0.75rem;
+}
+
+.inUseDialogue {
+  background: var(--surface-muted);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.inUseDialogue p {
+  margin: 0 0 0.75rem;
+}
+
+.inUseDialogue p:last-child {
+  margin-bottom: 0;
+}
+
+.inUseAttribution {
+  margin: 0.75rem 0 0;
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--text-muted);
+  text-align: right;
+}
+
+.authorLine {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin: 0 0 2.5rem;
+}
+
+.disclaimer {
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: var(--text-muted);
+  margin: 0 0 2.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+.pollSection {
+  margin-bottom: 2.5rem;
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface-muted);
+}
+
+.pollEyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-size: var(--text-label);
+  color: var(--text-muted);
+  margin: 0 0 0.5rem;
+}
+
+.pollQuestion {
+  font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
+  font-size: 1.25rem;
+  font-weight: 300;
+  margin: 0 0 1rem;
+}
+
+.pollOptions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pollOptionLink {
+  display: block;
+  padding: 0.75rem 1rem;
+  border-radius: calc(var(--radius) - 4px);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: inherit;
+  text-decoration: none;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.pollOptionLink:hover {
+  border-color: var(--accent);
+  background: var(--surface-muted);
+}
+
+.furtherReadingSection {
+  margin-bottom: 2.5rem;
+}
+
+.furtherReadingTitle {
+  font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
+  font-size: 1.25rem;
+  font-weight: 300;
+  margin: 0 0 1rem;
+}
+
+.furtherReadingList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.furtherReadingItem p {
+  margin: 0 0 0.25rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.furtherReadingLink {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+/* Full-width band below word + rail; rail sticky does not extend beside this */
+.readMoreOuter {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px 64px;
+  box-sizing: border-box;
+  container-type: inline-size;
+}
+
+@media (min-width: 769px) {
+  .readMoreOuter {
+    max-width: min(100%, 1200px);
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
+
+/* Read more module */
+.readMore {
+  margin-top: 2.5rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid var(--border);
+  max-width: none;
+}
+
+.readMoreTitle {
+  font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
+  font-size: var(--text-section-headline);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  margin: 0 0 1.25rem;
+}
+
+.readMoreGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.readMoreCard {
+  display: flex;
+  flex-direction: column;
+  color: inherit;
+  text-decoration: none;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.readMoreCard:hover {
+  border-color: var(--accent);
+  box-shadow: 0 4px 12px rgba(2, 30, 21, 0.08);
+}
+
+.readMoreThumb {
+  aspect-ratio: 3/2;
+  overflow: hidden;
+  background: var(--surface-muted);
+}
+
+.readMoreThumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.readMoreKicker {
+  font-size: var(--text-label);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--text-muted);
+  margin: 0;
+  padding: 0.75rem 1rem 0 1rem;
+}
+
+.readMoreHeadline {
+  font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
+  font-size: var(--text-card-headline);
+  font-weight: 300;
+  line-height: 1.25;
+  margin: 1rem 1rem .5rem 1rem;
+}
+
+.readMoreDek {
+  font-size: var(--text-dek);
+  line-height: 1.4;
+  color: var(--text-secondary);
+  margin: 0 1rem 1.5rem 1rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .readMoreGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Two-up layout: hide orphan third card */
+  .readMoreCard:nth-child(3) {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .readMoreGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .readMoreCard:nth-child(3) {
+    display: flex;
+  }
+}
+
+/* Medium-width desktop: two fit per row — show 2, not a lone third */
+@container (max-width: 960px) and (min-width: 481px) {
+  .readMoreGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .readMoreCard:nth-child(3) {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .articlebody-section .articlepage-form {
+    flex-direction: column;
+  }
+
+  .articlebody-section .articlepage-form input {
+    min-width: 100%;
+  }
+}

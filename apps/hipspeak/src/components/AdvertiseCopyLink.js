@@ -1,0 +1,21 @@
+"use client";
+
+import Link from "next/link";
+import { copyEmailToClipboard, notifyEmailCopiedToClipboard } from "@publication-websites/web-shell/contact-copy";
+
+const ADVERTISE_EMAIL = "advertise@hipspeak.com";
+
+export default function AdvertiseCopyLink({ children = "Advertise with Us", onClick, ...props }) {
+  const handleClick = async (event) => {
+    event.preventDefault();
+    onClick?.(event);
+    await copyEmailToClipboard(ADVERTISE_EMAIL);
+    notifyEmailCopiedToClipboard(ADVERTISE_EMAIL);
+  };
+
+  return (
+    <Link href={`mailto:${ADVERTISE_EMAIL}`} onClick={handleClick} {...props}>
+      {children}
+    </Link>
+  );
+}

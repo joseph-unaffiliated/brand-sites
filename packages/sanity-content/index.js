@@ -835,6 +835,156 @@ export function mapRecipe(raw, urlFor, fallbackImage = "/tec-logo.svg") {
   };
 }
 
+/* ------------------------------------------------------------------------- *
+ * Slang entries (Hipspeak — The Dictionary of Slang)
+ *
+ * One slangEntry = one word/phrase issue: word, pronunciation, "Think:" line,
+ * "In Use" dialogue, a Pop Quiz poll, and "What else?" further-reading links.
+ * ------------------------------------------------------------------------- */
+
+/** GROQ filter: published slang entries only (excludes drafts). */
+export const publishedSlangEntryFilter =
+  `_type == "slangEntry" && defined(slug.current) && !(_id in path("drafts.**"))`;
+
+const slangEntryProjection = `_id,
+  "slug": slug.current,
+  title,
+  pronunciation,
+  think,
+  inUse,
+  inUseAttribution,
+  authorName,
+  disclaimer,
+  mainImage,
+  "mainImageWidth": mainImage.asset->metadata.dimensions.width,
+  "mainImageHeight": mainImage.asset->metadata.dimensions.height,
+  publishedDate,
+  pollQuestion,
+  pollOptions[] { _key, key, label },
+  furtherReading[] { _key, label, sourceName, url },
+  ${articleSeoProjection}`;
+
+/** All slang entries, newest first (the first one is the featured word). */
+export const slangEntriesQuery = `*[${publishedSlangEntryFilter}] | order(publishedDate desc, _updatedAt desc) {
+  ${slangEntryProjection}
+}`;
+
+/** One slang entry by slug. */
+export const slangEntryBySlugQuery = `*[${publishedSlangEntryFilter} && slug.current == $slug][0] {
+  ${slangEntryProjection}
+}`;
+
+/** Slugs only, for generateStaticParams. */
+export const slangEntrySlugsQuery = `*[${publishedSlangEntryFilter}].slug.current`;
+
+/**
+ * @param {unknown} raw
+ * @param {(source: unknown) => unknown} urlFor
+ * @param {string} [fallbackImage]
+ */
+export function mapSlangEntry(raw, urlFor, fallbackImage = "/hip-photo.png") {
+  if (!raw) return null;
+
+  const imageBuilder = urlFor(raw.mainImage);
+  let heroImage = null;
+  if (imageBuilder) {
+    try {
+      const url = imageBuilder.width(1200).url();
+      if (url) {
+        heroImage = {
+          url,
+          width: raw.mainImageWidth ?? 1200,
+          height: raw.mainImageHeight ?? 800,
+        };
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+
+  let socialImage = null;
+  if (raw.socialImage) {
+    const socialBuilder = urlFor(raw.socialImage);
+    if (socialBuilder) {
+      try {
+        const url = socialBuilder.width(1200).url();
+        if (url) {
+          socialImage = {
+            url,
+            width: raw.socialImageWidth ?? 1200,
+            height: raw.socialImageHeight ?? 630,
+          };
+        }
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+
+  return {
+    _id: raw._id,
+    slug: normalizeArticleSlug(raw.slug),
+    title: raw.title,
+    pronunciation: raw.pronunciation ?? null,
+    think: raw.think ?? null,
+    inUse: raw.inUse ?? null,
+    inUseAttribution: raw.inUseAttribution ?? null,
+    authorName: raw.authorName ?? null,
+    disclaimer: raw.disclaimer ?? null,
+    mainImage: heroImage?.url ?? fallbackImage,
+    mainImageWidth: heroImage?.width ?? 1200,
+    mainImageHeight: heroImage?.height ?? 800,
+    heroImage,
+    publishedDate: raw.publishedDate ?? null,
+    pollQuestion: raw.pollQuestion ?? null,
+    pollOptions: Array.isArray(raw.pollOptions) ? raw.pollOptions.filter(Boolean) : [],
+    furtherReading: Array.isArray(raw.furtherReading) ? raw.furtherReading : [],
+    tags: Array.isArray(raw.tags) ? raw.tags : [],
+    seoTitle: raw.seoTitle ?? null,
+    seoDescription: raw.seoDescription ?? null,
+    socialImage,
+    noIndex: Boolean(raw.noIndex),
+    dateModified: raw.dateModified ?? raw._updatedAt ?? null,
+  };
+}
+
+/**
+ * @param {{ client: import("next-sanity").SanityClient | null; urlFor: (s: unknown) => unknown; fallbackImage?: string }} layer
+ */
+export function createSlangEntryQueries(layer) {
+  const { client, urlFor, fallbackImage } = layer;
+  const map = (raw) => mapSlangEntry(raw, urlFor, fallbackImage);
+
+  return {
+    async getSlangEntries() {
+      if (!client) return [];
+      const raw = await client.fetch(slangEntriesQuery, {}, nextOptions);
+      const mapped = (raw ?? []).map(map).filter(Boolean);
+      const bySlug = new Map();
+      for (const e of mapped) {
+        if (!e?.slug || bySlug.has(e.slug)) continue;
+        bySlug.set(e.slug, e);
+      }
+      return [...bySlug.values()];
+    },
+    async getSlangEntryBySlug(slug) {
+      if (!client) return null;
+      const normalized = normalizeArticleSlug(slug);
+      if (!normalized) return null;
+      const raw = await client.fetch(slangEntryBySlugQuery, { slug: normalized }, nextOptions);
+      return map(raw);
+    },
+    async getSlangEntrySlugs() {
+      if (!client) return [];
+      const slugs = await client.fetch(slangEntrySlugsQuery, {}, nextOptions);
+      return (slugs ?? [])
+        .filter(Boolean)
+        .map((slug) => ({ slug: normalizeArticleSlug(slug) }))
+        .filter((entry) => entry.slug);
+    },
+  };
+}
+
 /**
  * @param {{ client: import("next-sanity").SanityClient | null; urlFor: (s: unknown) => unknown; fallbackImage?: string }} layer
  */
