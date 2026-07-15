@@ -7,7 +7,6 @@ import { trackAdClick, useAdImpression } from "@publication-websites/reader-even
 import "./CrossPromoImageAd.css";
 
 const DEFAULT_URL = process.env.NEXT_PUBLIC_CROSS_PROMO_URL || "https://hookuplists.com";
-const CREATIVE_BRAND = (process.env.NEXT_PUBLIC_SHARED_ADS_BRAND || "").trim();
 
 /** Per-placement URLs; unset values fall back to `NEXT_PUBLIC_CROSS_PROMO_URL`. */
 function urlForPlacement(placement) {
@@ -35,13 +34,13 @@ function layout2x(intrinsic) {
   };
 }
 
-function TrackedPromoLink({ href, placement, className, children }) {
+function TrackedPromoLink({ href, placement, className, creativeBrand, children }) {
   const ref = useRef(null);
   const trackProps = {
     placement,
     adType: "cross_promo",
     destinationUrl: href,
-    ...(CREATIVE_BRAND ? { creativeBrand: CREATIVE_BRAND } : {}),
+    ...(creativeBrand ? { creativeBrand } : {}),
   };
   useAdImpression(ref, trackProps);
   return (
@@ -61,10 +60,18 @@ function TrackedPromoLink({ href, placement, className, children }) {
 
 /**
  * Image-based cross-promo using `@publication-websites/shared-ads` creatives.
+ * Prefer an explicit `promoUrl` from the slot config over env placement URLs.
  */
-export default function CrossPromoImageAd({ format = "rectangle", className, creatives }) {
+export default function CrossPromoImageAd({
+  format = "rectangle",
+  className,
+  creatives,
+  promoUrl,
+  creativeBrand,
+}) {
   const placement = placementFromFormat(format);
-  const stickyUrl = urlForPlacement("sticky");
+  const href = (typeof promoUrl === "string" && promoUrl.trim()) || urlForPlacement(placement);
+  const brand = (creativeBrand || "").trim();
 
   if (placement === "sticky") {
     const d = creatives.stickyDesktop;
@@ -76,8 +83,9 @@ export default function CrossPromoImageAd({ format = "rectangle", className, cre
     return (
       <div className={`cross-promo-image-sticky ${className || ""}`}>
         <TrackedPromoLink
-          href={stickyUrl}
+          href={href}
           placement="sticky"
+          creativeBrand={brand}
           className="cross-promo-image-sticky-link cross-promo-image-sticky-desktop"
         >
           <Image
@@ -90,8 +98,9 @@ export default function CrossPromoImageAd({ format = "rectangle", className, cre
           />
         </TrackedPromoLink>
         <TrackedPromoLink
-          href={stickyUrl}
+          href={href}
           placement="sticky"
+          creativeBrand={brand}
           className="cross-promo-image-sticky-link cross-promo-image-sticky-mobile"
         >
           <Image
@@ -110,14 +119,18 @@ export default function CrossPromoImageAd({ format = "rectangle", className, cre
   const img = placement === "rail" ? creatives.rail : creatives.inArticle;
   if (!img) return null;
 
-  const href = urlForPlacement(placement);
   const lay = layout2x(img);
 
   return (
     <div
       className={`cross-promo-image-ad cross-promo-image-ad-${placement} ${className || ""}`}
     >
-      <TrackedPromoLink href={href} placement={placement} className="cross-promo-image-ad-link">
+      <TrackedPromoLink
+        href={href}
+        placement={placement}
+        creativeBrand={brand}
+        className="cross-promo-image-ad-link"
+      >
         <Image
           src={img}
           alt=""

@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import AdSlot from "./AdSlot";
+import { crossPromoForSlot } from "@/config/crossPromoAds";
 
 const ADS_MODE = (process.env.NEXT_PUBLIC_ADS_MODE || "cross_promo").toLowerCase();
 const CROSS_PROMO = ADS_MODE === "cross_promo";
@@ -21,7 +22,12 @@ export default function ArticleAdStickyBottom() {
     <div className="article-ad-sticky-bottom">
       <div className="article-ad-sticky-bottom-inner">
         <div className="article-ad-sticky-bottom-slot">
-          <AdSlot slotId={SLOT_STICKY} format="horizontal" onCollapse={handleAdCollapse} />
+          <AdSlot
+            slotId={SLOT_STICKY}
+            format="horizontal"
+            onCollapse={handleAdCollapse}
+            {...crossPromoForSlot("sticky")}
+          />
           <button
             type="button"
             className="article-ad-sticky-dismiss"

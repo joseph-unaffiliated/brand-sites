@@ -12,6 +12,7 @@ import FavoriteButton from "@/components/FavoriteButton";
 import AdSlot from "@/components/AdSlot";
 import ArticleAdStickyBottom from "@/components/ArticleAdStickyBottom";
 import JsonLd from "@/components/JsonLd";
+import { crossPromoForSlot } from "@/config/crossPromoAds";
 import { siteConfig, siteDisplayName } from "@/config/site";
 import styles from "./page.module.css";
 
@@ -284,7 +285,7 @@ export default async function RecipePage({ params }) {
               </div>
               {SHOW_BOTTOM && (
                 <div className={styles.adBottom}>
-                  <AdSlot slotId={SLOT_BOTTOM} format="rectangle" />
+                  <AdSlot slotId={SLOT_BOTTOM} format="rectangle" {...crossPromoForSlot("bottom")} />
                 </div>
               )}
               <HideWhenSubscribed>
@@ -303,7 +304,7 @@ export default async function RecipePage({ params }) {
           </div>
           {SHOW_RAIL && (
             <div className={styles.articleRail}>
-              <AdSlot slotId={SLOT_RAIL} format="vertical" />
+              <AdSlot slotId={SLOT_RAIL} format="vertical" {...crossPromoForSlot("rail")} />
             </div>
           )}
         </div>

@@ -11,7 +11,7 @@ export default defineConfig({
   name: 'default',
   title: "The Eyeballer's Cookbook",
 
-  projectId: 'YOUR_SANITY_PROJECT_ID',
+  projectId: '89sdxpbh',
   dataset: 'production',
 
   plugins: [structureTool(), visionTool()],

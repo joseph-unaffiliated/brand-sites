@@ -283,7 +283,7 @@ a {
     position: relative;
     gap: 16px 28px;
     --header-mark-w: min(132px, 16vw);
-    --header-mark-h: calc(var(--header-mark-w) * 104 / 154);
+    --header-mark-h: calc(var(--header-mark-w) * 26 / 39);
     --logo-line-pad-x: 34px;
     --logo-line-gap: calc(var(--header-mark-w) + 2 * var(--logo-line-pad-x));
     --brand-top: 24px;
@@ -417,7 +417,7 @@ a {
     padding-bottom: 22px;
     min-height: 0;
     --header-wordmark-w: min(200px, 32vw);
-    --header-wordmark-h: calc(var(--header-wordmark-w) * 73 / 773);
+    --header-wordmark-h: calc(var(--header-wordmark-w) * 19 / 194);
     /* Optical center: R descender hangs below cap height. */
     --header-wordmark-offset-y: 8px;
     --logo-mark-center-y: calc(
@@ -545,9 +545,9 @@ a {
   flex-shrink: 0;
   width: var(--header-mark-w, min(132px, 16vw));
   max-width: min(132px, 16vw);
-  height: var(--header-mark-h, calc(var(--header-mark-w, 132px) * 104 / 154));
-  -webkit-mask-image: url(/tec-logo-black.png);
-  mask-image: url(/tec-logo-black.png);
+  height: var(--header-mark-h, calc(var(--header-mark-w, 132px) * 26 / 39));
+  -webkit-mask-image: url(/tec-logo.svg);
+  mask-image: url(/tec-logo.svg);
   -webkit-mask-size: contain;
   mask-size: contain;
   -webkit-mask-repeat: no-repeat;
@@ -563,9 +563,9 @@ a {
   flex-shrink: 0;
   width: var(--header-wordmark-w, min(200px, 32vw));
   max-width: min(200px, 32vw);
-  height: var(--header-wordmark-h, calc(var(--header-wordmark-w, 200px) * 73 / 773));
-  -webkit-mask-image: url(/tec-wordmark-black.png);
-  mask-image: url(/tec-wordmark-black.png);
+  height: var(--header-wordmark-h, calc(var(--header-wordmark-w, 200px) * 19 / 194));
+  -webkit-mask-image: url(/tec-wordmark.svg);
+  mask-image: url(/tec-wordmark.svg);
   -webkit-mask-size: contain;
   mask-size: contain;
   -webkit-mask-repeat: no-repeat;
@@ -1175,7 +1175,7 @@ a {
   .site-header--marketing .header-row-marketing {
     position: relative;
     --header-mark-w: min(96px, 28vw);
-    --header-mark-h: calc(var(--header-mark-w) * 104 / 154);
+    --header-mark-h: calc(var(--header-mark-w) * 26 / 39);
     --logo-line-pad-x: 24px;
     --logo-line-gap: calc(var(--header-mark-w) + 2 * var(--logo-line-pad-x));
     --brand-top: 14px;
@@ -1266,7 +1266,7 @@ a {
 
   .site-header--article .header-row-1 {
     --header-wordmark-w: min(200px, 72vw);
-    --header-wordmark-h: calc(var(--header-wordmark-w) * 73 / 773);
+    --header-wordmark-h: calc(var(--header-wordmark-w) * 19 / 194);
     --header-wordmark-offset-y: 8px;
     --logo-mark-center-y: calc(
       20px + var(--header-wordmark-offset-y) + var(--header-wordmark-h) / 2
@@ -1319,13 +1319,13 @@ a {
 }
 
 .brand-mask-logo {
-  -webkit-mask-image: url(/tec-logo-black.png);
-  mask-image: url(/tec-logo-black.png);
-  aspect-ratio: 154 / 104;
+  -webkit-mask-image: url(/tec-logo.svg);
+  mask-image: url(/tec-logo.svg);
+  aspect-ratio: 39 / 26;
 }
 
 .brand-mask-wordmark {
-  -webkit-mask-image: url(/tec-wordmark-black.png);
-  mask-image: url(/tec-wordmark-black.png);
-  aspect-ratio: 773 / 73;
+  -webkit-mask-image: url(/tec-wordmark.svg);
+  mask-image: url(/tec-wordmark.svg);
+  aspect-ratio: 194 / 19;
 }
