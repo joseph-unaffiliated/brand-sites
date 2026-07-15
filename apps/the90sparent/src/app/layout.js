@@ -13,6 +13,7 @@
  */
 
 import Link from "next/link";
+import Script from "next/script";
 import { Suspense } from "react";
 import BrandLogoMark from "@/components/BrandLogoMark";
 import BrandWordmark from "@/components/BrandWordmark";
@@ -138,6 +139,12 @@ export default async function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2963525366468863"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
         <GoogleTagManagerScript />
         <GoogleAnalyticsScript />
         <OneTrustScripts />
