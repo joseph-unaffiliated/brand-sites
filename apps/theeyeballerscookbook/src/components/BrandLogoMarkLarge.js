@@ -1,20 +1,10 @@
-import BrandLogoImageFill from "@/components/BrandLogoImageFill";
 import BrandLogoMark from "@/components/BrandLogoMark";
 
 /**
  * Large marketing-header logomark.
- * Default: SVG paths in `currentColor`. With `fillImageUrl`, a full-viewport photo shows through the PR mask.
+ * Always the crisp inline SVG (no photo-through-mask) — the CSS mask path
+ * looked soft when scaled up in the marketing header.
  */
-export default function BrandLogoMarkLarge({ className, fillImageUrl }) {
-  if (fillImageUrl) {
-    return (
-      <BrandLogoImageFill
-        className={className}
-        fillClassName="brand-logo-mark-fill"
-        fillImageUrl={fillImageUrl}
-      />
-    );
-  }
-
+export default function BrandLogoMarkLarge({ className }) {
   return <BrandLogoMark className={className} />;
 }

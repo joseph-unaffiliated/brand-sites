@@ -500,7 +500,8 @@ a {
   height: auto;
   max-width: min(48px, 100%);
   color: var(--text-primary);
-  object-fit: contain;
+  overflow: visible;
+  shape-rendering: geometricPrecision;
 }
 
 @media (min-width: 769px) {

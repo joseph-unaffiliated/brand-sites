@@ -190,7 +190,6 @@ export default function Header() {
             ) : (
               <BrandLogoMarkLarge
                 className="brand-logo-img brand-logo-mark brand-logo-mark-large"
-                fillImageUrl={logomarkFillImage}
               />
             )}
           </Link>
