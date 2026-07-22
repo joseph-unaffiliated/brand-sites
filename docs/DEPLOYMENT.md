@@ -13,7 +13,7 @@
 - Deploy a **separate Vercel project** per `magic.<brand>` from the **`subscription-functions`** repo (branch `main`, root `/`).
 - Topology inventory (hosts, env, reader rollout): [`subscription-functions/docs/MAGIC_DEPLOY_TOPOLOGY.md`](https://github.com/joseph-unaffiliated/subscription-functions/blob/main/docs/MAGIC_DEPLOY_TOPOLOGY.md) (also under `../subscription-functions/docs/` locally).
 - Ensure **`READER_TOKEN_SECRET`** and **`READERS_CORS_ORIGINS`** are set for profile / reader APIs.
-- Reader routes: `/api/reader-health`, `/api/reader-events`, `/api/reader-profile`, `/api/reader-subscriptions`.
+- Reader routes: `/api/reader-health`, `/api/reader-events`, `/api/reader-profile`, `/api/reader-subscriptions`, `/api/reader-identity`, `/api/ga-client-id`.
 
 ## Cloudflare (per brand)
 

@@ -14,6 +14,7 @@ export { initReaderEventsCollector, enqueueEvent, flush } from "./collector.js";
 export { track } from "./track.js";
 export { useArticleView, useScrollDepth } from "./hooks.js";
 export { default as ReaderEventsInit } from "./ReaderEventsInit.jsx";
+export { default as GaIdentityBridge } from "./GaIdentityBridge.jsx";
 export { default as ArticleViewTracker } from "./ArticleViewTracker.jsx";
 export { default as ScrollDepthTracker } from "./ScrollDepthTracker.jsx";
 export { trackSubscribeFormStart, trackSubscribeFormSubmit } from "./subscribe-funnel.js";

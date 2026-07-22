@@ -36,7 +36,7 @@
 | `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` | yes | Optional Google Search Console site-verification token. Renders `<meta name="google-site-verification">`. |
 | `NEXT_PUBLIC_BING_SITE_VERIFICATION` | yes | Optional Bing Webmaster Tools site-verification token. Renders `<meta name="msvalidate.01">`. |
 | `NEXT_PUBLIC_GTM_ID` | yes | Optional Google Tag Manager container id (e.g. `GTM-XXXX`). Injects the standard GTM script in the document head and the noscript iframe at the top of `<body>`. |
-| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | yes | Optional GA4 Measurement ID (e.g. `G-XXXX`). Marketing apps load gtag.js when set. Do not duplicate the same ID in GTM. |
+| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | yes | Optional GA4 Measurement ID (e.g. `G-XXXX`). Marketing apps load gtag.js when set. Do not duplicate the same ID in GTM. Also used by `GaIdentityBridge` (reader-events) to set `user_id` and capture `client_id` when the reader is known and analytics consent allows. |
 | `NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT` | yes | Optional OneTrust domain script UUID (Pickle loads only when set). |
 | `NEXT_PUBLIC_RETENTION_SITE_ID` | yes | Optional Retention.com browser snippet site id (loads only when set). |
 

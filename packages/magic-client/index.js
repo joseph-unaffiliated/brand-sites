@@ -27,18 +27,51 @@ export function isRealBrowser() {
   return Object.values(checks).filter(Boolean).length >= 4;
 }
 
+export const READER_TOKEN_STORAGE_KEY = "magic_reader_token";
+export const USER_ID_STORAGE_KEY = "magic_user_id";
+
 /**
- * If the magic server returned a readerToken, store it for the profile page.
+ * Persist warehouse userID for GA stitching / profile.
+ * @param {string} userID
+ */
+export function storeUserId(userID) {
+  if (typeof window === "undefined") return;
+  if (!userID || typeof userID !== "string") return;
+  try {
+    localStorage.setItem(USER_ID_STORAGE_KEY, userID);
+    window.dispatchEvent(new CustomEvent("magic-user-id-updated", { detail: { userID } }));
+  } catch {
+    /* ignore quota / private mode */
+  }
+}
+
+/**
+ * @returns {string | null}
+ */
+export function getUserId() {
+  if (typeof window === "undefined") return null;
+  try {
+    return localStorage.getItem(USER_ID_STORAGE_KEY);
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * If the magic server returned a readerToken / userID, store for profile + GA stitching.
  * Token is opaque; do not log it.
  * @param {unknown} data
  */
 export function storeReaderTokenFromResponse(data) {
   if (typeof window === "undefined") return;
   if (!data || typeof data !== "object") return;
-  const token = /** @type {{ readerToken?: string }} */ (data).readerToken;
-  if (token && typeof token === "string") {
+  const body = /** @type {{ readerToken?: string; userID?: string }} */ (data);
+  if (body.userID && typeof body.userID === "string") {
+    storeUserId(body.userID);
+  }
+  if (body.readerToken && typeof body.readerToken === "string") {
     try {
-      localStorage.setItem(READER_TOKEN_STORAGE_KEY, token);
+      localStorage.setItem(READER_TOKEN_STORAGE_KEY, body.readerToken);
       window.dispatchEvent(new CustomEvent("magic-reader-token-updated"));
     } catch {
       /* ignore quota / private mode */
@@ -84,8 +117,6 @@ export async function executeAction(cfg, searchParams, action) {
   return data;
 }
 
-export const READER_TOKEN_STORAGE_KEY = "magic_reader_token";
-
 export function getReaderToken() {
   if (typeof window === "undefined") return null;
   try {
@@ -99,7 +130,36 @@ export function clearReaderToken() {
   if (typeof window === "undefined") return;
   try {
     localStorage.removeItem(READER_TOKEN_STORAGE_KEY);
+    localStorage.removeItem(USER_ID_STORAGE_KEY);
   } catch {
     /* ignore */
   }
+}
+
+/**
+ * Resolve userID from localStorage or GET /api/reader-identity when a readerToken exists.
+ * @param {string} apiOrigin magic origin (no trailing slash)
+ * @returns {Promise<string | null>}
+ */
+export async function ensureUserId(apiOrigin) {
+  const existing = getUserId();
+  if (existing) return existing;
+  const token = getReaderToken();
+  const origin = (apiOrigin || "").replace(/\/$/, "");
+  if (!token || !origin) return null;
+  try {
+    const res = await fetch(`${origin}/api/reader-identity`, {
+      method: "GET",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (!res.ok) return null;
+    const data = await res.json().catch(() => ({}));
+    if (data?.userID && typeof data.userID === "string") {
+      storeUserId(data.userID);
+      return data.userID;
+    }
+  } catch {
+    /* ignore */
+  }
+  return null;
 }
