@@ -365,7 +365,7 @@ a {
     gap: 0 28px;
     padding-bottom: max(4px, calc(var(--header-mark-h) * 0.22 + 12px - 16px));
     /* Nav/logo are grid-centered; nudge down slightly to sit through the text. */
-    --hairline-y: calc(50% + 7px);
+    --hairline-y: calc(50% + 5px);
   }
 
   .site-header--marketing .header-row-marketing--subscribed .brand {
