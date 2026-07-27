@@ -4,3 +4,4 @@
   "buildCommand": "cd ../.. && pnpm --filter heebnewsletters build",
   "ignoreCommand": "npx turbo-ignore --fallback=HEAD^1"
 }
+

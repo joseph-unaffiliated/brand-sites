@@ -12,3 +12,5 @@ Next.js publication in the **`brand-sites`** monorepo. **Pickle-only** magic: `m
 
 Vercel env copy/paste: [`docs/THEPICKLEREPORT_VERCEL_ENV.md`](../../docs/THEPICKLEREPORT_VERCEL_ENV.md).  
 Launch checklist: [`docs/THEPICKLEREPORT_LAUNCH_GUIDE.md`](../../docs/THEPICKLEREPORT_LAUNCH_GUIDE.md).
+
+<!-- First production deploy trigger for turbo-ignore -->
