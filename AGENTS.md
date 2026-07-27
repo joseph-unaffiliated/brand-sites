@@ -7,7 +7,8 @@
 
 ## Deploy
 
-- **One Vercel project per app**, with **Root Directory** set to `apps/hookuplists`, `apps/thepicklereport`, `apps/thekissandtell`, `apps/the90sparent`, `apps/theeyeballerscookbook`, `apps/hipspeak`, etc.
+- **One Vercel project per app**, with **Root Directory** set to `apps/hookuplists`, `apps/thepicklereport`, `apps/thekissandtell`, `apps/the90sparent`, `apps/theeyeballerscookbook`, `apps/hipspeak`, `apps/heebnewsletters`, etc.
+- Each app `vercel.json` includes **`ignoreCommand`: `npx turbo-ignore --fallback=HEAD^1`** so unrelated monorepo pushes do not rebuild every site. Shared `packages/*` changes still trigger dependent apps.
 - **“Build and deploy”** (when asked in chat): run a **production build** for the relevant app (e.g. `pnpm --filter <app> build`), then **commit and push to GitHub** so **Vercel’s Git integration** deploys. Do **not** use `vercel deploy` from the CLI unless the user explicitly asks for that.
 - **Marketing sites must not** add **BigQuery** or other network DB clients for unauthenticated email lookup. Profile subscriptions load via **Bearer token** from **`magic.*`** (`/api/reader-subscriptions`).
 

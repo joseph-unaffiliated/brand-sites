@@ -1,5 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "installCommand": "cd ../.. && corepack enable pnpm && pnpm install --frozen-lockfile",
-  "buildCommand": "cd ../.. && pnpm --filter the90sparent build"
+  "buildCommand": "cd ../.. && pnpm --filter the90sparent build",
+  "ignoreCommand": "npx turbo-ignore --fallback=HEAD^1"
 }
