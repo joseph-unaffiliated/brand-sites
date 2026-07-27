@@ -48,5 +48,5 @@ A fuller **magic-link sign-in for existing subscribers**, **Customer.io** transa
 |--------|------|
 | `platform-redirects` | Homepage intent → redirect |
 | `magic-client` | `/execute` fetch + token storage |
-| `sanity-content` | GROQ + article/recipe/slang mapping (`createArticleQueries`, `createRecipeQueries`, `createSlangEntryQueries`) |
+| `sanity-content` | GROQ + article/recipe/slang/vault mapping (`createArticleQueries`, `createRecipeQueries`, `createSlangEntryQueries`, `createVaultIssueQueries`) |
 | `web-shell` | AdSense / Meta Script wrappers |
