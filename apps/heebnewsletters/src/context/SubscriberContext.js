@@ -1,0 +1,66 @@
+"use client";
+
+import { createContext, useCallback, useContext, useMemo, useState, useEffect } from "react";
+import { siteConfig } from "@/config/site";
+
+const BRAND = siteConfig.brandId;
+
+function getStoredState() {
+  if (typeof window === "undefined") {
+    return { isSubscribed: false, email: null, subscribedAt: null };
+  }
+  const isSubscribed = localStorage.getItem(`subscribed_${BRAND}`) === "true";
+  const email = localStorage.getItem(`email_${BRAND}`);
+  const subscribedAt = localStorage.getItem(`subscribed_at_${BRAND}`);
+  return {
+    isSubscribed,
+    email: email ? decodeURIComponent(email) : null,
+    subscribedAt: subscribedAt || null,
+  };
+}
+
+const SubscriberContext = createContext(null);
+
+export function SubscriberProvider({ children }) {
+  const [state, setState] = useState({ isSubscribed: false, email: null, subscribedAt: null });
+
+  useEffect(() => {
+    setState(getStoredState());
+    const handleStorage = () => setState(getStoredState());
+    window.addEventListener("storage", handleStorage);
+    window.addEventListener("magic-subscriber-updated", handleStorage);
+    window.addEventListener("magic-reader-token-updated", handleStorage);
+    return () => {
+      window.removeEventListener("storage", handleStorage);
+      window.removeEventListener("magic-subscriber-updated", handleStorage);
+      window.removeEventListener("magic-reader-token-updated", handleStorage);
+    };
+  }, []);
+
+  const refresh = useCallback(() => setState(getStoredState()), []);
+
+  const value = useMemo(
+    () => ({
+      ...state,
+      refresh,
+    }),
+    [state.isSubscribed, state.email, state.subscribedAt, refresh]
+  );
+
+  return (
+    <SubscriberContext.Provider value={value}>{children}</SubscriberContext.Provider>
+  );
+}
+
+export function useSubscriber() {
+  const ctx = useContext(SubscriberContext);
+  if (!ctx) {
+    return {
+      isSubscribed: false,
+      email: null,
+      subscribedAt: null,
+      refresh: () => {},
+    };
+  }
+  return ctx;
+}

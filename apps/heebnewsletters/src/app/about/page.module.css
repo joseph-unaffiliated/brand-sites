@@ -1,0 +1,139 @@
+/* Full-bleed gutters; inner grid shrink-wraps and centers */
+.aboutOuter {
+  width: 100%;
+  max-width: 100%;
+  padding: 0 24px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+}
+
+/* Single-column reading layout */
+.aboutLayout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+  align-items: start;
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.aboutMain {
+  min-width: 0;
+  width: 100%;
+  max-width: 640px;
+}
+
+.aboutEraPull {
+  margin: 32px 0;
+  padding: 20px 24px;
+  border-left: 3px solid var(--accent);
+  background: var(--surface-muted);
+  border-radius: 0 12px 12px 0;
+}
+
+.aboutEraPullText {
+  margin: 0;
+  font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
+  font-size: 1.25rem;
+  font-style: italic;
+  color: var(--text-primary);
+}
+
+.aboutTitle {
+  margin-bottom: 28px !important;
+}
+
+.outreach {
+  margin-top: 16px;
+  max-width: none;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+@media (min-width: 720px) {
+  .outreach {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px 16px;
+    align-items: start;
+  }
+}
+
+.outreachItem {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  min-width: 0;
+}
+
+.outreachDek {
+  margin: 0;
+  max-width: none;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: var(--text-secondary);
+  font-weight: 300;
+}
+
+.outreachDek strong {
+  font-weight: 500;
+}
+
+.outreachButton {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  align-self: flex-start;
+  max-width: none;
+  padding: 6px 12px 8px;
+  font-size: 12px;
+  font-weight: 300;
+  letter-spacing: 0.02em;
+  border-radius: 0;
+  border: 1px solid var(--text-primary) !important;
+  background: var(--bg) !important;
+  color: var(--text-primary) !important;
+  text-align: center;
+  text-decoration: none !important;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.outreachTitleButton {
+  align-self: stretch !important;
+  width: 100% !important;
+  padding: 10px 14px 12px !important;
+  font-size: 15px !important;
+  font-weight: 300 !important;
+}
+
+.outreachButton:hover {
+  background: hsl(0 0% 94%) !important;
+  border-color: var(--text-primary) !important;
+  color: var(--text-primary) !important;
+}
+
+.subscriberRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+  margin-top: 8px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  grid-column: 1 / -1;
+}
+
+.subscriberLink {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.subscriberLink:hover {
+  color: var(--text-primary);
+}

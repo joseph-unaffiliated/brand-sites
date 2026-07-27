@@ -990,6 +990,228 @@ export function createSlangEntryQueries(layer) {
   };
 }
 
+/* ------------------------------------------------------------------------- *
+ * Vault issues (From the Vault, by Heeb)
+ *
+ * One vaultIssue = one "From the Vault" email: an editor's intro reproducing
+ * a piece of 2000s Jewish counter-culture media, framed with era context,
+ * a buy/collect CTA, and a curated "Rabbit Hole" of further links.
+ * ------------------------------------------------------------------------- */
+
+/** GROQ filter: published vault issues only (excludes drafts and future-dated). */
+export const publishedVaultIssueFilter =
+  `_type == "vaultIssue" && defined(slug.current) && !(_id in path("drafts.**")) && (!defined(publishedDate) || publishedDate <= now())`;
+
+const vaultIssueProjection = `_id,
+  "slug": slug.current,
+  title,
+  summary,
+  editorIntro,
+  editorName,
+  editorTitle,
+  editorSignature {
+    asset->{
+      _id,
+      url,
+      metadata { dimensions { width, height } }
+    }
+  },
+  mainImage,
+  "mainImageWidth": mainImage.asset->metadata.dimensions.width,
+  "mainImageHeight": mainImage.asset->metadata.dimensions.height,
+  photoCredit,
+  publishedDate,
+  eraLabel,
+  originalYear,
+  originalPublication,
+  originalIssueUrl,
+  buyCtaLabel,
+  authorName,
+  photographerCredit,
+  body[] {
+    ...,
+    _type == "image" => {
+      _type,
+      _key,
+      caption,
+      credit,
+      asset->{
+        _id,
+        _ref,
+        url,
+        metadata {
+          dimensions { width, height }
+        }
+      },
+      hotspot
+    }
+  },
+  rabbitHole[] { _key, title, sourceLabel, url },
+  newsletter,
+  ${articleSeoProjection}`;
+
+/** All vault issues, newest first (the first one is the latest issue). */
+export const vaultIssuesQuery = `*[${publishedVaultIssueFilter}] | order(publishedDate desc, _updatedAt desc) {
+  ${vaultIssueProjection}
+}`;
+
+/** One vault issue by slug. */
+export const vaultIssueBySlugQuery = `*[${publishedVaultIssueFilter} && slug.current == $slug][0] {
+  ${vaultIssueProjection}
+}`;
+
+/** Slugs only, for generateStaticParams. */
+export const vaultIssueSlugsQuery = `*[${publishedVaultIssueFilter}].slug.current`;
+
+/** Plain text from a Portable Text array — used for summary/description fallbacks. */
+function portableTextToPlainText(blocks) {
+  if (!Array.isArray(blocks)) return "";
+  return blocks
+    .filter((b) => b?._type === "block")
+    .map((b) => (b.children || []).map((c) => c?.text || "").join(""))
+    .join(" ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+/** `editorIntro` may be a plain string or Portable Text; normalize to a short plain-text preview. */
+function summaryFromEditorIntro(editorIntro, maxWords = 40) {
+  let plain = "";
+  if (typeof editorIntro === "string") plain = editorIntro.trim();
+  else if (Array.isArray(editorIntro)) plain = portableTextToPlainText(editorIntro);
+  if (!plain) return null;
+  const words = plain.split(/\s+/);
+  if (words.length <= maxWords) return plain;
+  return `${words.slice(0, maxWords).join(" ")}…`;
+}
+
+/**
+ * @param {unknown} raw
+ * @param {(source: unknown) => unknown} urlFor
+ * @param {string} [fallbackImage]
+ */
+export function mapVaultIssue(raw, urlFor, fallbackImage = "/ftv-logo-black.png") {
+  if (!raw) return null;
+
+  const imageBuilder = urlFor(raw.mainImage);
+  let heroImage = null;
+  if (imageBuilder) {
+    try {
+      const url = imageBuilder.width(1200).url();
+      if (url) {
+        heroImage = {
+          url,
+          width: raw.mainImageWidth ?? 1200,
+          height: raw.mainImageHeight ?? 800,
+        };
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+
+  let socialImage = null;
+  if (raw.socialImage) {
+    const socialBuilder = urlFor(raw.socialImage);
+    if (socialBuilder) {
+      try {
+        const url = socialBuilder.width(1200).url();
+        if (url) {
+          socialImage = {
+            url,
+            width: raw.socialImageWidth ?? 1200,
+            height: raw.socialImageHeight ?? 630,
+          };
+        }
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+
+  let editorSignature = null;
+  const sigAsset = raw.editorSignature?.asset;
+  if (sigAsset?.url) {
+    editorSignature = {
+      url: sigAsset.url,
+      width: sigAsset.metadata?.dimensions?.width ?? 200,
+      height: sigAsset.metadata?.dimensions?.height ?? 80,
+    };
+  }
+
+  const summary = raw.summary?.trim() || summaryFromEditorIntro(raw.editorIntro) || null;
+
+  return {
+    _id: raw._id,
+    slug: normalizeArticleSlug(raw.slug),
+    title: raw.title,
+    summary,
+    editorIntro: raw.editorIntro ?? null,
+    editorName: raw.editorName ?? null,
+    editorTitle: raw.editorTitle ?? null,
+    editorSignature,
+    mainImage: heroImage?.url ?? fallbackImage,
+    mainImageWidth: heroImage?.width ?? 1200,
+    mainImageHeight: heroImage?.height ?? 800,
+    heroImage,
+    photoCredit: raw.photoCredit ?? null,
+    publishedDate: raw.publishedDate ?? null,
+    eraLabel: raw.eraLabel ?? null,
+    originalYear: raw.originalYear ?? null,
+    originalPublication: raw.originalPublication ?? null,
+    originalIssueUrl: raw.originalIssueUrl ?? null,
+    buyCtaLabel: raw.buyCtaLabel ?? null,
+    authorName: raw.authorName ?? null,
+    photographerCredit: raw.photographerCredit ?? null,
+    body: Array.isArray(raw.body) ? raw.body : [],
+    rabbitHole: Array.isArray(raw.rabbitHole) ? raw.rabbitHole.filter(Boolean) : [],
+    newsletter: raw.newsletter ?? null,
+    tags: Array.isArray(raw.tags) ? raw.tags : [],
+    seoTitle: raw.seoTitle ?? null,
+    seoDescription: raw.seoDescription ?? null,
+    socialImage,
+    noIndex: Boolean(raw.noIndex),
+    dateModified: raw.dateModified ?? raw._updatedAt ?? null,
+  };
+}
+
+/**
+ * @param {{ client: import("next-sanity").SanityClient | null; urlFor: (s: unknown) => unknown; fallbackImage?: string }} layer
+ */
+export function createVaultIssueQueries(layer) {
+  const { client, urlFor, fallbackImage } = layer;
+  const map = (raw) => mapVaultIssue(raw, urlFor, fallbackImage);
+
+  return {
+    async getVaultIssues() {
+      if (!client) return [];
+      const raw = await client.fetch(vaultIssuesQuery, {}, nextOptions);
+      const mapped = (raw ?? []).map(map).filter(Boolean);
+      const bySlug = new Map();
+      for (const issue of mapped) {
+        if (!issue?.slug || bySlug.has(issue.slug)) continue;
+        bySlug.set(issue.slug, issue);
+      }
+      return [...bySlug.values()];
+    },
+    async getVaultIssueBySlug(slug) {
+      if (!client) return null;
+      const normalized = normalizeArticleSlug(slug);
+      if (!normalized) return null;
+      const raw = await client.fetch(vaultIssueBySlugQuery, { slug: normalized }, nextOptions);
+      return map(raw);
+    },
+    async getVaultIssueSlugs() {
+      if (!client) return [];
+      const slugs = await client.fetch(vaultIssueSlugsQuery, {}, nextOptions);
+      return (slugs ?? [])
+        .filter(Boolean)
+        .map((slug) => ({ slug: normalizeArticleSlug(slug) }))
+        .filter((entry) => entry.slug);
+    },
+  };
+}
+
 /**
  * @param {{ client: import("next-sanity").SanityClient | null; urlFor: (s: unknown) => unknown; fallbackImage?: string }} layer
  */

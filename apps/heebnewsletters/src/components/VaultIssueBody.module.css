@@ -1,0 +1,71 @@
+.body {
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+
+.body :global(p) {
+  margin: 0 0 1.25rem;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.body :global(h2) {
+  font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
+  font-size: 1.6rem;
+  font-weight: 300;
+  margin: 2rem 0 0.75rem;
+}
+
+.body :global(h3) {
+  font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
+  font-size: 1.3rem;
+  font-weight: 300;
+  margin: 1.75rem 0 0.6rem;
+}
+
+.body :global(blockquote) {
+  margin: 1.5rem 0;
+  padding-left: 1.25rem;
+  border-left: 2px solid var(--accent);
+  font-style: italic;
+  color: var(--text-primary);
+}
+
+.body :global(ul),
+.body :global(ol) {
+  margin: 0 0 1.25rem;
+  padding-left: 1.5rem;
+}
+
+.bodyLink {
+  text-decoration: underline;
+  text-decoration-color: var(--border);
+  text-underline-offset: 2px;
+}
+
+.bodyLink:hover {
+  text-decoration-color: var(--accent);
+}
+
+.figure {
+  margin: 2rem 0;
+}
+
+.figureImage {
+  width: 100%;
+  height: auto;
+  border-radius: 0.75rem;
+  display: block;
+}
+
+.figureCaption {
+  margin: 0.5rem 0 0;
+  font-size: 0.8rem;
+  line-height: 1.35;
+  color: var(--text-muted);
+}
+
+.figureCredit {
+  color: var(--text-muted-light);
+}
