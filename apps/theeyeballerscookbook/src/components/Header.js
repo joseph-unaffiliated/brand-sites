@@ -172,7 +172,7 @@ export default function Header() {
         </button>
         <nav className="site-nav site-nav-left header-nav-desktop" aria-label="Main">
           <Link href="/recipes">Recipes</Link>
-          <Link href="/favorites">Favorites</Link>
+          {!isSubscribed ? <Link href="/favorites">Favorites</Link> : null}
           {!isSubscribed && <Link href="/about">About</Link>}
         </nav>
         <div className="brand">

@@ -364,6 +364,8 @@ a {
     align-items: center;
     gap: 0 28px;
     padding-bottom: max(4px, calc(var(--header-mark-h) * 0.22 + 12px - 16px));
+    /* Center the hairline on the nav text / logo midpoint (not lower on the mark). */
+    --hairline-y: calc(var(--brand-top) + var(--header-mark-h) / 2);
   }
 
   .site-header--marketing .header-row-marketing--subscribed .brand {
