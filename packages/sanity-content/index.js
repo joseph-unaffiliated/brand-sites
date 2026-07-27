@@ -718,9 +718,14 @@ export function createArticleQueries(layer) {
  * the content comes from.
  * ------------------------------------------------------------------------- */
 
-/** GROQ filter: published recipes only (excludes drafts and future-dated). */
+/**
+ * GROQ filter: published recipes only (excludes drafts and future-dated).
+ * Uses `$now` (passed from the app) instead of GROQ `now()` so Sanity CDN
+ * caching cannot freeze the cutoff — recipes go live within the Next revalidate
+ * window once their publishedDate arrives.
+ */
 export const publishedRecipeFilter =
-  `_type == "recipe" && !(_id in path("drafts.**")) && (!defined(publishedDate) || publishedDate <= now())`;
+  `_type == "recipe" && !(_id in path("drafts.**")) && (!defined(publishedDate) || publishedDate <= $now)`;
 
 const recipeProjection = `_id,
   "slug": slug.current,
@@ -991,11 +996,13 @@ export function createSlangEntryQueries(layer) {
 export function createRecipeQueries(layer) {
   const { client, urlFor, fallbackImage } = layer;
   const map = (raw) => mapRecipe(raw, urlFor, fallbackImage);
+  /** Fresh ISO cutoff each request — keeps scheduled go-lives accurate. */
+  const nowParams = () => ({ now: new Date().toISOString() });
 
   return {
     async getRecipes() {
       if (!client) return [];
-      const raw = await client.fetch(recipesQuery, {}, nextOptions);
+      const raw = await client.fetch(recipesQuery, nowParams(), nextOptions);
       const mapped = (raw ?? []).map(map).filter(Boolean);
       const bySlug = new Map();
       for (const r of mapped) {
@@ -1008,12 +1015,16 @@ export function createRecipeQueries(layer) {
       if (!client) return null;
       const normalized = normalizeArticleSlug(slug);
       if (!normalized) return null;
-      const raw = await client.fetch(recipeBySlugQuery, { slug: normalized }, nextOptions);
+      const raw = await client.fetch(
+        recipeBySlugQuery,
+        { ...nowParams(), slug: normalized },
+        nextOptions,
+      );
       return map(raw);
     },
     async getRecipeSlugs() {
       if (!client) return [];
-      const slugs = await client.fetch(recipeSlugsQuery, {}, nextOptions);
+      const slugs = await client.fetch(recipeSlugsQuery, nowParams(), nextOptions);
       return (slugs ?? [])
         .filter(Boolean)
         .map((slug) => ({ slug: normalizeArticleSlug(slug) }))

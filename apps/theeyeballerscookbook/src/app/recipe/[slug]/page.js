@@ -191,9 +191,6 @@ export default async function RecipePage({ params }) {
                 ) : null}
               </div>
               <div className={styles.recipeMetaRow}>
-                {recipe.issueNumber ? (
-                  <span className={styles.recipeMetaItem}>Issue {recipe.issueNumber}</span>
-                ) : null}
                 {recipe.publishedDate ? (
                   <span className={styles.recipeMetaItem}>
                     {new Date(recipe.publishedDate).toLocaleDateString("en-US", {

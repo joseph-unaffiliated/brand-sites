@@ -203,6 +203,23 @@
   color: #555;
 }
 
+.inlineSubscribe {
+  appearance: none;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  cursor: pointer;
+}
+
+.inlineSubscribe:hover {
+  color: #111;
+}
+
 .kickerLink {
   color: inherit;
   text-decoration: none;

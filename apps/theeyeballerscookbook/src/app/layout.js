@@ -177,11 +177,10 @@ export default async function RootLayout({ children }) {
                 </div>
                 <div>
                   <div className="footer-links">
-                    <Link href="/recipes">Recipes</Link>
                     <Link href="/favorites">Favorites</Link>
                     <Link href="/about">About</Link>
                     <Link href="/terms">Terms</Link>
-                    <Link href="/privacy">Policy</Link>
+                    <Link href="/privacy">Privacy</Link>
                   </div>
                 </div>
                 <div>

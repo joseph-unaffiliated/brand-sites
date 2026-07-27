@@ -4,13 +4,18 @@ import { useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import SubscribeBlock from "./SubscribeBlock";
 import { useSubscriber } from "@/context/SubscriberContext";
+import { OPEN_SUBSCRIBE_FOR_FAVORITES_EVENT } from "@/lib/favorites";
 import styles from "./SubscribePopup.module.css";
 
 export default function SubscribePopup() {
   const [open, setOpen] = useState(false);
+  const [variant, setVariant] = useState("default");
   const { isSubscribed } = useSubscriber();
   const searchParams = useSearchParams();
-  const close = useCallback(() => setOpen(false), []);
+  const close = useCallback(() => {
+    setOpen(false);
+    setVariant("default");
+  }, []);
   const initialEmail = searchParams.get("email") ? decodeURIComponent(searchParams.get("email")) : undefined;
 
   useEffect(() => {
@@ -22,7 +27,11 @@ export default function SubscribePopup() {
   }, [open]);
 
   useEffect(() => {
-    if (isSubscribed) return;
+    if (isSubscribed) {
+      setOpen(false);
+      setVariant("default");
+      return;
+    }
     function handleClick(e) {
       const t = e.target;
       const el = t instanceof Element ? t : t?.parentElement;
@@ -30,6 +39,7 @@ export default function SubscribePopup() {
       const link = el.closest('a[href*="#subscribe"]');
       if (link) {
         e.preventDefault();
+        setVariant("default");
         setOpen(true);
       }
     }
@@ -39,7 +49,20 @@ export default function SubscribePopup() {
 
   useEffect(() => {
     if (typeof window === "undefined" || isSubscribed) return;
+    function handleFavoritesPrompt() {
+      setVariant("favorites");
+      setOpen(true);
+    }
+    window.addEventListener(OPEN_SUBSCRIBE_FOR_FAVORITES_EVENT, handleFavoritesPrompt);
+    return () => {
+      window.removeEventListener(OPEN_SUBSCRIBE_FOR_FAVORITES_EVENT, handleFavoritesPrompt);
+    };
+  }, [isSubscribed]);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || isSubscribed) return;
     if (window.location.hash === "#subscribe") {
+      setVariant("default");
       setOpen(true);
       window.history.replaceState(null, "", window.location.pathname + window.location.search);
     }
@@ -72,7 +95,11 @@ export default function SubscribePopup() {
       >
         <div className={styles.panelInner}>
           <div className={styles.moduleWrap} onClick={(e) => e.stopPropagation()}>
-            <SubscribeBlock layout="banner" initialEmail={initialEmail} />
+            <SubscribeBlock
+              layout="banner"
+              initialEmail={initialEmail}
+              variant={variant}
+            />
           </div>
         </div>
       </div>

@@ -71,8 +71,8 @@ export default async function AboutPage() {
               <p>
                 Subscribe once, and a new recipe arrives in your inbox each
                 week. Browsing past recipes on the site is free anytime — by
-                category, or straight through the whole cookbook. Tap the ♡
-                on any recipe to save it to your favorites. Snooze and
+                category, or straight through the whole cookbook. Subscribe and
+                tap the heart on any recipe to save it to your favorites. Snooze and
                 unsubscribe stay a click away in your mail when you need them.
               </p>
 
@@ -96,8 +96,8 @@ export default async function AboutPage() {
               <Image
                 src="/tec-phone.png"
                 alt="Example of a published recipe in an email, shown on a phone"
-                width={800}
-                height={1600}
+                width={480}
+                height={983}
                 className={aboutStyles.aboutPhoneImage}
                 sizes="(min-width: 900px) 420px, min(92vw, 360px)"
               />

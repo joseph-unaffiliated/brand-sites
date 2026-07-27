@@ -73,7 +73,8 @@ export const recipeType = defineType({
     defineField({
       name: 'publishedDate',
       title: 'Published date',
-      description: 'Newest published recipe becomes the "recipe of the week" on the homepage.',
+      description:
+        'Go-live date/time. Recipes with a future date stay hidden on the site until then, then appear automatically (newest live recipe is the "recipe of the week").',
       type: 'datetime',
       initialValue: () => new Date().toISOString(),
     }),

@@ -1,13 +1,16 @@
 /**
  * Favorited recipes, stored client-side per brand (mirrors the read-history
- * pattern in SubscribedArticleView). No backend required; the /favorites page
- * matches stored slugs against the recipe list from Sanity.
+ * pattern in SubscribedArticleView). Saving requires an active subscription;
+ * non-subscribers get the subscribe banner instead.
  */
 
 import { BRAND } from "@/config/site";
 
 const FAVORITES_KEY = `favorite_recipes_${BRAND}`;
+const PENDING_FAVORITE_KEY = `pending_favorite_${BRAND}`;
 const FAVORITES_EVENT = "tec:favorites-changed";
+/** Opens SubscribePopup with favorites-specific copy. Detail may include `{ slug }`. */
+export const OPEN_SUBSCRIBE_FOR_FAVORITES_EVENT = "tec:open-subscribe-favorites";
 const MAX_FAVORITES = 500;
 
 export function getFavoriteSlugs() {
@@ -45,6 +48,55 @@ export function toggleFavorite(slug) {
   }
   writeFavorites([...current, slug]);
   return true;
+}
+
+/** Add without toggling off. No-op if already favorited. */
+export function addFavorite(slug) {
+  if (typeof window === "undefined" || !slug) return;
+  const current = getFavoriteSlugs();
+  if (current.includes(slug)) return;
+  writeFavorites([...current, slug]);
+}
+
+export function clearFavorites() {
+  if (typeof window === "undefined") return;
+  writeFavorites([]);
+}
+
+/** Remember a recipe to favorite after the subscribe flow completes. */
+export function setPendingFavorite(slug) {
+  if (typeof window === "undefined" || !slug) return;
+  try {
+    localStorage.setItem(PENDING_FAVORITE_KEY, slug);
+  } catch {
+    /* ignore */
+  }
+}
+
+/** @returns {string | null} */
+export function consumePendingFavorite() {
+  if (typeof window === "undefined") return null;
+  try {
+    const slug = localStorage.getItem(PENDING_FAVORITE_KEY);
+    localStorage.removeItem(PENDING_FAVORITE_KEY);
+    return slug || null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Block saving and open the subscribe banner (favorites prompt).
+ * Optionally stash `slug` to favorite after they subscribe.
+ */
+export function promptSubscribeToFavorite(slug) {
+  if (typeof window === "undefined") return;
+  if (slug) setPendingFavorite(slug);
+  window.dispatchEvent(
+    new CustomEvent(OPEN_SUBSCRIBE_FOR_FAVORITES_EVENT, {
+      detail: { slug: slug || null },
+    }),
+  );
 }
 
 /** Subscribe to favorite changes (same-tab custom event + cross-tab storage). */

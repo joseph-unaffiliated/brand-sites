@@ -765,16 +765,16 @@ a {
 
 @media (min-width: 769px) {
   .footer-logo {
-    max-width: min(180px, 30vw);
+    max-width: min(240px, 36vw);
   }
 
   .footer-logo-wordmark {
     display: block;
     box-sizing: border-box;
-    width: min(180px, 30vw);
+    width: min(240px, 36vw);
     max-width: 100%;
     height: auto;
-    max-height: 36px;
+    max-height: 48px;
     color: var(--footer-text);
     filter: none;
     object-fit: contain;
