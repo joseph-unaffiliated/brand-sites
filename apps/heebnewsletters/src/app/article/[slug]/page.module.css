@@ -100,7 +100,7 @@
   padding-bottom: 0;
 }
 
-/* Editor's intro: italic framing text + signature, ahead of the hero image */
+/* Editor's intro: framing text + signature, ahead of the hero image */
 .editorIntro {
   max-width: 640px;
   margin: 0 auto 2rem;
@@ -109,17 +109,21 @@
 
 .editorIntroKicker {
   margin: 0 0 0.75rem;
-  font-size: var(--text-label);
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  color: var(--text-muted);
+  font-family: "halyard-display", "Helvetica Neue", Arial, sans-serif;
+  font-size: var(--text-lead);
+  font-weight: 500;
+  font-style: normal;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--text-primary);
 }
 
 .editorIntroText {
-  font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
-  font-size: 1.2rem;
-  line-height: 1.5;
-  font-style: italic;
+  font-family: "halyard-display", "Helvetica Neue", Arial, sans-serif;
+  font-size: var(--text-lead);
+  line-height: 1.55;
+  font-style: normal;
+  font-weight: 300;
   color: var(--text-primary);
 }
 
@@ -157,7 +161,7 @@
 
 /* Era pill above the title */
 .eraPill {
-  margin: 0.5rem auto 0;
+  margin: 0.5rem auto 1.5rem;
   text-align: center;
 }
 
