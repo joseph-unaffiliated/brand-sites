@@ -2,7 +2,7 @@
 
 **Canvas:** Studio **The Pickle Report** → **Article** → paste below → **Label entire document** → **Send to Studio**.
 
-**After Send to Studio:** Add `contentBlocks` in order: (1) **BODY** → `proseSection` (use H2 for each profile line like `Bobby Frye - CEO of…`) or `listicleSection`; (2) **PICKLE ECONOMICS** → `pickleEconomicsSection`; (3) **NIBBLES** → `nibblesBlock`; (4) **SEXY PIC(KLE)** → `photoOfWeekBlock`; (5) **TODAY'S / LAST WEEK'S TRIVIA** → `pickleVoteBlock`.
+**After Send to Studio:** Add `contentBlocks` in order: (1) **BODY** → `proseSection` (use H2 for each profile / numbered line); (2) **PICKLE ECONOMICS** → `pickleEconomicsSection`; (3) **NIBBLES** → `nibblesBlock`; (4) **SEXY PIC(KLE)** → `photoOfWeekBlock`; (5) **TODAY'S / LAST WEEK'S TRIVIA** → `pickleVoteBlock`.
 
 **Mark as excluded in Canvas (do not send to Studio):** ISSUE #, EMAIL SUBJECT LINE, EMAIL PRE-HEADER, and drive link reminders.
 

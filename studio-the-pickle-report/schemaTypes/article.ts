@@ -113,17 +113,16 @@ export const articleType = defineType({
       name: 'contentBlocks',
       title: 'Issue sections',
       description:
-        'Typical order: (1) Feature — proseSection and/or listicleSection; (2) Pickle Economics — pickleEconomicsSection only (never inside prose); (3) Nibbles; (4) Sexy Pic(kle) of the Week; (5) Pickle trivia / poll.',
+        'Typical order: (1) Feature — proseSection; (2) Pickle Economics — pickleEconomicsSection only (never inside prose); (3) Nibbles; (4) Sexy Pic(kle) of the Week; (5) Pickle trivia / poll.',
       type: 'array',
       options: {
         canvasApp: {
           purpose:
-            'Build in Studio after top-level fields: (1) BODY → proseSection or listicleSection; (2) PICKLE ECONOMICS TITLE + GRAPH → pickleEconomicsSection; (3) NIBBLES (secondary sources) → nibblesBlock; (4) SEXY PIC(KLE) OF THE WEEK → photoOfWeekBlock; (5) TODAY’S + LAST WEEK’S PICKLE TRIVIA → pickleVoteBlock.',
+            'Build in Studio after top-level fields: (1) BODY → proseSection (use H2 for numbered / profile lines); (2) PICKLE ECONOMICS TITLE + GRAPH → pickleEconomicsSection; (3) NIBBLES (secondary sources) → nibblesBlock; (4) SEXY PIC(KLE) OF THE WEEK → photoOfWeekBlock; (5) TODAY’S + LAST WEEK’S PICKLE TRIVIA → pickleVoteBlock.',
         },
       },
       of: [
         defineArrayMember({type: 'proseSection'}),
-        defineArrayMember({type: 'listicleSection'}),
         defineArrayMember({type: 'pickleEconomicsSection'}),
         defineArrayMember({type: 'nibblesBlock'}),
         defineArrayMember({type: 'photoOfWeekBlock'}),

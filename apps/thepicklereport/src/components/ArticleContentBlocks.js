@@ -68,11 +68,6 @@ function nibblesCtaLabel(item) {
   return "Read more";
 }
 
-function isFestivalListicleHeading(heading) {
-  if (typeof heading !== "string") return false;
-  return /festival|picklesburgh|big dill|major pickle|economics/i.test(heading.trim());
-}
-
 function portableTextBlockPlainText(block) {
   if (!block || block._type !== "block") return "";
   return (block.children || []).map((c) => c.text || "").join("");
@@ -362,76 +357,6 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset, artic
                     <PortableText value={proseBody} components={ptComponents} />
                   </div>
                 ) : null}
-              </section>
-            );
-          }
-          case "listicleSection": {
-            const showHeading = block.heading && !hidePartHeading(block.heading);
-            const festivalList = isFestivalListicleHeading(block.heading);
-            return (
-              <section
-                key={key}
-                className={`${styles.block} ${festivalList ? styles.economicsFestivalList : ""}`}
-              >
-                {showHeading ? <h2 className={styles.blockHeading}>{block.heading}</h2> : null}
-                <div className={styles.listicle}>
-                  {(block.items || []).map((item) => {
-                    const ik = item._key || `${item.itemNumber}-${item.title}`;
-                    const imgSrc = item.image ? urlForImage(projectId, dataset, item.image) : null;
-                    const { w, h } = item.image ? dims(item.image) : { w: 900, h: 600 };
-                    return (
-                      <article key={ik} className={styles.listicleItem}>
-                        {imgSrc ? (
-                          <div className={styles.listicleImageWrap}>
-                            <Image
-                              src={imgSrc}
-                              alt=""
-                              width={Math.min(w, 900)}
-                              height={Math.min(h, 700)}
-                              className={styles.blockImage}
-                              sizes="(max-width: 900px) 100vw, 720px"
-                            />
-                            {(item.caption || item.credit) && (
-                              <p className={styles.caption}>
-                                {item.caption ? <span>{item.caption}</span> : null}
-                                {item.caption && item.credit ? (
-                                  <span className={styles.captionSep}> · </span>
-                                ) : null}
-                                {item.credit ? (
-                                  <span className={styles.credit}>{item.credit}</span>
-                                ) : null}
-                              </p>
-                            )}
-                          </div>
-                        ) : null}
-                        <div className={styles.listicleCopy}>
-                          {Number.isFinite(item.itemNumber) ? (
-                            <span className={styles.itemNum}>{item.itemNumber}. </span>
-                          ) : null}
-                          {item.title ? (
-                            item.url ? (
-                              <a
-                                href={item.url}
-                                rel="noopener noreferrer"
-                                target="_blank"
-                                className={`${styles.proseLink} ${festivalList ? styles.festivalItemTitle : ""}`.trim()}
-                              >
-                                <strong>{item.title}</strong>
-                              </a>
-                            ) : (
-                              <strong
-                                className={festivalList ? styles.festivalItemTitle : undefined}
-                              >
-                                {item.title}
-                              </strong>
-                            )
-                          ) : null}
-                          {item.body ? <p className={styles.listicleBody}>{item.body}</p> : null}
-                        </div>
-                      </article>
-                    );
-                  })}
-                </div>
               </section>
             );
           }

@@ -118,7 +118,7 @@ function headingsMatchHero(a, b) {
  * Remove hero duplicates from the first prose section: subtitle at the start of body, and
  * section `heading` when it repeats the article title (H1 is already shown above).
  *
- * @param {string} [title] — when set, clears the first matching `heading` on proseSection / listicleSection / nibblesBlock
+ * @param {string} [title] — when set, clears the first matching `heading` on proseSection / nibblesBlock
  */
 export function dedupeSubtitleInContentBlocks(blocks, subtitle, title) {
   if (!Array.isArray(blocks) || blocks.length === 0) return blocks;

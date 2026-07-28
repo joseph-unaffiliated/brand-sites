@@ -8,7 +8,7 @@ Redeploy after schema changes: `npm run deploy` in `studio-the-pickle-report/`.
 
 ## `contentBlocks` order
 
-1. **BODY** — `proseSection` (typical) or `listicleSection` (numbered profiles)
+1. **BODY** — `proseSection` (use H2 for numbered items / profile lines)
 2. **Pickle Economics** — `pickleEconomicsSection` only (never inside prose)
 3. **NIBBLES** — `nibblesBlock`
 4. **SEXY PIC(KLE) OF THE WEEK** — `photoOfWeekBlock`
@@ -25,14 +25,13 @@ Redeploy after schema changes: `npm run deploy` in `studio-the-pickle-report/`.
 | IMAGE | `mainImage` | Upload in Studio; doc often links to Header Image drive |
 | PHOTO SOURCE | `photoCredit` | |
 | AUTHOR | `authorName` | e.g. `By Rachel Manson` — strip “By ” if you prefer |
-| BODY | `proseSection` / `listicleSection` | See below |
+| BODY | `proseSection` | See below |
 
 **Ignore in CMS:** ISSUE #, EMAIL SUBJECT LINE, EMAIL PRE-HEADER.
 
-## BODY → prose or listicle
+## BODY → prose
 
-- **Prose (most issues):** One `proseSection`. Use **Heading 2** for profile lines like `Bobby Frye - CEO of Mt. Olive Pickle Co.` (Issue 19 style).
-- **Listicle:** `listicleSection` — each profile = one item (`title` = name line, `body` = paragraph, optional `url` when the title is a link in the email).
+One `proseSection`. Use **Heading 2** for numbered items or profile lines (e.g. `1. Edible Glitter for Pickles`, `Bobby Frye - CEO of Mt. Olive Pickle Co.`). Optional title links go on the H2 text.
 
 ## Pickle Economics block
 
