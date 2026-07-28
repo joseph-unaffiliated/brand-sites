@@ -32,7 +32,7 @@ Redeploy after schema changes: `npm run deploy` in `studio-the-pickle-report/`.
 ## BODY → prose or listicle
 
 - **Prose (most issues):** One `proseSection`. Use **Heading 2** for profile lines like `Bobby Frye - CEO of Mt. Olive Pickle Co.` (Issue 19 style).
-- **Listicle:** `listicleSection` — each profile = one item (`title` = name line, `body` = paragraph).
+- **Listicle:** `listicleSection` — each profile = one item (`title` = name line, `body` = paragraph, optional `url` when the title is a link in the email).
 
 ## Pickle Economics block
 

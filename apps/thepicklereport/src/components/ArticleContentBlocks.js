@@ -409,11 +409,22 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset, artic
                             <span className={styles.itemNum}>{item.itemNumber}. </span>
                           ) : null}
                           {item.title ? (
-                            <strong
-                              className={festivalList ? styles.festivalItemTitle : undefined}
-                            >
-                              {item.title}
-                            </strong>
+                            item.url ? (
+                              <a
+                                href={item.url}
+                                rel="noopener noreferrer"
+                                target="_blank"
+                                className={`${styles.proseLink} ${festivalList ? styles.festivalItemTitle : ""}`.trim()}
+                              >
+                                <strong>{item.title}</strong>
+                              </a>
+                            ) : (
+                              <strong
+                                className={festivalList ? styles.festivalItemTitle : undefined}
+                              >
+                                {item.title}
+                              </strong>
+                            )
                           ) : null}
                           {item.body ? <p className={styles.listicleBody}>{item.body}</p> : null}
                         </div>

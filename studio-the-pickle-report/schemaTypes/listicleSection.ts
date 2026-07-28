@@ -42,6 +42,12 @@ export const listicleItemType = defineType({
   fields: [
     defineField({name: 'itemNumber', title: 'Item number', type: 'number'}),
     defineField({name: 'title', title: 'Title', type: 'string'}),
+    defineField({
+      name: 'url',
+      title: 'Title link URL',
+      description: 'Optional. When set, the listicle title is a link (product / article URL from the email).',
+      type: 'url',
+    }),
     defineField({name: 'body', title: 'Body', type: 'text'}),
     defineField({
       name: 'image',

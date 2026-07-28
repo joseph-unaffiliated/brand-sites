@@ -156,6 +156,7 @@ const articleContentBlocksProjection = `contentBlocks[] {
       _key,
       itemNumber,
       title,
+      url,
       body,
       caption,
       credit,
