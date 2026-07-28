@@ -1,12 +1,8 @@
-import Image from "next/image";
-import Link from "next/link";
 import {
   getArticles,
-  getDemographicAndDescription,
 } from "@/lib/articles";
-import SubscribeBlock from "@/components/SubscribeBlock";
+import HomeMosaic from "@/components/HomeMosaic";
 import HideWhenSubscribed from "@/components/HideWhenSubscribed";
-import HomeSnippetsList from "@/components/HomeSnippetsList";
 import HomeAboutSection from "@/components/HomeAboutSection";
 import HomeHeroTagline from "@/components/HomeHeroTagline";
 import JsonLd from "@/components/JsonLd";
@@ -27,12 +23,6 @@ function absoluteSiteUrl(path) {
   if (!path) return base;
   return path.startsWith("http") ? path : `${base}${path.startsWith("/") ? "" : "/"}${path}`;
 }
-
-/** Featured issues in center, left cards, right stack. No issue repeated. */
-const CENTER_COUNT = 2;
-const LEFT_COUNT = 4;
-/** Max items for "More issues" (client shows 4 when signed out, 5 when signed in). */
-const STACK_COUNT_MAX = 5;
 
 function firstWordsWithEllipsis(text, wordCount = 150) {
   const clean = (text || "").replace(/\s+/g, " ").trim();
@@ -60,19 +50,28 @@ function featuredPreviewFromArticle(article) {
   return firstWordsWithEllipsis(fromIntro || fromBody || fallback, 150);
 }
 
+/** Strip heavy Portable Text before sending the mosaic to the client. */
+function toMosaicArticle(article) {
+  return {
+    _id: article._id,
+    slug: article.slug,
+    title: article.title,
+    eraLabel: article.eraLabel || "",
+    mainImage: article.mainImage,
+    mainImageWidth: article.mainImageWidth,
+    mainImageHeight: article.mainImageHeight,
+    cardDek: (article.summary || "").trim(),
+    featuredPreview: featuredPreviewFromArticle(article),
+  };
+}
+
 export default async function Home({ searchParams: searchParamsProp }) {
   const searchParams = typeof searchParamsProp?.then === "function" ? await searchParamsProp : searchParamsProp ?? {};
   const initialEmail = searchParams?.email ? decodeURIComponent(String(searchParams.email)) : undefined;
 
   const articles = await getArticles();
   const totalCount = articles.length;
-
-  const featuredArticles = articles.slice(0, CENTER_COUNT);
-  const leftCards = articles.slice(CENTER_COUNT, CENTER_COUNT + LEFT_COUNT);
-  const stackItems = articles.slice(
-    CENTER_COUNT + LEFT_COUNT,
-    CENTER_COUNT + LEFT_COUNT + STACK_COUNT_MAX,
-  );
+  const mosaicArticles = articles.map(toMosaicArticle);
 
   const homeUrl = absoluteSiteUrl("/");
   const ogImageUrl = absoluteSiteUrl(SITE_OG_IMAGE_PATH);
@@ -128,101 +127,10 @@ export default async function Home({ searchParams: searchParamsProp }) {
           </section>
         ) : null}
 
-        {/* Atlantic mosaic: 4 left | 2 center | right stack + subscribe */}
-        <section className={styles.mosaic} id="subscribe">
-        <div className={styles.mosaicContainer}>
-          {/* Left column */}
-          <div className={styles.mosaicLeft}>
-            {leftCards.map((article) => (
-              <article className={styles.mosaicCard} key={article._id ?? article.slug}>
-                <Link
-                  href={`/article/${article.slug}`}
-                  className={styles.mosaicCardLink}
-                >
-                  <div className={styles.mosaicCardImage}>
-                    <Image
-                      src={article.mainImage}
-                      alt=""
-                      width={400}
-                      height={267}
-                      sizes="(max-width: 900px) 100vw, 320px"
-                    />
-                  </div>
-                  <div className={styles.mosaicCardBody}>
-                    <h3 className={styles.mosaicCardHeadline}>{article.title}</h3>
-                    {(() => {
-                      const { demographic, description } = getDemographicAndDescription(article);
-                      return (
-                        <>
-                          {demographic && (
-                            <p className={styles.mosaicCardDemographic}>{demographic}</p>
-                          )}
-                          {description && (
-                            <p className={styles.mosaicCardDek}>{description}</p>
-                          )}
-                        </>
-                      );
-                    })()}
-                  </div>
-                </Link>
-              </article>
-            ))}
-          </div>
+        <HomeMosaic articles={mosaicArticles} initialEmail={initialEmail} />
 
-          {/* Center: featured issues */}
-          <div className={styles.mosaicCenter}>
-            {featuredArticles.map((article, index) => {
-              const { demographic } = getDemographicAndDescription(article);
-              const preview = featuredPreviewFromArticle(article);
-              return (
-                <Link
-                  key={article._id ?? article.slug}
-                  href={`/article/${article.slug}`}
-                  className={styles.featuredCard}
-                >
-                  <div className={styles.featuredImage}>
-                    <Image
-                      src={article.mainImage}
-                      alt=""
-                      width={article.mainImageWidth || 900}
-                      height={article.mainImageHeight || 600}
-                      priority={index === 0}
-                      sizes="(max-width: 900px) 100vw, 560px"
-                    />
-                  </div>
-                  <div className={styles.featuredBody}>
-                    {index === 0 && (
-                      <p className={styles.featuredKicker}>Latest issue</p>
-                    )}
-                    <h2 className={styles.featuredHeadline}>{article.title}</h2>
-                    {demographic && (
-                      <p className={styles.featuredDek}>{demographic}</p>
-                    )}
-                    {preview ? (
-                      <div className={styles.featuredEntryPreview}>
-                        <p className={styles.featuredEntrySnippet}>{preview}</p>
-                      </div>
-                    ) : null}
-                    <span className={styles.featuredLink}>Read more</span>
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
-
-          {/* Right column: stack (snippets with thumb) then subscribe at bottom */}
-          <div className={styles.mosaicRight}>
-            <HideWhenSubscribed>
-              <SubscribeBlock initialEmail={initialEmail} />
-            </HideWhenSubscribed>
-            <HomeSnippetsList stackItems={stackItems} />
-          </div>
-        </div>
-      </section>
-
-      {/* More about (always visible; copy and Subscribe link vary by sign-in) */}
-      <HomeAboutSection totalCount={totalCount} />
-    </div>
+        <HomeAboutSection totalCount={totalCount} />
+      </div>
     </>
   );
 }

@@ -206,7 +206,6 @@
 
 .mosaicCenter {
   min-width: 0;
-  height: 100%;
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -215,10 +214,6 @@
 @media (max-width: 1024px) and (min-width: 641px) {
   .mosaicCenter {
     align-items: center;
-  }
-
-  .mosaicCenter .featuredCard:nth-child(2) {
-    display: none;
   }
 
   .mosaicCenter .featuredCard:first-child {
@@ -328,13 +323,11 @@
   text-decoration: underline;
 }
 
-/* Right column: stack (snippets first) then subscribe at bottom */
+/* Right column: subscribe + snippets (no sticky — height is balanced with siblings) */
 .mosaicRight {
   display: flex;
   flex-direction: column;
   gap: 48px;
-  position: sticky;
-  top: 24px;
 }
 
 /* Snippets list: title left, small thumb right (Atlantic-style) */
