@@ -759,14 +759,14 @@ a {
 .footer-logo {
   display: block;
   width: auto;
-  max-width: min(280px, 70vw);
+  max-width: min(93px, 23vw);
   line-height: 0;
 }
 
 .footer-logo-wordmark {
   display: block;
   box-sizing: border-box;
-  width: min(280px, 70vw);
+  width: min(93px, 23vw);
   max-width: 100%;
   height: auto;
   color: var(--footer-text);
