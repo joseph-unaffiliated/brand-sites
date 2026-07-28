@@ -52,6 +52,21 @@ function formatIssueDate(iso) {
   }
 }
 
+/**
+ * Build "Originally published in …" without repeating the year when
+ * `originalPublication` already includes it (e.g. "HEEB #16, Spring 2008").
+ */
+function formatOriginalPublication(publication, year) {
+  const pub = typeof publication === "string" ? publication.trim() : "";
+  const yr = year != null && String(year).trim() !== "" ? String(year).trim() : "";
+  if (!pub && !yr) return null;
+  if (!pub) return `Originally published in ${yr}`;
+  if (!yr) return `Originally published in ${pub}`;
+  const yearAlreadyInPub = new RegExp(`\\b${yr.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`).test(pub);
+  if (yearAlreadyInPub) return `Originally published in ${pub}`;
+  return `Originally published in ${pub}, ${yr}`;
+}
+
 /** `editorIntro` may be a plain string (paragraphs split on blank lines) or Portable Text. */
 function EditorIntro({ editorIntro }) {
   if (!editorIntro) return null;
@@ -147,7 +162,10 @@ export default async function VaultIssuePage({ params }) {
   const canonicalIssueUrl = `${siteConfig.siteUrl.replace(/\/?$/, "")}/article/${slug}`;
   const heroImageUrl = issue.socialImage?.url || issue.heroImage?.url || issue.mainImage || null;
   const publishedDateLabel = formatIssueDate(issue.publishedDate);
-  const hasOriginalPub = Boolean(issue.originalPublication || issue.originalYear);
+  const originalPubAttribution = formatOriginalPublication(
+    issue.originalPublication,
+    issue.originalYear,
+  );
   const showBuyCta = Boolean(issue.buyCtaLabel && issue.originalIssueUrl);
   const rabbitHole = Array.isArray(issue.rabbitHole) ? issue.rabbitHole : [];
 
@@ -277,7 +295,7 @@ export default async function VaultIssuePage({ params }) {
                 </p>
               )}
 
-              {hasOriginalPub ? (
+              {originalPubAttribution ? (
                 <p className={styles.originalPubLine}>
                   {issue.originalIssueUrl ? (
                     <Link
@@ -285,14 +303,10 @@ export default async function VaultIssuePage({ params }) {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      Originally published{issue.originalPublication ? ` in ${issue.originalPublication}` : ""}
-                      {issue.originalYear ? `, ${issue.originalYear}` : ""}
+                      {originalPubAttribution}
                     </Link>
                   ) : (
-                    <>
-                      Originally published{issue.originalPublication ? ` in ${issue.originalPublication}` : ""}
-                      {issue.originalYear ? `, ${issue.originalYear}` : ""}
-                    </>
+                    originalPubAttribution
                   )}
                 </p>
               ) : null}
