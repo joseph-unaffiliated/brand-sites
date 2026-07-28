@@ -536,9 +536,6 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset, artic
                     </ul>
                   );
                 })()}
-                {block.teaserLine ? (
-                  <p className={styles.voteTeaser}>{block.teaserLine}</p>
-                ) : null}
                 {lastWeek?.question && Array.isArray(lastWeek.results) && lastWeek.results.length > 0 ? (
                   <div className={styles.lastWeekRecap}>
                     <p className={styles.lastWeekLabel}>Last week</p>
