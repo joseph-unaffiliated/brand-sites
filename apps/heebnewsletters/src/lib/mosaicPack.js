@@ -1,12 +1,9 @@
 /**
- * Greedy mosaic packer: assign each issue to the currently shortest column
- * using per-slot height estimates, then (on the client) refine with real
- * measurements by pulling from the unused pool.
+ * Greedy mosaic packer for left + center only. The right rail is a fixed-height
+ * sticky stack (subscribe + N snippets) and is not stretched to match.
  */
 
 const GAP = 24;
-const SUBSCRIBE_HEIGHT = 340;
-const SNIPPETS_TITLE = 28;
 
 function wordCount(text) {
   const clean = (text || "").replace(/\s+/g, " ").trim();
@@ -16,33 +13,25 @@ function wordCount(text) {
 
 function estimateCard(article) {
   const dekWords = wordCount(article.cardDek || article.summary);
-  // ~320px col: 3/2 image ≈ 210, title+meta+dek+padding
   return 210 + 96 + Math.ceil(dekWords / 11) * 21 + GAP;
 }
 
 function estimateFeatured(article, isLatest) {
   const previewWords = wordCount(article.featuredPreview || article.summary);
-  // ~420px col: 3/2 image ≈ 280, kicker/title/meta/preview/cta
   const image = isLatest ? 300 : 260;
   const chrome = isLatest ? 130 : 110;
   return image + chrome + Math.ceil(previewWords / 9) * 22 + GAP;
 }
 
-function estimateSnippet(article) {
-  const dekWords = Math.min(wordCount(article.cardDek || article.summary), 28);
-  return 88 + Math.ceil(dekWords / 14) * 18 + 8;
-}
-
 /**
  * @param {Array<object>} articles mosaic-ready articles (newest first)
- * @param {{ hasSubscribe?: boolean }} [options]
+ * @param {{ hasSubscribe?: boolean, rightCount?: number }} [options]
  */
 export function packMosaicColumns(articles, options = {}) {
-  const hasSubscribe = options.hasSubscribe !== false;
   const maxLeft = options.maxLeft ?? 6;
   const maxCenter = options.maxCenter ?? 5;
-  const maxRight = options.maxRight ?? 8;
-  const maxItems = options.maxItems ?? 16;
+  const rightCount = options.rightCount ?? (options.hasSubscribe === false ? 5 : 4);
+  const maxItems = options.maxItems ?? 14;
   const tolerance = options.tolerance ?? 100;
 
   if (!Array.isArray(articles) || articles.length === 0) {
@@ -52,23 +41,18 @@ export function packMosaicColumns(articles, options = {}) {
   const [latest, ...rest] = articles;
   const left = [];
   const center = [latest];
-  const right = [];
   let hLeft = 0;
   let hCenter = estimateFeatured(latest, true);
-  let hRight = (hasSubscribe ? SUBSCRIBE_HEIGHT + GAP : 0) + SNIPPETS_TITLE;
 
+  // Fixed right rail — take the next N issues, do not height-balance into it.
+  const right = rest.slice(0, rightCount);
+  const afterRight = rest.slice(rightCount);
   const unused = [];
 
-  const heightOf = (key) => {
-    if (key === "left") return hLeft;
-    if (key === "center") return hCenter;
-    return hRight;
-  };
-
-  const tryPlace = (article, force = false) => {
-    const total = left.length + center.length + right.length;
-    const spread = Math.max(hLeft, hCenter, hRight) - Math.min(hLeft, hCenter, hRight);
-    if (!force && total >= maxItems && spread <= tolerance) return false;
+  const tryPlace = (article) => {
+    const total = left.length + center.length;
+    const spread = Math.abs(hLeft - hCenter);
+    if (total >= maxItems && spread <= tolerance) return false;
 
     const candidates = [];
     if (left.length < maxLeft) {
@@ -80,9 +64,6 @@ export function packMosaicColumns(articles, options = {}) {
         next: hCenter + estimateFeatured(article, false),
       });
     }
-    if (right.length < maxRight) {
-      candidates.push({ key: "right", next: hRight + estimateSnippet(article) });
-    }
     if (!candidates.length) return false;
 
     candidates.sort((a, b) => a.next - b.next);
@@ -90,48 +71,33 @@ export function packMosaicColumns(articles, options = {}) {
     if (pick.key === "left") {
       left.push(article);
       hLeft = pick.next;
-    } else if (pick.key === "center") {
+    } else {
       center.push(article);
       hCenter = pick.next;
-    } else {
-      right.push(article);
-      hRight = pick.next;
     }
     return true;
   };
 
-  for (const article of rest) {
+  for (const article of afterRight) {
     if (!tryPlace(article)) unused.push(article);
   }
 
-  // Top up the shortest columns from unused until roughly level.
+  // Top up the shorter of left/center from unused.
   let guard = 0;
   while (unused.length && guard < 12) {
     guard += 1;
-    const spread = Math.max(hLeft, hCenter, hRight) - Math.min(hLeft, hCenter, hRight);
-    if (spread <= tolerance) break;
-    const order = ["left", "center", "right"].sort((a, b) => heightOf(a) - heightOf(b));
-    let placed = false;
-    for (const key of order) {
-      const caps = { left: maxLeft, center: maxCenter, right: maxRight };
-      const counts = { left: left.length, center: center.length, right: right.length };
-      if (counts[key] >= caps[key]) continue;
+    if (Math.abs(hLeft - hCenter) <= tolerance) break;
+    if (hLeft <= hCenter) {
+      if (left.length >= maxLeft) break;
       const article = unused.shift();
-      if (!article) break;
-      if (key === "left") {
-        left.push(article);
-        hLeft += estimateCard(article);
-      } else if (key === "center") {
-        center.push(article);
-        hCenter += estimateFeatured(article, false);
-      } else {
-        right.push(article);
-        hRight += estimateSnippet(article);
-      }
-      placed = true;
-      break;
+      left.push(article);
+      hLeft += estimateCard(article);
+    } else {
+      if (center.length >= maxCenter) break;
+      const article = unused.shift();
+      center.push(article);
+      hCenter += estimateFeatured(article, false);
     }
-    if (!placed) break;
   }
 
   return { left, center, right, unused };
@@ -141,67 +107,42 @@ function takeForShortestColumn(pack, heights) {
   const { left, center, right, unused } = pack;
   if (!unused?.length) return null;
 
-  const measured = {
-    left: heights.left ?? 0,
-    center: heights.center ?? 0,
-    right: heights.right ?? 0,
+  const hLeft = heights.left ?? 0;
+  const hCenter = heights.center ?? 0;
+  if (Math.abs(hLeft - hCenter) < 120) return null;
+
+  const caps = { left: 6, center: 5 };
+  const shortest = hLeft <= hCenter ? "left" : "center";
+  const cols = { left, center };
+  if (cols[shortest].length >= caps[shortest]) return null;
+
+  const [article, ...restUnused] = unused;
+  return {
+    left: shortest === "left" ? [...left, article] : left,
+    center: shortest === "center" ? [...center, article] : center,
+    right,
+    unused: restUnused,
   };
-  const spread =
-    Math.max(measured.left, measured.center, measured.right) -
-    Math.min(measured.left, measured.center, measured.right);
-  if (spread < 120) return null;
-
-  const caps = { left: 6, center: 5, right: 8 };
-  const cols = { left, center, right };
-  const order = ["left", "center", "right"].sort(
-    (a, b) => measured[a] - measured[b],
-  );
-
-  for (const key of order) {
-    if (cols[key].length >= caps[key]) continue;
-    const [article, ...restUnused] = unused;
-    return {
-      left: key === "left" ? [...left, article] : left,
-      center: key === "center" ? [...center, article] : center,
-      right: key === "right" ? [...right, article] : right,
-      unused: restUnused,
-    };
-  }
-  return null;
 }
 
 /**
- * After real layout, prefer topping up the shortest column from unused.
- * If unused is empty but columns still diverge, move the last item from the
- * tallest column into the shortest (never leaving center without the latest).
- * Returns null when no change.
+ * Refine left/center only after layout. Right rail stays fixed.
  */
 export function rebalanceMosaicStep(pack, heights) {
   const toppedUp = takeForShortestColumn(pack, heights);
   if (toppedUp) return toppedUp;
 
   const { left, center, right, unused = [] } = pack;
-  const measured = {
-    left: heights.left ?? 0,
-    center: heights.center ?? 0,
-    right: heights.right ?? 0,
-  };
-  const spread =
-    Math.max(measured.left, measured.center, measured.right) -
-    Math.min(measured.left, measured.center, measured.right);
-  if (spread < 160) return null;
+  const hLeft = heights.left ?? 0;
+  const hCenter = heights.center ?? 0;
+  if (Math.abs(hLeft - hCenter) < 160) return null;
 
-  const caps = { left: 6, center: 5, right: 8 };
-  const minKeep = { left: 1, center: 1, right: 1 };
-  const cols = { left, center, right };
+  const caps = { left: 6, center: 5 };
+  const minKeep = { left: 1, center: 1 };
+  const tallest = hLeft >= hCenter ? "left" : "center";
+  const shortest = tallest === "left" ? "center" : "left";
+  const cols = { left, center };
 
-  const tallest = ["left", "center", "right"].sort(
-    (a, b) => measured[b] - measured[a],
-  )[0];
-  const shortest = ["left", "center", "right"].sort(
-    (a, b) => measured[a] - measured[b],
-  )[0];
-  if (tallest === shortest) return null;
   if (cols[tallest].length <= minKeep[tallest]) return null;
   if (cols[shortest].length >= caps[shortest]) return null;
 
@@ -210,21 +151,12 @@ export function rebalanceMosaicStep(pack, heights) {
     left:
       tallest === "left"
         ? left.slice(0, -1)
-        : shortest === "left"
-          ? [...left, item]
-          : left,
+        : [...left, item],
     center:
       tallest === "center"
         ? center.slice(0, -1)
-        : shortest === "center"
-          ? [...center, item]
-          : center,
-    right:
-      tallest === "right"
-        ? right.slice(0, -1)
-        : shortest === "right"
-          ? [...right, item]
-          : right,
+        : [...center, item],
+    right,
     unused,
   };
 }

@@ -120,7 +120,6 @@ export default function HomeMosaic({ articles, initialEmail }) {
   const [pack, setPack] = useState(initialPack);
   const leftRef = useRef(null);
   const centerRef = useRef(null);
-  const rightRef = useRef(null);
   const passesRef = useRef(0);
 
   useEffect(() => {
@@ -137,9 +136,8 @@ export default function HomeMosaic({ articles, initialEmail }) {
     const heights = {
       left: leftRef.current?.offsetHeight ?? 0,
       center: centerRef.current?.offsetHeight ?? 0,
-      right: rightRef.current?.offsetHeight ?? 0,
     };
-    if (!heights.left && !heights.center && !heights.right) return;
+    if (!heights.left && !heights.center) return;
 
     const next = rebalanceMosaicStep(pack, heights);
     if (!next) return;
@@ -166,7 +164,7 @@ export default function HomeMosaic({ articles, initialEmail }) {
           ))}
         </div>
 
-        <div className={styles.mosaicRight} ref={rightRef}>
+        <div className={styles.mosaicRight}>
           <HideWhenSubscribed>
             <SubscribeBlock initialEmail={initialEmail} />
           </HideWhenSubscribed>

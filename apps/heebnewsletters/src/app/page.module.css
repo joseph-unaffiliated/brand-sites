@@ -323,11 +323,14 @@
   text-decoration: underline;
 }
 
-/* Right column: subscribe + snippets (no sticky — height is balanced with siblings) */
+/* Right column: subscribe + snippets; sticky, natural height (not stretched) */
 .mosaicRight {
   display: flex;
   flex-direction: column;
   gap: 48px;
+  position: sticky;
+  top: 24px;
+  align-self: start;
 }
 
 /* Snippets list: title left, small thumb right (Atlantic-style) */
