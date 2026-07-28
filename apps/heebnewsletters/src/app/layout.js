@@ -19,7 +19,6 @@ import {
   siteConfig,
   siteDefaultDescription,
   siteDisplayName,
-  siteFooterTagline,
 } from "@/config/site";
 import { OneTrustScripts, RetentionScript } from "@/components/ComplianceScripts";
 import { GoogleAnalyticsScript } from "@/components/GoogleAnalytics";
@@ -171,7 +170,6 @@ export default async function RootLayout({ children }) {
                   <Link href="/" className="footer-logo" aria-label={siteDisplayName}>
                     <BrandLogoMark className="footer-logo-img footer-logo-mark" />
                   </Link>
-                  <p className="footer-text footer-tagline">{siteFooterTagline}</p>
                 </div>
                 <div>
                   <div className="footer-links">
