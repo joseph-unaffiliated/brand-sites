@@ -10,7 +10,7 @@
 
 import Link from "next/link";
 import { Suspense } from "react";
-import BrandLogoMark from "@/components/BrandLogoMark";
+import BrandWordmark from "@/components/BrandWordmark";
 import { Geist, Geist_Mono } from "next/font/google";
 import { FontAwesomeStylesheet, MarketingScripts, TypekitStylesheet } from "@publication-websites/web-shell";
 import { ContactCopyLink, ContactCopyToast } from "@publication-websites/web-shell/contact-copy";
@@ -169,7 +169,7 @@ export default async function RootLayout({ children }) {
               <div className="container footer-grid">
                 <div className="footer-brand">
                   <Link href="/" className="footer-logo" aria-label={siteDisplayName}>
-                    <BrandLogoMark className="footer-logo-img footer-logo-mark" />
+                    <BrandWordmark className="footer-logo-img footer-logo-wordmark" />
                   </Link>
                   <p className="footer-text footer-tagline">{siteFooterTagline}</p>
                 </div>

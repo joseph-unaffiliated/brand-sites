@@ -1,24 +1,25 @@
 :root {
-  /* From the Vault palette: near-black/near-white neutrals, olive-black footer,
-     neon yellow (#e0ff00) as the email's signature hover accent. */
-  --bg: #fefefe;
-  --surface: #fefefe;
-  --surface-muted: hsl(67, 20%, 96%);
-  --surface-gradient-end: hsl(67, 16%, 92%);
-  --text-primary: hsl(67, 30%, 9%);
-  --text-secondary: hsl(67, 22%, 16%);
-  --text-muted: hsl(67, 10%, 44%);
-  --text-muted-light: hsl(67, 8%, 58%);
-  --accent: #e0ff00;
-  --accent-strong: #c2db00;
-  --border: hsl(67, 10%, 88%);
-  --footer-bg: #242902;
-  --footer-text: hsl(67, 20%, 92%);
-  --footer-accent: hsl(67, 30%, 70%);
-  --text-on-dark: hsl(67, 14%, 94%);
-  --subscribe-overlay: hsla(67, 60%, 6%, 0.5);
-  --subscribe-grad-top: hsl(67, 45%, 16%);
-  --subscribe-grad-bottom: #242902;
+  /* From the Vault: full neon field (#e0ff00) with black type — matching the
+     live landing page. Neon stays available as --neon for on-dark surfaces. */
+  --neon: #e0ff00;
+  --bg: #e0ff00;
+  --surface: #e0ff00;
+  --surface-muted: #d4f200;
+  --surface-gradient-end: #c8e600;
+  --text-primary: #0a0a0a;
+  --text-secondary: #141414;
+  --text-muted: #2a2a0a;
+  --text-muted-light: #3d3d14;
+  --accent: #0a0a0a;
+  --accent-strong: #000000;
+  --border: rgba(10, 10, 10, 0.22);
+  --footer-bg: #e0ff00;
+  --footer-text: #0a0a0a;
+  --footer-accent: #1a1a1a;
+  --text-on-dark: #e0ff00;
+  --subscribe-overlay: transparent;
+  --subscribe-grad-top: #0a0a0a;
+  --subscribe-grad-bottom: #0a0a0a;
   --max-width: 960px;
   --radius: 12px;
 
@@ -417,10 +418,10 @@ a {
     padding-top: 22px;
     padding-bottom: 22px;
     min-height: 0;
-    --header-wordmark-w: min(200px, 32vw);
-    --header-wordmark-h: calc(var(--header-wordmark-w) * 31 / 229);
-    /* Optical center: R descender hangs below cap height. */
-    --header-wordmark-offset-y: 8px;
+    /* 3× prior 200px wordmark; aspect matches ftv-wordmark-black.png (618×234). */
+    --header-wordmark-w: min(600px, 48vw);
+    --header-wordmark-h: calc(var(--header-wordmark-w) * 234 / 618);
+    --header-wordmark-offset-y: 4px;
     --logo-mark-center-y: calc(
       22px + var(--header-wordmark-offset-y) + var(--header-wordmark-h) / 2
     );
@@ -531,7 +532,7 @@ a {
   .site-header--article .brand-logo-wordmark-fill {
     display: block;
     box-sizing: border-box;
-    width: var(--header-wordmark-w, min(200px, 32vw));
+    width: var(--header-wordmark-w, min(600px, 48vw));
     max-width: 100%;
     height: var(--header-wordmark-h);
     color: var(--text-primary);
@@ -544,9 +545,9 @@ a {
   position: relative;
   display: block;
   flex-shrink: 0;
-  width: var(--header-wordmark-w, min(200px, 32vw));
-  max-width: min(200px, 32vw);
-  height: var(--header-wordmark-h, calc(var(--header-wordmark-w, 200px) * 31 / 229));
+  width: var(--header-wordmark-w, min(600px, 48vw));
+  max-width: min(600px, 48vw);
+  height: var(--header-wordmark-h, calc(var(--header-wordmark-w, 600px) * 234 / 618));
   -webkit-mask-image: url(/ftv-wordmark-black.png);
   mask-image: url(/ftv-wordmark-black.png);
   -webkit-mask-size: contain;
@@ -603,7 +604,7 @@ a {
 }
 .brand-mask-wordmark {
   aspect-ratio: 618 / 234;
-  width: 8.5rem;
+  width: 100%;
   height: auto;
   -webkit-mask-image: url("/ftv-wordmark-black.png");
   mask-image: url("/ftv-wordmark-black.png");
@@ -754,58 +755,31 @@ a {
 .footer-logo {
   display: block;
   width: auto;
-  max-width: none;
+  max-width: min(280px, 70vw);
   line-height: 0;
 }
 
 .footer-logo-wordmark {
-  display: none;
-}
-
-.footer-logo-mark {
   display: block;
-  width: 48px;
-  min-width: 48px;
+  box-sizing: border-box;
+  width: min(280px, 70vw);
+  max-width: 100%;
   height: auto;
-  max-width: min(48px, 100%);
   color: var(--footer-text);
+  filter: none;
   object-fit: contain;
 }
 
-@media (min-width: 769px) {
-  .footer-logo {
-    max-width: min(180px, 30vw);
-  }
-
-  .footer-logo-wordmark {
-    display: block;
-    box-sizing: border-box;
-    width: min(180px, 30vw);
-    max-width: 100%;
-    height: auto;
-    max-height: 36px;
-    color: var(--footer-text);
-    filter: none;
-    object-fit: contain;
-  }
-
-  .footer-logo-mark {
-    display: none;
-  }
+.footer-logo-mark {
+  display: none;
 }
 
 .footer-logo-img {
   object-fit: contain;
 }
 
-@media (min-width: 769px) {
-  .footer-logo-img.footer-logo-mark {
-    display: none;
-  }
-}
-
 .footer-logo path {
-  fill: #fff;
+  fill: currentColor;
 }
 
 .footer-links {
@@ -817,7 +791,8 @@ a {
 }
 
 .footer-links a:hover {
-  color: var(--bg);
+  color: var(--text-primary);
+  text-decoration: underline;
 }
 
 .button {
@@ -826,35 +801,37 @@ a {
   justify-content: center;
   padding: 10px 18px;
   border-radius: 999px;
-  border: 1px solid transparent;
+  border: 1.5px solid transparent;
   font-size: 14px;
-  font-weight: 300;
+  font-weight: 500;
   font-family: "halyard-display", "Helvetica Neue", Arial, sans-serif;
   transition: 0.2s ease;
   cursor: pointer;
 }
 
+/* Black fill + neon type, or neon fill + black type — never neon-on-white. */
 .button-primary {
-  background: var(--text-primary);
-  color: #ffffff;
-  border-color: var(--text-primary);
+  background: #0a0a0a;
+  color: var(--neon);
+  border-color: #0a0a0a;
 }
 
 .button-primary:hover {
-  background: var(--accent);
-  color: var(--text-primary);
-  border-color: var(--accent);
+  background: var(--neon);
+  color: #0a0a0a;
+  border-color: #0a0a0a;
 }
 
 .button-secondary {
-  border-color: var(--border);
-  color: var(--text-secondary);
+  border-color: #0a0a0a;
+  color: #0a0a0a;
   background: transparent;
 }
 
 .button-secondary:hover {
-  border-color: var(--accent);
-  color: var(--text-primary);
+  background: #0a0a0a;
+  color: var(--neon);
+  border-color: #0a0a0a;
 }
 
 /* Article page (Webflow detail_article–style) */
@@ -998,8 +975,7 @@ a {
   flex-flow: column;
   align-items: flex-start;
   gap: 1rem;
-  background: var(--footer-bg);
-  background-image: linear-gradient(rgba(0, 0, 0, 0.66), transparent);
+  background: #0a0a0a;
   border-radius: 0.5rem;
   padding: 1rem 1.5rem;
   width: 100%;
@@ -1131,7 +1107,7 @@ a {
 }
 
 .article-ad-sticky-dismiss:focus-visible {
-  outline: 2px solid var(--accent, #474f00);
+  outline: 2px solid var(--accent, #0a0a0a);
   outline-offset: 2px;
 }
 
@@ -1278,9 +1254,9 @@ a {
   }
 
   .site-header--article .header-row-1 {
-    --header-wordmark-w: min(200px, 72vw);
-    --header-wordmark-h: calc(var(--header-wordmark-w) * 31 / 229);
-    --header-wordmark-offset-y: 8px;
+    --header-wordmark-w: min(540px, 88vw);
+    --header-wordmark-h: calc(var(--header-wordmark-w) * 234 / 618);
+    --header-wordmark-offset-y: 4px;
     --logo-mark-center-y: calc(
       20px + var(--header-wordmark-offset-y) + var(--header-wordmark-h) / 2
     );
