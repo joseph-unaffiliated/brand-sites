@@ -28,10 +28,10 @@ function absoluteSiteUrl(path) {
   return path.startsWith("http") ? path : `${base}${path.startsWith("/") ? "" : "/"}${path}`;
 }
 
-/** One featured (latest) issue, 4 left cards, N in right stack. No issue repeated. */
-const CENTER_COUNT = 1;
+/** Featured issues in center, left cards, right stack. No issue repeated. */
+const CENTER_COUNT = 2;
 const LEFT_COUNT = 4;
-/** Max items for "More issues" (client shows 2 when signed out, 5 when signed in). */
+/** Max items for "More issues" (client shows 4 when signed out, 5 when signed in). */
 const STACK_COUNT_MAX = 5;
 
 function firstWordsWithEllipsis(text, wordCount = 150) {
@@ -42,8 +42,22 @@ function firstWordsWithEllipsis(text, wordCount = 150) {
   return `${words.slice(0, wordCount).join(" ")}…`;
 }
 
+function plainTextFromPortableText(value) {
+  if (typeof value === "string") return value.trim();
+  if (!Array.isArray(value)) return "";
+  return value
+    .filter((block) => block?._type === "block")
+    .map((block) => (block.children || []).map((child) => child?.text || "").join(""))
+    .join(" ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 function featuredPreviewFromArticle(article) {
-  return firstWordsWithEllipsis(article?.summary || "", 150);
+  const fromIntro = plainTextFromPortableText(article?.editorIntro);
+  const fromBody = plainTextFromPortableText(article?.body);
+  const fallback = (article?.summary || "").trim();
+  return firstWordsWithEllipsis(fromIntro || fromBody || fallback, 150);
 }
 
 export default async function Home({ searchParams: searchParamsProp }) {
