@@ -759,23 +759,23 @@ a {
 .footer-logo {
   display: block;
   width: auto;
-  max-width: min(93px, 23vw);
+  max-width: 48px;
   line-height: 0;
+  color: var(--footer-text);
 }
 
 .footer-logo-wordmark {
-  display: block;
-  box-sizing: border-box;
-  width: min(93px, 23vw);
-  max-width: 100%;
-  height: auto;
-  color: var(--footer-text);
-  filter: none;
-  object-fit: contain;
+  display: none;
 }
 
 .footer-logo-mark {
-  display: none;
+  display: block;
+  box-sizing: border-box;
+  width: 48px;
+  max-width: 100%;
+  height: auto;
+  aspect-ratio: 112 / 140;
+  color: var(--footer-text);
 }
 
 .footer-logo-img {
