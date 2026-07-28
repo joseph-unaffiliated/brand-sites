@@ -3,28 +3,27 @@
   flex-direction: column;
 }
 
-/* Hero tagline: first child of .site-main (above .page) */
+/* Hero tagline: full-bleed black band with neon type */
 .heroTagline {
   box-sizing: border-box;
   width: 100%;
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 40px 24px 16px;
+  max-width: none;
+  margin: 0;
+  padding: 40px 24px 36px;
   font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
   font-size: var(--text-hero-tagline);
   font-weight: 300;
   line-height: 1.2;
   letter-spacing: -0.02em;
-  margin: 0 auto;
-  color: var(--text-primary);
+  color: var(--text-on-dark);
+  background: #0a0a0a;
   text-align: center;
   text-wrap: balance;
 }
 
 /* Signed-in header is shorter — pull tagline closer */
 .heroTaglineSubscribed {
-  padding-top: 24px;
+  padding-top: 28px;
 }
 
 /* Archive meta line above mosaic */
@@ -84,13 +83,13 @@
 
 @media (max-width: 640px) {
   .heroTagline {
-    padding: 28px 24px 12px;
+    padding: 28px 24px 24px;
     font-size: clamp(1.5rem, 4.5vw + 0.35rem, 2rem);
     line-height: 1.22;
   }
 
   .heroTaglineSubscribed {
-    padding-top: 28px;
+    padding-top: 24px;
   }
 
   .hero {
@@ -529,10 +528,11 @@
   }
 }
 
-/* Below mosaic */
+/* Below mosaic — neon band with black type */
 .subscribeSection {
   padding: 48px 0 104px;
-  background: var(--surface-muted);
+  background: var(--neon);
+  color: var(--text-primary);
 }
 
 .subscribeInner {
@@ -551,12 +551,13 @@
   font-weight: 300;
   line-height: 1.2;
   margin: 0 0 24px;
+  color: var(--text-primary);
 }
 
 .lede {
   font-size: 17px;
   line-height: 1.4;
-  color: var(--text-secondary);
+  color: var(--text-primary);
 }
 
 .lede em {
@@ -567,7 +568,7 @@
   display: flex;
   gap: 12px;
   align-items: center;
-  color: var(--text-secondary);
+  color: var(--text-primary);
   font-size: 14px;
   flex-wrap: wrap;
 }
