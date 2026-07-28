@@ -98,9 +98,9 @@ export default async function Home({ searchParams: searchParamsProp }) {
       <div className={styles.page}>
         <JsonLd data={websiteJsonLd} />
         <JsonLd data={organizationJsonLd} />
-        <section className={styles.hero}>
-          <div className="container">
-            {totalCount > 0 && (
+        {totalCount > 0 ? (
+          <section className={styles.hero}>
+            <div className="container">
               <p className={styles.heroMeta}>
                 {totalCount} issue{totalCount !== 1 ? "s" : ""} in the archive
                 <HideWhenSubscribed>
@@ -110,9 +110,9 @@ export default async function Home({ searchParams: searchParamsProp }) {
                   </>
                 </HideWhenSubscribed>
               </p>
-            )}
-          </div>
-        </section>
+            </div>
+          </section>
+        ) : null}
 
         {/* Atlantic mosaic: 4 left | 2 center | right stack + subscribe */}
         <section className={styles.mosaic} id="subscribe">

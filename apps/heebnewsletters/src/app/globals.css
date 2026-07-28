@@ -132,7 +132,14 @@ a {
   box-sizing: border-box;
 }
 
-/* Atlantic-style header: row 1 = [nav | logo | nav] */
+/* Header: fixed overlay with reserved slot so it can track scroll off naturally,
+   then reappear when scrolling up. */
+.site-header-slot {
+  flex-shrink: 0;
+  width: 100%;
+  pointer-events: none;
+}
+
 .site-header {
   position: relative;
   border-bottom: 1px solid var(--border);
@@ -143,28 +150,28 @@ a {
   border-bottom: none;
 }
 
-/* Article pages: sticky header hides on scroll down, reappears on scroll up */
 .site-header--article {
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 200;
-  transition: transform 0.25s ease;
   will-change: transform;
 }
 
-.site-header--article.site-header--scroll-hidden {
-  transform: translateY(-100%);
-  pointer-events: none;
+.site-header--article.site-header--scroll-animate {
+  transition: transform 0.25s ease;
 }
 
 .site-header--article.site-header--menu-open {
-  transform: none;
+  transform: translateY(0) !important;
+  transition: none;
   pointer-events: auto;
   z-index: 1001;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .site-header--article {
+  .site-header--article.site-header--scroll-animate {
     transition: none;
   }
 }
@@ -411,15 +418,15 @@ a {
     grid-template-columns: 1fr auto 1fr;
     align-items: center;
     column-gap: 48px;
-    padding-top: 22px;
-    padding-bottom: 22px;
+    padding-top: 16px;
+    padding-bottom: 16px;
     min-height: 0;
-    /* 3× prior 200px wordmark; aspect matches ftv-wordmark-black.png (618×234). */
-    --header-wordmark-w: min(600px, 48vw);
+    /* Half of prior 600px wordmark; aspect matches ftv-wordmark-black.png (618×234). */
+    --header-wordmark-w: min(300px, 24vw);
     --header-wordmark-h: calc(var(--header-wordmark-w) * 234 / 618);
-    --header-wordmark-offset-y: 4px;
+    --header-wordmark-offset-y: 2px;
     --logo-mark-center-y: calc(
-      22px + var(--header-wordmark-offset-y) + var(--header-wordmark-h) / 2
+      16px + var(--header-wordmark-offset-y) + var(--header-wordmark-h) / 2
     );
   }
 
@@ -528,7 +535,7 @@ a {
   .site-header--article .brand-logo-wordmark-fill {
     display: block;
     box-sizing: border-box;
-    width: var(--header-wordmark-w, min(600px, 48vw));
+    width: var(--header-wordmark-w, min(300px, 24vw));
     max-width: 100%;
     height: var(--header-wordmark-h);
     color: var(--text-primary);
@@ -541,9 +548,9 @@ a {
   position: relative;
   display: block;
   flex-shrink: 0;
-  width: var(--header-wordmark-w, min(600px, 48vw));
-  max-width: min(600px, 48vw);
-  height: var(--header-wordmark-h, calc(var(--header-wordmark-w, 600px) * 234 / 618));
+  width: var(--header-wordmark-w, min(300px, 24vw));
+  max-width: min(300px, 24vw);
+  height: var(--header-wordmark-h, calc(var(--header-wordmark-w, 300px) * 234 / 618));
   -webkit-mask-image: url(/ftv-wordmark-black.png);
   mask-image: url(/ftv-wordmark-black.png);
   -webkit-mask-size: contain;
@@ -1251,7 +1258,7 @@ a {
   }
 
   .site-header--article .header-row-1 {
-    --header-wordmark-w: min(540px, 88vw);
+    --header-wordmark-w: min(270px, 44vw);
     --header-wordmark-h: calc(var(--header-wordmark-w) * 234 / 618);
     --header-wordmark-offset-y: 4px;
     --logo-mark-center-y: calc(
