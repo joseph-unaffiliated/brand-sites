@@ -113,12 +113,24 @@ export default function Header() {
       <div className="header-drawer-backdrop" onClick={closeMenu} aria-hidden />
       <div className="header-drawer-panel">
         <nav className="header-drawer-nav" aria-label="Mobile menu">
-          <Link href="/recipes" onClick={closeMenu}>
-            Recipes
-          </Link>
-          <Link href="/favorites" onClick={closeMenu}>
-            Favorites
-          </Link>
+          {isSubscribed ? (
+            <Link href="/favorites" onClick={closeMenu}>
+              Favorites
+            </Link>
+          ) : (
+            <Link href="/recipes" onClick={closeMenu}>
+              Recipes
+            </Link>
+          )}
+          {!isSubscribed ? (
+            <Link href="/favorites" onClick={closeMenu}>
+              Favorites
+            </Link>
+          ) : (
+            <Link href="/recipes" onClick={closeMenu}>
+              Recipes
+            </Link>
+          )}
           <Link href="/about" onClick={closeMenu}>
             About
           </Link>
@@ -171,7 +183,11 @@ export default function Header() {
           <span className="header-hamburger-line" aria-hidden />
         </button>
         <nav className="site-nav site-nav-left header-nav-desktop" aria-label="Main">
-          <Link href="/recipes">Recipes</Link>
+          {isSubscribed ? (
+            <Link href="/favorites">Favorites</Link>
+          ) : (
+            <Link href="/recipes">Recipes</Link>
+          )}
           {!isSubscribed ? <Link href="/favorites">Favorites</Link> : null}
           {!isSubscribed && <Link href="/about">About</Link>}
         </nav>
