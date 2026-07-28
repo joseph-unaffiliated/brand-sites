@@ -4,7 +4,18 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import RecipeCard from "@/components/RecipeCard";
 import { useSubscriber } from "@/context/SubscriberContext";
-import { getFavoriteSlugs, onFavoritesChange, promptSubscribeToFavorite } from "@/lib/favorites";
+import {
+  getFavoriteSlugs,
+  mergeFavoritesFromServer,
+  onFavoritesChange,
+  promptSubscribeToFavorite,
+} from "@/lib/favorites";
+import {
+  fetchReaderProfileForSite,
+  getReaderToken,
+  isReaderProfileV2Enabled,
+} from "@/lib/reader-profile";
+import { siteConfig } from "@/config/site";
 import styles from "../recipes/page.module.css";
 
 export default function FavoritesList({ recipes }) {
@@ -16,9 +27,34 @@ export default function FavoritesList({ recipes }) {
       setSlugs([]);
       return;
     }
-    const sync = () => setSlugs(getFavoriteSlugs());
-    sync();
-    return onFavoritesChange(sync);
+
+    setSlugs(getFavoriteSlugs());
+
+    let cancelled = false;
+    const hydrate = async () => {
+      if (!isReaderProfileV2Enabled()) return;
+      const token = getReaderToken();
+      if (!token) return;
+      try {
+        const profile = await fetchReaderProfileForSite(token);
+        const serverSlugs = profile?.favorites?.[siteConfig.brandId];
+        if (!cancelled && Array.isArray(serverSlugs) && serverSlugs.length) {
+          mergeFavoritesFromServer(serverSlugs);
+        }
+      } catch {
+        /* keep local list */
+      }
+    };
+    hydrate();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [isSubscribed]);
+
+  useEffect(() => {
+    if (!isSubscribed) return;
+    return onFavoritesChange(() => setSlugs(getFavoriteSlugs()));
   }, [isSubscribed]);
 
   // null until mounted: avoids a hydration flash of the empty state.

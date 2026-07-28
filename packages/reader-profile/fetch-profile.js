@@ -37,6 +37,7 @@ export async function fetchReaderProfile(readerToken, apiOrigin, fallbackBrandId
     return {
       subscribedBrands: fallbackBrandId ? [fallbackBrandId] : [],
       readArticles: {},
+      favorites: {},
       engagement: {},
       recommendations: [],
     };
@@ -63,6 +64,7 @@ export async function fetchReaderProfile(readerToken, apiOrigin, fallbackBrandId
   return {
     ...data,
     readArticles: {},
+    favorites: {},
     engagement: {},
     recommendations: [],
   };

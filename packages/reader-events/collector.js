@@ -4,7 +4,11 @@
 
 import { getReaderToken } from "@publication-websites/magic-client";
 import { hasAnalyticsConsent } from "./consent.js";
-import { isReaderEventsEnabled, isSessionOnlyEventType } from "./constants.js";
+import {
+  isPreferenceEventType,
+  isReaderEventsEnabled,
+  isSessionOnlyEventType,
+} from "./constants.js";
 
 let config = {
   brandId: "",
@@ -43,7 +47,9 @@ function getSessionId() {
 
 export function enqueueEvent(eventType, properties = {}) {
   if (!isReaderEventsEnabled()) return;
-  if (!hasAnalyticsConsent()) return;
+
+  const preference = isPreferenceEventType(eventType);
+  if (!preference && !hasAnalyticsConsent()) return;
 
   const sessionOnly = isSessionOnlyEventType(eventType);
   if (!sessionOnly && !getReaderToken()) return;
@@ -62,7 +68,7 @@ export function enqueueEvent(eventType, properties = {}) {
     properties: Object.keys(restProps).length ? restProps : null,
   });
 
-  if (queue.length >= MAX_QUEUE) {
+  if (preference || queue.length >= MAX_QUEUE) {
     flush(false);
     return;
   }

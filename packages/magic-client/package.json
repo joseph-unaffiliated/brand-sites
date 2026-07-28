@@ -7,7 +7,9 @@
   "exports": {
     ".": "./index.js",
     "./article-magic-link": "./ArticleMagicLinkLanding.jsx",
+    "./article-magic-link-toast.css": "./article-magic-link-toast.css",
     "./email-click-session": "./EmailClickSession.jsx",
+    "./email-url": "./email-url.js",
     "./subscriber-session-bootstrap": "./SubscriberSessionBootstrap.jsx"
   },
   "peerDependencies": {

@@ -112,6 +112,10 @@ NEXT_PUBLIC_ADS_MODE=cross_promo
 
 # --- Subscribe bot protection (⏭️ OPTIONAL) ---
 NEXT_PUBLIC_TURNSTILE_SITE_KEY=
+
+# --- Reader profile / favorites sync (⏭️ OPTIONAL until reader-platform is live) ---
+# NEXT_PUBLIC_READER_EVENTS_ENABLED=true
+# NEXT_PUBLIC_READER_PROFILE_V2=true
 ```
 
 ### Values you must update (checklist)

@@ -12,10 +12,13 @@ export const EVENT_TYPES = [
   "ad_click",
   "profile_view",
   "subscription_manage",
+  "favorite_add",
+  "favorite_remove",
 ];
 
 export const SCROLL_MILESTONES = [25, 50, 75, 100];
 export const MAX_READ_SLUGS_PER_BRAND = 200;
+export const MAX_FAVORITE_SLUGS_PER_BRAND = 500;
 
 export function isReaderEventsEnabled() {
   return process.env.NEXT_PUBLIC_READER_EVENTS_ENABLED === "true";
@@ -29,4 +32,11 @@ export const SESSION_ONLY_EVENT_TYPES = new Set([
 
 export function isSessionOnlyEventType(eventType) {
   return SESSION_ONLY_EVENT_TYPES.has(eventType);
+}
+
+/** Preference actions: need readerToken, skip analytics consent gate. */
+export const PREFERENCE_EVENT_TYPES = new Set(["favorite_add", "favorite_remove"]);
+
+export function isPreferenceEventType(eventType) {
+  return PREFERENCE_EVENT_TYPES.has(eventType);
 }

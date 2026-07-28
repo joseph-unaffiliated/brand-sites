@@ -1,10 +1,14 @@
 /**
- * Favorited recipes, stored client-side per brand (mirrors the read-history
- * pattern in SubscribedArticleView). Saving requires an active subscription;
- * non-subscribers get the subscribe banner instead.
+ * Favorited recipes — localStorage for instant UX, synced to reader profile
+ * via favorite_add / favorite_remove (same pipeline as reading history).
+ * Saving requires an active subscription; non-subscribers get the subscribe banner.
  */
 
 import { BRAND } from "@/config/site";
+import {
+  trackFavoriteAdd,
+  trackFavoriteRemove,
+} from "@publication-websites/reader-events";
 
 const FAVORITES_KEY = `favorite_recipes_${BRAND}`;
 const PENDING_FAVORITE_KEY = `pending_favorite_${BRAND}`;
@@ -38,29 +42,63 @@ function writeFavorites(slugs) {
   window.dispatchEvent(new CustomEvent(FAVORITES_EVENT));
 }
 
+function syncFavoriteToServer(slug, added) {
+  if (!slug) return;
+  if (added) trackFavoriteAdd(slug);
+  else trackFavoriteRemove(slug);
+}
+
 /** @returns {boolean} the new favorite state for the slug */
 export function toggleFavorite(slug) {
   if (typeof window === "undefined" || !slug) return false;
   const current = getFavoriteSlugs();
   if (current.includes(slug)) {
     writeFavorites(current.filter((s) => s !== slug));
+    syncFavoriteToServer(slug, false);
     return false;
   }
   writeFavorites([...current, slug]);
+  syncFavoriteToServer(slug, true);
   return true;
 }
 
-/** Add without toggling off. No-op if already favorited. */
+/** Add without toggling off. Always attempts a server sync (idempotent). */
 export function addFavorite(slug) {
   if (typeof window === "undefined" || !slug) return;
   const current = getFavoriteSlugs();
-  if (current.includes(slug)) return;
+  if (current.includes(slug)) {
+    syncFavoriteToServer(slug, true);
+    return;
+  }
   writeFavorites([...current, slug]);
+  syncFavoriteToServer(slug, true);
 }
 
 export function clearFavorites() {
   if (typeof window === "undefined") return;
+  const current = getFavoriteSlugs();
   writeFavorites([]);
+  for (const slug of current) {
+    syncFavoriteToServer(slug, false);
+  }
+}
+
+/**
+ * Union server favorites into localStorage (keeps unsynced local adds).
+ * @param {string[]} serverSlugs
+ */
+export function mergeFavoritesFromServer(serverSlugs) {
+  if (typeof window === "undefined") return;
+  if (!Array.isArray(serverSlugs) || !serverSlugs.length) return;
+  const local = getFavoriteSlugs();
+  const merged = [...local];
+  for (const slug of serverSlugs) {
+    if (typeof slug === "string" && slug && !merged.includes(slug)) {
+      merged.push(slug);
+    }
+  }
+  if (merged.length === local.length) return;
+  writeFavorites(merged);
 }
 
 /** Remember a recipe to favorite after the subscribe flow completes. */

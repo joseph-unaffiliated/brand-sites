@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getRecipes } from "@/lib/recipes";
 import FavoritesList from "./FavoritesList";
+import FavoriteFromEmail from "@/components/FavoriteFromEmail";
 import { siteDisplayName } from "@/config/site";
 import styles from "../recipes/page.module.css";
 
@@ -16,6 +17,7 @@ export default async function FavoritesPage() {
 
   return (
     <div className={styles.page}>
+      <FavoriteFromEmail />
       <div className="container">
         <header className={styles.header}>
           <div>

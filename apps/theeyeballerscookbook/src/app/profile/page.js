@@ -21,7 +21,7 @@ import {
   discoverMoreSubscribeIds,
   discoverMorePreSubscribeIds,
 } from "@/data/networkNewsletters";
-import { getFavoriteSlugs, onFavoritesChange } from "@/lib/favorites";
+import { getFavoriteSlugs, mergeFavoritesFromServer, onFavoritesChange } from "@/lib/favorites";
 import styles from "./page.module.css";
 
 const READ_ARTICLES_KEY = `read_articles_${BRAND}`;
@@ -107,6 +107,10 @@ export default function ProfilePage() {
       .then((data) => {
         setSubscribedBrands(data.subscribedBrands?.length ? data.subscribedBrands : [siteConfig.brandId]);
         setReadArticles(data.readArticles ?? {});
+        const serverFavorites = data.favorites?.[siteConfig.brandId];
+        if (Array.isArray(serverFavorites) && serverFavorites.length) {
+          mergeFavoritesFromServer(serverFavorites);
+        }
       })
       .catch(() => fallbackLocal())
       .finally(() => setLoading(false));
