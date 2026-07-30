@@ -5,6 +5,7 @@ import {
   getArticleBySlug,
   getArticleSlugs,
   getArticles,
+  bodyExcerptFromArticle,
   dedupeSubtitleInContentBlocks,
 } from "@/lib/articles";
 import { authorBylineText } from "@/lib/article-helpers";
@@ -334,7 +335,9 @@ export default async function ArticlePage({ params }) {
             <section className={styles.readMore} aria-label="Keep reading">
               <h2 className={styles.readMoreTitle}>Keep reading</h2>
               <div className={styles.readMoreGrid}>
-                {readMore.map((rec) => (
+                {readMore.map((rec) => {
+                  const excerpt = bodyExcerptFromArticle(rec, 2);
+                  return (
                   <Link
                     key={rec._id ?? rec.slug}
                     href={`/article/${rec.slug}`}
@@ -356,8 +359,12 @@ export default async function ArticlePage({ params }) {
                     {rec.summary && (
                       <p className={styles.readMoreDek}>{rec.summary}</p>
                     )}
+                    {excerpt && (
+                      <p className={styles.readMoreExcerpt}>{excerpt}</p>
+                    )}
                   </Link>
-                ))}
+                  );
+                })}
               </div>
             </section>
           </div>

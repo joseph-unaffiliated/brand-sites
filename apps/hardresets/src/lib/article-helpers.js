@@ -86,6 +86,16 @@ function firstWordsWithEllipsis(text, wordCount) {
   return `${words.slice(0, wordCount).join(" ")}…`;
 }
 
+function firstSentencesWithEllipsis(text, sentenceCount) {
+  const clean = (text || "").replace(/\s+/g, " ").trim();
+  if (!clean) return "";
+  const matches = clean.match(/[^.!?]+[.!?](?:["'”’)]*)(?=\s|$)|[^.!?]+$/g);
+  if (!matches) return clean;
+  const sentences = matches.map((s) => s.trim()).filter(Boolean);
+  if (sentences.length <= sentenceCount) return clean;
+  return `${sentences.slice(0, sentenceCount).join(" ")}…`;
+}
+
 function plainTextFromPortableTextBlocks(blocks) {
   if (!Array.isArray(blocks)) return "";
   return blocks
@@ -96,8 +106,8 @@ function plainTextFromPortableTextBlocks(blocks) {
     .trim();
 }
 
-/** Plain text from the start of the article body (contentBlocks / entries). */
-export function bodyPreviewFromArticle(article, wordCount = 40) {
+/** Full plain text from article body (contentBlocks / entries), no truncation. */
+function plainBodyTextFromArticle(article) {
   const sections = Array.isArray(article?.contentBlocks) ? article.contentBlocks : [];
   const fromBlocks = sections
     .map((section) => plainTextFromPortableTextBlocks(section?.body))
@@ -105,18 +115,50 @@ export function bodyPreviewFromArticle(article, wordCount = 40) {
     .join(" ")
     .replace(/\s+/g, " ")
     .trim();
-  if (fromBlocks) return firstWordsWithEllipsis(fromBlocks, wordCount);
+  if (fromBlocks) return fromBlocks;
 
   const entries = Array.isArray(article?.entries) ? article.entries : [];
-  const fromEntries = entries
+  return entries
     .map((entry) => plainTextFromPortableTextBlocks(entry?.body))
     .filter(Boolean)
     .join(" ")
     .replace(/\s+/g, " ")
     .trim();
-  if (fromEntries) return firstWordsWithEllipsis(fromEntries, wordCount);
+}
 
-  return "";
+/**
+ * Drop hero fields that often repeat at the start of imported body copy
+ * so card excerpts don’t echo the title/dek.
+ */
+function bodyTextWithoutHeroDupes(article, plain) {
+  if (!plain) return "";
+  const { demographic, description } = getDemographicAndDescription(article);
+  let text = plain;
+  for (const prefix of [
+    article?.title,
+    article?.subtitle,
+    demographic,
+    article?.summary,
+    description,
+  ]) {
+    text = stripLeadingDuplicate(text, prefix);
+  }
+  return (text || "").replace(/\s+/g, " ").trim();
+}
+
+/** Plain text from the start of the article body (contentBlocks / entries). */
+export function bodyPreviewFromArticle(article, wordCount = 40) {
+  const plain = bodyTextWithoutHeroDupes(article, plainBodyTextFromArticle(article));
+  return plain ? firstWordsWithEllipsis(plain, wordCount) : "";
+}
+
+/**
+ * Opening sentences from the article body for “Keep reading” / related cards.
+ * Strips leading title/subtitle/summary so the excerpt doesn’t repeat the dek.
+ */
+export function bodyExcerptFromArticle(article, sentenceCount = 2) {
+  const plain = bodyTextWithoutHeroDupes(article, plainBodyTextFromArticle(article));
+  return plain ? firstSentencesWithEllipsis(plain, sentenceCount) : "";
 }
 
 /**
