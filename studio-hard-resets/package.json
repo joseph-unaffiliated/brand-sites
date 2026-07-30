@@ -7,6 +7,7 @@
   "scripts": {
     "build": "sanity build",
     "import-arrangedmarriage": "node scripts/import-arrangedmarriage.mjs",
+    "import-catalog-issues": "node scripts/import-catalog-issues.mjs",
     "deploy": "sanity deploy",
     "deploy-graphql": "sanity graphql deploy",
     "dev": "sanity dev",
