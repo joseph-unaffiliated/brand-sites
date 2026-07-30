@@ -5,12 +5,10 @@ const PLACEHOLDER_RETENTION = "YOUR_RETENTION_ID_HERE";
 const PLACEHOLDER_RETENTION_LEGACY = "YOUR_RB2B_ID_HERE";
 
 /**
- * Hard Resets OneTrust domain script — MUST be set per-brand via
- * NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT on Vercel once the OneTrust domain is
- * provisioned for hardresets.com. Until then this falls back to the network
- * default (same UUID used by Pickle / From the Vault).
+ * Hard Resets OneTrust domain script. Prefer NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT
+ * on Vercel; this default matches the provisioned hardresets.com domain.
  */
-const DEFAULT_ONETRUST_DOMAIN_SCRIPT = "019a7160-715f-710a-9141-d7af1513ef88";
+const DEFAULT_ONETRUST_DOMAIN_SCRIPT = "019a7160-3984-781b-95d0-f07cf83e7e37";
 /** Network-wide Retention site id. */
 const DEFAULT_RETENTION_SITE_ID = "X2JHJ4WE";
 

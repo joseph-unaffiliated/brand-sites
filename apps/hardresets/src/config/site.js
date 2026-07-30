@@ -55,7 +55,7 @@ export const siteConfig = {
   magicReaderApiOrigin: process.env.NEXT_PUBLIC_MAGIC_READER_API_ORIGIN || defaultMagicOrigin(),
   magicSubscribeBase:
     process.env.NEXT_PUBLIC_MAGIC_SUBSCRIBE_BASE || defaultMagicSubscribeBase(),
-  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || "https://hardresets.com",
+  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || "https://www.hardresets.com",
   typekitKitId: process.env.NEXT_PUBLIC_TYPEKIT_KIT_ID || "xon1hcs",
 };
 

@@ -27,6 +27,7 @@ export default function AdSlot({
           className={className}
           creatives={creatives}
           promoUrl={promoUrl}
+          creativeBrand={brand}
         />
       );
     }
