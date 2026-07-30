@@ -3,6 +3,7 @@ import Link from "next/link";
 import {
   getArticles,
   getDemographicAndDescription,
+  previewTextFromArticle,
 } from "@/lib/articles";
 import SubscribeBlock from "@/components/SubscribeBlock";
 import HideWhenSubscribed from "@/components/HideWhenSubscribed";
@@ -160,14 +161,15 @@ export default async function Home({ searchParams: searchParamsProp }) {
                     )}
                     <h3 className={styles.mosaicCardHeadline}>{article.title}</h3>
                     {(() => {
-                      const { demographic, description } = getDemographicAndDescription(article);
+                      const { demographic } = getDemographicAndDescription(article);
+                      const preview = previewTextFromArticle(article, 45);
                       return (
                         <>
                           {demographic && (
                             <p className={styles.mosaicCardDemographic}>{demographic}</p>
                           )}
-                          {description && (
-                            <p className={styles.mosaicCardDek}>{description}</p>
+                          {preview && (
+                            <p className={styles.mosaicCardDek}>{preview}</p>
                           )}
                         </>
                       );

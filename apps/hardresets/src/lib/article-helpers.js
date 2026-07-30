@@ -78,6 +78,56 @@ export function getDemographicAndDescription(article) {
   return { demographic: subtitle, description: "" };
 }
 
+function firstWordsWithEllipsis(text, wordCount) {
+  const clean = (text || "").replace(/\s+/g, " ").trim();
+  if (!clean) return "";
+  const words = clean.split(" ");
+  if (words.length <= wordCount) return clean;
+  return `${words.slice(0, wordCount).join(" ")}…`;
+}
+
+function plainTextFromPortableTextBlocks(blocks) {
+  if (!Array.isArray(blocks)) return "";
+  return blocks
+    .filter((block) => block?._type === "block")
+    .map((block) => (block.children || []).map((child) => child?.text || "").join(""))
+    .join(" ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+/** Plain text from the start of the article body (contentBlocks / entries). */
+export function bodyPreviewFromArticle(article, wordCount = 40) {
+  const sections = Array.isArray(article?.contentBlocks) ? article.contentBlocks : [];
+  const fromBlocks = sections
+    .map((section) => plainTextFromPortableTextBlocks(section?.body))
+    .filter(Boolean)
+    .join(" ")
+    .replace(/\s+/g, " ")
+    .trim();
+  if (fromBlocks) return firstWordsWithEllipsis(fromBlocks, wordCount);
+
+  const entries = Array.isArray(article?.entries) ? article.entries : [];
+  const fromEntries = entries
+    .map((entry) => plainTextFromPortableTextBlocks(entry?.body))
+    .filter(Boolean)
+    .join(" ")
+    .replace(/\s+/g, " ")
+    .trim();
+  if (fromEntries) return firstWordsWithEllipsis(fromEntries, wordCount);
+
+  return "";
+}
+
+/**
+ * Card/snippet dek: prefer summary description, else first lines of the article body.
+ */
+export function previewTextFromArticle(article, wordCount = 40) {
+  const { description } = getDemographicAndDescription(article);
+  if (description?.trim()) return firstWordsWithEllipsis(description.trim(), wordCount);
+  return bodyPreviewFromArticle(article, wordCount);
+}
+
 function portableTextBlockToPlainText(block) {
   if (!block || block._type !== "block") return "";
   return (block.children || []).map((c) => c?.text || "").join("");

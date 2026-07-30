@@ -2,6 +2,7 @@ import { createSanityLayer, createArticleQueries } from "@publication-websites/s
 import {
   ensureDescriptionOnly,
   getDemographicAndDescription,
+  previewTextFromArticle,
   stripLeadingDuplicate,
   dedupeSubtitleInContentBlocks,
 } from "./article-helpers.js";
@@ -19,6 +20,7 @@ const queries = createArticleQueries({
 export {
   ensureDescriptionOnly,
   getDemographicAndDescription,
+  previewTextFromArticle,
   stripLeadingDuplicate,
   dedupeSubtitleInContentBlocks,
 };
