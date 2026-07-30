@@ -9,20 +9,23 @@ import { siteDisplayName, siteKickerLower } from "@/config/site";
 import { getArticles } from "@/lib/articles";
 import { pickRandomArticles } from "@/lib/pickRandomArticles";
 
+const ABOUT_DESCRIPTION =
+  `About ${siteDisplayName} — a weekly email series that tells one person's blow-up-your-life story at a time.`;
+
 export const metadata = {
   title: `About | ${siteDisplayName}`,
-  description: `About ${siteDisplayName} — a weekly email series for Millennial parents that holds modern parenting up against the way we grew up.`,
+  description: ABOUT_DESCRIPTION,
   alternates: { canonical: "/about" },
   openGraph: {
     title: `About | ${siteDisplayName}`,
-    description: `About ${siteDisplayName} — a weekly email series for Millennial parents that holds modern parenting up against the way we grew up.`,
+    description: ABOUT_DESCRIPTION,
     url: "/about",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: `About | ${siteDisplayName}`,
-    description: `About ${siteDisplayName} — a weekly email series for Millennial parents that holds modern parenting up against the way we grew up.`,
+    description: ABOUT_DESCRIPTION,
   },
 };
 
@@ -42,20 +45,14 @@ export default async function AboutPage() {
                 About {siteDisplayName}
               </h1>
               <p>
-                {siteDisplayName} is a weekly email series that unpacks one
-                modern parenting topic at a time and holds it next to the way we
-                grew up—honest, funny, a little nostalgic, and never pretending
-                there&apos;s one right answer. We&apos;re not here to
-                romanticize the past as if we&apos;d replay every detail exactly
-                as it was; we&apos;re here because the questions are real, and
-                the craving for a foregone time is complicated.
+                {siteDisplayName} is a weekly email series that tells one
+                person&apos;s blow-up-your-life-and-leave-it-in-shambles story at
+                a time. We take the reader on a full journey from the status quo,
+                the moment it collapsed, and how people picked up the pieces.
               </p>
               <p>
-                Each edition is <strong>one full issue you can finish</strong>—a
-                readable break from the infinite scroll, the push notification
-                guilt trip, and the performative &ldquo;perfect parent&rdquo;
-                feed. Humor, honesty, and a dial-up state of mind in a broadband
-                world, delivered to your inbox.
+                Each edition delivers the hard, the heartfelt, and the hilarious,
+                directly to your inbox.
               </p>
               <figure className={aboutStyles.rotaryFigure}>
                 <Image
@@ -70,42 +67,32 @@ export default async function AboutPage() {
 
               <h2>What we publish</h2>
               <p>
-                We write about what it feels like to parent in 2026 while part
-                of you aches for the nostalgia of a bygone era—not because you
-                literally want everything back as it was, but because
-                you&apos;re trying to sort signal from noise. No manifestos.
-                Just exploring how other people are grappling with the same
-                tensions you are.
+                We share stories of all kinds. Ever wondered what it&apos;s like
+                to quit a six-figure corporate job to become a children&apos;s
+                party clown? You can find out here. Are you curious about what
+                happens after people find the courage to leave their country
+                after a catastrophe, or how people rebuild a new life without a
+                longtime partner? We cover it all and more.
               </p>
               <p>
-                Topics might include gentle parenting; picky eaters;
-                over-the-top birthday parties; screen time; expensive
-                babysitters—and the question underneath: have things really
-                gotten better since we were kids? Worse? Maybe they&apos;re
-                just… different?
-              </p>
-              <p>
-                We&apos;re not here to romanticize riding in the trunk of a
-                station wagon (okay, maybe a little); we&apos;re here to ask
-                what&apos;s worth borrowing from yesterday and what&apos;s
-                better left behind.
+                Each edition is one full issue that will leave you with new ideas
+                about how we evolve when life pulls the rug out from under us.
               </p>
 
               <h2>How it works</h2>
               <p>
-                Subscribe once, and a new issue arrives in your inbox each
-                week—one focused read you can actually finish. Browsing past
-                articles in the archive is free anytime. Snooze and unsubscribe
-                stay a click away in your mail when you need them.
+                Subscribe once, and a new issue arrives in your inbox each week —
+                one focused read you can actually finish. Browsing past articles
+                in the archive is free anytime. Snooze and unsubscribe stay a
+                click away in your mail if you need them.
               </p>
 
               <h2>Who it&apos;s for</h2>
               <p>
-                Toddlers, tweens, teens, or a household that feels like a
-                conference call between generations—if you catch yourself
-                comparing how you&apos;re raising kids to how you were raised,
-                and you don&apos;t always know which side of that comparison you
-                believe, you&apos;re in the right place.
+                Anyone interested in genuine, relatable stories of people
+                completely starting over and finding themselves transformed. If
+                you catch yourself wondering what it&apos;s like to take a chance
+                or make a major change, you&apos;re in the right place.
               </p>
 
               <h2>Get in touch</h2>

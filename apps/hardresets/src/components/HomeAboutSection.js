@@ -15,22 +15,14 @@ export default function HomeAboutSection({ totalCount = 0 }) {
           <div className={styles.subscribeCopy}>
             <h2 className={styles.subscribeHeadline}>More about {siteDisplayName}</h2>
             <p className={styles.lede}>
-              <em>{siteDisplayName}</em> is for anyone raising kids while still humming theme songs
-              from 1994. Each article mixes humor, honesty, and the occasional rant about snacks,
-              screens, and sleep.
-              {totalCount > 0 && (
-                <>
-                  {" "}
-                  We&apos;ve published{" "}
-                  <strong>
-                    {totalCount} {totalCount === 1 ? "article" : "articles"}
-                  </strong>{" "}
-                  so far
-                  {isSubscribed
-                    ? " — with a new one in your inbox every week."
-                    : " — with a new one in your inbox every week when you subscribe."}
-                </>
-              )}
+              {siteDisplayName} is for anyone hungry for stories about blowing up
+              your life and coming out the other side changed. From moving across
+              the country for a date to quitting your job to rebuilding after
+              divorce to stealing from your company and going to jail, we tell
+              messy, beautiful stories about people starting over.{" "}
+              {isSubscribed
+                ? "A new story lands in your inbox every week."
+                : "A new story lands in your inbox every week when you subscribe."}
             </p>
           </div>
           <div className={styles.secondaryLinks}>
