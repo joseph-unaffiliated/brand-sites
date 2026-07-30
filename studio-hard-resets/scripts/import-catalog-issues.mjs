@@ -242,6 +242,13 @@ function decodeEntities(s) {
     .replace(/&#39;|&apos;/gi, "'")
     .replace(/&lt;/gi, '<')
     .replace(/&gt;/gi, '>')
+    .replace(/&rsquo;|&apos;/gi, '\u2019')
+    .replace(/&lsquo;/gi, '\u2018')
+    .replace(/&rdquo;/gi, '\u201D')
+    .replace(/&ldquo;/gi, '\u201C')
+    .replace(/&mdash;/gi, '\u2014')
+    .replace(/&ndash;/gi, '\u2013')
+    .replace(/&hellip;/gi, '\u2026')
     .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)))
     .replace(/&#x([0-9a-f]+);/gi, (_, h) => String.fromCharCode(parseInt(h, 16)))
 }
