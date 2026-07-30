@@ -114,7 +114,7 @@ GCP_SERVICE_ACCOUNT_KEY=
 
 | Step | Status (2026-07-30) |
 |------|---------------------|
-| Attach `hardresets.com` (+ `www`) on marketing Vercel project `hardresets` (`prj_boKP42mkO2IvXaNls33ZNBodDSrM`) | ✅ Done — both verified; `www` redirects to apex. DNS already resolving via Cloudflare → Vercel (`https://hardresets.com` 200). |
+| Attach `hardresets.com` (+ `www`) on marketing Vercel project `hardresets` (`prj_boKP42mkO2IvXaNls33ZNBodDSrM`) | ✅ Done — both verified on Vercel; apex **308 → `www.hardresets.com`**. **2026-07-30 cutover:** removed Cloudflare `webflow-proxy` routes on apex/`www` (were serving Webflow `unaffiliated.co` via dummy `A 192.0.2.1`). Apex + `www` now **CNAME → `238337c3951251d0.vercel-dns-016.com`** (DNS-only, same pattern as `magic.hardresets.com`). Confirmed Next.js + `G-LNK30D79KJ`. MX/email untouched. |
 | Attach `magic.hardresets.com` on `subscription-functions` (`prj_GKhgJdr2maNLxPuOWnmUQXZQRdQO`) | ✅ Already attached + verified (pre-existing). |
 | Set `READERS_CORS_ORIGINS` to include Hard Resets origins | ✅ Apex + www were already present; appended `http://localhost:3004`. Shared magic project — do **not** replace the whole list with Hard Resets–only origins. |
 | Core marketing env from this doc (site URL, brand id, magic URLs, Sanity `0vm5rx64`, copy, Typekit, ads mode, Retention, GTM `GTM-TVHD6JMG`) | ✅ Set on Production + Preview; redeploy triggered. |
