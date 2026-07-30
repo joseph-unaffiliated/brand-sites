@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
   getArticleBySlug,
@@ -15,9 +14,10 @@ import NavLogoImageSync from "@/components/NavLogoImageSync";
 import ArticleContentBlocks from "@/components/ArticleContentBlocks";
 import AdSlot from "@/components/AdSlot";
 import ArticleStickyBottom from "@/components/ArticleStickyBottom";
+import RecommendedArticleCards from "@/components/RecommendedArticleCards";
 import JsonLd from "@/components/JsonLd";
 import { crossPromoForSlot } from "@/config/crossPromoAds";
-import { siteConfig, siteDisplayName, siteKickerLower } from "@/config/site";
+import { siteConfig, siteDisplayName } from "@/config/site";
 import styles from "./page.module.css";
 
 const SANITY_PROJECT_ID = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
@@ -329,39 +329,7 @@ export default async function ArticlePage({ params }) {
           </div>
         )}
         </div>
-        {readMore.length > 0 && (
-          <div className={styles.readMoreOuter}>
-            <section className={styles.readMore} aria-label="Keep reading">
-              <h2 className={styles.readMoreTitle}>Keep reading</h2>
-              <div className={styles.readMoreGrid}>
-                {readMore.map((rec) => (
-                  <Link
-                    key={rec._id ?? rec.slug}
-                    href={`/article/${rec.slug}`}
-                    className={styles.readMoreCard}
-                  >
-                    <div className={styles.readMoreThumb}>
-                      <Image
-                        src={rec.mainImage}
-                        alt={rec.title}
-                        width={280}
-                        height={187}
-                        sizes="(max-width: 640px) 100vw, 280px"
-                      />
-                    </div>
-                    {rec.kicker && rec.kicker.trim().toLowerCase() !== siteKickerLower && (
-                      <p className={styles.readMoreKicker}>{rec.kicker}</p>
-                    )}
-                    <h3 className={styles.readMoreHeadline}>{rec.title}</h3>
-                    {rec.summary && (
-                      <p className={styles.readMoreDek}>{rec.summary}</p>
-                    )}
-                  </Link>
-                ))}
-              </div>
-            </section>
-          </div>
-        )}
+        <RecommendedArticleCards articles={readMore} />
       </section>
       <ArticleStickyBottom />
     </div>

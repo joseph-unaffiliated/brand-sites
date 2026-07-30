@@ -1,5 +1,6 @@
 import { createSanityLayer, createArticleQueries } from "@publication-websites/sanity-content";
 import {
+  bodyExcerptFromArticle,
   ensureDescriptionOnly,
   getDemographicAndDescription,
   previewTextFromArticle,
@@ -18,6 +19,7 @@ const queries = createArticleQueries({
 });
 
 export {
+  bodyExcerptFromArticle,
   ensureDescriptionOnly,
   getDemographicAndDescription,
   previewTextFromArticle,

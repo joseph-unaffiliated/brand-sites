@@ -1,6 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
-import { getArticles, ensureDescriptionOnly } from "@/lib/articles";
+import {
+  getArticles,
+  ensureDescriptionOnly,
+  bodyExcerptFromArticle,
+} from "@/lib/articles";
 import HideWhenSubscribed from "@/components/HideWhenSubscribed";
 import { siteDisplayName } from "@/config/site";
 import styles from "./page.module.css";
@@ -53,56 +57,62 @@ export default async function ArchivePage() {
         </header>
 
         <div className={styles.issueMosaic}>
-          {articles.map((article) => (
-            <article className={styles.issueCard} key={article._id ?? article.slug}>
-              <Link href={`/article/${article.slug}`} className={styles.issueCardLink}>
-                <div className={styles.issueCardImage}>
-                  <Image
-                    src={article.mainImage}
-                    alt={article.title}
-                    width={400}
-                    height={267}
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  />
-                </div>
-                <div className={styles.issueCardBody}>
-                  <p className={styles.issueDate}>
-                    {article.publishedDate
-                      ? new Date(article.publishedDate).toLocaleDateString("en-US", {
-                          month: "short",
-                          day: "numeric",
-                          year: "numeric",
-                        })
-                      : "—"}
-                  </p>
-                  <h3>{article.title}</h3>
-                  <p className={styles.issueDek}>
-                    {ensureDescriptionOnly(article.summary || article.subtitle) ||
-                      article.summary ||
-                      article.subtitle}
-                  </p>
-                  <span className={styles.issueCta}>
-                    <span>Read issue</span>
-                    <span className={styles.issueCtaArrow} aria-hidden>
-                      <svg
-                        width="7"
-                        height="6"
-                        viewBox="0 0 7 6"
-                        fill="none"
-                        role="presentation"
-                        focusable="false"
-                      >
-                        <path
-                          d="M0 2.91722H6.01145M6.01145 2.91722L3.44774 0.353516M6.01145 2.91722L3.44774 5.48093"
-                          stroke="currentColor"
-                        />
-                      </svg>
+          {articles.map((article) => {
+            const dek =
+              ensureDescriptionOnly(article.summary || article.subtitle) ||
+              article.summary ||
+              article.subtitle;
+            const excerpt = bodyExcerptFromArticle(article, 2);
+            return (
+              <article className={styles.issueCard} key={article._id ?? article.slug}>
+                <Link href={`/article/${article.slug}`} className={styles.issueCardLink}>
+                  <div className={styles.issueCardImage}>
+                    <Image
+                      src={article.mainImage}
+                      alt={article.title}
+                      width={400}
+                      height={267}
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    />
+                  </div>
+                  <div className={styles.issueCardBody}>
+                    <p className={styles.issueDate}>
+                      {article.publishedDate
+                        ? new Date(article.publishedDate).toLocaleDateString("en-US", {
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric",
+                          })
+                        : "—"}
+                    </p>
+                    <h3>{article.title}</h3>
+                    {dek ? <p className={styles.issueDek}>{dek}</p> : null}
+                    {excerpt ? (
+                      <p className={styles.issueExcerpt}>{excerpt}</p>
+                    ) : null}
+                    <span className={styles.issueCta}>
+                      <span>Read issue</span>
+                      <span className={styles.issueCtaArrow} aria-hidden>
+                        <svg
+                          width="7"
+                          height="6"
+                          viewBox="0 0 7 6"
+                          fill="none"
+                          role="presentation"
+                          focusable="false"
+                        >
+                          <path
+                            d="M0 2.91722H6.01145M6.01145 2.91722L3.44774 0.353516M6.01145 2.91722L3.44774 5.48093"
+                            stroke="currentColor"
+                          />
+                        </svg>
+                      </span>
                     </span>
-                  </span>
-                </div>
-              </Link>
-            </article>
-          ))}
+                  </div>
+                </Link>
+              </article>
+            );
+          })}
           <HideWhenSubscribed>
             <article className={styles.issueCard}>
               <div className={styles.issueCardPlaceholder}>
