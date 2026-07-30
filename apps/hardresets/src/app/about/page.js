@@ -54,13 +54,13 @@ export default async function AboutPage() {
                 Each edition delivers the hard, the heartfelt, and the hilarious,
                 directly to your inbox.
               </p>
-              <figure className={aboutStyles.rotaryFigure}>
+              <figure className={aboutStyles.aboutFigure}>
                 <Image
-                  src="/images/about/rotary-phone.png"
-                  alt="Rotary phone on a side table, nostalgic 1990s home setting"
+                  src="/hr-photo.png"
+                  alt="Hard Resets"
                   width={960}
                   height={640}
-                  className={aboutStyles.rotaryImage}
+                  className={aboutStyles.aboutFigureImage}
                   sizes="(min-width: 900px) 480px, 100vw"
                 />
               </figure>
@@ -103,11 +103,11 @@ export default async function AboutPage() {
 
             <aside
               className={aboutStyles.aboutPhoneAside}
-              aria-label="Newsletter in your inbox"
+              aria-label="Hard Resets brand"
             >
               <Image
-                src="/images/about/email-phone-mockup.png"
-                alt="Example of a published issue in an email, shown on a phone"
+                src="/hr-phone.png"
+                alt="Hard Resets"
                 width={800}
                 height={1600}
                 className={aboutStyles.aboutPhoneImage}

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { copyEmailToClipboard, notifyEmailCopiedToClipboard } from "@publication-websites/web-shell/contact-copy";
 
-const ADVERTISE_EMAIL = "advertise@the90sparent.com";
+const ADVERTISE_EMAIL = "advertise@hardresets.com";
 
 export default function AdvertiseCopyLink({ children = "Advertise with Us", onClick, ...props }) {
   const handleClick = async (event) => {

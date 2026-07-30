@@ -63,6 +63,7 @@ https://hookuplists.com,https://www.hookuplists.com,https://thepicklereport.com,
 |----------------------|----------------------------------------|
 | `magic.hookuplists.com` | `https://hookuplists.com`, optional `www`, optional `http://localhost:3000` |
 | `magic.thepicklereport.com` | **Pickle only:** `https://thepicklereport.com`, optional `www`, optional `http://localhost:3001` — do not point Pickle marketing at `magic.hookuplists.com` |
+| `magic.hardresets.com` | **Hard Resets only:** `https://hardresets.com`, optional `www`, optional `http://localhost:3004` — see [`HARDRESETS_VERCEL_ENV.md`](./HARDRESETS_VERCEL_ENV.md) |
 
 Pickle copy/paste env: [`THEPICKLEREPORT_VERCEL_ENV.md`](./THEPICKLEREPORT_VERCEL_ENV.md).
 

@@ -50,3 +50,7 @@ A fuller **magic-link sign-in for existing subscribers**, **Customer.io** transa
 | `magic-client` | `/execute` fetch + token storage |
 | `sanity-content` | GROQ + article/recipe/slang/vault mapping (`createArticleQueries`, `createRecipeQueries`, `createSlangEntryQueries`, `createVaultIssueQueries`) |
 | `web-shell` | AdSense / Meta Script wrappers |
+
+## Publications in this repo
+
+Marketing apps under `apps/` include Hookup Lists, The Pickle Report, The Kiss and Tell, The ’90s Parent, Eyeballer’s Cookbook, Hipspeak, From the Vault (Heeb), and **Hard Resets** (`apps/hardresets`, Sanity `0vm5rx64`, magic `magic.hardresets.com`). Env checklist: [`HARDRESETS_VERCEL_ENV.md`](./HARDRESETS_VERCEL_ENV.md).

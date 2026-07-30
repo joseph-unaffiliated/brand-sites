@@ -1,6 +1,6 @@
 import Link from "next/link";
 import styles from "../basic-page.module.css";
-import { contactEmail, siteDisplayName } from "@/config/site";
+import { contactEmail, siteDisplayName, siteConfig } from "@/config/site";
 
 export const metadata = {
   title: `AI Usage Policy | ${siteDisplayName}`,
@@ -19,7 +19,17 @@ export const metadata = {
   },
 };
 
+function siteHostLabel() {
+  try {
+    return new URL(siteConfig.siteUrl).hostname;
+  } catch {
+    return "hardresets.com";
+  }
+}
+
 export default function AiPolicyPage() {
+  const host = siteHostLabel();
+
   return (
     <div className={`${styles.page} ${styles.pageLegal}`}>
       <div className="container">
@@ -39,12 +49,12 @@ export default function AiPolicyPage() {
 
         <h2>What we publish</h2>
         <p>
-          We publish weekly editions about modern parenting, written for
-          Millennial parents who grew up in the {`'`}80s and {`'`}90s. Articles
-          are produced by editorial staff and contributors, with credits where
-          applicable. The publicly available articles are the canonical record
-          of our editorial work; preview pages, snippets, and email-only
-          variants are not.
+          We publish weekly profiles of people who blew up their lives and came
+          out the other side changed — endings, beginnings, and the messy middle
+          in between. Articles are produced by editorial staff and contributors,
+          with credits where applicable. The publicly available articles are the
+          canonical record of our editorial work; preview pages, snippets, and
+          email-only variants are not.
         </p>
 
         <h2>What is allowed</h2>
@@ -53,8 +63,8 @@ export default function AiPolicyPage() {
             <strong>Citing and linking:</strong> AI tools may quote short
             excerpts and answer questions about our articles when each response
             includes the canonical article URL on{" "}
-            <Link href="/">the90sparent.com</Link> and attributes the
-            publication as &quot;{siteDisplayName}.&quot;
+            <Link href="/">{host}</Link> and attributes the publication as
+            &quot;{siteDisplayName}.&quot;
           </li>
           <li>
             <strong>Indexing for retrieval:</strong> Crawlers from search and

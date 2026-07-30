@@ -8,6 +8,7 @@
  * and NEXT_PUBLIC_RETENTION_SITE_ID on Vercel if IDs change).
  *
  * Google Tag Manager: set `NEXT_PUBLIC_GTM_ID` (e.g. `GTM-XXXX`) on Vercel; see `GoogleTagManager.js`.
+ * GA4: set `NEXT_PUBLIC_GA_MEASUREMENT_ID` (e.g. `G-XXXX`) on Vercel; see `GoogleAnalytics.js`.
  * Search Console verification is separate: `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` in metadata.
  */
 
@@ -26,6 +27,7 @@ import {
   siteFooterTagline,
 } from "@/config/site";
 import { OneTrustScripts, RetentionScript } from "@/components/ComplianceScripts";
+import { GoogleAnalyticsScript } from "@/components/GoogleAnalytics";
 import { GoogleTagManagerNoscript, GoogleTagManagerScript } from "@/components/GoogleTagManager";
 import Header from "@/components/Header";
 import { getArticles } from "@/lib/articles";
@@ -124,6 +126,7 @@ export default async function RootLayout({ children }) {
     <html lang="en">
       <head>
         <GoogleTagManagerScript />
+        <GoogleAnalyticsScript />
         <OneTrustScripts />
         <TypekitStylesheet kitId={siteConfig.typekitKitId} />
         <FontAwesomeStylesheet />

@@ -50,12 +50,12 @@
     drop-shadow(12px 36px 72px rgba(2, 30, 21, 0.05));
 }
 
-.rotaryFigure {
+.aboutFigure {
   margin: 28px 0 16px;
   max-width: 100%;
 }
 
-.rotaryImage {
+.aboutFigureImage {
   width: 100%;
   height: auto;
   display: block;

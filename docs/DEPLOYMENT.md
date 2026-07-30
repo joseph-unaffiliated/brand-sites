@@ -3,7 +3,7 @@
 ## Vercel (per publication)
 
 1. **Connect** the **`brand-sites`** Git repo.
-2. **Root Directory:** `apps/hookuplists`, `apps/thepicklereport`, `apps/thekissandtell`, `apps/the90sparent`, `apps/theeyeballerscookbook`, `apps/hipspeak`, `apps/heebnewsletters`, etc. (one Vercel project per app).
+2. **Root Directory:** `apps/hookuplists`, `apps/thepicklereport`, `apps/thekissandtell`, `apps/the90sparent`, `apps/theeyeballerscookbook`, `apps/hipspeak`, `apps/heebnewsletters`, `apps/hardresets`, etc. (one Vercel project per app).
 3. **Production branch:** your default branch (`main` / `master`).
 4. **Ignored Build Step:** each app’s `vercel.json` sets `ignoreCommand` to `npx turbo-ignore --fallback=HEAD^1`, so a push only builds projects whose app (or shared `packages/*` dependencies) changed. Skipped builds leave the current production deployment untouched.
 5. **Environment variables:** see `docs/ENVIRONMENT.md` for that app.

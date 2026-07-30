@@ -4,9 +4,9 @@ Editorial CMS for **Hard Resets** (`hardresets.com`). Schema matches the master 
 
 ## First-time setup
 
-1. [sanity.io/manage](https://sanity.io/manage) → create project **Hard Resets**, dataset `production`.
-2. Replace `YOUR_SANITY_PROJECT_ID` in `sanity.config.ts` and `sanity.cli.ts`.
-3. `npm install && npm run deploy` — choose hostname **`hardresets`** → `https://hardresets.sanity.studio`.
+1. [sanity.io/manage](https://sanity.io/manage) → project **Hard Resets** (`0vm5rx64`), dataset `production`.
+2. Confirm `projectId` in `sanity.config.ts` / `sanity.cli.ts` (or set `SANITY_STUDIO_PROJECT_ID`).
+3. `npm install && npm run deploy` — hostname **`hardresets`** → `https://hardresets.sanity.studio`.
 4. Enable Canvas: already set in `sanity.config.ts` (`apps.canvas.enabled: true`).
 5. In Manage → Studios → **Show in Dashboard** so Canvas lists the studio.
 
@@ -18,4 +18,6 @@ Troubleshooting: [`docs/HARDRESETS_CANVAS.md`](../docs/HARDRESETS_CANVAS.md)
 
 ## Marketing site
 
-The Next.js app (`apps/hardresets`, not yet in repo) reads this project via `NEXT_PUBLIC_SANITY_PROJECT_ID`. Deploy studio schema before importing issues.
+The Next.js app lives at **`apps/hardresets`** (Vercel root directory `apps/hardresets`). It reads this Sanity project via `NEXT_PUBLIC_SANITY_PROJECT_ID=0vm5rx64`.
+
+Env checklist: [`docs/HARDRESETS_VERCEL_ENV.md`](../docs/HARDRESETS_VERCEL_ENV.md).

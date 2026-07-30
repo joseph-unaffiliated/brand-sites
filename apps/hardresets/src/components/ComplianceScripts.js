@@ -4,8 +4,14 @@ const PLACEHOLDER_ONETRUST = "YOUR_ONETRUST_ID_HERE";
 const PLACEHOLDER_RETENTION = "YOUR_RETENTION_ID_HERE";
 const PLACEHOLDER_RETENTION_LEGACY = "YOUR_RB2B_ID_HERE";
 
-/** Defaults match prior Cloudflare Worker map for the90sparent.com; override via NEXT_PUBLIC_* on Vercel. */
-const DEFAULT_ONETRUST_DOMAIN_SCRIPT = "019a714f-7f94-7c01-ba60-1bd164378e13";
+/**
+ * Hard Resets OneTrust domain script — MUST be set per-brand via
+ * NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT on Vercel once the OneTrust domain is
+ * provisioned for hardresets.com. Until then this falls back to the network
+ * default (same UUID used by Pickle / From the Vault).
+ */
+const DEFAULT_ONETRUST_DOMAIN_SCRIPT = "019a7160-715f-710a-9141-d7af1513ef88";
+/** Network-wide Retention site id. */
 const DEFAULT_RETENTION_SITE_ID = "X2JHJ4WE";
 
 function resolveOnetrustDomainScript() {
@@ -23,10 +29,10 @@ function resolveRetentionSiteId() {
   if (!v || v === PLACEHOLDER_RETENTION || v === PLACEHOLDER_RETENTION_LEGACY) {
     return DEFAULT_RETENTION_SITE_ID;
   }
-  return v;
+  return /^[A-Za-z0-9_-]+$/.test(v) ? v : DEFAULT_RETENTION_SITE_ID;
 }
 
-/** OneTrust cookie consent — load early in <head> (matches prior Worker order). */
+/** OneTrust cookie consent — load early in <head>. */
 export function OneTrustScripts() {
   const domainScript = resolveOnetrustDomainScript();
   return (
@@ -45,7 +51,7 @@ export function OneTrustScripts() {
   );
 }
 
-/** Retention site snippet (same behavior as prior edge injection). */
+/** Retention site snippet. */
 export function RetentionScript() {
   const siteId = resolveRetentionSiteId();
   if (!/^[A-Za-z0-9_-]+$/.test(siteId)) return null;

@@ -2,8 +2,9 @@
 
 import { Suspense, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { siteConfig } from "@/config/site";
 
-const BRAND = "the90sparent";
+const BRAND = siteConfig.brandId;
 
 function DevMarkSubscribedInner() {
   const router = useRouter();

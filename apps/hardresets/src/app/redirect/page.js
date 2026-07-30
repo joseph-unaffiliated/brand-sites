@@ -76,7 +76,6 @@ function RedirectContent() {
         refresh();
 
         if (typeof gtag !== "undefined") {
-          gtag("event", "conversion", { send_to: "AW-17856709988/yAjBCImA9tObP05K38JC" });
           gtag("event", "subscription_success", {
             event_category: "engagement",
             event_label: "magic_redirect_external",

@@ -40,9 +40,9 @@
 | `NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT` | yes | Optional OneTrust domain script UUID (Pickle loads only when set). |
 | `NEXT_PUBLIC_RETENTION_SITE_ID` | yes | Optional Retention.com browser snippet site id (loads only when set). |
 
-**Pickle copy/paste:** [`THEPICKLEREPORT_VERCEL_ENV.md`](./THEPICKLEREPORT_VERCEL_ENV.md). **Eyeballer's Cookbook copy/paste:** [`THEEYEBALLERSCOOKBOOK_VERCEL_ENV.md`](./THEEYEBALLERSCOOKBOOK_VERCEL_ENV.md). **Hipspeak copy/paste:** [`HIPSPEAK_VERCEL_ENV.md`](./HIPSPEAK_VERCEL_ENV.md). **From the Vault, by Heeb copy/paste:** [`HEEBNEWSLETTERS_VERCEL_ENV.md`](./HEEBNEWSLETTERS_VERCEL_ENV.md).
+**Pickle copy/paste:** [`THEPICKLEREPORT_VERCEL_ENV.md`](./THEPICKLEREPORT_VERCEL_ENV.md). **Eyeballer's Cookbook copy/paste:** [`THEEYEBALLERSCOOKBOOK_VERCEL_ENV.md`](./THEEYEBALLERSCOOKBOOK_VERCEL_ENV.md). **Hipspeak copy/paste:** [`HIPSPEAK_VERCEL_ENV.md`](./HIPSPEAK_VERCEL_ENV.md). **From the Vault, by Heeb copy/paste:** [`HEEBNEWSLETTERS_VERCEL_ENV.md`](./HEEBNEWSLETTERS_VERCEL_ENV.md). **Hard Resets copy/paste:** [`HARDRESETS_VERCEL_ENV.md`](./HARDRESETS_VERCEL_ENV.md).
 
-**GA4 measurement IDs:** the90sparent `G-5H0RESEP13`, thepicklereport `G-ZLQN0SDVL2`, thekissandtell `G-88RGCF170R` — set each on its Vercel marketing project as `NEXT_PUBLIC_GA_MEASUREMENT_ID`.
+**GA4 measurement IDs:** the90sparent `G-5H0RESEP13`, thepicklereport `G-ZLQN0SDVL2`, thekissandtell `G-88RGCF170R` — set each on its Vercel marketing project as `NEXT_PUBLIC_GA_MEASUREMENT_ID`. Hard Resets: create a new property and set `NEXT_PUBLIC_GA_MEASUREMENT_ID` (see [`HARDRESETS_VERCEL_ENV.md`](./HARDRESETS_VERCEL_ENV.md)).
 
 **Do not** set `GCP_*` on marketing apps for reader profile; removed BigQuery route.
 

@@ -26,4 +26,7 @@ Header/footer logos live in `public/hr-*` (wordmark + H|R mark, black and white)
 ## CMS
 
 Sanity Studio: [hardresets.sanity.studio](https://hardresets.sanity.studio)  
-Canvas template: `studio-hard-resets/canvas-templates/hard-reset-issue-template.md`
+Canvas template: `studio-hard-resets/canvas-templates/hard-reset-issue-template.md`  
+Vercel env checklist: [`docs/HARDRESETS_VERCEL_ENV.md`](../../docs/HARDRESETS_VERCEL_ENV.md)
+
+**Note:** The Sanity schema under `apps/hardresets/sanity/` is a lightweight stub for local tooling. The source of truth for editorial fields (`subjectName`, `contentBlocks`, etc.) is **`studio-hard-resets/`**.
