@@ -108,6 +108,21 @@
   overflow: hidden;
 }
 
+.issueDek + .issueExcerpt {
+  margin-top: -4px;
+}
+
+.issueExcerpt {
+  color: var(--text-muted);
+  line-height: 1.45;
+  font-size: 0.95rem;
+  margin: 0 0 12px;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
 .issueDate {
   font-size: 11px;
   text-transform: uppercase;
