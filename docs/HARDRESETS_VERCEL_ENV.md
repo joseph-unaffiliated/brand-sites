@@ -111,10 +111,21 @@ GCP_SERVICE_ACCOUNT_KEY=
 
 ## Go-live checklist
 
-1. Attach `hardresets.com` (+ `www`) on the marketing Vercel project.
-2. Attach `magic.hardresets.com` on the magic Vercel project; set CORS as above.
-3. Provision OneTrust for `hardresets.com` and set `NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT`.
-4. Create GA4 property; set `NEXT_PUBLIC_GA_MEASUREMENT_ID`.
-5. Redeploy marketing + magic; smoke-test subscribe → profile → reader-subscriptions.
+| Step | Status (2026-07-30) |
+|------|---------------------|
+| Attach `hardresets.com` (+ `www`) on marketing Vercel project `hardresets` (`prj_boKP42mkO2IvXaNls33ZNBodDSrM`) | ✅ Done — both verified; `www` redirects to apex. DNS already resolving via Cloudflare → Vercel (`https://hardresets.com` 200). |
+| Attach `magic.hardresets.com` on `subscription-functions` (`prj_GKhgJdr2maNLxPuOWnmUQXZQRdQO`) | ✅ Already attached + verified (pre-existing). |
+| Set `READERS_CORS_ORIGINS` to include Hard Resets origins | ✅ Apex + www were already present; appended `http://localhost:3004`. Shared magic project — do **not** replace the whole list with Hard Resets–only origins. |
+| Core marketing env from this doc (site URL, brand id, magic URLs, Sanity `0vm5rx64`, copy, Typekit, ads mode, Retention, GTM `GTM-TVHD6JMG`) | ✅ Set on Production + Preview; redeploy triggered. |
+| Provision OneTrust for `hardresets.com` → `NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT` | ⏳ **Blocked** — no brand-specific UUID exists. App falls back to network default in `ComplianceScripts.js` until you provision OneTrust and set the env. Do not invent a UUID. |
+| Create GA4 property → `NEXT_PUBLIC_GA_MEASUREMENT_ID` | ⏳ **Blocked** — no Hard Resets measurement ID in repo/docs. Create a new GA4 property in Google Analytics, then set the `G-…` id on the marketing project. Do not reuse another brand’s ID. |
+| Optional: `NEXT_PUBLIC_META_PIXEL_ID` | ⏳ Not set — create Meta pixel for this brand when ready. |
+| Smoke-test subscribe → profile → reader-subscriptions | ⏳ Manual after redeploys finish. |
+
+### Manual next clicks (remaining)
+
+1. **OneTrust:** OneTrust admin → add domain `hardresets.com` → copy Domain Script UUID → Vercel → **hardresets** → Settings → Environment Variables → `NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT` (Production + Preview) → Redeploy.
+2. **GA4:** Google Analytics → Admin → Create property “Hard Resets” → Web data stream for `hardresets.com` → copy Measurement ID → set `NEXT_PUBLIC_GA_MEASUREMENT_ID` on **hardresets** → Redeploy.
+3. **Smoke-test:** Open `https://hardresets.com` → subscribe → confirm magic execute → Profile → `GET https://magic.hardresets.com/api/reader-subscriptions` returns 200 with matching `Access-Control-Allow-Origin`.
 
 See also [ENVIRONMENT.md](./ENVIRONMENT.md) and [DEPLOYMENT.md](./DEPLOYMENT.md).
