@@ -432,7 +432,17 @@
   font-size: var(--text-card-headline);
   font-weight: 300;
   line-height: 1.25;
-  margin: 1rem 1rem 0.5rem 1rem;
+  margin: 0.35rem 1rem 0.5rem 1rem;
+}
+
+.readMoreSubject {
+  font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
+  font-size: 1.05rem;
+  font-weight: 300;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: var(--accent);
+  margin: 0.75rem 1rem 0;
 }
 
 .readMoreHeadline:last-child {

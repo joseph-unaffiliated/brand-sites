@@ -5,7 +5,7 @@ import { siteKickerLower } from "@/config/site";
 import styles from "@/app/article/[slug]/page.module.css";
 
 /**
- * Shared “Keep reading” / suggested-article grid (image, title, dek, body excerpt).
+ * Shared “Keep reading” / suggested-article grid (image, subject, title, body excerpt).
  *
  * @param {{
  *   articles: Array<{
@@ -13,6 +13,8 @@ import styles from "@/app/article/[slug]/page.module.css";
  *     slug?: string;
  *     title?: string;
  *     kicker?: string;
+ *     subjectName?: string | null;
+ *     subjectColor?: string | null;
  *     summary?: string;
  *     mainImage?: string;
  *     contentBlocks?: unknown[];
@@ -55,10 +57,15 @@ export default function RecommendedArticleCards({
                 {rec.kicker && rec.kicker.trim().toLowerCase() !== siteKickerLower ? (
                   <p className={styles.readMoreKicker}>{rec.kicker}</p>
                 ) : null}
-                <h3 className={styles.readMoreHeadline}>{rec.title}</h3>
-                {rec.summary ? (
-                  <p className={styles.readMoreDek}>{rec.summary}</p>
+                {rec.subjectName ? (
+                  <p
+                    className={styles.readMoreSubject}
+                    style={rec.subjectColor ? { color: rec.subjectColor } : undefined}
+                  >
+                    {rec.subjectName}
+                  </p>
                 ) : null}
+                <h3 className={styles.readMoreHeadline}>{rec.title}</h3>
                 {excerpt ? (
                   <p className={styles.readMoreExcerpt}>{excerpt}</p>
                 ) : null}

@@ -80,6 +80,14 @@ export default async function ArchivePage() {
                           })
                         : "—"}
                     </p>
+                    {article.subjectName ? (
+                      <p
+                        className={styles.issueSubject}
+                        style={article.subjectColor ? { color: article.subjectColor } : undefined}
+                      >
+                        {article.subjectName}
+                      </p>
+                    ) : null}
                     <h3>{article.title}</h3>
                     {excerpt ? (
                       <p className={styles.issueExcerpt}>{excerpt}</p>

@@ -97,19 +97,14 @@
   font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
 }
 
-.issueDek {
-  color: var(--text-secondary);
-  line-height: 1.4;
-  font-size: 0.95rem;
-  margin: 0 0 12px;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.issueDek + .issueExcerpt {
-  margin-top: -4px;
+.issueSubject {
+  font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
+  font-size: 1.125rem;
+  font-weight: 300;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: var(--accent);
+  margin: 4px 0 0;
 }
 
 .issueExcerpt {

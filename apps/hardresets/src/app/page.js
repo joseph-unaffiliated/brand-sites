@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   getArticles,
-  getDemographicAndDescription,
   bodyExcerptFromArticle,
 } from "@/lib/articles";
 import SubscribeBlock from "@/components/SubscribeBlock";
@@ -78,7 +77,6 @@ export default async function Home({ searchParams: searchParamsProp }) {
   const featured = articles[0] ?? null;
   const leftCards = articles.slice(1, 1 + LEFT_COUNT);
   const stackItems = articles.slice(1 + LEFT_COUNT, 1 + LEFT_COUNT + STACK_COUNT_MAX);
-  const featuredDemographic = featured ? getDemographicAndDescription(featured).demographic : "";
 
   const homeUrl = absoluteSiteUrl("/");
   const ogImageUrl = absoluteSiteUrl(SITE_OG_IMAGE_PATH);
@@ -158,20 +156,20 @@ export default async function Home({ searchParams: searchParamsProp }) {
                     {article.kicker && article.kicker.trim().toLowerCase() !== siteKickerLower && (
                       <p className={styles.mosaicCardKicker}>{article.kicker}</p>
                     )}
+                    {article.subjectName ? (
+                      <p
+                        className={styles.mosaicCardSubject}
+                        style={article.subjectColor ? { color: article.subjectColor } : undefined}
+                      >
+                        {article.subjectName}
+                      </p>
+                    ) : null}
                     <h3 className={styles.mosaicCardHeadline}>{article.title}</h3>
                     {(() => {
-                      const { demographic } = getDemographicAndDescription(article);
                       const excerpt = bodyExcerptFromArticle(article, 2);
-                      return (
-                        <>
-                          {demographic && (
-                            <p className={styles.mosaicCardDemographic}>{demographic}</p>
-                          )}
-                          {excerpt && (
-                            <p className={styles.mosaicCardDek}>{excerpt}</p>
-                          )}
-                        </>
-                      );
+                      return excerpt ? (
+                        <p className={styles.mosaicCardDek}>{excerpt}</p>
+                      ) : null;
                     })()}
                   </div>
                 </Link>
@@ -198,10 +196,15 @@ export default async function Home({ searchParams: searchParamsProp }) {
                 </div>
                 <div className={styles.featuredBody}>
                   <p className={styles.featuredKicker}>Latest issue</p>
+                  {featured.subjectName ? (
+                    <p
+                      className={styles.featuredSubject}
+                      style={featured.subjectColor ? { color: featured.subjectColor } : undefined}
+                    >
+                      {featured.subjectName}
+                    </p>
+                  ) : null}
                   <h2 className={styles.featuredHeadline}>{featured.title}</h2>
-                  {featuredDemographic && (
-                    <p className={styles.featuredDek}>{featuredDemographic}</p>
-                  )}
                   {(() => {
                     const preview = featuredPreviewFromArticle(featured);
                     return preview ? (

@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useSubscriber } from "@/context/SubscriberContext";
-import { getDemographicAndDescription, bodyExcerptFromArticle } from "@/lib/articles";
+import { bodyExcerptFromArticle } from "@/lib/articles";
 import styles from "../app/page.module.css";
 
 const SNIPPETS_SIGNED_OUT = 3;
@@ -18,7 +18,6 @@ export default function HomeSnippetsList({ stackItems }) {
     <div className={styles.snippetsList}>
       <p className={styles.snippetsListTitle}>More issues</p>
       {items.map((article) => {
-        const { demographic } = getDemographicAndDescription(article);
         const excerpt = bodyExcerptFromArticle(article, 2);
         return (
           <Link
@@ -27,10 +26,15 @@ export default function HomeSnippetsList({ stackItems }) {
             className={styles.snippetItem}
           >
             <span className={styles.snippetItemText}>
+              {article.subjectName ? (
+                <span
+                  className={styles.snippetSubject}
+                  style={article.subjectColor ? { color: article.subjectColor } : undefined}
+                >
+                  {article.subjectName}
+                </span>
+              ) : null}
               <span className={styles.snippetTitle}>{article.title}</span>
-              {demographic && (
-                <span className={styles.snippetDemographic}>{demographic}</span>
-              )}
               {excerpt && (
                 <span className={styles.snippetSummary}>{excerpt}</span>
               )}
