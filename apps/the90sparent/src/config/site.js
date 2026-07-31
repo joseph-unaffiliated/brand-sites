@@ -45,7 +45,7 @@ export const subscribeCardTitle =
 
 export const subscribeCardDek =
   process.env.NEXT_PUBLIC_SUBSCRIBE_CARD_DEK ||
-  "Join The 90s Parent newsletter and get a weekly breakdown of parenting hacks, tips and stories from the Millennial parents who are all that and a bag of chips, delivered straight to your inbox.";
+  "Join The '90s Parent newsletter and get a weekly breakdown of parenting hacks, tips and stories from the Millennial parents who are all that and a bag of chips, delivered straight to your inbox.";
 
 export const siteConfig = {
   brandId: process.env.NEXT_PUBLIC_BRAND_ID || "the90sparent",

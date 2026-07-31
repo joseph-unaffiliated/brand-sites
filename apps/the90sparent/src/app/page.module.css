@@ -269,6 +269,8 @@
 .mosaicContainerSubscribeLeft > .archiveMosaicRight {
   position: static;
   top: auto;
+  align-self: stretch;
+  height: auto;
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -629,13 +631,16 @@
   text-decoration: underline;
 }
 
-/* Right column: stack (snippets first) then subscribe at bottom */
+/* Right column: subscribe + snippets hug content so sticky can travel within the mosaic */
 .mosaicRight {
   display: flex;
   flex-direction: column;
   gap: 48px;
   position: sticky;
   top: 24px;
+  align-self: start;
+  height: fit-content;
+  width: 100%;
 }
 
 /* Snippets list: title left, small thumb right (Atlantic-style) */
