@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useSubscriber } from "@/context/SubscriberContext";
-import { getDemographicAndDescription, previewTextFromArticle } from "@/lib/articles";
+import { getDemographicAndDescription, bodyExcerptFromArticle } from "@/lib/articles";
 import styles from "../app/page.module.css";
 
 const SNIPPETS_SIGNED_OUT = 3;
@@ -19,7 +19,7 @@ export default function HomeSnippetsList({ stackItems }) {
       <p className={styles.snippetsListTitle}>More issues</p>
       {items.map((article) => {
         const { demographic } = getDemographicAndDescription(article);
-        const preview = previewTextFromArticle(article, 32);
+        const excerpt = bodyExcerptFromArticle(article, 2);
         return (
           <Link
             key={article._id ?? article.slug}
@@ -31,8 +31,8 @@ export default function HomeSnippetsList({ stackItems }) {
               {demographic && (
                 <span className={styles.snippetDemographic}>{demographic}</span>
               )}
-              {preview && (
-                <span className={styles.snippetSummary}>{preview}</span>
+              {excerpt && (
+                <span className={styles.snippetSummary}>{excerpt}</span>
               )}
             </span>
             <span className={styles.snippetThumb}>

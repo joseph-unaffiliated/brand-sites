@@ -3,7 +3,7 @@ import Link from "next/link";
 import {
   getArticles,
   getDemographicAndDescription,
-  previewTextFromArticle,
+  bodyExcerptFromArticle,
 } from "@/lib/articles";
 import SubscribeBlock from "@/components/SubscribeBlock";
 import HideWhenSubscribed from "@/components/HideWhenSubscribed";
@@ -65,8 +65,7 @@ function featuredPreviewFromArticle(article) {
     .join(" ")
     .replace(/\s+/g, " ")
     .trim();
-  const fallback = (article?.summary || article?.subtitle || "").trim();
-  return firstWordsWithEllipsis(bodyText || fallback, 150);
+  return firstWordsWithEllipsis(bodyText, 150);
 }
 
 export default async function Home({ searchParams: searchParamsProp }) {
@@ -162,14 +161,14 @@ export default async function Home({ searchParams: searchParamsProp }) {
                     <h3 className={styles.mosaicCardHeadline}>{article.title}</h3>
                     {(() => {
                       const { demographic } = getDemographicAndDescription(article);
-                      const preview = previewTextFromArticle(article, 45);
+                      const excerpt = bodyExcerptFromArticle(article, 2);
                       return (
                         <>
                           {demographic && (
                             <p className={styles.mosaicCardDemographic}>{demographic}</p>
                           )}
-                          {preview && (
-                            <p className={styles.mosaicCardDek}>{preview}</p>
+                          {excerpt && (
+                            <p className={styles.mosaicCardDek}>{excerpt}</p>
                           )}
                         </>
                       );

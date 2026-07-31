@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   getArticles,
-  ensureDescriptionOnly,
   bodyExcerptFromArticle,
 } from "@/lib/articles";
 import HideWhenSubscribed from "@/components/HideWhenSubscribed";
@@ -58,10 +57,6 @@ export default async function ArchivePage() {
 
         <div className={styles.issueMosaic}>
           {articles.map((article) => {
-            const dek =
-              ensureDescriptionOnly(article.summary || article.subtitle) ||
-              article.summary ||
-              article.subtitle;
             const excerpt = bodyExcerptFromArticle(article, 2);
             return (
               <article className={styles.issueCard} key={article._id ?? article.slug}>
@@ -86,7 +81,6 @@ export default async function ArchivePage() {
                         : "—"}
                     </p>
                     <h3>{article.title}</h3>
-                    {dek ? <p className={styles.issueDek}>{dek}</p> : null}
                     {excerpt ? (
                       <p className={styles.issueExcerpt}>{excerpt}</p>
                     ) : null}
