@@ -46,6 +46,25 @@
 
 **Do not** set `GCP_*` on marketing apps for reader profile; removed BigQuery route.
 
+## House ads (Airtable) — the90sparent, thepicklereport, hardresets, theeyeballerscookbook
+
+Airtable-backed cross-promo pool that a brand's `/api/house-ads` route reads and
+`HouseAdPool`/`HouseAdImage` render client-side, ahead of the static `shared-ads`
+creative (which stays as the fallback). See
+[`packages/shared-ads/README.md`](../packages/shared-ads/README.md) for the full
+schema, upload steps, and the `Jewish-interested` flag.
+
+| Variable | Browser? | Purpose |
+|----------|----------|---------|
+| `AIRTABLE_API_KEY` | **no — server only** | Airtable personal access token, read access to base `appXFQv3Hy0wUDDnb`. Value lives in `Keys/AIRTABLE_ACCESS_TOKEN.txt` locally — copy it into each brand's marketing Vercel project as a server env var; **do not** commit it or prefix it `NEXT_PUBLIC_`. `AIRTABLE_ACCESS_TOKEN` also works as a fallback name. |
+| `AIRTABLE_HOUSE_ADS_BASE_ID` | no | Optional override; defaults to `appXFQv3Hy0wUDDnb`. |
+| `AIRTABLE_HOUSE_ADS_TABLE_ID` | no | Optional override; defaults to `tblB3emRodWIzabTP` (Creatives table). |
+
+Set the same `AIRTABLE_API_KEY` (+ optional base/table overrides) on all four brands'
+marketing Vercel projects — `the90sparent`, `thepicklereport`, `hardresets`,
+`theeyeballerscookbook`. Leaving `AIRTABLE_API_KEY` unset is safe: `/api/house-ads`
+returns `{ ad: null }` and every app falls back to its existing static creative.
+
 ## Magic deploy (`subscription-functions-copy` on Vercel)
 
 | Variable | Secret? | Purpose |

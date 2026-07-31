@@ -189,13 +189,18 @@ export default async function RootLayout({ children }) {
                   <div className="footer-links">
                     <Link href="/archive">Archive</Link>
                     <Link href="/about">About</Link>
-                    <Link href="/terms">Terms</Link>
-                    <Link href="/privacy">Policy</Link>
+                    <ContactCopyLink email={contactEmail}>Contact</ContactCopyLink>
                   </div>
                 </div>
                 <div>
                   <div className="footer-links">
-                    <ContactCopyLink email={contactEmail}>Contact</ContactCopyLink>
+                    <Link href="/terms">Terms</Link>
+                    <Link href="/privacy">Privacy</Link>
+                    <Link href="/ai-policy">AI Policy</Link>
+                  </div>
+                </div>
+                <div>
+                  <div className="footer-links">
                     <SubmissionsCopyLink>Submissions</SubmissionsCopyLink>
                     <AdvertiseCopyLink />
                     <p className="footer-text">© {siteDisplayName}. 2026.</p>

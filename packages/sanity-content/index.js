@@ -373,6 +373,8 @@ const articleSeoProjection = `seoTitle,
   noIndex,
   dateModified,
   tags,
+  themes,
+  isJewishContent,
   _updatedAt`;
 
 /** GROQ filter: published documents only (excludes `drafts.*` IDs and future-dated issues). */
@@ -662,6 +664,8 @@ export function mapArticle(raw, urlFor, fallbackImage = "/hl-photo.png") {
     noIndex: Boolean(raw.noIndex),
     dateModified: raw.dateModified ?? raw._updatedAt ?? null,
     tags: Array.isArray(raw.tags) ? raw.tags : [],
+    themes: Array.isArray(raw.themes) ? raw.themes : [],
+    isJewishContent: Boolean(raw.isJewishContent),
   };
 }
 
@@ -838,6 +842,7 @@ export function mapRecipe(raw, urlFor, fallbackImage = "/tec-logo.svg") {
     socialImage,
     noIndex: Boolean(raw.noIndex),
     dateModified: raw.dateModified ?? raw._updatedAt ?? null,
+    isJewishContent: Boolean(raw.isJewishContent),
   };
 }
 

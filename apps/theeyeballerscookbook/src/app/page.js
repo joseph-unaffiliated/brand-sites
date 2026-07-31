@@ -6,6 +6,7 @@ import HideWhenSubscribed from "@/components/HideWhenSubscribed";
 import HomeSnippetsList from "@/components/HomeSnippetsList";
 import HomeAboutSection from "@/components/HomeAboutSection";
 import HomeHeroTagline from "@/components/HomeHeroTagline";
+import HomeSubscribeSection from "@/components/HomeSubscribeSection";
 import JsonLd from "@/components/JsonLd";
 import {
   siteConfig,
@@ -211,6 +212,8 @@ export default async function Home({ searchParams: searchParamsProp }) {
 
       {/* More about (always visible; copy and Subscribe link vary by sign-in) */}
       <HomeAboutSection totalCount={totalCount} />
+
+      <HomeSubscribeSection initialEmail={initialEmail} />
     </div>
     </>
   );

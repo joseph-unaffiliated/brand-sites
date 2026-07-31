@@ -66,7 +66,7 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr) minmax(0, 380px);
   gap: 24px;
-  align-items: start;
+  align-items: stretch;
 }
 
 @media (max-width: 1024px) {
@@ -80,6 +80,21 @@
   .mosaicLeft { grid-area: left; }
   .mosaicCenter { grid-area: center; }
   .mosaicRight { grid-area: right; }
+
+  .mosaicCenter {
+    height: auto;
+    align-self: auto;
+  }
+
+  .mosaicCenter .featuredCard {
+    flex: 0 0 auto;
+    height: fit-content;
+    min-height: 0;
+  }
+
+  .mosaicCenter .featuredCard .featuredEntryPreview {
+    max-height: 22em;
+  }
 }
 
 @media (max-width: 640px) {
@@ -113,6 +128,20 @@
   .mosaicLeft { grid-area: left; }
   .mosaicCenter { grid-area: center; }
   .mosaicRight { grid-area: right; }
+
+  .mosaicCenter {
+    height: auto;
+  }
+
+  .mosaicCenter .featuredCard {
+    flex: 0 0 auto;
+    height: fit-content;
+    min-height: 0;
+  }
+
+  .mosaicCenter .featuredCard .featuredEntryPreview {
+    max-height: 18em;
+  }
 
   .featuredHeadline {
     font-size: clamp(2rem, 10vw, 2.75rem);
@@ -210,6 +239,7 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
+  align-self: stretch;
 }
 
 @media (max-width: 1024px) and (min-width: 641px) {
@@ -234,6 +264,77 @@
   border-radius: 8px;
   border: 1px solid var(--border);
   height: fit-content;
+}
+
+/*
+ * Desktop: the two center cards split the stretched row height equally so the
+ * featured column fills the same height as the left column (like The 90s Parent).
+ */
+.mosaicCenter .featuredCard {
+  flex: 1 1 0%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.mosaicCenter .featuredCard .featuredImage {
+  flex: 0 0 auto;
+  max-height: 38%;
+  height: auto;
+  min-height: 0;
+}
+
+.mosaicCenter .featuredCard .featuredImage img {
+  max-height: 100%;
+}
+
+.mosaicCenter .featuredCard .featuredBody {
+  flex: 1 1 0%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  padding-bottom: 1.25rem;
+}
+
+.mosaicCenter .featuredCard .featuredKicker,
+.mosaicCenter .featuredCard .featuredHeadline,
+.mosaicCenter .featuredCard .featuredDek {
+  flex: 0 0 auto;
+}
+
+.mosaicCenter .featuredCard .featuredEntryPreview {
+  flex: 1 1 0%;
+  min-height: 0;
+  max-height: none;
+  overflow: hidden;
+  position: relative;
+}
+
+.mosaicCenter .featuredCard .featuredEntryPreview::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3.5rem;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgb(255 255 255 / 0%) 0%,
+    var(--surface) 55%,
+    var(--surface) 100%
+  );
+}
+
+.mosaicCenter .featuredCard .featuredLink {
+  flex: 0 0 auto;
+  position: relative;
+  z-index: 1;
+  background: var(--surface);
+  align-self: flex-start;
 }
 
 .featuredImage {
@@ -598,5 +699,51 @@
 @media (max-width: 640px) {
   .mosaicRight {
     position: static;
+  }
+}
+
+/* Bottom-of-page subscribe band (homepage + archive) */
+.subscribeCtaSection {
+  padding: 96px 0 120px;
+  background: var(--surface-muted);
+}
+
+.subscribeCtaSpacer {
+  height: 96px;
+}
+
+.subscribeCtaInner {
+  max-width: 640px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+  align-items: center;
+  text-align: center;
+}
+
+.subscribeCtaHeadline {
+  font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
+  font-size: clamp(1.85rem, 3.2vw, 2.75rem);
+  font-weight: 300;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin: 0;
+  text-wrap: balance;
+  color: var(--text-primary);
+}
+
+.subscribeCtaForm {
+  width: 100%;
+  max-width: 440px;
+}
+
+@media (max-width: 640px) {
+  .subscribeCtaSection {
+    padding: 72px 0 88px;
+  }
+
+  .subscribeCtaInner {
+    gap: 28px;
   }
 }

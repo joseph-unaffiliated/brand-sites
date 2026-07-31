@@ -8,15 +8,21 @@ import { track } from "./track.js";
 
 /**
  * Record article_view when subscribed (SubscriberContext check done by caller).
+ * @param {string} slug
+ * @param {boolean} [enabled]
+ * @param {boolean} [isJewishContent] When true, flags this view as a Jewish-interested signal for analytics.
  */
-export function useArticleView(slug, enabled = true) {
+export function useArticleView(slug, enabled = true, isJewishContent = false) {
   useEffect(() => {
     if (!enabled || !slug) return;
 
     let tracked = false;
     const tryTrack = () => {
       if (tracked || !getReaderToken() || !hasAnalyticsConsent()) return;
-      track("article_view", { articleSlug: slug });
+      track("article_view", {
+        articleSlug: slug,
+        ...(isJewishContent ? { isJewishContent: true } : {}),
+      });
       tracked = true;
     };
 
@@ -27,7 +33,7 @@ export function useArticleView(slug, enabled = true) {
       window.removeEventListener("magic-reader-token-updated", tryTrack);
       window.removeEventListener(ANALYTICS_CONSENT_EVENT, tryTrack);
     };
-  }, [enabled, slug]);
+  }, [enabled, slug, isJewishContent]);
 }
 
 function scrollMilestonesKey(slug) {

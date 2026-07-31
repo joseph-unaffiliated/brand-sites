@@ -15,7 +15,9 @@ export default function HomeSubscribeSection({
   titleId = "home-subscribe-cta-title",
 }) {
   const { isSubscribed } = useSubscriber();
-  if (isSubscribed) return null;
+  if (isSubscribed) {
+    return <div className={styles.subscribeCtaSpacer} aria-hidden="true" />;
+  }
 
   return (
     <section className={styles.subscribeCtaSection} aria-labelledby={titleId}>

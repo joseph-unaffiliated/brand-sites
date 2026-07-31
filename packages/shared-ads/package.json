@@ -4,6 +4,7 @@
   "private": true,
   "sideEffects": false,
   "exports": {
-    ".": "./index.js"
+    ".": "./index.js",
+    "./house-ads": "./house-ads.js"
   }
 }

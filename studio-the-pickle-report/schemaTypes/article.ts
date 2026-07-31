@@ -170,9 +170,29 @@ export const articleType = defineType({
       fieldset: 'seo',
     }),
     defineField({
+      name: 'themes',
+      title: 'Themes',
+      description:
+        'Archive themes (multi-select, controlled list). Used for filters on /archive. Pick every theme that fits.',
+      type: 'array',
+      of: [defineArrayMember({type: 'string'})],
+      options: {
+        list: [
+          {title: 'Pickle History & Origins', value: 'history-origins'},
+          {title: 'Pop Culture & Trends', value: 'pop-culture-trends'},
+          {title: 'Pickle Science & Curiosities', value: 'science-curiosities'},
+          {title: 'Pickle Business & Industry', value: 'business-industry'},
+          {title: 'Faith & the Sacred Pickle', value: 'faith-sacred'},
+          {title: 'Pickle Fandom & Community', value: 'fandom-community'},
+        ],
+        layout: 'tags',
+        canvasApp: {exclude: true},
+      },
+    }),
+    defineField({
       name: 'tags',
       title: 'Tags',
-      description: 'Optional topic tags.',
+      description: 'Optional freeform topic tags for SEO (separate from Themes above).',
       type: 'array',
       of: [defineArrayMember({type: 'string'})],
       options: {
@@ -182,6 +202,15 @@ export const articleType = defineType({
         },
       },
       fieldset: 'seo',
+    }),
+    defineField({
+      name: 'isJewishContent',
+      title: 'Jewish-interested content',
+      description:
+        'Marks visits/clicks as Jewish-interested signals for analytics.',
+      type: 'boolean',
+      initialValue: false,
+      options: {canvasApp: {exclude: true}},
     }),
   ],
   preview: {

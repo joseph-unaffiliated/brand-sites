@@ -10,7 +10,7 @@ import ArticleSubscribeForm from "@/components/ArticleSubscribeForm";
 import IngredientsChecklist from "@/components/IngredientsChecklist";
 import FavoriteButton from "@/components/FavoriteButton";
 import AdSlot from "@/components/AdSlot";
-import ArticleAdStickyBottom from "@/components/ArticleAdStickyBottom";
+import ArticleStickyBottom from "@/components/ArticleStickyBottom";
 import JsonLd from "@/components/JsonLd";
 import { crossPromoForSlot } from "@/config/crossPromoAds";
 import { siteConfig, siteDisplayName } from "@/config/site";
@@ -167,7 +167,7 @@ export default async function RecipePage({ params }) {
     <div className={styles.page}>
       <JsonLd data={recipeJsonLd} />
       <JsonLd data={breadcrumbJsonLd} />
-      <SubscribedArticleView slug={slug} />
+      <SubscribedArticleView slug={slug} isJewishContent={recipe.isJewishContent} />
       <NavLogoImageSync image={recipe.mainImage} />
       <section className="articlebody-section">
         <div className={`${styles.articleHeroBlock} ${styles.articleHeroBlockInline}`}>
@@ -338,7 +338,7 @@ export default async function RecipePage({ params }) {
           </div>
         )}
       </section>
-      <ArticleAdStickyBottom />
+      <ArticleStickyBottom />
     </div>
   );
 }

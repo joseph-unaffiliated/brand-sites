@@ -701,7 +701,7 @@ a {
 .footer-grid {
   display: grid;
   gap: 48px;
-  grid-template-columns: 1fr auto auto;
+  grid-template-columns: 1fr auto auto auto;
   align-items: start;
 }
 
@@ -1086,6 +1086,53 @@ a {
   width: auto;
   margin-left: 0;
   margin-right: 0;
+}
+
+/* Subscribe CTA in the same sticky shell: wider than in-article 640 cap; ad slot stays shrink-wrapped. */
+.article-ad-sticky-bottom-slot.article-ad-sticky-subscribe-slot {
+  flex: 0 1 auto;
+  width: min(800px, calc(100vw - 96px));
+  max-width: calc(100vw - 32px);
+}
+
+.article-ad-sticky-subscribe-slot .article-sticky-subscribe-inner {
+  width: 100%;
+  min-width: 0;
+}
+
+/* Sticky subscribe: asymmetric vertical rhythm (prompt↔form vs form↔disclaimer need different gaps). */
+.article-ad-sticky-subscribe-slot .newslettercta-block {
+  gap: 0;
+  max-width: none;
+  border-radius: 1rem;
+}
+
+.article-ad-sticky-subscribe-slot .newslettercta-block > .newslettercta-prompt {
+  margin-bottom: 1.125rem;
+}
+
+.article-ad-sticky-subscribe-slot .newslettercta-block > .articlepage-form {
+  margin-bottom: 0.25rem;
+}
+
+@media (max-width: 768px) {
+  .article-ad-sticky-bottom--subscribe {
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+
+  .article-ad-sticky-bottom--subscribe .article-ad-sticky-subscribe-slot {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .article-ad-sticky-subscribe-slot .newslettercta-block {
+    padding-bottom: 0.5rem;
+  }
+}
+
+.article-ad-sticky-subscribe-slot .articlebody-section .articlepage-form {
+  gap: 4px;
 }
 
 .article-ad-sticky-dismiss {

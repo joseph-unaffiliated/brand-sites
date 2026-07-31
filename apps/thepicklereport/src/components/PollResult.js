@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import ArticleAdStickyBottom from "@/components/ArticleAdStickyBottom";
+import ArticleStickyBottom from "@/components/ArticleStickyBottom";
 import { executeAction, isRealBrowser } from "@/lib/subscription";
 import { recordPollAnswer } from "@/lib/trivia-points";
 import { submitVoteToMagic } from "@/lib/submit-vote";
@@ -188,7 +188,7 @@ export default function PollResult({
         </div>
       ) : null}
 
-      <ArticleAdStickyBottom />
+      <ArticleStickyBottom />
     </div>
   );
 }

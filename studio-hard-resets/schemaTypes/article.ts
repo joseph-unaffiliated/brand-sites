@@ -174,6 +174,15 @@ export const articleType = defineType({
       options: {layout: 'tags', canvasApp: {exclude: true}},
       fieldset: 'seo',
     }),
+    defineField({
+      name: 'isJewishContent',
+      title: 'Jewish-interested content',
+      description:
+        'Marks visits/clicks as Jewish-interested signals for analytics.',
+      type: 'boolean',
+      initialValue: false,
+      options: {canvasApp: {exclude: true}},
+    }),
   ],
   preview: {
     select: {

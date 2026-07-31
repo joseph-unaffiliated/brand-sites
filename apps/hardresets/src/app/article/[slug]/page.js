@@ -192,7 +192,7 @@ export default async function ArticlePage({ params }) {
       ) : null}
       <JsonLd data={articleJsonLd} />
       <JsonLd data={breadcrumbJsonLd} />
-      <SubscribedArticleView slug={slug} />
+      <SubscribedArticleView slug={slug} isJewishContent={article.isJewishContent} />
       <section className="articlebody-section">
         {/* Centered hero: headline + optional cover image when not using content blocks */}
         <div

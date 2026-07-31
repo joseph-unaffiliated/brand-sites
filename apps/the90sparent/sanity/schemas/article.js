@@ -18,6 +18,13 @@ export default {
     { name: "brandExplainer", type: "text", title: "Brand explainer" },
     { name: "publishedDate", type: "datetime", title: "Published date" },
     { name: "bio", type: "text", title: "Bio" },
+    {
+      name: "isJewishContent",
+      type: "boolean",
+      title: "Jewish-interested content",
+      description: "Marks visits/clicks as Jewish-interested signals for analytics.",
+      initialValue: false,
+    },
   ],
   preview: {
     select: { title: "title", slug: "slug.current" },

@@ -78,6 +78,142 @@ export function getDemographicAndDescription(article) {
   return { demographic: subtitle, description: "" };
 }
 
+function firstSentencesWithEllipsis(text, sentenceCount) {
+  const clean = (text || "").replace(/\s+/g, " ").trim();
+  if (!clean) return "";
+  const matches = clean.match(/[^.!?]+[.!?](?:["'”’)]*)(?=\s|$)|[^.!?]+$/g);
+  if (!matches) return clean;
+  const sentences = matches.map((s) => s.trim()).filter(Boolean);
+  if (sentences.length <= sentenceCount) return clean;
+  return `${sentences.slice(0, sentenceCount).join(" ")}…`;
+}
+
+function plainTextFromPortableTextBlocks(blocks) {
+  if (!Array.isArray(blocks)) return "";
+  return blocks
+    .filter((block) => block?._type === "block")
+    .map((block) => (block.children || []).map((child) => child?.text || "").join(""))
+    .join(" ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+/** Full plain text from article body (contentBlocks / entries), no truncation. */
+function plainBodyTextFromArticle(article) {
+  const sections = Array.isArray(article?.contentBlocks) ? article.contentBlocks : [];
+  const fromBlocks = sections
+    .map((section) => plainTextFromPortableTextBlocks(section?.body))
+    .filter(Boolean)
+    .join(" ")
+    .replace(/\s+/g, " ")
+    .trim();
+  if (fromBlocks) return fromBlocks;
+
+  const entries = Array.isArray(article?.entries) ? article.entries : [];
+  return entries
+    .map((entry) => plainTextFromPortableTextBlocks(entry?.body))
+    .filter(Boolean)
+    .join(" ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+const SEARCH_SKIP_KEYS = new Set([
+  "_key",
+  "_id",
+  "_ref",
+  "_rev",
+  "_type",
+  "asset",
+  "hotspot",
+  "crop",
+  "markDefs",
+  "url",
+  "href",
+  "mainImage",
+  "socialImage",
+  "heroImage",
+  "dimensions",
+  "metadata",
+]);
+
+/** Walk Sanity content trees and collect human-readable strings for search. */
+function collectSearchableStrings(value, out = []) {
+  if (value == null) return out;
+  if (typeof value === "string") {
+    const trimmed = value.trim();
+    if (trimmed) out.push(trimmed);
+    return out;
+  }
+  if (typeof value === "number" || typeof value === "boolean") return out;
+  if (Array.isArray(value)) {
+    for (const item of value) collectSearchableStrings(item, out);
+    return out;
+  }
+  if (typeof value === "object") {
+    for (const [key, child] of Object.entries(value)) {
+      if (SEARCH_SKIP_KEYS.has(key)) continue;
+      collectSearchableStrings(child, out);
+    }
+  }
+  return out;
+}
+
+/**
+ * Lowercased corpus for archive search: title, dek, summary, byline, tags/themes,
+ * and all text from content blocks (prose body, Pickle Economics, Nibbles, etc.).
+ */
+export function searchTextFromArticle(article) {
+  const parts = [
+    article?.title,
+    article?.subtitle,
+    article?.summary,
+    article?.kicker,
+    article?.authorName,
+    article?.bio,
+    article?.photoCredit,
+  ];
+  if (Array.isArray(article?.tags)) parts.push(...article.tags);
+  if (Array.isArray(article?.themes)) parts.push(...article.themes);
+  collectSearchableStrings(article?.contentBlocks, parts);
+  collectSearchableStrings(article?.entries, parts);
+  return parts
+    .filter((part) => typeof part === "string" && part.trim())
+    .join(" ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase();
+}
+
+/**
+ * Drop hero fields that often repeat at the start of imported body copy
+ * so card excerpts don’t echo the title/dek.
+ */
+function bodyTextWithoutHeroDupes(article, plain) {
+  if (!plain) return "";
+  const { demographic, description } = getDemographicAndDescription(article);
+  let text = plain;
+  for (const prefix of [
+    article?.title,
+    article?.subtitle,
+    demographic,
+    article?.summary,
+    description,
+  ]) {
+    text = stripLeadingDuplicate(text, prefix);
+  }
+  return (text || "").replace(/\s+/g, " ").trim();
+}
+
+/**
+ * Opening sentences from the article body for “Keep reading” / related cards.
+ * Strips leading title/subtitle/summary so the excerpt doesn’t repeat the dek.
+ */
+export function bodyExcerptFromArticle(article, sentenceCount = 2) {
+  const plain = bodyTextWithoutHeroDupes(article, plainBodyTextFromArticle(article));
+  return plain ? firstSentencesWithEllipsis(plain, sentenceCount) : "";
+}
+
 function portableTextBlockToPlainText(block) {
   if (!block || block._type !== "block") return "";
   return (block.children || []).map((c) => c?.text || "").join("");

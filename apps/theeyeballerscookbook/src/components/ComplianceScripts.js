@@ -4,11 +4,10 @@ const PLACEHOLDER_ONETRUST = "YOUR_ONETRUST_ID_HERE";
 const PLACEHOLDER_RETENTION = "YOUR_RETENTION_ID_HERE";
 
 /**
- * Eyeballer's Cookbook OneTrust domain script — MUST be set per-brand via
- * NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT on Vercel once the OneTrust domain is
- * provisioned. Until then this falls back to the network default (Pickle's).
+ * Eyeballer's Cookbook OneTrust domain script for theeyeballerscookbook.com.
+ * Override with NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT on Vercel if needed.
  */
-const DEFAULT_ONETRUST_DOMAIN_SCRIPT = "019a7160-715f-710a-9141-d7af1513ef88";
+const DEFAULT_ONETRUST_DOMAIN_SCRIPT = "019a7167-a517-7d06-9a67-bb514569a46d";
 /** Network-wide Retention site id (same as The '90s Parent). */
 const DEFAULT_RETENTION_SITE_ID = "X2JHJ4WE";
 

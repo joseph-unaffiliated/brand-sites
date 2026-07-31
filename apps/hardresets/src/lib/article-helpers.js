@@ -146,6 +146,73 @@ function bodyTextWithoutHeroDupes(article, plain) {
   return (text || "").replace(/\s+/g, " ").trim();
 }
 
+const SEARCH_SKIP_KEYS = new Set([
+  "_key",
+  "_id",
+  "_ref",
+  "_rev",
+  "_type",
+  "asset",
+  "hotspot",
+  "crop",
+  "markDefs",
+  "url",
+  "href",
+  "mainImage",
+  "socialImage",
+  "heroImage",
+  "dimensions",
+  "metadata",
+]);
+
+/** Walk Sanity content trees and collect human-readable strings for search. */
+function collectSearchableStrings(value, out = []) {
+  if (value == null) return out;
+  if (typeof value === "string") {
+    const trimmed = value.trim();
+    if (trimmed) out.push(trimmed);
+    return out;
+  }
+  if (typeof value === "number" || typeof value === "boolean") return out;
+  if (Array.isArray(value)) {
+    for (const item of value) collectSearchableStrings(item, out);
+    return out;
+  }
+  if (typeof value === "object") {
+    for (const [key, child] of Object.entries(value)) {
+      if (SEARCH_SKIP_KEYS.has(key)) continue;
+      collectSearchableStrings(child, out);
+    }
+  }
+  return out;
+}
+
+/**
+ * Lowercased corpus for archive search: title, dek, summary, byline, subject, tags,
+ * and all text from content blocks (feature body, examples, nostalgia/around-the-web, etc).
+ */
+export function searchTextFromArticle(article) {
+  const parts = [
+    article?.title,
+    article?.subtitle,
+    article?.summary,
+    article?.kicker,
+    article?.authorName,
+    article?.bio,
+    article?.subjectName,
+    article?.photoCredit,
+  ];
+  if (Array.isArray(article?.tags)) parts.push(...article.tags);
+  collectSearchableStrings(article?.contentBlocks, parts);
+  collectSearchableStrings(article?.entries, parts);
+  return parts
+    .filter((part) => typeof part === "string" && part.trim())
+    .join(" ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase();
+}
+
 /** Plain text from the start of the article body (contentBlocks / entries). */
 export function bodyPreviewFromArticle(article, wordCount = 40) {
   const plain = bodyTextWithoutHeroDupes(article, plainBodyTextFromArticle(article));

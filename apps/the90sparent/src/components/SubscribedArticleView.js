@@ -12,7 +12,7 @@ const READ_ARTICLES_KEY = `read_articles_${BRAND}`;
 const MAX_ITEMS = 200;
 
 /** Magic-link toast + article_view tracking when subscribed or reader token present. */
-export default function SubscribedArticleView({ slug }) {
+export default function SubscribedArticleView({ slug, isJewishContent = false }) {
   const { isSubscribed, refresh } = useSubscriber();
   const [trackingEnabled, setTrackingEnabled] = useState(false);
 
@@ -59,7 +59,7 @@ export default function SubscribedArticleView({ slug }) {
         executeUrl={siteConfig.magicExecuteUrl}
         onLocalStateUpdated={refresh}
       />
-      <ArticleViewTracker slug={slug} enabled={trackingEnabled} />
+      <ArticleViewTracker slug={slug} enabled={trackingEnabled} isJewishContent={isJewishContent} />
       <ScrollDepthTracker slug={slug} enabled={trackingEnabled} />
     </>
   );

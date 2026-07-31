@@ -209,6 +209,14 @@ export const recipeType = defineType({
       options: {layout: 'tags'},
       fieldset: 'seo',
     }),
+    defineField({
+      name: 'isJewishContent',
+      title: 'Jewish-interested content',
+      description:
+        'Marks visits/clicks as Jewish-interested signals for analytics.',
+      type: 'boolean',
+      initialValue: false,
+    }),
   ],
   orderings: [
     {

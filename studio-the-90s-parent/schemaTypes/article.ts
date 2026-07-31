@@ -136,6 +136,14 @@ export const articleType = defineType({
         layout: 'tags',
       },
     }),
+    defineField({
+      name: 'isJewishContent',
+      title: 'Jewish-interested content',
+      description:
+        'Marks visits/clicks as Jewish-interested signals for analytics.',
+      type: 'boolean',
+      initialValue: false,
+    }),
     // Matches shared @publication-websites/sanity-content projections + Next.js renderers.
   ],
   preview: {

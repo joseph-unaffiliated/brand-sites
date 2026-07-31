@@ -43,11 +43,14 @@ After saving: **Redeploy** Production (and Preview if you added vars there).
 | `NEXT_PUBLIC_ADSENSE_CLIENT` | ⏭️ OPTIONAL — only if switching to `adsense` mode |
 | `NEXT_PUBLIC_META_PIXEL_ID` | ⚠️ UPDATE — new Meta pixel for this brand |
 | `NEXT_PUBLIC_GTM_ID` | Same GTM container as other Unaffiliated sites |
-| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | ⚠️ UPDATE — create a new GA4 property for this brand |
-| `NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT` | ⚠️ UPDATE — OneTrust domain script UUID for **theeyeballerscookbook.com** |
+| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | `G-L5VEGPHYGS` ✅ |
+| `NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT` | `019a7167-a517-7d06-9a67-bb514569a46d` ✅ |
 | `NEXT_PUBLIC_RETENTION_SITE_ID` | `X2JHJ4WE` (network default) |
 | `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` | Optional — Search Console token when ready |
 | `NEXT_PUBLIC_BING_SITE_VERIFICATION` | Optional — Bing token when ready |
+| `AIRTABLE_HOUSE_ADS_BASE_ID` | `appXFQv3Hy0wUDDnb` — house-ads Airtable pool (`/api/house-ads`), checked before `crossPromoAds.js`'s static creative |
+| `AIRTABLE_HOUSE_ADS_TABLE_ID` | `tblB3emRodWIzabTP` |
+| `AIRTABLE_API_KEY` | ⚠️ UPDATE — **server-only, no `NEXT_PUBLIC_` prefix.** Token from `Keys/AIRTABLE_ACCESS_TOKEN.txt` — do not commit it. See [`packages/shared-ads/README.md`](../packages/shared-ads/README.md#house-ads-airtable-pool). |
 | `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Optional — omit unless enabling Turnstile |
 
 **Do not add to marketing:** `SANITY_API_TOKEN`, `GCP_*`, `READER_TOKEN_SECRET`, `RETENTION_API_KEY`, `RETENTION_API_ID`.
@@ -96,19 +99,25 @@ NEXT_PUBLIC_SITE_FAVICON_PNG=/tec-favicon.png
 NEXT_PUBLIC_SITE_APPLE_ICON=/apple-icon.png
 NEXT_PUBLIC_TYPEKIT_KIT_ID=xon1hcs
 
-# --- Analytics & verification (⚠️ UPDATE GTM + GA4; optional Search Console / Bing) ---
+# --- Analytics & verification (⚠️ UPDATE GTM if needed; optional Search Console / Bing) ---
 NEXT_PUBLIC_GTM_ID=GTM-XXXXXXX
-NEXT_PUBLIC_GA_MEASUREMENT_ID=
+NEXT_PUBLIC_GA_MEASUREMENT_ID=G-L5VEGPHYGS
 NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION=
 NEXT_PUBLIC_BING_SITE_VERIFICATION=
-NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT=
+NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT=019a7167-a517-7d06-9a67-bb514569a46d
 NEXT_PUBLIC_RETENTION_SITE_ID=X2JHJ4WE
 
 # --- Ads & pixels (⚠️ UPDATE pixel; AdSense optional under cross_promo) ---
 NEXT_PUBLIC_META_PIXEL_ID=
 NEXT_PUBLIC_ADS_MODE=cross_promo
-# Do NOT set NEXT_PUBLIC_SHARED_ADS_BRAND for this app — house ads are chosen
-# per slot in src/config/crossPromoAds.js (never self-promo).
+# Do NOT set NEXT_PUBLIC_SHARED_ADS_BRAND for this app — the static cross-promo
+# fallback is chosen per slot in src/config/crossPromoAds.js (never self-promo).
+
+# --- House ads (Airtable pool, checked before crossPromoAds.js's static creative) ---
+AIRTABLE_HOUSE_ADS_BASE_ID=appXFQv3Hy0wUDDnb
+AIRTABLE_HOUSE_ADS_TABLE_ID=tblB3emRodWIzabTP
+# ⚠️ UPDATE — server-only secret, do NOT prefix NEXT_PUBLIC_. Value from Keys/AIRTABLE_ACCESS_TOKEN.txt (never commit it).
+AIRTABLE_API_KEY=
 
 # --- Subscribe bot protection (⏭️ OPTIONAL) ---
 NEXT_PUBLIC_TURNSTILE_SITE_KEY=
@@ -124,9 +133,9 @@ NEXT_PUBLIC_TURNSTILE_SITE_KEY=
 |----------|-------------|
 | `NEXT_PUBLIC_SANITY_PROJECT_ID` | `89sdxpbh` (already created) |
 | `NEXT_PUBLIC_GTM_ID` | GTM container ID, e.g. `GTM-ABC1234` |
-| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | New GA4 property Measurement ID for this brand |
-| `NEXT_PUBLIC_META_PIXEL_ID` | New Meta pixel for this brand |
-| `NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT` | OneTrust domain script UUID for **theeyeballerscookbook.com** |
+| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | `G-L5VEGPHYGS` (repo default) |
+| `NEXT_PUBLIC_META_PIXEL_ID` | Shared network Meta pixel (or brand-specific if split later) |
+| `NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT` | `019a7167-a517-7d06-9a67-bb514569a46d` (repo default) |
 | `NEXT_PUBLIC_RETENTION_SITE_ID` | Retention browser snippet site id (not magic server API keys) |
 | `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Optional — Cloudflare Turnstile site key |
 

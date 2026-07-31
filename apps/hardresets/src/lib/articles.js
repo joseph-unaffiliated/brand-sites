@@ -4,6 +4,7 @@ import {
   ensureDescriptionOnly,
   getDemographicAndDescription,
   previewTextFromArticle,
+  searchTextFromArticle,
   stripLeadingDuplicate,
   dedupeSubtitleInContentBlocks,
 } from "./article-helpers.js";
@@ -23,6 +24,7 @@ export {
   ensureDescriptionOnly,
   getDemographicAndDescription,
   previewTextFromArticle,
+  searchTextFromArticle,
   stripLeadingDuplicate,
   dedupeSubtitleInContentBlocks,
 };

@@ -50,6 +50,9 @@ After saving: **Redeploy** Production (and Preview if you added vars there).
 | `NEXT_PUBLIC_SHARED_ADS_URL_IN_ARTICLE` | `https://www.the90sparent.com/article/screenanxiety` |
 | `NEXT_PUBLIC_SHARED_ADS_URL_STICKY` | `https://www.the90sparent.com/article/birthdayparties` |
 | `NEXT_PUBLIC_SHARED_ADS_URL_RAIL` | `https://www.the90sparent.com` |
+| `AIRTABLE_HOUSE_ADS_BASE_ID` | `appXFQv3Hy0wUDDnb` — house-ads Airtable pool, checked before the static shared-ads creative above |
+| `AIRTABLE_HOUSE_ADS_TABLE_ID` | `tblB3emRodWIzabTP` |
+| `AIRTABLE_API_KEY` | ⚠️ UPDATE — **server-only, no `NEXT_PUBLIC_` prefix.** Token from `Keys/AIRTABLE_ACCESS_TOKEN.txt` — do not commit it. See [`packages/shared-ads/README.md`](../packages/shared-ads/README.md#house-ads-airtable-pool). |
 | `NEXT_PUBLIC_GTM_ID` | Same GTM container as other Unaffiliated sites (view source on the90sparent.com → search `GTM-`) |
 | `NEXT_PUBLIC_GA_MEASUREMENT_ID` | `G-ZLQN0SDVL2` — do not also fire this ID from GTM |
 | `NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT` | `019a7160-715f-710a-9141-d7af1513ef88` |
@@ -125,6 +128,12 @@ NEXT_PUBLIC_SHARED_ADS_URL_IN_ARTICLE=https://www.the90sparent.com/article/scree
 NEXT_PUBLIC_SHARED_ADS_URL_RAIL=https://www.the90sparent.com
 NEXT_PUBLIC_SHARED_ADS_URL_STICKY=https://www.the90sparent.com/article/birthdayparties
 
+# --- House ads (Airtable pool, checked before the static promo above) ---
+AIRTABLE_HOUSE_ADS_BASE_ID=appXFQv3Hy0wUDDnb
+AIRTABLE_HOUSE_ADS_TABLE_ID=tblB3emRodWIzabTP
+# ⚠️ UPDATE — server-only secret, do NOT prefix NEXT_PUBLIC_. Value from Keys/AIRTABLE_ACCESS_TOKEN.txt (never commit it).
+AIRTABLE_API_KEY=
+
 # --- Subscribe bot protection (⏭️ OPTIONAL) ---
 NEXT_PUBLIC_TURNSTILE_SITE_KEY=
 ```
@@ -140,6 +149,7 @@ NEXT_PUBLIC_TURNSTILE_SITE_KEY=
 | `NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT` | OneTrust domain script UUID for **thepicklereport.com** |
 | `NEXT_PUBLIC_RETENTION_SITE_ID` | Retention browser snippet site id (not magic server API keys) |
 | `NEXT_PUBLIC_SHARED_ADS_*` | Cross-promo click URLs (defaults target the90sparent.com articles) |
+| `AIRTABLE_API_KEY` | Airtable token from `Keys/AIRTABLE_ACCESS_TOKEN.txt` — powers `/api/house-ads`; leave unset locally to always fall back to the static creative |
 | `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Optional — Cloudflare Turnstile site key |
 
 Magic URLs in section A should stay on **`magic.thepicklereport.com`** unless you are deliberately changing infrastructure (not Hookup Lists).

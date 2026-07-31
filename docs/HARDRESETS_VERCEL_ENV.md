@@ -50,6 +50,9 @@ After saving: **Redeploy** Production (and Preview if you added vars there).
 | `NEXT_PUBLIC_RETENTION_SITE_ID` | `X2JHJ4WE` (network default) |
 | `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` | `czv-_WEhfW3Syo2EqhEfAMjrylIYTqZ9crDm1FU8qBY` (matches DNS TXT on apex) |
 | `NEXT_PUBLIC_BING_SITE_VERIFICATION` | Optional — Bing token when ready |
+| `AIRTABLE_HOUSE_ADS_BASE_ID` | `appXFQv3Hy0wUDDnb` — house-ads Airtable pool (`/api/house-ads`), checked before `crossPromoAds.js`'s static creative |
+| `AIRTABLE_HOUSE_ADS_TABLE_ID` | `tblB3emRodWIzabTP` |
+| `AIRTABLE_API_KEY` | ⚠️ UPDATE — **server-only, no `NEXT_PUBLIC_` prefix.** Token from `Keys/AIRTABLE_ACCESS_TOKEN.txt` — do not commit it. See [`packages/shared-ads/README.md`](../packages/shared-ads/README.md#house-ads-airtable-pool). |
 | `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Optional — omit unless enabling Turnstile |
 
 **Do not add to marketing:** `SANITY_API_TOKEN`, `GCP_*`, `READER_TOKEN_SECRET`, `RETENTION_API_KEY`, `RETENTION_API_ID`.
@@ -99,6 +102,12 @@ NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT=019a7160-3984-781b-95d0-f07cf83e7e37
 NEXT_PUBLIC_META_PIXEL_ID=809409995127436
 NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION=czv-_WEhfW3Syo2EqhEfAMjrylIYTqZ9crDm1FU8qBY
 # NEXT_PUBLIC_GTM_ID=   # set on Vercel (Production + Preview)
+
+# --- House ads (Airtable pool, checked before crossPromoAds.js's static creative) ---
+AIRTABLE_HOUSE_ADS_BASE_ID=appXFQv3Hy0wUDDnb
+AIRTABLE_HOUSE_ADS_TABLE_ID=tblB3emRodWIzabTP
+# ⚠️ UPDATE — server-only secret, do NOT prefix NEXT_PUBLIC_. Value from Keys/AIRTABLE_ACCESS_TOKEN.txt (never commit it).
+AIRTABLE_API_KEY=
 ```
 
 ## B) Magic (`magic.hardresets.com`)

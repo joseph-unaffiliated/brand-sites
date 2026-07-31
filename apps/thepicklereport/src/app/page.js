@@ -9,6 +9,7 @@ import HideWhenSubscribed from "@/components/HideWhenSubscribed";
 import HomeSnippetsList from "@/components/HomeSnippetsList";
 import HomeAboutSection from "@/components/HomeAboutSection";
 import HomeHeroTagline from "@/components/HomeHeroTagline";
+import HomeSubscribeSection from "@/components/HomeSubscribeSection";
 import JsonLd from "@/components/JsonLd";
 import {
   siteConfig,
@@ -81,6 +82,18 @@ export default async function Home({ searchParams: searchParamsProp }) {
     CENTER_COUNT + LEFT_COUNT,
     CENTER_COUNT + LEFT_COUNT + STACK_COUNT_MAX,
   );
+  const remainingArticles = articles.slice(CENTER_COUNT + LEFT_COUNT + STACK_COUNT_MAX);
+  // Second mosaic: same left/center/right split logic as the top mosaic, sized to what's left.
+  const remainingCount = remainingArticles.length;
+  const archiveCenterCount = Math.max(1, Math.min(CENTER_COUNT, Math.round(remainingCount / 5)));
+  const sideTotal = remainingCount - archiveCenterCount;
+  const archiveLeftCount = Math.ceil(sideTotal / 2);
+  const archiveLeft = remainingArticles.slice(0, archiveLeftCount);
+  const archiveCenter = remainingArticles.slice(
+    archiveLeftCount,
+    archiveLeftCount + archiveCenterCount,
+  );
+  const archiveRight = remainingArticles.slice(archiveLeftCount + archiveCenterCount);
 
   const homeUrl = absoluteSiteUrl("/");
   const ogImageUrl = absoluteSiteUrl(SITE_OG_IMAGE_PATH);
@@ -230,6 +243,117 @@ export default async function Home({ searchParams: searchParamsProp }) {
 
       {/* More about (always visible; copy and Subscribe link vary by sign-in) */}
       <HomeAboutSection totalCount={totalCount} />
+
+      {/* Second mosaic: left medium | center featured | right medium */}
+      {remainingArticles.length > 0 ? (
+        <section className={styles.mosaic} aria-label="More issues">
+          <div className={styles.mosaicContainer}>
+            <div className={styles.mosaicLeft}>
+              {archiveLeft.map((article) => (
+                <article className={styles.mosaicCard} key={article._id ?? article.slug}>
+                  <Link href={`/article/${article.slug}`} className={styles.mosaicCardLink}>
+                    <div className={styles.mosaicCardImage}>
+                      <Image
+                        src={article.mainImage}
+                        alt=""
+                        width={400}
+                        height={267}
+                        sizes="(max-width: 900px) 100vw, 320px"
+                      />
+                    </div>
+                    <div className={styles.mosaicCardBody}>
+                      <h3 className={styles.mosaicCardHeadline}>{article.title}</h3>
+                      {(() => {
+                        const { demographic, description } = getDemographicAndDescription(article);
+                        return (
+                          <>
+                            {demographic && (
+                              <p className={styles.mosaicCardDemographic}>{demographic}</p>
+                            )}
+                            {description && (
+                              <p className={styles.mosaicCardDek}>{description}</p>
+                            )}
+                          </>
+                        );
+                      })()}
+                    </div>
+                  </Link>
+                </article>
+              ))}
+            </div>
+
+            <div className={styles.mosaicCenter}>
+              {archiveCenter.map((article) => {
+                const { demographic } = getDemographicAndDescription(article);
+                const preview = featuredPreviewFromArticle(article);
+                return (
+                  <Link
+                    key={article._id ?? article.slug}
+                    href={`/article/${article.slug}`}
+                    className={styles.featuredCard}
+                  >
+                    <div className={styles.featuredImage}>
+                      <Image
+                        src={article.mainImage}
+                        alt=""
+                        width={article.mainImageWidth || 900}
+                        height={article.mainImageHeight || 600}
+                        sizes="(max-width: 900px) 100vw, 560px"
+                      />
+                    </div>
+                    <div className={styles.featuredBody}>
+                      <h2 className={styles.featuredHeadline}>{article.title}</h2>
+                      {demographic && <p className={styles.featuredDek}>{demographic}</p>}
+                      {preview ? (
+                        <div className={styles.featuredEntryPreview}>
+                          <p className={styles.featuredEntrySnippet}>{preview}</p>
+                        </div>
+                      ) : null}
+                      <span className={styles.featuredLink}>Read more</span>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+
+            <div className={styles.mosaicLeft}>
+              {archiveRight.map((article) => (
+                <article className={styles.mosaicCard} key={article._id ?? article.slug}>
+                  <Link href={`/article/${article.slug}`} className={styles.mosaicCardLink}>
+                    <div className={styles.mosaicCardImage}>
+                      <Image
+                        src={article.mainImage}
+                        alt=""
+                        width={400}
+                        height={267}
+                        sizes="(max-width: 900px) 100vw, 320px"
+                      />
+                    </div>
+                    <div className={styles.mosaicCardBody}>
+                      <h3 className={styles.mosaicCardHeadline}>{article.title}</h3>
+                      {(() => {
+                        const { demographic, description } = getDemographicAndDescription(article);
+                        return (
+                          <>
+                            {demographic && (
+                              <p className={styles.mosaicCardDemographic}>{demographic}</p>
+                            )}
+                            {description && (
+                              <p className={styles.mosaicCardDek}>{description}</p>
+                            )}
+                          </>
+                        );
+                      })()}
+                    </div>
+                  </Link>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
+
+      <HomeSubscribeSection initialEmail={initialEmail} />
     </div>
     </>
   );

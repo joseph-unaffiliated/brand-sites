@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
   getArticleBySlug,
@@ -13,8 +12,9 @@ import SubscribedArticleView from "@/components/SubscribedArticleView";
 import NavLogoImageSync from "@/components/NavLogoImageSync";
 import ArticleSubscribeForm from "@/components/ArticleSubscribeForm";
 import ArticleContentBlocks from "@/components/ArticleContentBlocks";
+import RecommendedArticleCards from "@/components/RecommendedArticleCards";
 import AdSlot from "@/components/AdSlot";
-import ArticleAdStickyBottom from "@/components/ArticleAdStickyBottom";
+import ArticleStickyBottom from "@/components/ArticleStickyBottom";
 import JsonLd from "@/components/JsonLd";
 import { siteConfig, siteDisplayName } from "@/config/site";
 import styles from "./page.module.css";
@@ -180,7 +180,7 @@ export default async function ArticlePage({ params }) {
     <div className={styles.page}>
       <JsonLd data={articleJsonLd} />
       <JsonLd data={breadcrumbJsonLd} />
-      <SubscribedArticleView slug={slug} />
+      <SubscribedArticleView slug={slug} isJewishContent={article.isJewishContent} />
       <NavLogoImageSync image={article.mainImage} />
       <section className="articlebody-section">
         {/* Centered hero: headline + optional cover image when not using content blocks */}
@@ -297,38 +297,9 @@ export default async function ArticlePage({ params }) {
           </div>
         )}
         </div>
-        {readMore.length > 0 && (
-          <div className={styles.readMoreOuter}>
-            <section className={styles.readMore} aria-label="Keep reading">
-              <h2 className={styles.readMoreTitle}>Keep reading</h2>
-              <div className={styles.readMoreGrid}>
-                {readMore.map((rec) => (
-                  <Link
-                    key={rec._id ?? rec.slug}
-                    href={`/article/${rec.slug}`}
-                    className={styles.readMoreCard}
-                  >
-                    <div className={styles.readMoreThumb}>
-                      <Image
-                        src={rec.mainImage}
-                        alt=""
-                        width={280}
-                        height={187}
-                        sizes="(max-width: 640px) 100vw, 280px"
-                      />
-                    </div>
-                    <h3 className={styles.readMoreHeadline}>{rec.title}</h3>
-                    {rec.summary && (
-                      <p className={styles.readMoreDek}>{rec.summary}</p>
-                    )}
-                  </Link>
-                ))}
-              </div>
-            </section>
-          </div>
-        )}
+        <RecommendedArticleCards articles={readMore} />
       </section>
-      <ArticleAdStickyBottom />
+      <ArticleStickyBottom />
     </div>
   );
 }

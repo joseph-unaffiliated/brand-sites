@@ -15,5 +15,12 @@ export default {
     { name: "publishedDate", type: "datetime", title: "Publishing date" },
     { name: "authorName", type: "string", title: "Author" },
     { name: "contentBlocks", type: "array", title: "Issue sections", of: [{ type: "object" }] },
+    {
+      name: "isJewishContent",
+      type: "boolean",
+      title: "Jewish-interested content",
+      description: "Marks visits/clicks as Jewish-interested signals for analytics.",
+      initialValue: false,
+    },
   ],
 };

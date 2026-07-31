@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { getCategories, getRecipes } from "@/lib/recipes";
 import RecipesBrowser from "@/components/RecipesBrowser";
+import HomeSubscribeSection from "@/components/HomeSubscribeSection";
 import { siteDisplayName } from "@/config/site";
 import styles from "./page.module.css";
 
@@ -21,10 +22,19 @@ export const metadata = {
   },
 };
 
-export default async function RecipesPage() {
+export default async function RecipesPage({ searchParams: searchParamsProp }) {
+  const searchParams =
+    typeof searchParamsProp?.then === "function"
+      ? await searchParamsProp
+      : searchParamsProp ?? {};
+  const initialEmail = searchParams?.email
+    ? decodeURIComponent(String(searchParams.email))
+    : undefined;
+
   const [recipes, categories] = await Promise.all([getRecipes(), getCategories()]);
 
   return (
+    <>
     <div className={styles.page}>
       <div className="container">
         <header className={styles.header}>
@@ -38,5 +48,11 @@ export default async function RecipesPage() {
         </Suspense>
       </div>
     </div>
+    <HomeSubscribeSection
+      initialEmail={initialEmail}
+      inputId="recipes-subscribe-cta-email"
+      titleId="recipes-subscribe-cta-title"
+    />
+    </>
   );
 }

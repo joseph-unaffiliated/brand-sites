@@ -1,9 +1,12 @@
 import Script from "next/script";
 
-const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID?.trim();
+const DEFAULT_GA_MEASUREMENT_ID = "G-L5VEGPHYGS";
+const GA_MEASUREMENT_ID =
+  process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID?.trim() || DEFAULT_GA_MEASUREMENT_ID;
 
 /**
- * GA4 measurement tag (gtag.js). Set NEXT_PUBLIC_GA_MEASUREMENT_ID on Vercel.
+ * GA4 measurement tag (gtag.js). Defaults to Eyeballer's property; override with
+ * NEXT_PUBLIC_GA_MEASUREMENT_ID on Vercel if needed.
  * Do not also fire the same Measurement ID from GTM — that double-counts page views.
  */
 export function GoogleAnalyticsScript() {
