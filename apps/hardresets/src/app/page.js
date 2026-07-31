@@ -156,6 +156,7 @@ export default async function Home({ searchParams: searchParamsProp }) {
                     {article.kicker && article.kicker.trim().toLowerCase() !== siteKickerLower && (
                       <p className={styles.mosaicCardKicker}>{article.kicker}</p>
                     )}
+                    <h3 className={styles.mosaicCardHeadline}>{article.title}</h3>
                     {article.subjectName ? (
                       <p
                         className={styles.mosaicCardSubject}
@@ -164,7 +165,6 @@ export default async function Home({ searchParams: searchParamsProp }) {
                         {article.subjectName}
                       </p>
                     ) : null}
-                    <h3 className={styles.mosaicCardHeadline}>{article.title}</h3>
                     {(() => {
                       const excerpt = bodyExcerptFromArticle(article, 2);
                       return excerpt ? (
@@ -195,7 +195,7 @@ export default async function Home({ searchParams: searchParamsProp }) {
                   />
                 </div>
                 <div className={styles.featuredBody}>
-                  <p className={styles.featuredKicker}>Latest issue</p>
+                  <h2 className={styles.featuredHeadline}>{featured.title}</h2>
                   {featured.subjectName ? (
                     <p
                       className={styles.featuredSubject}
@@ -204,7 +204,6 @@ export default async function Home({ searchParams: searchParamsProp }) {
                       {featured.subjectName}
                     </p>
                   ) : null}
-                  <h2 className={styles.featuredHeadline}>{featured.title}</h2>
                   {(() => {
                     const preview = featuredPreviewFromArticle(featured);
                     return preview ? (

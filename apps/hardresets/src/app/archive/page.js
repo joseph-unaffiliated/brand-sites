@@ -80,6 +80,7 @@ export default async function ArchivePage() {
                           })
                         : "—"}
                     </p>
+                    <h3>{article.title}</h3>
                     {article.subjectName ? (
                       <p
                         className={styles.issueSubject}
@@ -88,7 +89,6 @@ export default async function ArchivePage() {
                         {article.subjectName}
                       </p>
                     ) : null}
-                    <h3>{article.title}</h3>
                     {excerpt ? (
                       <p className={styles.issueExcerpt}>{excerpt}</p>
                     ) : null}

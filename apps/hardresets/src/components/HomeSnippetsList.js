@@ -26,6 +26,7 @@ export default function HomeSnippetsList({ stackItems }) {
             className={styles.snippetItem}
           >
             <span className={styles.snippetItemText}>
+              <span className={styles.snippetTitle}>{article.title}</span>
               {article.subjectName ? (
                 <span
                   className={styles.snippetSubject}
@@ -34,7 +35,6 @@ export default function HomeSnippetsList({ stackItems }) {
                   {article.subjectName}
                 </span>
               ) : null}
-              <span className={styles.snippetTitle}>{article.title}</span>
               {excerpt && (
                 <span className={styles.snippetSummary}>{excerpt}</span>
               )}

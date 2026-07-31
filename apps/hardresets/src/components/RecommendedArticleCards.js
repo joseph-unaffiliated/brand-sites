@@ -57,6 +57,7 @@ export default function RecommendedArticleCards({
                 {rec.kicker && rec.kicker.trim().toLowerCase() !== siteKickerLower ? (
                   <p className={styles.readMoreKicker}>{rec.kicker}</p>
                 ) : null}
+                <h3 className={styles.readMoreHeadline}>{rec.title}</h3>
                 {rec.subjectName ? (
                   <p
                     className={styles.readMoreSubject}
@@ -65,7 +66,6 @@ export default function RecommendedArticleCards({
                     {rec.subjectName}
                   </p>
                 ) : null}
-                <h3 className={styles.readMoreHeadline}>{rec.title}</h3>
                 {excerpt ? (
                   <p className={styles.readMoreExcerpt}>{excerpt}</p>
                 ) : null}
