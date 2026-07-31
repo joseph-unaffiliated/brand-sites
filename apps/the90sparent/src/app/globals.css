@@ -342,8 +342,9 @@ a {
     gap: 0 28px;
     /* Less air below the hairline before the hero (signed-in has no subscribe rail). */
     padding-bottom: max(4px, calc(var(--header-mark-h) * 0.22 + 12px - 16px));
-    /* Collapse hairlines when signed in (opaque mask chip removed for transparent header). */
-    --logo-line-gap: 100vw;
+    /* Hairline gap: logo + nearest nav labels; lines stay in the outer margins. */
+    --logo-line-gap: calc(var(--header-mark-w) + 2 * var(--logo-line-pad-x) + 220px);
+    --hairline-y: calc(50% + 5px);
   }
 
   .site-header--marketing .header-row-marketing--subscribed .brand {
@@ -382,7 +383,7 @@ a {
     width: min(calc(var(--logo-line-gap) + 140px + 2 * 24px), calc(100% - 48px));
     height: calc(18px + var(--header-mark-h) + 22px);
     border-radius: 6px;
-    background: transparent;
+    background: var(--bg);
     z-index: 2;
     pointer-events: none;
   }
@@ -394,7 +395,7 @@ a {
   }
 
   .site-header--marketing .header-row-marketing--subscribed .brand-name {
-    background: transparent;
+    background: var(--bg);
   }
 
   /* Article: equal-width side rails so the wordmark stays centered in the container. */
