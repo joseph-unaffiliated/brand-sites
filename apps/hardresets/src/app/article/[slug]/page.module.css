@@ -437,12 +437,12 @@
 
 .readMoreSubject {
   font-family: "halyard-display", "Helvetica Neue", Arial, sans-serif;
-  font-size: 1.05rem;
+  font-size: 15px;
   font-weight: 300;
-  line-height: 1.25;
+  line-height: 1.4;
   letter-spacing: -0.02em;
-  color: var(--accent);
-  margin: 0 1rem 0.5rem;
+  color: var(--text-muted);
+  margin: 0.75rem 1rem;
 }
 
 .readMoreHeadline:last-child {

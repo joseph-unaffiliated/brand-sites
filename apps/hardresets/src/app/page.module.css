@@ -179,19 +179,19 @@
 
 .mosaicCardSubject {
   font-family: "halyard-display", "Helvetica Neue", Arial, sans-serif;
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 300;
-  line-height: 1.2;
+  line-height: 1.4;
   letter-spacing: -0.02em;
-  color: var(--accent);
-  margin: -0.5rem 0 1rem;
+  color: var(--text-muted);
+  margin: 0.75rem 0;
 }
 
 .mosaicCardHeadline {
   font-size: 28px;
   font-weight: 300;
   line-height: 1.1;
-  margin: 0 0 1rem;
+  margin: 0;
 }
 
 .mosaicCardDek {
@@ -200,6 +200,10 @@
   line-height: 1.4;
   color: var(--text-secondary);
   margin: 0;
+}
+
+.mosaicCardHeadline + .mosaicCardDek {
+  margin-top: 0.75rem;
 }
 
 /* Center: big feature */
@@ -252,17 +256,17 @@
   font-weight: 300;
   line-height: 1.15;
   letter-spacing: -0.02em;
-  margin: 0 0 10px;
+  margin: 0;
 }
 
 .featuredSubject {
   font-family: "halyard-display", "Helvetica Neue", Arial, sans-serif;
-  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+  font-size: 15px;
   font-weight: 300;
-  line-height: 1.2;
+  line-height: 1.4;
   letter-spacing: -0.02em;
-  color: var(--accent);
-  margin: 0 0 10px;
+  color: var(--text-muted);
+  margin: 0.75rem 0;
 }
 
 .featuredDek {
@@ -273,12 +277,25 @@
 }
 
 .featuredEntryPreview {
-  margin: 0 0 12px;
+  margin: 0;
   max-height: 12em;
   overflow: hidden;
   position: relative;
   -webkit-mask-image: linear-gradient(to bottom, black 0%, black 85%, transparent 100%);
   mask-image: linear-gradient(to bottom, black 0%, black 85%, transparent 100%);
+}
+
+.featuredHeadline + .featuredEntryPreview {
+  margin-top: 0.75rem;
+}
+
+.featuredSubject + .featuredEntryPreview {
+  /* subject already provides equal top/bottom margin */
+  margin-top: 0;
+}
+
+.featuredEntryPreview + .featuredLink {
+  margin-top: 12px;
 }
 
 .featuredEntryBlock {
@@ -297,11 +314,11 @@
 }
 
 .featuredEntrySnippet {
-  font-size: 13px;
+  font-size: 15px;
   line-height: 1.55;
   color: var(--text-secondary);
   opacity: 0.9;
-  margin: 8px 0 0 0em;
+  margin: 0;
   padding-left: 0;
 }
 
@@ -386,9 +403,10 @@
   font-family: "halyard-display", "Helvetica Neue", Arial, sans-serif;
   font-size: 15px;
   font-weight: 300;
-  line-height: 1.25;
+  line-height: 1.4;
   letter-spacing: -0.02em;
-  color: var(--accent);
+  color: var(--text-muted);
+  margin: 0.35rem 0;
 }
 
 .snippetSummary {

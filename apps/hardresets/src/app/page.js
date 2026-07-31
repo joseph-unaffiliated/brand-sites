@@ -158,12 +158,7 @@ export default async function Home({ searchParams: searchParamsProp }) {
                     )}
                     <h3 className={styles.mosaicCardHeadline}>{article.title}</h3>
                     {article.subjectName ? (
-                      <p
-                        className={styles.mosaicCardSubject}
-                        style={article.subjectColor ? { color: article.subjectColor } : undefined}
-                      >
-                        {article.subjectName}
-                      </p>
+                      <p className={styles.mosaicCardSubject}>{article.subjectName}</p>
                     ) : null}
                     {(() => {
                       const excerpt = bodyExcerptFromArticle(article, 2);
@@ -197,12 +192,7 @@ export default async function Home({ searchParams: searchParamsProp }) {
                 <div className={styles.featuredBody}>
                   <h2 className={styles.featuredHeadline}>{featured.title}</h2>
                   {featured.subjectName ? (
-                    <p
-                      className={styles.featuredSubject}
-                      style={featured.subjectColor ? { color: featured.subjectColor } : undefined}
-                    >
-                      {featured.subjectName}
-                    </p>
+                    <p className={styles.featuredSubject}>{featured.subjectName}</p>
                   ) : null}
                   {(() => {
                     const preview = featuredPreviewFromArticle(featured);

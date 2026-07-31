@@ -59,12 +59,7 @@ export default function RecommendedArticleCards({
                 ) : null}
                 <h3 className={styles.readMoreHeadline}>{rec.title}</h3>
                 {rec.subjectName ? (
-                  <p
-                    className={styles.readMoreSubject}
-                    style={rec.subjectColor ? { color: rec.subjectColor } : undefined}
-                  >
-                    {rec.subjectName}
-                  </p>
+                  <p className={styles.readMoreSubject}>{rec.subjectName}</p>
                 ) : null}
                 {excerpt ? (
                   <p className={styles.readMoreExcerpt}>{excerpt}</p>

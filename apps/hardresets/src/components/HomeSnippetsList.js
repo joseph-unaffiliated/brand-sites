@@ -27,14 +27,6 @@ export default function HomeSnippetsList({ stackItems }) {
           >
             <span className={styles.snippetItemText}>
               <span className={styles.snippetTitle}>{article.title}</span>
-              {article.subjectName ? (
-                <span
-                  className={styles.snippetSubject}
-                  style={article.subjectColor ? { color: article.subjectColor } : undefined}
-                >
-                  {article.subjectName}
-                </span>
-              ) : null}
               {excerpt && (
                 <span className={styles.snippetSummary}>{excerpt}</span>
               )}

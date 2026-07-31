@@ -99,12 +99,12 @@
 
 .issueSubject {
   font-family: "halyard-display", "Helvetica Neue", Arial, sans-serif;
-  font-size: 1.125rem;
+  font-size: 15px;
   font-weight: 300;
-  line-height: 1.25;
+  line-height: 1.4;
   letter-spacing: -0.02em;
-  color: var(--accent);
-  margin: 0 0 8px;
+  color: var(--text-muted);
+  margin: 0.75rem 0;
 }
 
 .issueExcerpt {
