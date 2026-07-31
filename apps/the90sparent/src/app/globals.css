@@ -342,6 +342,8 @@ a {
     gap: 0 28px;
     /* Less air below the hairline before the hero (signed-in has no subscribe rail). */
     padding-bottom: max(4px, calc(var(--header-mark-h) * 0.22 + 12px - 16px));
+    /* Collapse hairlines when signed in (opaque mask chip removed for transparent header). */
+    --logo-line-gap: 100vw;
   }
 
   .site-header--marketing .header-row-marketing--subscribed .brand {
