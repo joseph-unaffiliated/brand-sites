@@ -33,6 +33,9 @@ apps/*/out/
 .DS_Store
 *.pem
 
+# Local reference dumps (not part of the product)
+/reference/
+
 # debug
 npm-debug.log*
 yarn-debug.log*
