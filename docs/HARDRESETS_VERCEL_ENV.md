@@ -48,7 +48,7 @@ After saving: **Redeploy** Production (and Preview if you added vars there).
 | `NEXT_PUBLIC_GA_MEASUREMENT_ID` | `G-LNK30D79KJ` (Hard Resets Website web stream) |
 | `NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT` | `019a7160-3984-781b-95d0-f07cf83e7e37` |
 | `NEXT_PUBLIC_RETENTION_SITE_ID` | `X2JHJ4WE` (network default) |
-| `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` | Optional — Search Console token when ready |
+| `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` | `czv-_WEhfW3Syo2EqhEfAMjrylIYTqZ9crDm1FU8qBY` (matches DNS TXT on apex) |
 | `NEXT_PUBLIC_BING_SITE_VERIFICATION` | Optional — Bing token when ready |
 | `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Optional — omit unless enabling Turnstile |
 
@@ -97,6 +97,7 @@ NEXT_PUBLIC_RETENTION_SITE_ID=X2JHJ4WE
 NEXT_PUBLIC_GA_MEASUREMENT_ID=G-LNK30D79KJ
 NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT=019a7160-3984-781b-95d0-f07cf83e7e37
 NEXT_PUBLIC_META_PIXEL_ID=809409995127436
+NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION=czv-_WEhfW3Syo2EqhEfAMjrylIYTqZ9crDm1FU8qBY
 # NEXT_PUBLIC_GTM_ID=   # set on Vercel (Production + Preview)
 ```
 
@@ -121,11 +122,13 @@ GCP_SERVICE_ACCOUNT_KEY=
 | Create GA4 property → `NEXT_PUBLIC_GA_MEASUREMENT_ID` | ✅ Done — stream “Hard Resets Website” (`https://hardresets.com`, Stream ID `15355500265`) Measurement ID `G-LNK30D79KJ` set on Production + Preview. |
 | `NEXT_PUBLIC_META_PIXEL_ID` | ✅ Network pixel `809409995127436` |
 | `NEXT_PUBLIC_SITE_URL` preferred host | ✅ `https://www.hardresets.com` (canonical / sitemap / OG) |
-| Smoke-test subscribe → profile → reader-subscriptions | ⏳ Manual after redeploys finish. |
+| Smoke-test subscribe → profile → reader-subscriptions | ✅ 2026-07-30 — CORS OK (www + apex); `/execute` subscribe 200 + readerToken; `subscribedBrands: ["hardresets"]`; `/profile` 200 |
+| GTM vs GA4 double-count | ✅ Published `GTM-TVHD6JMG` contains **no** `G-*` measurement IDs (no `G-LNK30D79KJ`); direct gtag alone fires Hard Resets GA4 |
+| Search Console | ✅ DNS TXT already on apex (`google-site-verification=czv-_…`); meta env set to same token for HTML tag |
 
 ### Manual next clicks (remaining)
 
-1. **Smoke-test:** Open `https://www.hardresets.com` → subscribe → confirm magic execute → Profile → `GET https://magic.hardresets.com/api/reader-subscriptions` returns 200 with matching `Access-Control-Allow-Origin`.
-2. **GTM:** Confirm container `GTM-TVHD6JMG` does not also fire GA4 `G-LNK30D79KJ` (direct gtag is already on the site).
+1. In Google Search Console, confirm a **Domain** property for `hardresets.com` (DNS already verifies) or URL-prefix `https://www.hardresets.com/` — submit sitemap `https://www.hardresets.com/sitemap.xml` if not already.
+2. Optional: clean up the smoke-test address `joseph+hr-smoke-*@unaffiliated.co` in Customer.io if you don’t want it kept.
 
 See also [ENVIRONMENT.md](./ENVIRONMENT.md) and [DEPLOYMENT.md](./DEPLOYMENT.md).
