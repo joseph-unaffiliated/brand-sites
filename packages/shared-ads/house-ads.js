@@ -8,7 +8,9 @@ export const HOUSE_ADS_TABLE_ID_DEFAULT = "tblB3emRodWIzabTP";
 
 const FIELD = {
   name: "Name",
-  brandKey: "Brand key",
+  /** Lookup of All Brands → slug (preferred). Legacy plain-text name kept as fallback. */
+  brandKey: "Brand Key",
+  brandKeyLegacy: "Brand key",
   slot: "Slot",
   image: "Image",
   clickUrl: "Click URL",
@@ -44,6 +46,24 @@ function imageUrlFromAttachment(attachments) {
 }
 
 /**
+ * Normalize Airtable single-line / lookup / linked primary values to one string.
+ * Lookups arrive as `["the90sparent"]`; plain text as `"the90sparent"`.
+ * @param {unknown} value
+ */
+function firstFieldString(value) {
+  if (value == null || value === "") return "";
+  if (Array.isArray(value)) {
+    if (!value.length) return "";
+    const first = value[0];
+    if (first && typeof first === "object" && "name" in first) {
+      return String(first.name || "").trim();
+    }
+    return String(first ?? "").trim();
+  }
+  return String(value).trim();
+}
+
+/**
  * Fetch all Active creatives (cached by caller / Next revalidate).
  * @returns {Promise<HouseCreative[]>}
  */
@@ -68,14 +88,16 @@ export async function fetchActiveHouseCreatives() {
   const out = [];
   for (const rec of data.records || []) {
     const f = rec.fields || {};
-    const brandKey = String(f[FIELD.brandKey] || "").trim();
-    const slot = String(f[FIELD.slot] || "").trim();
+    const brandKey =
+      firstFieldString(f[FIELD.brandKey]) ||
+      firstFieldString(f[FIELD.brandKeyLegacy]);
+    const slot = firstFieldString(f[FIELD.slot]);
     const imageUrl = imageUrlFromAttachment(f[FIELD.image]);
-    const clickUrl = String(f[FIELD.clickUrl] || "").trim();
+    const clickUrl = firstFieldString(f[FIELD.clickUrl]);
     if (!brandKey || !slot || !imageUrl || !clickUrl) continue;
     out.push({
       id: rec.id,
-      name: String(f[FIELD.name] || ""),
+      name: firstFieldString(f[FIELD.name]),
       brandKey,
       slot,
       imageUrl,
