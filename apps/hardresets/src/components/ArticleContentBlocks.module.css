@@ -30,8 +30,13 @@
   margin-top: .5rem;
 }
 
+/* Extra air after the main feature before secondary sources / divider */
+.blocks > .block:has(+ .secondarySources) {
+  padding-bottom: 80px;
+}
+
 .blocks > .block + .secondarySources {
-  margin-top: -0.5rem;
+  margin-top: 0;
 }
 
 .block {
