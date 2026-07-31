@@ -24,7 +24,11 @@ function articleSlugFromPath(pathname) {
   return pathname.split("/").filter(Boolean)[1] || undefined;
 }
 
-export default function SubscribeFormWithTurnstile({ initialEmail, layout = "stack" }) {
+export default function SubscribeFormWithTurnstile({
+  initialEmail,
+  layout = "stack",
+  inputId = "email",
+}) {
   const pathname = usePathname();
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -32,6 +36,7 @@ export default function SubscribeFormWithTurnstile({ initialEmail, layout = "sta
   const emailRef = useRef(null);
   const funnelStartedRef = useRef(false);
   const isBanner = layout === "banner";
+  const isCta = layout === "cta";
   const funnelProps = {
     placement: layout,
     ...(articleSlugFromPath(pathname) ? { articleSlug: articleSlugFromPath(pathname) } : {}),
@@ -81,7 +86,9 @@ export default function SubscribeFormWithTurnstile({ initialEmail, layout = "sta
   return (
     <>
       <form
-        className={isArticle ? "articlepage-form" : styles.form}
+        className={
+          isArticle ? "articlepage-form" : isCta ? styles.formCta : styles.form
+        }
         onSubmit={handleSubmit}
         onKeyDown={onFormKeyDown}
         noValidate
@@ -91,7 +98,7 @@ export default function SubscribeFormWithTurnstile({ initialEmail, layout = "sta
             <div className={styles.formRow}>
               <input
                 ref={emailRef}
-                id="email"
+                id={inputId}
                 name="email"
                 type="email"
                 placeholder="Email address"
@@ -125,7 +132,7 @@ export default function SubscribeFormWithTurnstile({ initialEmail, layout = "sta
             <div className={styles.formRow}>
               <input
                 ref={emailRef}
-                id="email"
+                id={inputId}
                 name="email"
                 type="email"
                 placeholder="Email"
@@ -171,7 +178,7 @@ export default function SubscribeFormWithTurnstile({ initialEmail, layout = "sta
         )}
       </form>
       {!isArticle && (
-        <p className={styles.note}>
+        <p className={isCta ? styles.noteCta : styles.note}>
           By entering your email you agree to our{" "}
           <Link href="/terms">Terms</Link> and{" "}
           <Link href="/privacy">Privacy</Link>.

@@ -1,10 +1,9 @@
 import Image from "next/image";
-import Link from "next/link";
 import { Suspense } from "react";
 import styles from "../basic-page.module.css";
 import aboutStyles from "./page.module.css";
-import articleStyles from "../article/[slug]/page.module.css";
 import AboutOutreach from "./AboutOutreach";
+import RecommendedArticleCards from "@/components/RecommendedArticleCards";
 import { siteDisplayName } from "@/config/site";
 import { getArticles } from "@/lib/articles";
 import { pickRandomArticles } from "@/lib/pickRandomArticles";
@@ -131,37 +130,7 @@ export default async function AboutPage() {
         </div>
       </div>
 
-      {readMore.length > 0 ? (
-        <div className={articleStyles.readMoreOuter}>
-          <section className={articleStyles.readMore} aria-label="Keep reading">
-            <div className={articleStyles.readMoreGrid}>
-              {readMore.map((rec) => (
-                <Link
-                  key={rec._id ?? rec.slug}
-                  href={`/article/${rec.slug}`}
-                  className={articleStyles.readMoreCard}
-                >
-                  <div className={articleStyles.readMoreThumb}>
-                    <Image
-                      src={rec.mainImage}
-                      alt={rec.title}
-                      width={280}
-                      height={187}
-                      sizes="(max-width: 640px) 100vw, 280px"
-                    />
-                  </div>
-                  <h3 className={articleStyles.readMoreHeadline}>
-                    {rec.title}
-                  </h3>
-                  {rec.summary ? (
-                    <p className={articleStyles.readMoreDek}>{rec.summary}</p>
-                  ) : null}
-                </Link>
-              ))}
-            </div>
-          </section>
-        </div>
-      ) : null}
+      <RecommendedArticleCards articles={readMore} title={null} />
     </>
   );
 }

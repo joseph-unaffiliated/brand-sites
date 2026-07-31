@@ -273,6 +273,81 @@
   margin-top: 2px;
 }
 
+/* Light CTA band (homepage bottom) — same control shape, surface-friendly colors */
+.formCta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 0;
+  width: 100%;
+}
+
+.formCta .formRow {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.formCta .formRow input {
+  flex: 1;
+  width: 100%;
+  height: 52px;
+  padding: 0 146px 0 18px;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 16px;
+  font-family: "halyard-display", "Helvetica Neue", Arial, sans-serif;
+  font-weight: 300;
+}
+
+.formCta .formRow input::placeholder {
+  color: var(--text-muted);
+}
+
+.formCta .formRow input:focus,
+.formCta .formRow input:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.formCta .formRow input:focus::placeholder,
+.formCta .formRow input:focus-visible::placeholder {
+  color: transparent;
+}
+
+.formCta .submitPill {
+  color: var(--text-primary);
+}
+
+.formCta .submitPill:hover:not(:disabled) {
+  background: linear-gradient(
+    to right,
+    rgba(2, 30, 21, 0) 0%,
+    rgba(2, 30, 21, 0.02) 32%,
+    rgba(2, 30, 21, 0.04) 72%,
+    rgba(2, 30, 21, 0.06) 100%
+  );
+}
+
+.noteCta {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.35;
+  margin: 12px 0 0 0;
+  text-align: center;
+}
+
+.noteCta a {
+  text-decoration: underline;
+  color: inherit;
+}
+
 /* Banner: stack text above form on mobile, smaller type and tighter button */
 @media (max-width: 768px) {
   .rootBanner {

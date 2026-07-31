@@ -2,12 +2,14 @@ import Link from "next/link";
 import {
   getArticles,
   getDemographicAndDescription,
+  bodyExcerptFromArticle,
 } from "@/lib/articles";
 import SanityMedia from "@/components/SanityMedia";
 import SubscribeBlock from "@/components/SubscribeBlock";
 import HideWhenSubscribed from "@/components/HideWhenSubscribed";
 import HomeSnippetsList from "@/components/HomeSnippetsList";
 import HomeAboutSection from "@/components/HomeAboutSection";
+import HomeSubscribeSection from "@/components/HomeSubscribeSection";
 import JsonLd from "@/components/JsonLd";
 import {
   siteConfig,
@@ -33,18 +35,18 @@ const LEFT_COUNT = 2;
 /** Max items for "More issues" (client shows 3 when signed out, 6 when signed in). */
 const STACK_COUNT_MAX = 6;
 
-function plainTextFromPortableTextBlocks(blocks) {
-  if (!Array.isArray(blocks)) return "";
+function paragraphsFromPortableTextBlocks(blocks) {
+  if (!Array.isArray(blocks)) return [];
   return blocks
-    .flatMap((block) => {
-      if (!Array.isArray(block?.children)) return [];
+    .map((block) => {
+      if (!Array.isArray(block?.children)) return "";
       return block.children
         .map((child) => (typeof child?.text === "string" ? child.text : ""))
-        .filter(Boolean);
+        .join("")
+        .replace(/\s+/g, " ")
+        .trim();
     })
-    .join(" ")
-    .replace(/\s+/g, " ")
-    .trim();
+    .filter(Boolean);
 }
 
 function firstWordsWithEllipsis(text, wordCount = 150) {
@@ -55,16 +57,47 @@ function firstWordsWithEllipsis(text, wordCount = 150) {
   return `${words.slice(0, wordCount).join(" ")}…`;
 }
 
-function featuredPreviewFromArticle(article) {
+/** Opening body paragraphs for featured cards, preserving article paragraph breaks. */
+function featuredPreviewParagraphsFromArticle(article, wordCount = 150) {
   const sections = Array.isArray(article?.contentBlocks) ? article.contentBlocks : [];
-  const bodyText = sections
-    .map((section) => plainTextFromPortableTextBlocks(section?.body))
-    .filter(Boolean)
-    .join(" ")
-    .replace(/\s+/g, " ")
-    .trim();
-  const fallback = (article?.summary || article?.subtitle || "").trim();
-  return firstWordsWithEllipsis(bodyText || fallback, 150);
+  const paragraphs = sections.flatMap((section) =>
+    paragraphsFromPortableTextBlocks(section?.body),
+  );
+  if (paragraphs.length === 0) {
+    const fallback = (article?.summary || article?.subtitle || "").trim();
+    return fallback ? [firstWordsWithEllipsis(fallback, wordCount)] : [];
+  }
+
+  const out = [];
+  let wordsUsed = 0;
+  for (const para of paragraphs) {
+    if (wordsUsed >= wordCount) break;
+    const words = para.split(/\s+/).filter(Boolean);
+    const remaining = wordCount - wordsUsed;
+    if (words.length <= remaining) {
+      out.push(para);
+      wordsUsed += words.length;
+    } else {
+      out.push(`${words.slice(0, remaining).join(" ")}…`);
+      break;
+    }
+  }
+  return out;
+}
+
+function MosaicCardBody({ article }) {
+  const { demographic, description } = getDemographicAndDescription(article);
+  const excerpt = bodyExcerptFromArticle(article, 2);
+  return (
+    <div className={styles.mosaicCardBody}>
+      <h3 className={styles.mosaicCardHeadline}>{article.title}</h3>
+      {demographic ? (
+        <p className={styles.mosaicCardDemographic}>{demographic}</p>
+      ) : null}
+      {description ? <p className={styles.mosaicCardDek}>{description}</p> : null}
+      {excerpt ? <p className={styles.mosaicCardExcerpt}>{excerpt}</p> : null}
+    </div>
+  );
 }
 
 export default async function Home({ searchParams: searchParamsProp }) {
@@ -77,6 +110,18 @@ export default async function Home({ searchParams: searchParamsProp }) {
   const featured = articles[0] ?? null;
   const leftCards = articles.slice(1, 1 + LEFT_COUNT);
   const stackItems = articles.slice(1 + LEFT_COUNT, 1 + LEFT_COUNT + STACK_COUNT_MAX);
+  const remainingArticles = articles.slice(1 + LEFT_COUNT + STACK_COUNT_MAX);
+  // Side columns share medium cards (equal width); center keeps featured cards.
+  const remainingCount = remainingArticles.length;
+  const archiveCenterCount = Math.max(1, Math.min(2, Math.round(remainingCount / 5)));
+  const sideTotal = remainingCount - archiveCenterCount;
+  const archiveLeftCount = Math.ceil(sideTotal / 2);
+  const archiveLeft = remainingArticles.slice(0, archiveLeftCount);
+  const archiveCenter = remainingArticles.slice(
+    archiveLeftCount,
+    archiveLeftCount + archiveCenterCount,
+  );
+  const archiveRight = remainingArticles.slice(archiveLeftCount + archiveCenterCount);
   const featuredDemographic = featured ? getDemographicAndDescription(featured).demographic : "";
 
   const homeUrl = absoluteSiteUrl("/");
@@ -153,22 +198,7 @@ export default async function Home({ searchParams: searchParamsProp }) {
                       sizes="(max-width: 900px) 100vw, 320px"
                     />
                   </div>
-                  <div className={styles.mosaicCardBody}>
-                    <h3 className={styles.mosaicCardHeadline}>{article.title}</h3>
-                    {(() => {
-                      const { demographic, description } = getDemographicAndDescription(article);
-                      return (
-                        <>
-                          {demographic && (
-                            <p className={styles.mosaicCardDemographic}>{demographic}</p>
-                          )}
-                          {description && (
-                            <p className={styles.mosaicCardDek}>{description}</p>
-                          )}
-                        </>
-                      );
-                    })()}
-                  </div>
+                  <MosaicCardBody article={article} />
                 </Link>
               </article>
             ))}
@@ -198,10 +228,14 @@ export default async function Home({ searchParams: searchParamsProp }) {
                     <p className={styles.featuredDek}>{featuredDemographic}</p>
                   )}
                   {(() => {
-                    const preview = featuredPreviewFromArticle(featured);
-                    return preview ? (
+                    const paragraphs = featuredPreviewParagraphsFromArticle(featured);
+                    return paragraphs.length > 0 ? (
                       <div className={styles.featuredEntryPreview}>
-                        <p className={styles.featuredEntrySnippet}>{preview}</p>
+                        {paragraphs.map((para, index) => (
+                          <p className={styles.featuredEntrySnippet} key={index}>
+                            {para}
+                          </p>
+                        ))}
                       </div>
                     ) : null;
                   })()}
@@ -223,6 +257,103 @@ export default async function Home({ searchParams: searchParamsProp }) {
 
       {/* More about (always visible; copy and Subscribe link vary by sign-in) */}
       <HomeAboutSection totalCount={totalCount} />
+
+      {/* Second mosaic: left medium | center featured | right snippets */}
+      {remainingArticles.length > 0 ? (
+        <section className={styles.mosaic} aria-label="More issues">
+          <div
+            className={`${styles.mosaicContainer} ${styles.mosaicContainerSubscribeLeft}`}
+          >
+            <div className={styles.mosaicLeft}>
+              {archiveLeft.map((article) => (
+                <article className={styles.mosaicCard} key={article._id ?? article.slug}>
+                  <Link
+                    href={`/article/${article.slug}`}
+                    className={styles.mosaicCardLink}
+                  >
+                    <div className={styles.mosaicCardImage}>
+                      <SanityMedia
+                        src={article.mainImage}
+                        alt={article.title}
+                        width={400}
+                        height={267}
+                        sizes="(max-width: 900px) 100vw, 320px"
+                      />
+                    </div>
+                    <MosaicCardBody article={article} />
+                  </Link>
+                </article>
+              ))}
+            </div>
+
+            <div className={styles.mosaicCenter}>
+              <div className={styles.archiveIssueColumn}>
+                {archiveCenter.map((article) => {
+                  const { demographic } = getDemographicAndDescription(article);
+                  const paragraphs = featuredPreviewParagraphsFromArticle(article, 280);
+                  return (
+                    <Link
+                      key={article._id ?? article.slug}
+                      href={`/article/${article.slug}`}
+                      className={`${styles.featuredCard} ${styles.archiveFeaturedCard}`}
+                    >
+                      <div className={styles.featuredImage}>
+                        <SanityMedia
+                          src={article.mainImage}
+                          alt={article.title}
+                          width={article.mainImageWidth || 900}
+                          height={article.mainImageHeight || 600}
+                          sizes="(max-width: 900px) 100vw, 560px"
+                        />
+                      </div>
+                      <div className={styles.featuredBody}>
+                        <h2 className={styles.featuredHeadline}>{article.title}</h2>
+                        {demographic ? (
+                          <p className={styles.featuredDek}>{demographic}</p>
+                        ) : null}
+                        {paragraphs.length > 0 ? (
+                          <div className={styles.featuredEntryPreview}>
+                            {paragraphs.map((para, index) => (
+                              <p className={styles.featuredEntrySnippet} key={index}>
+                                {para}
+                              </p>
+                            ))}
+                          </div>
+                        ) : null}
+                        <span className={styles.featuredLink}>Read more</span>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className={`${styles.mosaicRight} ${styles.archiveMosaicRight}`}>
+              {archiveRight.map((article) => (
+                <article className={styles.mosaicCard} key={article._id ?? article.slug}>
+                  <Link
+                    href={`/article/${article.slug}`}
+                    className={styles.mosaicCardLink}
+                  >
+                    <div className={styles.mosaicCardImage}>
+                      <SanityMedia
+                        src={article.mainImage}
+                        alt={article.title}
+                        width={400}
+                        height={267}
+                        sizes="(max-width: 900px) 100vw, 320px"
+                      />
+                    </div>
+                    <MosaicCardBody article={article} />
+                  </Link>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
+
+      <HomeSubscribeSection initialEmail={initialEmail} />
     </div>
   );
 }

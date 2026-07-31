@@ -119,15 +119,24 @@ export const articleType = defineType({
     }),
     defineField({
       name: 'tags',
-      title: 'Tags',
-      description: 'Optional topic tags for clustering and analytics.',
+      title: 'Categories',
+      description:
+        'Archive categories (multi-select). Used for filters on /archive. Prefer the controlled list.',
       type: 'array',
       of: [defineArrayMember({type: 'string'})],
-      options: {layout: 'tags'},
-      fieldset: 'seo',
+      options: {
+        list: [
+          {title: 'Screens & Attention', value: 'screens-attention'},
+          {title: 'Safety Theater', value: 'safety-theater'},
+          {title: 'Play & Boredom', value: 'play-boredom'},
+          {title: 'Food & Bodies', value: 'food-bodies'},
+          {title: 'Parenting Scripts', value: 'parenting-scripts'},
+          {title: 'The Village', value: 'the-village'},
+        ],
+        layout: 'tags',
+      },
     }),
     // Matches shared @publication-websites/sanity-content projections + Next.js renderers.
-    
   ],
   preview: {
     select: {

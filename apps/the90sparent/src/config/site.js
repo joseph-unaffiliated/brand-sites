@@ -34,7 +34,7 @@ export const siteFooterTagline =
 
 export const siteHeroTagline =
   process.env.NEXT_PUBLIC_SITE_HERO_TAGLINE ||
-  "For us Millennial parents, nostalgic for 'the good old days'";
+  "For us millennial parents, nostalgic for 'the good old days'";
 
 export const contactEmail =
   process.env.NEXT_PUBLIC_CONTACT_EMAIL || "contact@the90sparent.com";

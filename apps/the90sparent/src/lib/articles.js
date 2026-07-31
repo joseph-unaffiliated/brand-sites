@@ -4,6 +4,8 @@ import {
   getDemographicAndDescription,
   stripLeadingDuplicate,
   dedupeSubtitleInContentBlocks,
+  bodyExcerptFromArticle,
+  searchTextFromArticle,
 } from "./article-helpers.js";
 
 const layer = createSanityLayer({
@@ -21,6 +23,8 @@ export {
   getDemographicAndDescription,
   stripLeadingDuplicate,
   dedupeSubtitleInContentBlocks,
+  bodyExcerptFromArticle,
+  searchTextFromArticle,
 };
 
 export async function getArticles() {

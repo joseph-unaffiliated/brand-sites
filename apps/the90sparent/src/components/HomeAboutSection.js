@@ -13,7 +13,7 @@ export default function HomeAboutSection({ totalCount = 0 }) {
       <div className="container">
         <div className={styles.subscribeInner}>
           <div className={styles.subscribeCopy}>
-            <h2 className={styles.subscribeHeadline}>More about {siteDisplayName}</h2>
+            <h2 className={styles.subscribeHeadline}>About {siteDisplayName}</h2>
             <p className={styles.lede}>
               <em>{siteDisplayName}</em> is for anyone raising kids while still humming theme songs
               from 1994. Each article mixes humor, honesty, and the occasional rant about snacks,

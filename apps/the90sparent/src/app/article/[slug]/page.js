@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
   getArticleBySlug,
@@ -9,6 +8,7 @@ import {
 import { authorBylineText } from "@/lib/article-helpers";
 import SanityMedia from "@/components/SanityMedia";
 import { pickRandomArticles } from "@/lib/pickRandomArticles";
+import RecommendedArticleCards from "@/components/RecommendedArticleCards";
 import SubscribedArticleView from "@/components/SubscribedArticleView";
 import NavLogoImageSync from "@/components/NavLogoImageSync";
 import ArticleContentBlocks from "@/components/ArticleContentBlocks";
@@ -296,36 +296,7 @@ export default async function ArticlePage({ params }) {
           </div>
         )}
         </div>
-        {readMore.length > 0 && (
-          <div className={styles.readMoreOuter}>
-            <section className={styles.readMore} aria-label="Keep reading">
-              <h2 className={styles.readMoreTitle}>Keep reading</h2>
-              <div className={styles.readMoreGrid}>
-                {readMore.map((rec) => (
-                  <Link
-                    key={rec._id ?? rec.slug}
-                    href={`/article/${rec.slug}`}
-                    className={styles.readMoreCard}
-                  >
-                    <div className={styles.readMoreThumb}>
-                      <SanityMedia
-                        src={rec.mainImage}
-                        alt={rec.title}
-                        width={280}
-                        height={187}
-                        sizes="(max-width: 640px) 100vw, 280px"
-                      />
-                    </div>
-                    <h3 className={styles.readMoreHeadline}>{rec.title}</h3>
-                    {rec.summary && (
-                      <p className={styles.readMoreDek}>{rec.summary}</p>
-                    )}
-                  </Link>
-                ))}
-              </div>
-            </section>
-          </div>
-        )}
+        <RecommendedArticleCards articles={readMore} />
       </section>
       <ArticleStickyBottom />
     </div>
