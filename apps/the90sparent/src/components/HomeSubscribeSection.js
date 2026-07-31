@@ -13,6 +13,8 @@ export default function HomeSubscribeSection({
   initialEmail,
   inputId = "home-subscribe-cta-email",
   titleId = "home-subscribe-cta-title",
+  /** When true (no second mosaic above), use accent bg + black subscribe button. */
+  accentBand = false,
 }) {
   const { isSubscribed } = useSubscriber();
   if (isSubscribed) {
@@ -20,7 +22,10 @@ export default function HomeSubscribeSection({
   }
 
   return (
-    <section className={styles.subscribeCtaSection} aria-labelledby={titleId}>
+    <section
+      className={`${styles.subscribeCtaSection}${accentBand ? ` ${styles.subscribeCtaSectionAccent}` : ""}`}
+      aria-labelledby={titleId}
+    >
       <div className="container">
         <div className={styles.subscribeCtaInner}>
           <h2 id={titleId} className={styles.subscribeCtaHeadline}>

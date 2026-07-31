@@ -111,9 +111,9 @@ export default async function Home({ searchParams: searchParamsProp }) {
   const leftCards = articles.slice(1, 1 + LEFT_COUNT);
   const stackItems = articles.slice(1 + LEFT_COUNT, 1 + LEFT_COUNT + STACK_COUNT_MAX);
   const remainingArticles = articles.slice(1 + LEFT_COUNT + STACK_COUNT_MAX);
-  // Side columns share medium cards (equal width); center keeps featured cards.
+  // Side columns share medium cards; center featured count scales with archive (~1/5).
   const remainingCount = remainingArticles.length;
-  const archiveCenterCount = Math.max(1, Math.min(2, Math.round(remainingCount / 5)));
+  const archiveCenterCount = Math.max(1, Math.round(remainingCount / 5));
   const sideTotal = remainingCount - archiveCenterCount;
   const archiveLeftCount = Math.ceil(sideTotal / 2);
   const archiveLeft = remainingArticles.slice(0, archiveLeftCount);
@@ -353,7 +353,10 @@ export default async function Home({ searchParams: searchParamsProp }) {
         </section>
       ) : null}
 
-      <HomeSubscribeSection initialEmail={initialEmail} />
+      <HomeSubscribeSection
+        initialEmail={initialEmail}
+        accentBand={remainingArticles.length === 0}
+      />
     </div>
   );
 }

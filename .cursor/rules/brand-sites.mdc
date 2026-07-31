@@ -9,4 +9,5 @@ globs: apps/**/*,packages/**/*
 - Do not import one app from another app.
 - Do not add BigQuery or unauthenticated email-based subscription lookup to marketing Next apps; use magic `/api/reader-subscriptions` with Bearer token.
 - Prefer env-driven brand config in each app’s `src/config/site.js`.
+- Second homepage mosaic: center featured count is `Math.max(1, Math.round(remaining / 5))` (uncapped; see `homepage-second-mosaic.mdc`).
 - See root `AGENTS.md` and `docs/ARCHITECTURE.md`.

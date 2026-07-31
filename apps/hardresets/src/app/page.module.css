@@ -243,12 +243,15 @@
 .mosaicCard {
   border-radius: 8px;
   border: 1px solid var(--border);
+  background: #fff;
+  overflow: hidden;
 }
 
 .mosaicCardLink {
   display: block;
   color: inherit;
   text-decoration: none;
+  background: #fff;
 }
 
 .mosaicCardImage {
@@ -286,6 +289,7 @@
   padding: 1.35rem 1.25rem 1.5rem 1.25rem;
   border-radius: 0 0 8px 8px;
   overflow: hidden;
+  background: #fff;
 }
 
 .mosaicCardBody .mosaicCardKicker {
@@ -663,7 +667,7 @@
 /* Below mosaic */
 .subscribeSection {
   padding: 48px 0 104px;
-  background: var(--surface-muted);
+  background: transparent;
 }
 
 .subscribeInner {
@@ -735,7 +739,41 @@
 /* Bottom-of-page subscribe band (homepage + archive) */
 .subscribeCtaSection {
   padding: 96px 0 120px;
-  background: var(--surface-muted);
+  background: transparent;
+}
+
+/*
+ * No second mosaic: invert Subscribe CTA.
+ * HR footer is already --accent, so use black band + accent button (not accent band + black).
+ */
+.subscribeCtaSectionAccent {
+  background: #000;
+}
+
+/* Drop the footer's hairline so it doesn't show between accent band and footer. */
+:global(.site):has(.subscribeCtaSectionAccent) :global(.site-footer) {
+  border-top: none;
+}
+
+.subscribeCtaSectionAccent .subscribeCtaHeadline {
+  color: #fff;
+}
+
+.subscribeCtaSectionAccent .subscribeCtaForm :global(.button-primary) {
+  background: var(--accent);
+  color: #fff;
+}
+
+.subscribeCtaSectionAccent .subscribeCtaForm :global(.button-primary:hover) {
+  background: var(--accent-strong);
+}
+
+.subscribeCtaSectionAccent .subscribeCtaForm :global(p) {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.subscribeCtaSectionAccent .subscribeCtaForm :global(p a) {
+  color: #fff;
 }
 
 .subscribeCtaSpacer {

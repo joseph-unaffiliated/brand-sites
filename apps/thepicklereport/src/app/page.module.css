@@ -69,6 +69,226 @@
   align-items: stretch;
 }
 
+/*
+ * Primary mosaic: left sets row height; center featured cards fill that space
+ * (right rail is sticky and does not inflate the row).
+ */
+.mosaicContainer > .mosaicCenter {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  height: auto;
+  align-self: stretch;
+}
+
+.mosaicContainer > .mosaicCenter > .featuredIssueColumn {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.mosaicContainer > .mosaicCenter > .featuredIssueColumn > .featuredFillCard {
+  flex: 1 1 0%;
+  min-height: 0;
+  height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.mosaicContainer > .mosaicCenter > .featuredIssueColumn > .featuredFillCard .featuredImage {
+  flex: 0 0 auto;
+  max-height: 38%;
+  height: auto;
+  min-height: 0;
+}
+
+.mosaicContainer > .mosaicCenter > .featuredIssueColumn > .featuredFillCard .featuredImage img {
+  max-height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+.mosaicContainer > .mosaicCenter > .featuredIssueColumn > .featuredFillCard .featuredBody {
+  flex: 1 1 0%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.mosaicContainer > .mosaicCenter > .featuredIssueColumn > .featuredFillCard .featuredKicker,
+.mosaicContainer > .mosaicCenter > .featuredIssueColumn > .featuredFillCard .featuredHeadline,
+.mosaicContainer > .mosaicCenter > .featuredIssueColumn > .featuredFillCard .featuredDek {
+  flex: 0 0 auto;
+}
+
+.mosaicContainer > .mosaicCenter > .featuredIssueColumn > .featuredFillCard .featuredEntryPreview {
+  flex: 1 1 0%;
+  min-height: 0;
+  max-height: none;
+  margin: 0 0 8px;
+  overflow: hidden;
+  position: relative;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 72%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 72%, transparent 100%);
+}
+
+.mosaicContainer > .mosaicCenter > .featuredIssueColumn > .featuredFillCard .featuredEntryPreview::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 4.5rem;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgb(255 255 255 / 0%) 0%,
+    var(--surface) 55%,
+    var(--surface) 100%
+  );
+}
+
+.mosaicContainer > .mosaicCenter > .featuredIssueColumn > .featuredFillCard .featuredLink {
+  flex: 0 0 auto;
+  position: relative;
+  z-index: 1;
+  margin-top: 0;
+  padding-top: 2px;
+  background: var(--surface);
+  align-self: flex-start;
+}
+
+/* Second home mosaic: equal side rails; center absolute-fills side height */
+.mosaic:has(> .mosaicContainerSubscribeLeft) {
+  padding-bottom: 0;
+}
+
+.mosaicContainerSubscribeLeft {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr) minmax(0, 1fr);
+  padding-bottom: 0;
+  align-items: stretch;
+}
+
+.mosaicContainerSubscribeLeft > .mosaicCenter {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  height: auto;
+  align-self: stretch;
+}
+
+.mosaicContainerSubscribeLeft .archiveIssueColumn {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.mosaicContainerSubscribeLeft .archiveFeaturedCard {
+  flex: 1 1 0%;
+  min-height: 0;
+  height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.mosaicContainerSubscribeLeft .archiveFeaturedCard .featuredImage {
+  flex: 0 0 auto;
+  max-height: 38%;
+  height: auto;
+  min-height: 0;
+}
+
+.mosaicContainerSubscribeLeft .archiveFeaturedCard .featuredImage img {
+  max-height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+.mosaicContainerSubscribeLeft .archiveFeaturedCard .featuredBody {
+  flex: 1 1 0%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.mosaicContainerSubscribeLeft .archiveFeaturedCard .featuredHeadline,
+.mosaicContainerSubscribeLeft .archiveFeaturedCard .featuredDek {
+  flex: 0 0 auto;
+}
+
+.mosaicContainerSubscribeLeft .archiveFeaturedCard .featuredEntryPreview {
+  flex: 1 1 0%;
+  min-height: 0;
+  max-height: none;
+  margin: 0 0 8px;
+  overflow: hidden;
+  position: relative;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 72%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 72%, transparent 100%);
+}
+
+.mosaicContainerSubscribeLeft .archiveFeaturedCard .featuredEntryPreview::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 4.5rem;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgb(255 255 255 / 0%) 0%,
+    var(--surface) 55%,
+    var(--surface) 100%
+  );
+}
+
+.mosaicContainerSubscribeLeft .archiveFeaturedCard .featuredEntrySnippet {
+  margin: 0 0 0.9em;
+}
+
+.mosaicContainerSubscribeLeft .archiveFeaturedCard .featuredEntrySnippet:last-child {
+  margin-bottom: 0;
+}
+
+.mosaicContainerSubscribeLeft .archiveFeaturedCard .featuredLink {
+  flex: 0 0 auto;
+  position: relative;
+  z-index: 1;
+  margin-top: 0;
+  padding-top: 2px;
+  background: var(--surface);
+  align-self: flex-start;
+}
+
+.mosaicContainerSubscribeLeft > .archiveMosaicRight {
+  position: static;
+  top: auto;
+  align-self: stretch;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
 @media (max-width: 1024px) {
   .mosaicContainer {
     grid-template-columns: 1fr 1fr;
@@ -81,18 +301,55 @@
   .mosaicCenter { grid-area: center; }
   .mosaicRight { grid-area: right; }
 
-  .mosaicCenter {
+  .mosaicContainer > .mosaicCenter {
+    position: static;
+    overflow: visible;
+  }
+
+  .mosaicContainer > .mosaicCenter > .featuredIssueColumn {
+    position: static;
+    inset: auto;
     height: auto;
-    align-self: auto;
+    overflow: visible;
   }
 
-  .mosaicCenter .featuredCard {
+  .mosaicContainer > .mosaicCenter > .featuredIssueColumn > .featuredFillCard {
     flex: 0 0 auto;
-    height: fit-content;
-    min-height: 0;
+    height: auto;
   }
 
-  .mosaicCenter .featuredCard .featuredEntryPreview {
+  .mosaicContainer > .mosaicCenter > .featuredIssueColumn > .featuredFillCard .featuredEntryPreview {
+    max-height: 22em;
+  }
+
+  .mosaicContainerSubscribeLeft {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "left right"
+      "center center";
+  }
+
+  .mosaicContainerSubscribeLeft > .mosaicCenter {
+    position: static;
+    overflow: visible;
+  }
+
+  .mosaicContainerSubscribeLeft .archiveIssueColumn {
+    position: static;
+    inset: auto;
+    height: auto;
+    overflow: visible;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .mosaicContainerSubscribeLeft .archiveFeaturedCard {
+    flex: 0 0 auto;
+    height: auto;
+  }
+
+  .mosaicContainerSubscribeLeft .archiveFeaturedCard .featuredEntryPreview {
     max-height: 22em;
   }
 }
@@ -129,17 +386,53 @@
   .mosaicCenter { grid-area: center; }
   .mosaicRight { grid-area: right; }
 
-  .mosaicCenter {
+  .mosaicContainer > .mosaicCenter {
+    position: static;
+    overflow: visible;
+  }
+
+  .mosaicContainer > .mosaicCenter > .featuredIssueColumn {
+    position: static;
+    inset: auto;
+    height: auto;
+    overflow: visible;
+  }
+
+  .mosaicContainer > .mosaicCenter > .featuredIssueColumn > .featuredFillCard {
+    flex: 0 0 auto;
     height: auto;
   }
 
-  .mosaicCenter .featuredCard {
-    flex: 0 0 auto;
-    height: fit-content;
-    min-height: 0;
+  .mosaicContainer > .mosaicCenter > .featuredIssueColumn > .featuredFillCard .featuredEntryPreview {
+    max-height: 18em;
   }
 
-  .mosaicCenter .featuredCard .featuredEntryPreview {
+  .mosaicContainerSubscribeLeft {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "center"
+      "left"
+      "right";
+  }
+
+  .mosaicContainerSubscribeLeft > .mosaicCenter {
+    position: static;
+    overflow: visible;
+  }
+
+  .mosaicContainerSubscribeLeft .archiveIssueColumn {
+    position: static;
+    inset: auto;
+    height: auto;
+    overflow: visible;
+  }
+
+  .mosaicContainerSubscribeLeft .archiveFeaturedCard {
+    flex: 0 0 auto;
+    height: auto;
+  }
+
+  .mosaicContainerSubscribeLeft .archiveFeaturedCard .featuredEntryPreview {
     max-height: 18em;
   }
 
@@ -158,12 +451,15 @@
 .mosaicCard {
   border-radius: 8px;
   border: 1px solid var(--border);
+  background: #fff;
+  overflow: hidden;
 }
 
 .mosaicCardLink {
   display: block;
   color: inherit;
   text-decoration: none;
+  background: #fff;
 }
 
 .mosaicCardImage {
@@ -201,6 +497,7 @@
   padding: 1rem 1.25rem 1.5rem 1.25rem;
   border-radius: 0 0 8px 8px;
   overflow: hidden;
+  background: #fff;
 }
 
 .mosaicCardBody .mosaicCardKicker {
@@ -235,23 +532,27 @@
 
 .mosaicCenter {
   min-width: 0;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
   align-self: stretch;
 }
 
 @media (max-width: 1024px) and (min-width: 641px) {
   .mosaicCenter {
     align-items: center;
+    display: flex;
+    flex-direction: column;
   }
 
-  .mosaicCenter .featuredCard:nth-child(2) {
+  .featuredIssueColumn {
+    width: 100%;
+    max-width: 640px;
+    align-items: center;
+  }
+
+  .featuredIssueColumn > .featuredFillCard:nth-child(2) {
     display: none;
   }
 
-  .mosaicCenter .featuredCard:first-child {
+  .featuredIssueColumn > .featuredFillCard:first-child {
     max-width: 640px;
     width: 100%;
   }
@@ -264,77 +565,7 @@
   border-radius: 8px;
   border: 1px solid var(--border);
   height: fit-content;
-}
-
-/*
- * Desktop: the two center cards split the stretched row height equally so the
- * featured column fills the same height as the left column (like The 90s Parent).
- */
-.mosaicCenter .featuredCard {
-  flex: 1 1 0%;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
   background: var(--surface);
-}
-
-.mosaicCenter .featuredCard .featuredImage {
-  flex: 0 0 auto;
-  max-height: 38%;
-  height: auto;
-  min-height: 0;
-}
-
-.mosaicCenter .featuredCard .featuredImage img {
-  max-height: 100%;
-}
-
-.mosaicCenter .featuredCard .featuredBody {
-  flex: 1 1 0%;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-  overflow: hidden;
-  padding-bottom: 1.25rem;
-}
-
-.mosaicCenter .featuredCard .featuredKicker,
-.mosaicCenter .featuredCard .featuredHeadline,
-.mosaicCenter .featuredCard .featuredDek {
-  flex: 0 0 auto;
-}
-
-.mosaicCenter .featuredCard .featuredEntryPreview {
-  flex: 1 1 0%;
-  min-height: 0;
-  max-height: none;
-  overflow: hidden;
-  position: relative;
-}
-
-.mosaicCenter .featuredCard .featuredEntryPreview::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 3.5rem;
-  pointer-events: none;
-  background: linear-gradient(
-    to bottom,
-    rgb(255 255 255 / 0%) 0%,
-    var(--surface) 55%,
-    var(--surface) 100%
-  );
-}
-
-.mosaicCenter .featuredCard .featuredLink {
-  flex: 0 0 auto;
-  position: relative;
-  z-index: 1;
-  background: var(--surface);
-  align-self: flex-start;
 }
 
 .featuredImage {
@@ -440,6 +671,8 @@
   gap: 48px;
   position: sticky;
   top: 24px;
+  align-self: start;
+  height: fit-content;
 }
 
 /* Snippets list: title left, small thumb right (Atlantic-style) */
@@ -633,7 +866,7 @@
 /* Below mosaic */
 .subscribeSection {
   padding: 48px 0 104px;
-  background: var(--surface-muted);
+  background: transparent;
 }
 
 .subscribeInner {
@@ -705,7 +938,38 @@
 /* Bottom-of-page subscribe band (homepage + archive) */
 .subscribeCtaSection {
   padding: 96px 0 120px;
-  background: var(--surface-muted);
+  background: transparent;
+}
+
+/* Adjacent to “More about” when there is no second mosaic: accent band + black CTA. */
+.subscribeCtaSectionAccent {
+  background: var(--accent);
+}
+
+/* Drop the footer's hairline so it doesn't show between accent band and footer. */
+:global(.site):has(.subscribeCtaSectionAccent) :global(.site-footer) {
+  border-top: none;
+}
+
+.subscribeCtaSectionAccent .subscribeCtaHeadline {
+  color: #fff;
+}
+
+.subscribeCtaSectionAccent .subscribeCtaForm :global(.button-primary) {
+  background: #000;
+  color: #fff;
+}
+
+.subscribeCtaSectionAccent .subscribeCtaForm :global(.button-primary:hover) {
+  background: #111;
+}
+
+.subscribeCtaSectionAccent .subscribeCtaForm :global(p) {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.subscribeCtaSectionAccent .subscribeCtaForm :global(p a) {
+  color: #fff;
 }
 
 .subscribeCtaSpacer {

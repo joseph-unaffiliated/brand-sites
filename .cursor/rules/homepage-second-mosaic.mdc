@@ -1,0 +1,23 @@
+---
+description: Second homepage mosaic center column scales with archive length
+globs: apps/**/src/app/page.js
+alwaysApply: false
+---
+
+# Homepage second mosaic (archive rail)
+
+When a brand has a second mosaic after “More about …”, split remaining articles into left / center / right.
+
+## Center count
+
+Do **not** cap center at the primary mosaic’s `CENTER_COUNT`. Let center scale with archive size so tall side rails don’t leave a gap:
+
+```js
+const archiveCenterCount = Math.max(1, Math.round(remainingCount / 5));
+```
+
+## Layout
+
+- Equal-width side rails (`mosaicContainerSubscribeLeft`: `1fr 1.4fr 1fr`)
+- Right column uses `mosaicRight` + `archiveMosaicRight` (never a second `mosaicLeft`)
+- Center absolute-fills side height via `archiveIssueColumn` + `archiveFeaturedCard` (same pattern as TNP)

@@ -83,9 +83,9 @@ export default async function Home({ searchParams: searchParamsProp }) {
     CENTER_COUNT + LEFT_COUNT + STACK_COUNT_MAX,
   );
   const remainingArticles = articles.slice(CENTER_COUNT + LEFT_COUNT + STACK_COUNT_MAX);
-  // Second mosaic: same left/center/right split logic as the top mosaic, sized to what's left.
+  // Second mosaic: left/center/right split; center scales with archive (~1/5 of remaining).
   const remainingCount = remainingArticles.length;
-  const archiveCenterCount = Math.max(1, Math.min(CENTER_COUNT, Math.round(remainingCount / 5)));
+  const archiveCenterCount = Math.max(1, Math.round(remainingCount / 5));
   const sideTotal = remainingCount - archiveCenterCount;
   const archiveLeftCount = Math.ceil(sideTotal / 2);
   const archiveLeft = remainingArticles.slice(0, archiveLeftCount);
@@ -190,45 +190,47 @@ export default async function Home({ searchParams: searchParamsProp }) {
             ))}
           </div>
 
-          {/* Center: featured issues */}
+          {/* Center: featured issues (fill height set by left rail) */}
           <div className={styles.mosaicCenter}>
-            {featuredArticles.map((article, index) => {
-              const { demographic } = getDemographicAndDescription(article);
-              const preview = featuredPreviewFromArticle(article);
-              return (
-                <Link
-                  key={article._id ?? article.slug}
-                  href={`/article/${article.slug}`}
-                  className={styles.featuredCard}
-                >
-                  <div className={styles.featuredImage}>
-                    <Image
-                      src={article.mainImage}
-                      alt=""
-                      width={article.mainImageWidth || 900}
-                      height={article.mainImageHeight || 600}
-                      priority={index === 0}
-                      sizes="(max-width: 900px) 100vw, 560px"
-                    />
-                  </div>
-                  <div className={styles.featuredBody}>
-                    {index === 0 && (
-                      <p className={styles.featuredKicker}>Latest issue</p>
-                    )}
-                    <h2 className={styles.featuredHeadline}>{article.title}</h2>
-                    {demographic && (
-                      <p className={styles.featuredDek}>{demographic}</p>
-                    )}
-                    {preview ? (
-                      <div className={styles.featuredEntryPreview}>
-                        <p className={styles.featuredEntrySnippet}>{preview}</p>
-                      </div>
-                    ) : null}
-                    <span className={styles.featuredLink}>Read more</span>
-                  </div>
-                </Link>
-              );
-            })}
+            <div className={styles.featuredIssueColumn}>
+              {featuredArticles.map((article, index) => {
+                const { demographic } = getDemographicAndDescription(article);
+                const preview = featuredPreviewFromArticle(article);
+                return (
+                  <Link
+                    key={article._id ?? article.slug}
+                    href={`/article/${article.slug}`}
+                    className={`${styles.featuredCard} ${styles.featuredFillCard}`}
+                  >
+                    <div className={styles.featuredImage}>
+                      <Image
+                        src={article.mainImage}
+                        alt=""
+                        width={article.mainImageWidth || 900}
+                        height={article.mainImageHeight || 600}
+                        priority={index === 0}
+                        sizes="(max-width: 900px) 100vw, 560px"
+                      />
+                    </div>
+                    <div className={styles.featuredBody}>
+                      {index === 0 && (
+                        <p className={styles.featuredKicker}>Latest issue</p>
+                      )}
+                      <h2 className={styles.featuredHeadline}>{article.title}</h2>
+                      {demographic && (
+                        <p className={styles.featuredDek}>{demographic}</p>
+                      )}
+                      {preview ? (
+                        <div className={styles.featuredEntryPreview}>
+                          <p className={styles.featuredEntrySnippet}>{preview}</p>
+                        </div>
+                      ) : null}
+                      <span className={styles.featuredLink}>Read more</span>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
           </div>
 
           {/* Right column: stack (snippets with thumb) then subscribe at bottom */}
@@ -244,10 +246,12 @@ export default async function Home({ searchParams: searchParamsProp }) {
       {/* More about (always visible; copy and Subscribe link vary by sign-in) */}
       <HomeAboutSection totalCount={totalCount} />
 
-      {/* Second mosaic: left medium | center featured | right medium */}
+      {/* Second mosaic: left medium | center featured | right medium (equal rails) */}
       {remainingArticles.length > 0 ? (
         <section className={styles.mosaic} aria-label="More issues">
-          <div className={styles.mosaicContainer}>
+          <div
+            className={`${styles.mosaicContainer} ${styles.mosaicContainerSubscribeLeft}`}
+          >
             <div className={styles.mosaicLeft}>
               {archiveLeft.map((article) => (
                 <article className={styles.mosaicCard} key={article._id ?? article.slug}>
@@ -283,40 +287,42 @@ export default async function Home({ searchParams: searchParamsProp }) {
             </div>
 
             <div className={styles.mosaicCenter}>
-              {archiveCenter.map((article) => {
-                const { demographic } = getDemographicAndDescription(article);
-                const preview = featuredPreviewFromArticle(article);
-                return (
-                  <Link
-                    key={article._id ?? article.slug}
-                    href={`/article/${article.slug}`}
-                    className={styles.featuredCard}
-                  >
-                    <div className={styles.featuredImage}>
-                      <Image
-                        src={article.mainImage}
-                        alt=""
-                        width={article.mainImageWidth || 900}
-                        height={article.mainImageHeight || 600}
-                        sizes="(max-width: 900px) 100vw, 560px"
-                      />
-                    </div>
-                    <div className={styles.featuredBody}>
-                      <h2 className={styles.featuredHeadline}>{article.title}</h2>
-                      {demographic && <p className={styles.featuredDek}>{demographic}</p>}
-                      {preview ? (
-                        <div className={styles.featuredEntryPreview}>
-                          <p className={styles.featuredEntrySnippet}>{preview}</p>
-                        </div>
-                      ) : null}
-                      <span className={styles.featuredLink}>Read more</span>
-                    </div>
-                  </Link>
-                );
-              })}
+              <div className={styles.archiveIssueColumn}>
+                {archiveCenter.map((article) => {
+                  const { demographic } = getDemographicAndDescription(article);
+                  const preview = featuredPreviewFromArticle(article);
+                  return (
+                    <Link
+                      key={article._id ?? article.slug}
+                      href={`/article/${article.slug}`}
+                      className={`${styles.featuredCard} ${styles.archiveFeaturedCard}`}
+                    >
+                      <div className={styles.featuredImage}>
+                        <Image
+                          src={article.mainImage}
+                          alt=""
+                          width={article.mainImageWidth || 900}
+                          height={article.mainImageHeight || 600}
+                          sizes="(max-width: 900px) 100vw, 560px"
+                        />
+                      </div>
+                      <div className={styles.featuredBody}>
+                        <h2 className={styles.featuredHeadline}>{article.title}</h2>
+                        {demographic && <p className={styles.featuredDek}>{demographic}</p>}
+                        {preview ? (
+                          <div className={styles.featuredEntryPreview}>
+                            <p className={styles.featuredEntrySnippet}>{preview}</p>
+                          </div>
+                        ) : null}
+                        <span className={styles.featuredLink}>Read more</span>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
             </div>
 
-            <div className={styles.mosaicLeft}>
+            <div className={`${styles.mosaicRight} ${styles.archiveMosaicRight}`}>
               {archiveRight.map((article) => (
                 <article className={styles.mosaicCard} key={article._id ?? article.slug}>
                   <Link href={`/article/${article.slug}`} className={styles.mosaicCardLink}>
@@ -353,7 +359,10 @@ export default async function Home({ searchParams: searchParamsProp }) {
         </section>
       ) : null}
 
-      <HomeSubscribeSection initialEmail={initialEmail} />
+      <HomeSubscribeSection
+        initialEmail={initialEmail}
+        accentBand={remainingArticles.length === 0}
+      />
     </div>
     </>
   );

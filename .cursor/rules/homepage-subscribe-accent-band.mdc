@@ -1,0 +1,39 @@
+---
+description: Homepage bottom Subscribe CTA accent band when there is no second mosaic
+globs: apps/**/src/app/page.js,apps/**/src/app/page.module.css,apps/**/src/components/HomeSubscribeSection.js
+alwaysApply: false
+---
+
+# Homepage subscribe accent band (no second mosaic)
+
+When the homepage has **no second mosaic** between “More about …” and the bottom Subscribe CTA, those two sections sit back-to-back and look flat. Invert the bottom Subscribe band in that case only.
+
+## When to enable
+
+Pass `accentBand` to `HomeSubscribeSection` on the homepage:
+
+- Brands **without** a second mosaic (e.g. TEC, Hard Resets): always `accentBand`
+- Brands **with** a conditional second mosaic (e.g. TNP, TPR): `accentBand={remainingArticles.length === 0}` (or equivalent “second mosaic not rendered”)
+
+Do **not** enable on archive/recipes listing CTAs unless they have the same adjacent layout problem.
+
+## Visual rules
+
+With `accentBand` / `.subscribeCtaSectionAccent`:
+
+1. **Default:** section background = `var(--accent)`; Subscribe button = black (`#000`)
+2. **Hard Resets exception:** footer is already `--accent`, so invert the other way — section = black, button = `var(--accent)` / hover `var(--accent-strong)`
+3. Headline + legal copy readable on the band (typically white / translucent white)
+4. Hide footer hairline while accent band is present:
+
+```css
+:global(.site):has(.subscribeCtaSectionAccent) :global(.site-footer) {
+  border-top: none;
+}
+```
+
+## Wiring
+
+- Prop: `HomeSubscribeSection` → `accentBand` → append `styles.subscribeCtaSectionAccent`
+- Styles live in that brand’s `page.module.css` next to `.subscribeCtaSection`
+- Keep default (transparent) CTA when a second mosaic separates About and Subscribe

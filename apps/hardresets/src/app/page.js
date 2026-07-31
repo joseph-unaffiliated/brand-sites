@@ -222,7 +222,7 @@ export default async function Home({ searchParams: searchParamsProp }) {
       {/* More about (always visible; copy and Subscribe link vary by sign-in) */}
       <HomeAboutSection totalCount={totalCount} />
 
-      <HomeSubscribeSection initialEmail={initialEmail} />
+      <HomeSubscribeSection initialEmail={initialEmail} accentBand />
     </div>
   );
 }

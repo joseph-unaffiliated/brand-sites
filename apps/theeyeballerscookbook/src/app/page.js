@@ -26,17 +26,46 @@ function absoluteSiteUrl(path) {
   return path.startsWith("http") ? path : `${base}${path.startsWith("/") ? "" : "/"}${path}`;
 }
 
-/** Atlantic-style: 2 center, 4 left, N in right stack. No recipe repeated. */
-const CENTER_COUNT = 2;
-const LEFT_COUNT = 4;
+/** Atlantic-style: 1 center, 2 left, N in right stack. No recipe repeated. */
+const LEFT_COUNT = 2;
 /** Max items for "More recipes" (client shows 2 when signed out, 5 when signed in). */
 const STACK_COUNT_MAX = 5;
 
-function featuredPreviewFromRecipe(recipe) {
-  if (recipe?.description?.trim()) return recipe.description.trim();
-  const ingredients = (recipe?.ingredients ?? []).slice(0, 5);
-  if (ingredients.length === 0) return "";
-  return `What you'll need: ${ingredients.join(", ").toLowerCase()}…`;
+function stepText(step) {
+  if (typeof step === "string") return step.trim();
+  if (step && typeof step.text === "string") return step.text.trim();
+  return "";
+}
+
+/** Opening recipe copy for the featured card (dek + method steps). */
+function featuredPreviewParagraphsFromRecipe(recipe, wordCount = 120) {
+  const paragraphs = [];
+  if (recipe?.description?.trim()) paragraphs.push(recipe.description.trim());
+  for (const step of recipe?.steps ?? []) {
+    const text = stepText(step);
+    if (text) paragraphs.push(text);
+  }
+  if (paragraphs.length === 0) {
+    const ingredients = (recipe?.ingredients ?? []).slice(0, 5);
+    if (ingredients.length === 0) return [];
+    return [`What you'll need: ${ingredients.join(", ").toLowerCase()}…`];
+  }
+
+  const out = [];
+  let wordsUsed = 0;
+  for (const para of paragraphs) {
+    if (wordsUsed >= wordCount) break;
+    const words = para.split(/\s+/).filter(Boolean);
+    const remaining = wordCount - wordsUsed;
+    if (words.length <= remaining) {
+      out.push(para);
+      wordsUsed += words.length;
+    } else {
+      out.push(`${words.slice(0, remaining).join(" ")}…`);
+      break;
+    }
+  }
+  return out;
 }
 
 export default async function Home({ searchParams: searchParamsProp }) {
@@ -46,12 +75,10 @@ export default async function Home({ searchParams: searchParamsProp }) {
   const [recipes, categories] = await Promise.all([getRecipes(), getCategories()]);
   const totalCount = recipes.length;
 
-  const featuredRecipes = recipes.slice(0, CENTER_COUNT);
-  const leftCards = recipes.slice(CENTER_COUNT, CENTER_COUNT + LEFT_COUNT);
-  const stackItems = recipes.slice(
-    CENTER_COUNT + LEFT_COUNT,
-    CENTER_COUNT + LEFT_COUNT + STACK_COUNT_MAX,
-  );
+  const featured = recipes[0] ?? null;
+  const leftCards = recipes.slice(1, 1 + LEFT_COUNT);
+  const stackItems = recipes.slice(1 + LEFT_COUNT, 1 + LEFT_COUNT + STACK_COUNT_MAX);
+  const featuredPreview = featured ? featuredPreviewParagraphsFromRecipe(featured) : [];
 
   const usedCategorySlugs = new Set(recipes.map((r) => r.category?.slug).filter(Boolean));
   const categoryTiles = categories.filter((c) => usedCategorySlugs.has(c.slug));
@@ -126,7 +153,7 @@ export default async function Home({ searchParams: searchParamsProp }) {
           </div>
         </section>
 
-        {/* Atlantic mosaic: 4 left | 2 center | right stack + subscribe */}
+        {/* Atlantic mosaic: 2 left | 1 center | right stack + subscribe */}
         <section className={styles.mosaic} id="subscribe">
         <div className={styles.mosaicContainer}>
           {/* Left column */}
@@ -160,44 +187,42 @@ export default async function Home({ searchParams: searchParamsProp }) {
             ))}
           </div>
 
-          {/* Center: featured recipes */}
+          {/* Center: one featured recipe filling left-column height */}
           <div className={styles.mosaicCenter}>
-            {featuredRecipes.map((recipe, index) => {
-              const preview = featuredPreviewFromRecipe(recipe);
-              return (
-                <Link
-                  key={recipe._id ?? recipe.slug}
-                  href={`/recipe/${recipe.slug}`}
-                  className={styles.featuredCard}
-                >
-                  <div className={styles.featuredImage}>
-                    <Image
-                      src={recipe.mainImage}
-                      alt=""
-                      width={recipe.mainImageWidth || 900}
-                      height={recipe.mainImageHeight || 600}
-                      priority={index === 0}
-                      sizes="(max-width: 900px) 100vw, 560px"
-                    />
-                  </div>
-                  <div className={styles.featuredBody}>
-                    {index === 0 && (
-                      <p className={styles.featuredKicker}>Recipe of the week</p>
-                    )}
-                    <h2 className={styles.featuredHeadline}>{recipe.title}</h2>
-                    {recipe.category?.title && (
-                      <p className={styles.featuredDek}>{recipe.category.title}</p>
-                    )}
-                    {preview ? (
-                      <div className={styles.featuredEntryPreview}>
-                        <p className={styles.featuredEntrySnippet}>{preview}</p>
-                      </div>
-                    ) : null}
-                    <span className={styles.featuredLink}>Get the recipe</span>
-                  </div>
-                </Link>
-              );
-            })}
+            {featured ? (
+              <Link
+                href={`/recipe/${featured.slug}`}
+                className={styles.featuredCard}
+              >
+                <div className={styles.featuredImage}>
+                  <Image
+                    src={featured.mainImage}
+                    alt=""
+                    width={featured.mainImageWidth || 900}
+                    height={featured.mainImageHeight || 600}
+                    priority
+                    sizes="(max-width: 900px) 100vw, 560px"
+                  />
+                </div>
+                <div className={styles.featuredBody}>
+                  <p className={styles.featuredKicker}>Recipe of the week</p>
+                  <h2 className={styles.featuredHeadline}>{featured.title}</h2>
+                  {featured.category?.title && (
+                    <p className={styles.featuredDek}>{featured.category.title}</p>
+                  )}
+                  {featuredPreview.length > 0 ? (
+                    <div className={styles.featuredEntryPreview}>
+                      {featuredPreview.map((para, i) => (
+                        <p key={i} className={styles.featuredEntrySnippet}>
+                          {para}
+                        </p>
+                      ))}
+                    </div>
+                  ) : null}
+                  <span className={styles.featuredLink}>See more</span>
+                </div>
+              </Link>
+            ) : null}
           </div>
 
           {/* Right column: stack (snippets with thumb) then subscribe at bottom */}
@@ -213,7 +238,7 @@ export default async function Home({ searchParams: searchParamsProp }) {
       {/* More about (always visible; copy and Subscribe link vary by sign-in) */}
       <HomeAboutSection totalCount={totalCount} />
 
-      <HomeSubscribeSection initialEmail={initialEmail} />
+      <HomeSubscribeSection initialEmail={initialEmail} accentBand />
     </div>
     </>
   );

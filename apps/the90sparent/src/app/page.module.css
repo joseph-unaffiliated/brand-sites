@@ -881,7 +881,38 @@
 /* Bottom homepage subscribe CTA — About-section rhythm, more space */
 .subscribeCtaSection {
   padding: 96px 0 120px;
-  background: var(--surface-muted);
+  background: transparent;
+}
+
+/* Adjacent to “More about” when there is no second mosaic: accent band + black CTA. */
+.subscribeCtaSectionAccent {
+  background: var(--accent);
+}
+
+/* Drop the footer's hairline so it doesn't show between accent band and footer. */
+:global(.site):has(.subscribeCtaSectionAccent) :global(.site-footer) {
+  border-top: none;
+}
+
+.subscribeCtaSectionAccent .subscribeCtaHeadline {
+  color: #fff;
+}
+
+.subscribeCtaSectionAccent .subscribeCtaForm :global(.button-primary) {
+  background: #000;
+  color: #fff;
+}
+
+.subscribeCtaSectionAccent .subscribeCtaForm :global(.button-primary:hover) {
+  background: #111;
+}
+
+.subscribeCtaSectionAccent .subscribeCtaForm :global(p) {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.subscribeCtaSectionAccent .subscribeCtaForm :global(p a) {
+  color: #fff;
 }
 
 /* Breathing room above footer when subscribe CTA is hidden for subscribers */
