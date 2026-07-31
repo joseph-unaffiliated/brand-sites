@@ -143,7 +143,7 @@ a {
 .site-header {
   position: relative;
   border-bottom: 1px solid var(--border);
-  background: var(--header-bg);
+  background: transparent;
 }
 
 .site-header--marketing {
@@ -151,6 +151,7 @@ a {
 }
 
 .site-header--article {
+  background: var(--header-bg);
   position: fixed;
   top: 0;
   left: 0;
@@ -404,7 +405,7 @@ a {
     width: min(calc(var(--logo-line-gap) + 140px + 2 * 24px), calc(100% - 48px));
     height: calc(18px + var(--header-mark-h) + 22px);
     border-radius: 6px;
-    background: var(--header-bg);
+    background: transparent;
     z-index: 2;
     pointer-events: none;
   }

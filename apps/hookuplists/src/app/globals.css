@@ -98,7 +98,7 @@ a {
 .site-header {
   position: relative;
   border-bottom: 1px solid var(--border);
-  background: var(--bg);
+  background: transparent;
 }
 
 .header-row-1 {
