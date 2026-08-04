@@ -61,6 +61,6 @@ export const siteConfig = {
 
 /** Amazon Associates tracking ID (public; used in product URLs). */
 export const amazonAssociatesTag =
-  process.env.NEXT_PUBLIC_AMAZON_ASSOCIATES_TAG || "unaffiliate0f-20";
+  process.env.NEXT_PUBLIC_AMAZON_ASSOCIATES_TAG || "hardresets-20";
 
 export const BRAND = siteConfig.brandId;
