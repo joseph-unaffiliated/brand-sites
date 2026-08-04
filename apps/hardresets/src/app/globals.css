@@ -709,7 +709,7 @@ main.site-main > [data-subscription-landing] {
 .footer-grid {
   display: grid;
   gap: 48px;
-  grid-template-columns: 1fr auto auto auto;
+  grid-template-columns: 1fr auto auto;
   align-items: start;
 }
 

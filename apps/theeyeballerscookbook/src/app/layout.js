@@ -180,6 +180,8 @@ export default async function RootLayout({ children }) {
                     <Link href="/favorites">Favorites</Link>
                     <Link href="/about">About</Link>
                     <ContactCopyLink email={contactEmail}>Contact</ContactCopyLink>
+                    <SubmissionsCopyLink>Submissions</SubmissionsCopyLink>
+                    <AdvertiseCopyLink />
                   </div>
                 </div>
                 <div>
@@ -187,13 +189,7 @@ export default async function RootLayout({ children }) {
                     <Link href="/terms">Terms</Link>
                     <Link href="/privacy">Privacy</Link>
                     <Link href="/ai-policy">AI Policy</Link>
-                  <Link href="/affiliate-disclosure">Affiliate</Link>
-                  </div>
-                </div>
-                <div>
-                  <div className="footer-links">
-                    <SubmissionsCopyLink>Submissions</SubmissionsCopyLink>
-                    <AdvertiseCopyLink />
+                    <Link href="/affiliate-disclosure">Affiliate Disclosure</Link>
                     <p className="footer-text">© {siteDisplayName}. 2026.</p>
                   </div>
                 </div>
