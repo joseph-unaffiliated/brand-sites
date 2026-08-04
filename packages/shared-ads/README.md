@@ -47,7 +47,8 @@ Airtable is empty/unconfigured or has no eligible creative for that slot + reade
 | `Destination Brands` | Link to All Brands | Host sites allowed to show this creative. Empty = all hosts. Required in practice for Commerce Ads targeting. |
 | `Slot` | Single select | One of `inArticle`, `rail`, `stickyDesktop`, `stickyMobile`. Sticky ads need **both** a `stickyDesktop` and a `stickyMobile` row for the same `Brand key` — an unpaired sticky creative is skipped. |
 | `Image` | Attachment | Upload the creative image here; the first attachment's URL is used. |
-| `Click URL` | URL | Destination when the ad is clicked. Amazon product URLs are auto-tagged with the site Associates ID at render time. |
+| `Click URL` | Formula | Auto-built for **House Ads** only (`https://{brand}.com/article/{slug}`). Blank for Commerce Ads. |
+| `Commerce URL` | URL | Amazon/affiliate destination for **Commerce Ads**. Preferred over Click URL when Ad type is Commerce Ads. |
 | `Ad type` | Single select | `House Ads` (cross-promo network) or `Commerce Ads` (Amazon/affiliate commerce). Existing rows defaulted to `House Ads`. Tracked as `house_ad` / `commerce_ad` in ad events. |
 | `Active` | Checkbox | Only checked rows are eligible. |
 | `Jewish-interested` | Checkbox | See "Jewish-interested flag" below. |

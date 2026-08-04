@@ -19,6 +19,8 @@ const FIELD = {
   slot: "Slot",
   image: "Image",
   clickUrl: "Click URL",
+  /** Freeform Amazon/affiliate URL for Commerce Ads (Click URL formula is House Ads only). */
+  commerceUrl: "Commerce URL",
   active: "Active",
   jewish: "Jewish-interested",
   weight: "Weight",
@@ -230,7 +232,11 @@ export async function fetchActiveHouseCreatives() {
       (isCommerce ? "commerce" : "");
     const slot = firstFieldString(f[FIELD.slot]);
     const imageUrl = imageUrlFromAttachment(f[FIELD.image]);
-    const clickUrl = firstFieldString(f[FIELD.clickUrl]);
+    const commerceUrl = firstFieldString(f[FIELD.commerceUrl]);
+    const houseClickUrl = firstFieldString(f[FIELD.clickUrl]);
+    const clickUrl = isCommerce
+      ? commerceUrl || houseClickUrl
+      : houseClickUrl || commerceUrl;
     if (!brandKey || !slot || !imageUrl || !clickUrl) continue;
     out.push({
       id: rec.id,
