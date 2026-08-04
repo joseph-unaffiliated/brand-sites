@@ -43,10 +43,12 @@ Airtable is empty/unconfigured or has no eligible creative for that slot + reade
 | Field | Type | Notes |
 |-------|------|-------|
 | `Name` | Single line text | Internal label only, not rendered. |
-| `Brand key` | Single line text | Advertiser brand id, e.g. `hardresets`, `thepicklereport`. Used to exclude the host brand and any brand the reader is already subscribed to. |
+| `Brand` / `Brand Key` | Link + lookup | Advertiser brand for house ads (`Brand Key` slug). Commerce Ads may omit Brand (treated as `commerce`). |
+| `Destination Brands` | Link to All Brands | Host sites allowed to show this creative. Empty = all hosts. Required in practice for Commerce Ads targeting. |
 | `Slot` | Single select | One of `inArticle`, `rail`, `stickyDesktop`, `stickyMobile`. Sticky ads need **both** a `stickyDesktop` and a `stickyMobile` row for the same `Brand key` — an unpaired sticky creative is skipped. |
 | `Image` | Attachment | Upload the creative image here; the first attachment's URL is used. |
-| `Click URL` | URL | Destination when the ad is clicked. |
+| `Click URL` | URL | Destination when the ad is clicked. Amazon product URLs are auto-tagged with the site Associates ID at render time. |
+| `Ad type` | Single select | `House Ads` (cross-promo network) or `Commerce Ads` (Amazon/affiliate commerce). Existing rows defaulted to `House Ads`. Tracked as `house_ad` / `commerce_ad` in ad events. |
 | `Active` | Checkbox | Only checked rows are eligible. |
 | `Jewish-interested` | Checkbox | See "Jewish-interested flag" below. |
 | `Weight` | Number | Optional; defaults to `1`. Higher weight = picked more often (weighted random) among eligible creatives for a slot. |
@@ -54,10 +56,11 @@ Airtable is empty/unconfigured or has no eligible creative for that slot + reade
 ### Uploading a new creative
 
 1. Open the base ([airtable.com/appXFQv3Hy0wUDDnb](https://airtable.com/appXFQv3Hy0wUDDnb)) → **Creatives** table.
-2. Add a row: set `Brand key` to the advertiser's brand id, `Slot` to the placement
+2. Add a row: set `Brand` (advertiser) for House Ads, set `Destination Brands` to the host
+   sites that may show it, `Slot` to the placement
    (`inArticle` / `rail`, or both `stickyDesktop` + `stickyMobile` rows for a sticky pair),
-   attach the `Image`, set `Click URL`, and check `Active`.
-3. Set `Jewish-interested` if the creative should be flagged as Jewish-interest content
+   attach the `Image`, set `Click URL` / slug fields as needed, and check `Active`.
+3. Set `Ad type` to `House Ads` or `Commerce Ads`. Set `Jewish-interested` if the creative should be flagged as Jewish-interest content
    (see below). Optionally set `Weight` to bias selection.
 4. No redeploy needed — the `/api/house-ads` route revalidates every 10 minutes
    (`revalidate: 600`), so new/edited rows appear within ~10 minutes.

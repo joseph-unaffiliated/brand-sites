@@ -40,7 +40,8 @@ export function isAmazonShortLink(href) {
 
 /**
  * Append (or leave) the Associates `tag` on amazon.* product URLs.
- * Existing `tag=` values are preserved so per-brand overrides still work.
+ * Existing `tag=` values (any casing) are preserved so Airtable/SiteStripe
+ * links that already include the Associate ID are not double-tagged.
  *
  * @param {string | null | undefined} href
  * @param {string | null | undefined} tag
@@ -50,7 +51,9 @@ export function withAmazonTag(href, tag) {
   if (!href || !tag || !isAmazonUrl(href) || isAmazonShortLink(href)) return href;
   try {
     const u = new URL(href);
-    if (u.searchParams.has("tag")) return href;
+    for (const key of u.searchParams.keys()) {
+      if (key.toLowerCase() === "tag") return href;
+    }
     u.searchParams.set("tag", tag);
     return u.toString();
   } catch {

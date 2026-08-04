@@ -4,6 +4,8 @@ import { useRef } from "react";
 import Link from "next/link";
 import { trackAdClick, useAdImpression } from "@publication-websites/reader-events";
 import "./CrossPromoImageAd.css";
+import { withAmazonTag } from "@publication-websites/affiliate";
+import { amazonAssociatesTag } from "@/config/site";
 
 function TrackedHouseAdLink({
   href,
@@ -11,13 +13,15 @@ function TrackedHouseAdLink({
   className,
   creativeBrand,
   isJewishContent,
+  houseAdType,
   children,
 }) {
   const ref = useRef(null);
+  const taggedHref = withAmazonTag(href, amazonAssociatesTag) || href;
   const trackProps = {
     placement,
-    adType: "house_ad",
-    destinationUrl: href,
+    adType: houseAdType === "Commerce Ads" ? "commerce_ad" : "house_ad",
+    destinationUrl: taggedHref,
     ...(creativeBrand ? { creativeBrand } : {}),
     ...(isJewishContent ? { isJewishContent: true } : {}),
   };
@@ -25,7 +29,7 @@ function TrackedHouseAdLink({
   return (
     <div ref={ref}>
       <Link
-        href={href}
+        href={taggedHref}
         target="_blank"
         rel="noopener noreferrer sponsored"
         className={className}
@@ -56,6 +60,7 @@ export default function HouseAdImage({ ad, placement = "inArticle", className })
           placement="sticky"
           creativeBrand={ad.brandKey}
           isJewishContent={ad.isJewishContent}
+          houseAdType={ad.adType}
           className="cross-promo-image-sticky-link cross-promo-image-sticky-desktop"
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -70,6 +75,7 @@ export default function HouseAdImage({ ad, placement = "inArticle", className })
           placement="sticky"
           creativeBrand={ad.brandKey}
           isJewishContent={ad.isJewishContent}
+          houseAdType={ad.adType}
           className="cross-promo-image-sticky-link cross-promo-image-sticky-mobile"
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -90,6 +96,7 @@ export default function HouseAdImage({ ad, placement = "inArticle", className })
         placement={placement}
         creativeBrand={ad.brandKey}
         isJewishContent={ad.isJewishContent}
+        houseAdType={ad.adType}
         className="cross-promo-image-ad-link"
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
