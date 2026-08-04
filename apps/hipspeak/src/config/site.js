@@ -56,4 +56,8 @@ export const siteConfig = {
   typekitKitId: process.env.NEXT_PUBLIC_TYPEKIT_KIT_ID || "xon1hcs",
 };
 
+/** Amazon Associates tracking ID (public; used in product URLs). */
+export const amazonAssociatesTag =
+  process.env.NEXT_PUBLIC_AMAZON_ASSOCIATES_TAG || "unaffiliate0f-20";
+
 export const BRAND = siteConfig.brandId;

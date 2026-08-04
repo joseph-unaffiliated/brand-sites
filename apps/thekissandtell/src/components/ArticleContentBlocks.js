@@ -3,6 +3,8 @@ import Link from "next/link";
 import { PortableText } from "next-sanity";
 import { createImageUrlBuilder } from "@sanity/image-url";
 import styles from "./ArticleContentBlocks.module.css";
+import { affiliateAnchorProps } from "@publication-websites/affiliate";
+import { amazonAssociatesTag } from "@/config/site";
 
 function urlForImage(projectId, dataset, source) {
   if (!projectId || !dataset || !source?.asset) return null;
@@ -159,9 +161,7 @@ function portableTextComponents(projectId, dataset) {
     marks: {
       link: ({ children, value }) => (
         <a
-          href={value?.href}
-          rel="noopener noreferrer"
-          target="_blank"
+          {...affiliateAnchorProps(value?.href, amazonAssociatesTag)}
           className={styles.proseLink}
         >
           {children}
@@ -379,7 +379,7 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset, artic
                     <li key={item._key || item.url}>
                       {item.title ? <h3 className={styles.nibblesTitle}>{item.title}</h3> : null}
                       {item.url ? (
-                        <Link href={item.url} rel="noopener noreferrer" target="_blank" className={styles.nibblesLink}>
+                        <Link {...affiliateAnchorProps(item.url, amazonAssociatesTag)} className={styles.nibblesLink}>
                           {item.ctaLabel || "Read more"}
                         </Link>
                       ) : null}

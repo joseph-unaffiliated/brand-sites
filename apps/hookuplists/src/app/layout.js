@@ -139,6 +139,7 @@ export default function RootLayout({ children }) {
                 <div className="footer-links">
                   <Link href="/terms">Terms</Link>
                   <Link href="/privacy">Privacy</Link>
+                  <Link href="/affiliate-disclosure">Affiliate</Link>
                   <p className="footer-text">
                     © Hookup Lists. 2026.
                   </p>

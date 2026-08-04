@@ -39,6 +39,7 @@
 | `NEXT_PUBLIC_GA_MEASUREMENT_ID` | yes | Optional GA4 Measurement ID (e.g. `G-XXXX`). Marketing apps load gtag.js when set. Do not duplicate the same ID in GTM. Also used by `GaIdentityBridge` (reader-events) to set `user_id` and capture `client_id` when the reader is known and analytics consent allows. |
 | `NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT` | yes | Optional OneTrust domain script UUID (Pickle loads only when set). |
 | `NEXT_PUBLIC_RETENTION_SITE_ID` | yes | Optional Retention.com browser snippet site id (loads only when set). |
+| `NEXT_PUBLIC_AMAZON_ASSOCIATES_TAG` | yes | Amazon Associates tracking ID (e.g. `unaffiliate0f-20`). Defaults in each `apps/*/src/config/site.js` if unset. Public by design — used in product URLs. See [`AMAZON_ASSOCIATES.md`](./AMAZON_ASSOCIATES.md). |
 
 **Pickle copy/paste:** [`THEPICKLEREPORT_VERCEL_ENV.md`](./THEPICKLEREPORT_VERCEL_ENV.md). **Eyeballer's Cookbook copy/paste:** [`THEEYEBALLERSCOOKBOOK_VERCEL_ENV.md`](./THEEYEBALLERSCOOKBOOK_VERCEL_ENV.md). **Hipspeak copy/paste:** [`HIPSPEAK_VERCEL_ENV.md`](./HIPSPEAK_VERCEL_ENV.md). **From the Vault, by Heeb copy/paste:** [`HEEBNEWSLETTERS_VERCEL_ENV.md`](./HEEBNEWSLETTERS_VERCEL_ENV.md). **Hard Resets copy/paste:** [`HARDRESETS_VERCEL_ENV.md`](./HARDRESETS_VERCEL_ENV.md).
 

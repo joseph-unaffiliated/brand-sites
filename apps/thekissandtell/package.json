@@ -20,7 +20,8 @@
     "next-sanity": "^12.1.0",
     "next-turnstile": "^1.0.7",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "@publication-websites/affiliate": "workspace:*"
   },
   "devDependencies": {
     "eslint": "^9",

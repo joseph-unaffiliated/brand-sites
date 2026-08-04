@@ -1,0 +1,14 @@
+{
+  "name": "@publication-websites/affiliate",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": "./index.js",
+    "./disclosure": "./disclosure.js"
+  },
+  "peerDependencies": {
+    "react": ">=18"
+  }
+}

@@ -14,6 +14,9 @@ importers:
 
   apps/hardresets:
     dependencies:
+      '@publication-websites/affiliate':
+        specifier: workspace:*
+        version: link:../../packages/affiliate
       '@publication-websites/magic-client':
         specifier: workspace:*
         version: link:../../packages/magic-client
@@ -63,6 +66,9 @@ importers:
 
   apps/heebnewsletters:
     dependencies:
+      '@publication-websites/affiliate':
+        specifier: workspace:*
+        version: link:../../packages/affiliate
       '@publication-websites/magic-client':
         specifier: workspace:*
         version: link:../../packages/magic-client
@@ -112,6 +118,9 @@ importers:
 
   apps/hipspeak:
     dependencies:
+      '@publication-websites/affiliate':
+        specifier: workspace:*
+        version: link:../../packages/affiliate
       '@publication-websites/magic-client':
         specifier: workspace:*
         version: link:../../packages/magic-client
@@ -161,6 +170,9 @@ importers:
 
   apps/hookuplists:
     dependencies:
+      '@publication-websites/affiliate':
+        specifier: workspace:*
+        version: link:../../packages/affiliate
       '@publication-websites/magic-client':
         specifier: workspace:*
         version: link:../../packages/magic-client
@@ -207,6 +219,9 @@ importers:
 
   apps/the90sparent:
     dependencies:
+      '@publication-websites/affiliate':
+        specifier: workspace:*
+        version: link:../../packages/affiliate
       '@publication-websites/magic-client':
         specifier: workspace:*
         version: link:../../packages/magic-client
@@ -256,6 +271,9 @@ importers:
 
   apps/theeyeballerscookbook:
     dependencies:
+      '@publication-websites/affiliate':
+        specifier: workspace:*
+        version: link:../../packages/affiliate
       '@publication-websites/magic-client':
         specifier: workspace:*
         version: link:../../packages/magic-client
@@ -305,6 +323,9 @@ importers:
 
   apps/thekissandtell:
     dependencies:
+      '@publication-websites/affiliate':
+        specifier: workspace:*
+        version: link:../../packages/affiliate
       '@publication-websites/magic-client':
         specifier: workspace:*
         version: link:../../packages/magic-client
@@ -351,6 +372,9 @@ importers:
 
   apps/thepicklereport:
     dependencies:
+      '@publication-websites/affiliate':
+        specifier: workspace:*
+        version: link:../../packages/affiliate
       '@publication-websites/magic-client':
         specifier: workspace:*
         version: link:../../packages/magic-client
@@ -397,6 +421,12 @@ importers:
       eslint-config-next:
         specifier: 16.1.1
         version: 16.1.1(eslint@9.39.4(jiti@2.6.1))(typescript@5.9.3)
+
+  packages/affiliate:
+    dependencies:
+      react:
+        specifier: '>=18'
+        version: 19.2.3
 
   packages/magic-client:
     dependencies:

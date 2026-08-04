@@ -5,6 +5,8 @@ import { PortableText } from "next-sanity";
 import { createImageUrlBuilder } from "@sanity/image-url";
 import { authorBylineText } from "@/lib/article-helpers";
 import styles from "./ArticleContentBlocks.module.css";
+import { affiliateAnchorProps } from "@publication-websites/affiliate";
+import { amazonAssociatesTag } from "@/config/site";
 
 function urlForImage(projectId, dataset, source) {
   if (!projectId || !dataset || !source?.asset) return null;
@@ -83,9 +85,7 @@ function portableTextComponents(projectId, dataset) {
     marks: {
       link: ({ children, value }) => (
         <a
-          href={value?.href}
-          rel="noopener noreferrer"
-          target="_blank"
+          {...affiliateAnchorProps(value?.href, amazonAssociatesTag)}
           className={styles.featureLink}
         >
           {children}
@@ -125,9 +125,7 @@ function renderSecondarySourcesBlock(block) {
                 <p>
                   {item.url ? (
                     <Link
-                      href={item.url}
-                      rel="noopener noreferrer"
-                      target="_blank"
+                      {...affiliateAnchorProps(item.url, amazonAssociatesTag)}
                       className={styles.secondarySourcesHeadlineLink}
                     >
                       <strong>{item.headline}</strong>
@@ -142,9 +140,7 @@ function renderSecondarySourcesBlock(block) {
                   {item.description}{" "}
                   {item.url && item.ctaLabel ? (
                     <Link
-                      href={item.url}
-                      rel="noopener noreferrer"
-                      target="_blank"
+                      {...affiliateAnchorProps(item.url, amazonAssociatesTag)}
                       className={styles.secondarySourcesCta}
                     >
                       <strong>{item.ctaLabel}</strong>

@@ -16,6 +16,7 @@ const nextConfig = {
       "https://www.the90sparent.com/article/birthdayparties",
   },
   transpilePackages: [
+    "@publication-websites/affiliate",
     "@publication-websites/shared-ads",
     "@publication-websites/web-shell",
     "@publication-websites/sanity-content",

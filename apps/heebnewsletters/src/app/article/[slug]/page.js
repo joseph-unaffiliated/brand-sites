@@ -16,7 +16,8 @@ import AdSlot from "@/components/AdSlot";
 import ArticleAdStickyBottom from "@/components/ArticleAdStickyBottom";
 import JsonLd from "@/components/JsonLd";
 import { crossPromoForSlot } from "@/config/crossPromoAds";
-import { siteConfig, siteDisplayName } from "@/config/site";
+import { amazonAssociatesTag, siteConfig, siteDisplayName } from "@/config/site";
+import { affiliateAnchorProps } from "@publication-websites/affiliate";
 import styles from "./page.module.css";
 
 export const dynamic = "force-dynamic";
@@ -323,9 +324,7 @@ export default async function VaultIssuePage({ params }) {
                   {showBuyCta ? (
                     <div className={styles.buyCtaRow}>
                       <Link
-                        href={issue.originalIssueUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                        {...affiliateAnchorProps(issue.originalIssueUrl, amazonAssociatesTag)}
                         className={styles.buyCta}
                       >
                         {issue.buyCtaLabel}
@@ -342,9 +341,7 @@ export default async function VaultIssuePage({ params }) {
                             <span className={styles.rabbitHoleItemTitle}>{item.title}</span>
                             {item.url ? (
                               <Link
-                                href={item.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
+                                {...affiliateAnchorProps(item.url, amazonAssociatesTag)}
                                 className={styles.rabbitHoleSourceBtn}
                               >
                                 {item.sourceLabel || "Read more"}

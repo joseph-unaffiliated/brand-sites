@@ -5,6 +5,8 @@ import { PortableText } from "next-sanity";
 import { createImageUrlBuilder } from "@sanity/image-url";
 import { authorBylineText } from "@/lib/article-helpers";
 import styles from "./ArticleContentBlocks.module.css";
+import { affiliateAnchorProps } from "@publication-websites/affiliate";
+import { amazonAssociatesTag } from "@/config/site";
 
 function urlForImage(projectId, dataset, source) {
   if (!projectId || !dataset || !source?.asset) return null;
@@ -190,9 +192,7 @@ function portableTextComponents(projectId, dataset) {
     marks: {
       link: ({ children, value }) => (
         <a
-          href={value?.href}
-          rel="noopener noreferrer"
-          target="_blank"
+          {...affiliateAnchorProps(value?.href, amazonAssociatesTag)}
           className={styles.featureLink}
         >
           {children}
@@ -480,9 +480,7 @@ function renderContentBlock(block, projectId, dataset) {
                     <li key={item._key || item.url}>
                       {item.url ? (
                         <Link
-                          href={item.url}
-                          rel="noopener noreferrer"
-                          target="_blank"
+                          {...affiliateAnchorProps(item.url, amazonAssociatesTag)}
                           className={styles.aroundTheWebItemLink}
                         >
                           {item.title ? <h3 className={styles.aroundTheWebTitle}>{item.title}</h3> : null}

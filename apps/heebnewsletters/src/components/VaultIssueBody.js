@@ -1,6 +1,8 @@
 import Image from "next/image";
 import { PortableText } from "next-sanity";
 import styles from "./VaultIssueBody.module.css";
+import { affiliateAnchorProps } from "@publication-websites/affiliate";
+import { amazonAssociatesTag } from "@/config/site";
 
 /** Body images are already dereferenced by the vault issue GROQ projection. */
 function urlForBodyImage(asset, width = 1400) {
@@ -49,9 +51,7 @@ const components = {
   marks: {
     link: ({ children, value }) => (
       <a
-        href={value?.href}
-        target="_blank"
-        rel="noopener noreferrer"
+        {...affiliateAnchorProps(value?.href, amazonAssociatesTag)}
         className={styles.bodyLink}
       >
         {children}

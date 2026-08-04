@@ -2,9 +2,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { PortableText } from "next-sanity";
 import { createImageUrlBuilder } from "@sanity/image-url";
-import { siteConfig } from "@/config/site";
+import { amazonAssociatesTag, siteConfig } from "@/config/site";
 import { buildPollVoteUrl, getOptionCode, isTriviaBlock } from "@/lib/vote-block";
 import styles from "./ArticleContentBlocks.module.css";
+import { affiliateAnchorProps } from "@publication-websites/affiliate";
 
 const siteUrl = siteConfig.siteUrl.replace(/\/$/, "");
 
@@ -137,9 +138,7 @@ function captionCreditPortableTextComponents() {
     marks: {
       link: ({ children, value }) => (
         <a
-          href={value?.href}
-          rel="noopener noreferrer"
-          target="_blank"
+          {...affiliateAnchorProps(value?.href, amazonAssociatesTag)}
           className={styles.proseLink}
         >
           {children}
@@ -231,9 +230,7 @@ function portableTextComponents(projectId, dataset, { omitImageCredit = false } 
     marks: {
       link: ({ children, value }) => (
         <a
-          href={value?.href}
-          rel="noopener noreferrer"
-          target="_blank"
+          {...affiliateAnchorProps(value?.href, amazonAssociatesTag)}
           className={styles.proseLink}
         >
           {children}
@@ -376,9 +373,7 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset, artic
                       <li key={item._key || item.url}>
                         {item.url ? (
                           <Link
-                            href={item.url}
-                            rel="noopener noreferrer"
-                            target="_blank"
+                            {...affiliateAnchorProps(item.url, amazonAssociatesTag)}
                             className={styles.nibblesItemLink}
                           >
                             {item.title ? (

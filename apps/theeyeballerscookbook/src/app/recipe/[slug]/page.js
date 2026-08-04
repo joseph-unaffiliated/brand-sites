@@ -11,7 +11,8 @@ import AdSlot from "@/components/AdSlot";
 import ArticleStickyBottom from "@/components/ArticleStickyBottom";
 import JsonLd from "@/components/JsonLd";
 import { crossPromoForSlot } from "@/config/crossPromoAds";
-import { siteConfig, siteDisplayName } from "@/config/site";
+import { amazonAssociatesTag, siteConfig, siteDisplayName } from "@/config/site";
+import { affiliateAnchorProps } from "@publication-websites/affiliate";
 import styles from "./page.module.css";
 
 const ADS_MODE = (process.env.NEXT_PUBLIC_ADS_MODE || "cross_promo").toLowerCase();
@@ -262,9 +263,7 @@ export default async function RecipePage({ params }) {
                               <p>{item.label}</p>
                               {item.url ? (
                                 <a
-                                  href={item.url}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
+                                  {...affiliateAnchorProps(item.url, amazonAssociatesTag)}
                                   className={styles.recipeFurtherReadingLink}
                                 >
                                   {item.sourceName || "Read more"} &gt;

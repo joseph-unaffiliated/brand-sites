@@ -187,6 +187,7 @@ export default async function RootLayout({ children }) {
                     <Link href="/terms">Terms</Link>
                     <Link href="/privacy">Privacy</Link>
                     <Link href="/ai-policy">AI Policy</Link>
+                  <Link href="/affiliate-disclosure">Affiliate</Link>
                   </div>
                 </div>
                 <div>

@@ -33,4 +33,8 @@ export const contactEmail =
   process.env.NEXT_PUBLIC_CONTACT_EMAIL || "contact@hookuplists.com";
 
 /** @deprecated use siteConfig.brandId */
+/** Amazon Associates tracking ID (public; used in product URLs). */
+export const amazonAssociatesTag =
+  process.env.NEXT_PUBLIC_AMAZON_ASSOCIATES_TAG || "unaffiliate0f-20";
+
 export const BRAND = siteConfig.brandId;
