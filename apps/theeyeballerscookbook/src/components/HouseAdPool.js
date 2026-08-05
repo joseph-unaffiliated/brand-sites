@@ -23,6 +23,10 @@ import "./HouseAdPool.css";
  * When wrapped in `HouseAdClaimProvider`, click URLs already used by other slots
  * on this page are excluded so two ads never share a destination (supply allowing).
  *
+ * Verified readers with `jewishInterested` may receive creatives marked
+ * `Target for CE` (House Ads and Commerce Ads). The separate `Flag for CE`
+ * checkbox is analytics-only and does not gate who sees the ad.
+ *
  * @param {string[]} [excludeBrands] Extra brand keys to exclude (e.g. the other rail ad).
  * @param {(ad: object | null) => void} [onHouseAd] Called when the house-ad result settles.
  * @param {() => void} [onReady] Called once when there is something to display.
@@ -97,11 +101,14 @@ export default function HouseAdPool({
       if (isRefresh && currentClickUrlRef.current) {
         pageExcluded.add(currentClickUrlRef.current);
       }
+      let jewishInterested = false;
       const readerToken = getReaderToken();
       if (readerToken) {
         try {
-          const { subscribedBrands } = await fetchVerifiedSubscriptionsForSite(readerToken);
-          (subscribedBrands || []).forEach((brand) => excluded.add(brand));
+          const profile = await fetchVerifiedSubscriptionsForSite(readerToken);
+          const subscribedBrands = profile?.subscribedBrands || [];
+          subscribedBrands.forEach((brand) => excluded.add(brand));
+          jewishInterested = !!profile?.jewishInterested;
         } catch {
           /* best-effort — an unverified reader just sees the normal pool */
         }
@@ -115,6 +122,9 @@ export default function HouseAdPool({
         }
         for (const url of pageExcluded) {
           params.append("pageExcludeUrl", url);
+        }
+        if (jewishInterested) {
+          params.set("jewishInterested", "1");
         }
         const res = await fetch(`/api/house-ads?${params}`, { cache: "no-store" });
         const data = await res.json().catch(() => ({}));

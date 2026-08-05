@@ -53,7 +53,7 @@ Airtable-backed cross-promo pool that a brand's `/api/house-ads` route reads and
 `HouseAdPool`/`HouseAdImage` render client-side, ahead of the static `shared-ads`
 creative (which stays as the fallback). See
 [`packages/shared-ads/README.md`](../packages/shared-ads/README.md) for the full
-schema, upload steps, and the `Jewish-interested` flag.
+schema, upload steps, and the `Flag for CE` / `Target for CE` flags.
 
 | Variable | Browser? | Purpose |
 |----------|----------|---------|

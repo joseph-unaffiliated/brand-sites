@@ -51,7 +51,8 @@ Airtable is empty/unconfigured or has no eligible creative for that slot + reade
 | `Commerce URL` | URL | Amazon/affiliate destination for **Commerce Ads**. Preferred over Click URL when Ad type is Commerce Ads. |
 | `Ad type` | Single select | `House Ads` (cross-promo network) or `Commerce Ads` (Amazon/affiliate commerce). Existing rows defaulted to `House Ads`. Tracked as `house_ad` / `commerce_ad` in ad events. |
 | `Active` | Checkbox | Only checked rows are eligible. |
-| `Jewish-interested` | Checkbox | See "Jewish-interested flag" below. |
+| `Flag for CE` | Checkbox | **Signal only.** Show to everyone; impressions/clicks carry `isJewishContent` for analytics. Does not restrict audience. |
+| `Target for CE` | Checkbox | **Targeting.** Creative is only eligible for verified Jewish-interested readers (`interest_ce`). House Ads and Commerce Ads. |
 | `Weight` | Number | Optional; defaults to `1`. Higher weight = picked more often (weighted random) among eligible creatives for a slot. |
 
 ### Uploading a new creative
@@ -61,8 +62,9 @@ Airtable is empty/unconfigured or has no eligible creative for that slot + reade
    sites that may show it, `Slot` to the placement
    (`inArticle` / `rail`, or both `stickyDesktop` + `stickyMobile` rows for a sticky pair),
    attach the `Image`, set `Click URL` / slug fields as needed, and check `Active`.
-3. Set `Ad type` to `House Ads` or `Commerce Ads`. Set `Jewish-interested` if the creative should be flagged as Jewish-interest content
-   (see below). Optionally set `Weight` to bias selection.
+3. Set `Ad type` to `House Ads` or `Commerce Ads`. Optionally check `Flag for CE`
+   (analytics signal) and/or `Target for CE` (audience gate) — see below.
+   Optionally set `Weight` to bias selection.
 4. No redeploy needed — the `/api/house-ads` route revalidates every 10 minutes
    (`revalidate: 600`), so new/edited rows appear within ~10 minutes.
 
@@ -78,11 +80,18 @@ When `AIRTABLE_API_KEY` (or `AIRTABLE_ACCESS_TOKEN`) is unset, `/api/house-ads` 
 `{ ad: null }` immediately (no Airtable call) and every app silently falls back to its
 static `shared-ads` creative — safe to leave unset in local dev.
 
-### Jewish-interested flag
+### Flag for CE / Target for CE
 
-Some house-ad advertisers (e.g. `heebnewsletters`) are relevant primarily to readers
-interested in Jewish content. The `Jewish-interested` checkbox on a creative flows
-through `selectHouseAd()` as `isJewishContent` and is attached to that ad's
-`ad_impression` / `ad_click` tracking events (`trackAdClick` / `useAdImpression` props in
-`HouseAdImage`) alongside `creativeBrand`, so downstream analytics can segment or
-suppress Jewish-interest house ads without needing a second Airtable field per brand.
+| Checkbox | Purpose |
+|----------|---------|
+| `Flag for CE` | Show to **everyone**. Events get `isJewishContent: true` so clicks/impressions are Jewish-interest signals for analytics. |
+| `Target for CE` | Show **only** when `/api/house-ads` is called with `jewishInterested=1` (verified session + reader qualifies for `interest_ce`). Applies to House Ads and Commerce Ads. |
+
+You can check both, either, or neither. Targeting does not imply the analytics flag and vice versa — set each intentionally.
+
+Brand sites set `jewishInterested=1` after `/api/reader-subscriptions` reports
+`jewishInterested: true` (Jewish pubs, Jewish Meta creatives, Jewish content
+landings/clicks). Unverified readers never get audience-gated creatives.
+
+`isJewishContent` from the signal checkbox is attached to `ad_impression` /
+`ad_click` via `HouseAdImage`.

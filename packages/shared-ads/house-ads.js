@@ -22,7 +22,10 @@ const FIELD = {
   /** Freeform Amazon/affiliate URL for Commerce Ads (Click URL formula is House Ads only). */
   commerceUrl: "Commerce URL",
   active: "Active",
-  jewish: "Jewish-interested",
+  /** Analytics signal: show to everyone; events carry isJewishContent. */
+  jewish: "Flag for CE",
+  /** Targeting: only serve to verified jewish-interested readers. */
+  jewishAudienceOnly: "Target for CE",
   weight: "Weight",
   /** House Ads | Commerce Ads */
   adType: "Ad type",
@@ -37,6 +40,7 @@ const FIELD = {
  *   imageUrl: string,
  *   clickUrl: string,
  *   isJewishContent: boolean,
+ *   jewishAudienceOnly: boolean,
  *   weight: number,
  *   adType: 'House Ads' | 'Commerce Ads' | '',
  *   destinationBrandKeys: string[],
@@ -246,6 +250,7 @@ export async function fetchActiveHouseCreatives() {
       imageUrl,
       clickUrl,
       isJewishContent: !!f[FIELD.jewish],
+      jewishAudienceOnly: !!f[FIELD.jewishAudienceOnly],
       weight: Math.max(1, Number(f[FIELD.weight]) || 1),
       adType,
       destinationBrandKeys: resolveDestinationBrandKeys(f, slugByRecordId),
@@ -297,8 +302,10 @@ export function normalizeAdClickUrl(url) {
  * @param {HouseCreative} c
  * @param {{ hostBrand: string, blocked: Set<string>, pageBlockedUrls?: Set<string> }} ctx
  */
-function isEligibleForHost(c, { hostBrand, blocked, pageBlockedUrls }) {
+function isEligibleForHost(c, { hostBrand, blocked, pageBlockedUrls, jewishInterested }) {
   if (!matchesDestinationBrands(c, hostBrand)) return false;
+  // "Target for CE" creatives (house + commerce) for verified jewish-interested readers.
+  if (c.jewishAudienceOnly && !jewishInterested) return false;
   // Already driving to a URL shown elsewhere on this page.
   if (pageBlockedUrls?.size) {
     const normalized = normalizeAdClickUrl(c.clickUrl);
@@ -316,11 +323,18 @@ function isEligibleForHost(c, { hostBrand, blocked, pageBlockedUrls }) {
  *   hostBrand: string,
  *   excludeBrands?: string[],
  *   pageExcludeUrls?: string[],
+ *   jewishInterested?: boolean,
  * }} opts
  */
 export function selectHouseAd(
   creatives,
-  { slot, hostBrand, excludeBrands = [], pageExcludeUrls = [] }
+  {
+    slot,
+    hostBrand,
+    excludeBrands = [],
+    pageExcludeUrls = [],
+    jewishInterested = false,
+  }
 ) {
   const blocked = new Set(
     [hostBrand, ...excludeBrands].map((b) => String(b || "").trim()).filter(Boolean)
@@ -328,7 +342,12 @@ export function selectHouseAd(
   const pageBlockedUrls = new Set(
     pageExcludeUrls.map((u) => normalizeAdClickUrl(u)).filter(Boolean)
   );
-  const hostCtx = { hostBrand, blocked, pageBlockedUrls };
+  const hostCtx = {
+    hostBrand,
+    blocked,
+    pageBlockedUrls,
+    jewishInterested: !!jewishInterested,
+  };
 
   if (slot === "sticky") {
     const byBrand = new Map();
@@ -352,6 +371,9 @@ export function selectHouseAd(
         clickUrl,
         isJewishContent:
           parts.stickyDesktop.isJewishContent || parts.stickyMobile.isJewishContent,
+        jewishAudienceOnly:
+          parts.stickyDesktop.jewishAudienceOnly ||
+          parts.stickyMobile.jewishAudienceOnly,
         adType: parts.stickyDesktop.adType || parts.stickyMobile.adType || "",
         destinationBrandKeys:
           parts.stickyDesktop.destinationBrandKeys ||
@@ -366,6 +388,7 @@ export function selectHouseAd(
       brandKey: pick.brandKey,
       clickUrl: pick.clickUrl,
       isJewishContent: pick.isJewishContent,
+      jewishAudienceOnly: pick.jewishAudienceOnly,
       adType: pick.adType,
       desktop: { imageUrl: pick.desktop.imageUrl, id: pick.desktop.id },
       mobile: { imageUrl: pick.mobile.imageUrl, id: pick.mobile.id },
@@ -382,6 +405,7 @@ export function selectHouseAd(
     brandKey: pick.brandKey,
     clickUrl: pick.clickUrl,
     isJewishContent: pick.isJewishContent,
+    jewishAudienceOnly: pick.jewishAudienceOnly,
     adType: pick.adType,
     imageUrl: pick.imageUrl,
     id: pick.id,
