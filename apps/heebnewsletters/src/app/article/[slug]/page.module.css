@@ -355,12 +355,19 @@
   }
 }
 
+/* Stretch to article column so the sticky rail bottoms out with the final in-article ad. */
 .articleRail {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  padding-top: 1.5rem;
+  box-sizing: border-box;
+  min-height: 0;
+}
+
+.articleRailSticky {
   position: sticky;
   top: 24px;
-  align-self: start;
-  margin-top: 1.5rem;
-  box-sizing: border-box;
 }
 
 @media (min-width: 769px) {
@@ -385,9 +392,14 @@
   }
 }
 
-.adMid,
-.adBottom {
+.adMid {
   margin: 2rem 0;
+  min-height: 0;
+}
+
+/* Flush with rail column bottom so the final in-article and rail ads share a baseline. */
+.adBottom {
+  margin: 2rem 0 0;
   min-height: 0;
 }
 

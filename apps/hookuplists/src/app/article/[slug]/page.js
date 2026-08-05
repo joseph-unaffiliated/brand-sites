@@ -119,58 +119,59 @@ export default async function ArticlePage({ params }) {
                   <AdUnit slotId={SLOT_BOTTOM} format="rectangle" />
                 </div>
               )}
-              <div className="spacer-4rem" />
-              <HideWhenSubscribed>
-            <section className="newslettercta-section">
-              <div className="newslettercta-block">
-                <div className="newslettercta-prompt">
-                  <span>Subscribe for more from </span>
-                  <span>Hookup Lists</span>
-                  <span className="italic">, weekly in your inbox</span>
-                </div>
-                <ArticleSubscribeForm />
+            </div>
+          </div>
+          {SLOT_RAIL && (
+            <div className={styles.articleRail}>
+              <div className={styles.articleRailSticky}>
+                <AdUnit slotId={SLOT_RAIL} format="vertical" />
               </div>
-            </section>
-          </HideWhenSubscribed>
-          {readMore.length > 0 && (
-            <section className={styles.readMore} aria-label="Keep reading">
-              <h2 className={styles.readMoreTitle}>Keep reading</h2>
-              <div className={styles.readMoreGrid}>
-                {readMore.map((rec) => (
-                  <Link
-                    key={rec._id ?? rec.slug}
-                    href={`/article/${rec.slug}`}
-                    className={styles.readMoreCard}
-                  >
-                    <div className={styles.readMoreThumb}>
-                      <Image
-                        src={rec.mainImage}
-                        alt=""
-                        width={280}
-                        height={187}
-                        sizes="(max-width: 640px) 100vw, 280px"
-                      />
-                    </div>
-                    {rec.kicker && rec.kicker.trim().toLowerCase() !== "hookup lists" && (
-                      <p className={styles.readMoreKicker}>{rec.kicker}</p>
-                    )}
-                    <h3 className={styles.readMoreHeadline}>{rec.title}</h3>
-                    {rec.summary && (
-                      <p className={styles.readMoreDek}>{rec.summary}</p>
-                    )}
-                  </Link>
-                ))}
-              </div>
-            </section>
+            </div>
           )}
-          </div>
         </div>
-        {SLOT_RAIL && (
-          <div className={styles.articleRail}>
-            <AdUnit slotId={SLOT_RAIL} format="vertical" />
-          </div>
+        <HideWhenSubscribed>
+          <section className="newslettercta-section">
+            <div className="newslettercta-block">
+              <div className="newslettercta-prompt">
+                <span>Subscribe for more from </span>
+                <span>Hookup Lists</span>
+                <span className="italic">, weekly in your inbox</span>
+              </div>
+              <ArticleSubscribeForm />
+            </div>
+          </section>
+        </HideWhenSubscribed>
+        {readMore.length > 0 && (
+          <section className={styles.readMore} aria-label="Keep reading">
+            <h2 className={styles.readMoreTitle}>Keep reading</h2>
+            <div className={styles.readMoreGrid}>
+              {readMore.map((rec) => (
+                <Link
+                  key={rec._id ?? rec.slug}
+                  href={`/article/${rec.slug}`}
+                  className={styles.readMoreCard}
+                >
+                  <div className={styles.readMoreThumb}>
+                    <Image
+                      src={rec.mainImage}
+                      alt=""
+                      width={280}
+                      height={187}
+                      sizes="(max-width: 640px) 100vw, 280px"
+                    />
+                  </div>
+                  {rec.kicker && rec.kicker.trim().toLowerCase() !== "hookup lists" && (
+                    <p className={styles.readMoreKicker}>{rec.kicker}</p>
+                  )}
+                  <h3 className={styles.readMoreHeadline}>{rec.title}</h3>
+                  {rec.summary && (
+                    <p className={styles.readMoreDek}>{rec.summary}</p>
+                  )}
+                </Link>
+              ))}
+            </div>
+          </section>
         )}
-        </div>
       </section>
       <ArticleAdStickyBottom />
     </div>

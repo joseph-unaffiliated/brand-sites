@@ -37,6 +37,7 @@ import SubscribePopup from "@/components/SubscribePopup";
 import SubmissionsCopyLink from "@/components/SubmissionsCopyLink";
 import AdvertiseCopyLink from "@/components/AdvertiseCopyLink";
 import { SubscriberProvider } from "@/context/SubscriberContext";
+import { HouseAdClaimProvider } from "@/context/HouseAdClaimContext";
 import { ReaderEventsInit } from "@publication-websites/reader-events";
 import EmailClickSession from "@publication-websites/magic-client/email-click-session";
 import SubscriberSessionBootstrap from "@publication-websites/magic-client/subscriber-session-bootstrap";
@@ -159,6 +160,7 @@ export default async function RootLayout({ children }) {
         <GoogleTagManagerNoscript />
         <MarketingScripts adsenseClient={ADSENSE_CLIENT} metaPixelId={META_PIXEL_ID} />
         <SubscriberProvider>
+          <HouseAdClaimProvider>
           <ReaderEventsInit
             brandId={siteConfig.brandId}
             apiOrigin={siteConfig.magicReaderApiOrigin}
@@ -217,6 +219,7 @@ export default async function RootLayout({ children }) {
           </footer>
           </div>
           </NavLogoImageProvider>
+          </HouseAdClaimProvider>
         </SubscriberProvider>
       </body>
     </html>

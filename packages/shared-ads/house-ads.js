@@ -272,11 +272,38 @@ export function weightedRandom(items) {
 }
 
 /**
- * @param {HouseCreative} c
- * @param {{ hostBrand: string, blocked: Set<string> }} ctx
+ * Normalize click URLs for page-level dedupe (same destination = same ad).
+ * @param {unknown} url
+ * @returns {string}
  */
-function isEligibleForHost(c, { hostBrand, blocked }) {
+export function normalizeAdClickUrl(url) {
+  if (url == null) return "";
+  const raw = String(url).trim();
+  if (!raw) return "";
+  try {
+    const u = new URL(raw);
+    u.hash = "";
+    u.hostname = u.hostname.toLowerCase();
+    if (u.pathname.length > 1) {
+      u.pathname = u.pathname.replace(/\/+$/, "");
+    }
+    return u.toString();
+  } catch {
+    return raw.toLowerCase().replace(/\/+$/, "");
+  }
+}
+
+/**
+ * @param {HouseCreative} c
+ * @param {{ hostBrand: string, blocked: Set<string>, pageBlockedUrls?: Set<string> }} ctx
+ */
+function isEligibleForHost(c, { hostBrand, blocked, pageBlockedUrls }) {
   if (!matchesDestinationBrands(c, hostBrand)) return false;
+  // Already driving to a URL shown elsewhere on this page.
+  if (pageBlockedUrls?.size) {
+    const normalized = normalizeAdClickUrl(c.clickUrl);
+    if (normalized && pageBlockedUrls.has(normalized)) return false;
+  }
   // Self-promo exclusion applies to network house ads only (advertiser brand).
   if (c.adType !== "Commerce Ads" && blocked.has(c.brandKey)) return false;
   return true;
@@ -284,13 +311,24 @@ function isEligibleForHost(c, { hostBrand, blocked }) {
 
 /**
  * @param {HouseCreative[]} creatives
- * @param {{ slot: 'inArticle' | 'rail' | 'sticky', hostBrand: string, excludeBrands?: string[] }} opts
+ * @param {{
+ *   slot: 'inArticle' | 'rail' | 'sticky',
+ *   hostBrand: string,
+ *   excludeBrands?: string[],
+ *   pageExcludeUrls?: string[],
+ * }} opts
  */
-export function selectHouseAd(creatives, { slot, hostBrand, excludeBrands = [] }) {
+export function selectHouseAd(
+  creatives,
+  { slot, hostBrand, excludeBrands = [], pageExcludeUrls = [] }
+) {
   const blocked = new Set(
     [hostBrand, ...excludeBrands].map((b) => String(b || "").trim()).filter(Boolean)
   );
-  const hostCtx = { hostBrand, blocked };
+  const pageBlockedUrls = new Set(
+    pageExcludeUrls.map((u) => normalizeAdClickUrl(u)).filter(Boolean)
+  );
+  const hostCtx = { hostBrand, blocked, pageBlockedUrls };
 
   if (slot === "sticky") {
     const byBrand = new Map();
@@ -303,12 +341,15 @@ export function selectHouseAd(creatives, { slot, hostBrand, excludeBrands = [] }
     const pairs = [];
     for (const [brandKey, parts] of byBrand) {
       if (!parts.stickyDesktop || !parts.stickyMobile) continue;
+      const clickUrl = parts.stickyDesktop.clickUrl || parts.stickyMobile.clickUrl;
+      const normalizedClick = normalizeAdClickUrl(clickUrl);
+      if (normalizedClick && pageBlockedUrls.has(normalizedClick)) continue;
       pairs.push({
         brandKey,
         weight: Math.max(parts.stickyDesktop.weight, parts.stickyMobile.weight),
         desktop: parts.stickyDesktop,
         mobile: parts.stickyMobile,
-        clickUrl: parts.stickyDesktop.clickUrl || parts.stickyMobile.clickUrl,
+        clickUrl,
         isJewishContent:
           parts.stickyDesktop.isJewishContent || parts.stickyMobile.isJewishContent,
         adType: parts.stickyDesktop.adType || parts.stickyMobile.adType || "",

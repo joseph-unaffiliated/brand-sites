@@ -286,7 +286,9 @@ export default async function RecipePage({ params }) {
           </div>
           {SHOW_RAIL && (
             <div className={styles.articleRail}>
-              <AdSlot slotId={SLOT_RAIL} format="vertical" {...crossPromoForSlot("rail")} />
+              <div className={styles.articleRailSticky}>
+                <AdSlot slotId={SLOT_RAIL} format="vertical" {...crossPromoForSlot("rail")} />
+              </div>
             </div>
           )}
         </div>

@@ -3,6 +3,10 @@
   min-height: 0;
 }
 
+.segment + .segment {
+  margin-top: 40px;
+}
+
 .sticky {
   position: sticky;
   top: 24px;

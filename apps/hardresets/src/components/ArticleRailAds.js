@@ -30,12 +30,14 @@ export default function ArticleRailAds({ slotId, className, adSlotProps }) {
           <AdSlot
             slotId={slotId}
             format="vertical"
+            {...extra}
             refreshKey={refreshKey}
             onHouseAd={(ad) => {
+              // Lock the sibling exclude to the *initial* pick only — updating on
+              // every cycle retriggers the other slot mid-refresh and causes flicker.
               const key = ad?.brandKey ? String(ad.brandKey) : "";
-              if (key) setFirstBrand(key);
+              if (key) setFirstBrand((prev) => prev || key);
             }}
-            {...extra}
           />
         </div>
       </div>
@@ -44,9 +46,9 @@ export default function ArticleRailAds({ slotId, className, adSlotProps }) {
           <AdSlot
             slotId={slotId}
             format="vertical"
+            {...extra}
             refreshKey={refreshKey}
             excludeBrands={firstBrand ? [firstBrand] : []}
-            {...extra}
           />
         </div>
       </div>

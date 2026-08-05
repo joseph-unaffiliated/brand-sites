@@ -1,18 +1,27 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { getReaderToken } from "@publication-websites/magic-client";
-import { houseSlotFromFormat } from "@publication-websites/shared-ads/house-ads";
+import {
+  houseSlotFromFormat,
+  normalizeAdClickUrl,
+} from "@publication-websites/shared-ads/house-ads";
 import { fetchVerifiedSubscriptionsForSite } from "@/lib/reader-profile";
+import { useHouseAdClaims } from "@/context/HouseAdClaimContext";
 import HouseAdImage from "./HouseAdImage";
 import "./HouseAdPool.css";
 
 /**
  * Resolves an Airtable house ad for this slot, falling back to `children` only
- * after the request settles (never while loading). Fades the result in over 200ms.
+ * after the *initial* request settles (never while loading). Fades the result in
+ * over 200ms.
  *
  * Pass `refreshKey` (incrementing) to re-fetch and cycle creatives; the current
- * brand is excluded so the next pick prefers something different.
+ * brand is excluded so the next pick prefers something different. If a cycle
+ * finds nothing new, the current creative is kept (no fallback flash).
+ *
+ * When wrapped in `HouseAdClaimProvider`, click URLs already used by other slots
+ * on this page are excluded so two ads never share a destination (supply allowing).
  *
  * @param {string[]} [excludeBrands] Extra brand keys to exclude (e.g. the other rail ad).
  * @param {(ad: object | null) => void} [onHouseAd] Called when the house-ad result settles.
@@ -32,10 +41,13 @@ export default function HouseAdPool({
   const [ad, setAd] = useState(undefined);
   const [visible, setVisible] = useState(false);
   const [generation, setGeneration] = useState(0);
-  const cancelledRef = useRef(false);
+  const ownerId = useId();
+  const claims = useHouseAdClaims();
+  const reqIdRef = useRef(0);
   const settledRef = useRef(false);
   const readyNotifiedRef = useRef(false);
   const currentBrandRef = useRef("");
+  const currentClickUrlRef = useRef("");
   const contentIdRef = useRef("");
   const childrenRef = useRef(children);
   childrenRef.current = children;
@@ -54,12 +66,24 @@ export default function HouseAdPool({
     onReadyRef.current?.();
   }
 
-  useEffect(() => {
-    cancelledRef.current = false;
-    const isRefresh = settledRef.current;
-    if (isRefresh) setVisible(false);
+  function contentIdFor(next) {
+    if (next) {
+      return `${next.brandKey || ""}:${next.imageUrl || next.desktop?.imageUrl || ""}`;
+    }
+    return childrenRef.current != null ? "__fallback__" : "__empty__";
+  }
 
-    async function load() {
+  useEffect(() => {
+    return () => {
+      claims?.release(ownerId);
+    };
+  }, [claims, ownerId]);
+
+  useEffect(() => {
+    const reqId = ++reqIdRef.current;
+    const isRefresh = settledRef.current;
+
+    async function loadBody() {
       const excluded = new Set(
         excludeKey
           .split(",")
@@ -68,6 +92,10 @@ export default function HouseAdPool({
       );
       if (isRefresh && currentBrandRef.current) {
         excluded.add(currentBrandRef.current);
+      }
+      const pageExcluded = new Set(claims?.getPageExcluded(ownerId) || []);
+      if (isRefresh && currentClickUrlRef.current) {
+        pageExcluded.add(currentClickUrlRef.current);
       }
       const readerToken = getReaderToken();
       if (readerToken) {
@@ -79,63 +107,71 @@ export default function HouseAdPool({
         }
       }
 
+      let next = null;
       try {
         const params = new URLSearchParams({ slot: houseSlotFromFormat(format) });
         if (excluded.size) {
           params.set("exclude", Array.from(excluded).join(","));
         }
+        for (const url of pageExcluded) {
+          params.append("pageExcludeUrl", url);
+        }
         const res = await fetch(`/api/house-ads?${params}`, { cache: "no-store" });
         const data = await res.json().catch(() => ({}));
-        const next = data?.ad || null;
-        if (cancelledRef.current) return;
-
-        const hasFallback = childrenRef.current != null;
-        const nextId = next
-          ? `${next.brandKey || ""}:${next.imageUrl || next.desktop?.imageUrl || ""}`
-          : hasFallback
-            ? "__fallback__"
-            : "__empty__";
-
-        // Same creative after a cycle — restore visibility without flashing.
-        if (isRefresh && nextId === contentIdRef.current) {
-          setVisible(true);
-          notifyReadyIfNeeded(next);
-          return;
-        }
-
-        settledRef.current = true;
-        contentIdRef.current = nextId;
-        currentBrandRef.current = next?.brandKey ? String(next.brandKey) : "";
-        setAd(next);
-        setGeneration((g) => g + 1);
-        onHouseAdRef.current?.(next);
-        notifyReadyIfNeeded(next);
+        next = data?.ad || null;
       } catch {
-        if (cancelledRef.current) return;
-        const hasFallback = childrenRef.current != null;
-        const nextId = hasFallback ? "__fallback__" : "__empty__";
-        if (isRefresh && nextId === contentIdRef.current) {
-          setVisible(true);
-          notifyReadyIfNeeded(null);
-          return;
-        }
-        settledRef.current = true;
-        contentIdRef.current = nextId;
-        currentBrandRef.current = "";
-        setAd(null);
-        setGeneration((g) => g + 1);
-        onHouseAdRef.current?.(null);
-        notifyReadyIfNeeded(null);
+        next = null;
       }
+
+      if (reqId !== reqIdRef.current) return null;
+
+      const nextId = contentIdFor(next);
+
+      // Cycle found nothing new (or empty pool) — keep what's on screen.
+      if (
+        isRefresh &&
+        (nextId === contentIdRef.current || nextId === "__empty__" || nextId === "__fallback__")
+      ) {
+        return { keep: true, next };
+      }
+
+      const claimedUrl = normalizeAdClickUrl(next?.clickUrl || "");
+      // Claim before releasing the queue so the next slot sees this destination.
+      claims?.claim(ownerId, claimedUrl);
+      return { keep: false, next, nextId, claimedUrl };
     }
 
-    const delay = isRefresh ? 200 : 0;
-    const timer = setTimeout(load, delay);
-    return () => {
-      cancelledRef.current = true;
-      clearTimeout(timer);
-    };
-  }, [format, excludeKey, refreshKey]);
+    async function load() {
+      const result = claims?.runExclusive
+        ? await claims.runExclusive(loadBody)
+        : await loadBody();
+
+      if (reqId !== reqIdRef.current || !result) return;
+
+      if (result.keep) {
+        setVisible(true);
+        notifyReadyIfNeeded(result.next);
+        return;
+      }
+
+      if (isRefresh) {
+        setVisible(false);
+        await new Promise((r) => setTimeout(r, 200));
+        if (reqId !== reqIdRef.current) return;
+      }
+
+      settledRef.current = true;
+      contentIdRef.current = result.nextId;
+      currentBrandRef.current = result.next?.brandKey ? String(result.next.brandKey) : "";
+      currentClickUrlRef.current = result.claimedUrl || "";
+      setAd(result.next);
+      setGeneration((g) => g + 1);
+      onHouseAdRef.current?.(result.next);
+      notifyReadyIfNeeded(result.next);
+    }
+
+    load();
+  }, [format, excludeKey, refreshKey, claims, ownerId]);
 
   useEffect(() => {
     if (generation === 0 && ad === undefined) return;

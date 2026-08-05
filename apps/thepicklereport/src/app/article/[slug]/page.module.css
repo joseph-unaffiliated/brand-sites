@@ -201,9 +201,14 @@
   }
 }
 
-.adMid,
-.adBottom {
+.adMid {
   margin: 2rem 0;
+  min-height: 0;
+}
+
+/* Flush with rail column bottom so the final in-article and rail ads share a baseline. */
+.adBottom {
+  margin: 2rem 0 0;
   min-height: 0;
 }
 

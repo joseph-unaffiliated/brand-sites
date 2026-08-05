@@ -16,10 +16,17 @@ function resolveSlot(searchParams) {
   return houseSlotFromFormat(raw);
 }
 
-function resolveExcludeBrands(searchParams) {
-  return (searchParams.get("exclude") || "")
+function resolveBrandList(searchParams, key) {
+  return (searchParams.get(key) || "")
     .split(",")
     .map((brand) => brand.trim())
+    .filter(Boolean);
+}
+
+function resolvePageExcludeUrls(searchParams) {
+  return searchParams
+    .getAll("pageExcludeUrl")
+    .map((url) => String(url || "").trim())
     .filter(Boolean);
 }
 
@@ -30,10 +37,13 @@ function hasAirtableToken() {
 }
 
 /**
- * GET /api/house-ads?slot=inArticle|rail|sticky&exclude=brandA,brandB
+ * GET /api/house-ads?slot=inArticle|rail|sticky&exclude=brandA&pageExcludeUrl=…
  * Returns `{ ad: HouseAdSelection | null }`. Never serving is not an error —
  * an empty/unconfigured Airtable base or a slot with no eligible creative
  * simply returns `{ ad: null }` so callers fall back to their static creative.
+ *
+ * `exclude` — subscribed / self-promo style (house ads only).
+ * `pageExcludeUrl` — click URLs already shown on this page (repeatable param).
  */
 export async function GET(request) {
   if (!hasAirtableToken()) {
@@ -42,12 +52,18 @@ export async function GET(request) {
 
   const { searchParams } = new URL(request.url);
   const slot = resolveSlot(searchParams);
-  const excludeBrands = resolveExcludeBrands(searchParams);
+  const excludeBrands = resolveBrandList(searchParams, "exclude");
+  const pageExcludeUrls = resolvePageExcludeUrls(searchParams);
   const hostBrand = siteConfig.brandId || process.env.NEXT_PUBLIC_BRAND_ID || "";
 
   try {
     const creatives = await fetchActiveHouseCreatives();
-    const ad = selectHouseAd(creatives, { slot, hostBrand, excludeBrands });
+    const ad = selectHouseAd(creatives, {
+      slot,
+      hostBrand,
+      excludeBrands,
+      pageExcludeUrls,
+    });
     return NextResponse.json({ ad });
   } catch (err) {
     console.error("[house-ads] route error", err);

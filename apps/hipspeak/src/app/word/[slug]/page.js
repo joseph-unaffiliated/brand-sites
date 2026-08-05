@@ -296,26 +296,28 @@ export default async function WordPage({ params }) {
                   <AdSlot slotId={SLOT_BOTTOM} format="rectangle" {...crossPromoForSlot("bottom")} />
                 </div>
               )}
-              <HideWhenSubscribed>
-                <section className="newslettercta-section">
-                  <div className="newslettercta-block">
-                    <div className="newslettercta-prompt">
-                      <span>Subscribe for more from </span>
-                      <span>{siteDisplayName}</span>
-                      <span className="italic">, one word a week in your inbox</span>
-                    </div>
-                    <ArticleSubscribeForm />
-                  </div>
-                </section>
-              </HideWhenSubscribed>
             </div>
           </div>
           {SHOW_RAIL && (
             <div className={styles.articleRail}>
-              <AdSlot slotId={SLOT_RAIL} format="vertical" {...crossPromoForSlot("rail")} />
+              <div className={styles.articleRailSticky}>
+                <AdSlot slotId={SLOT_RAIL} format="vertical" {...crossPromoForSlot("rail")} />
+              </div>
             </div>
           )}
         </div>
+        <HideWhenSubscribed>
+          <section className="newslettercta-section">
+            <div className="newslettercta-block">
+              <div className="newslettercta-prompt">
+                <span>Subscribe for more from </span>
+                <span>{siteDisplayName}</span>
+                <span className="italic">, one word a week in your inbox</span>
+              </div>
+              <ArticleSubscribeForm />
+            </div>
+          </section>
+        </HideWhenSubscribed>
         {moreWords.length > 0 && (
           <div className={styles.readMoreOuter}>
             <section className={styles.readMore} aria-label="More words">
