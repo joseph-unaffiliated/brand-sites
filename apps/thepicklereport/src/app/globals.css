@@ -587,7 +587,12 @@ a {
   width: calc(100vw + 64px);
   height: calc(100vh + 64px);
   background-color: var(--bg);
-  background-image: var(--header-mark-bg-image);
+  background-image:
+    linear-gradient(
+      rgba(0, 0, 0, var(--header-mark-overlay, 0)),
+      rgba(0, 0, 0, var(--header-mark-overlay, 0))
+    ),
+    var(--header-mark-bg-image);
   background-size: cover;
   /* Align image center with logomark (not viewport center). */
   background-position: 50% calc(50% + (var(--logo-mark-center-y, 50vh) - 50vh));

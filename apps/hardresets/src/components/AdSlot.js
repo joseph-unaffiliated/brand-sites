@@ -21,6 +21,8 @@ export default function AdSlot({
   promoUrl,
   excludeBrands,
   onHouseAd,
+  onReady,
+  refreshKey,
 }) {
   if (MODE === "cross_promo") {
     const brand = (sharedAdsBrand || "").trim();
@@ -40,6 +42,8 @@ export default function AdSlot({
         className={className}
         excludeBrands={excludeBrands}
         onHouseAd={onHouseAd}
+        onReady={onReady}
+        refreshKey={refreshKey}
       >
         {staticCreative}
       </HouseAdPool>

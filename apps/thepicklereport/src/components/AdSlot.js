@@ -24,6 +24,8 @@ export default function AdSlot({
   onCollapse,
   excludeBrands,
   onHouseAd,
+  onReady,
+  refreshKey,
 }) {
   if (MODE === "cross_promo") {
     const staticCreative = SHARED_CREATIVES ? (
@@ -37,6 +39,8 @@ export default function AdSlot({
         className={className}
         excludeBrands={excludeBrands}
         onHouseAd={onHouseAd}
+        onReady={onReady}
+        refreshKey={refreshKey}
       >
         {staticCreative}
       </HouseAdPool>
