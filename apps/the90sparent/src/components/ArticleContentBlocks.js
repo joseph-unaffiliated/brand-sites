@@ -4,6 +4,7 @@ import Link from "next/link";
 import { PortableText } from "next-sanity";
 import { createImageUrlBuilder } from "@sanity/image-url";
 import { authorBylineText } from "@/lib/article-helpers";
+import AdSlot from "@/components/AdSlot";
 import styles from "./ArticleContentBlocks.module.css";
 import { affiliateAnchorProps } from "@publication-websites/affiliate";
 import { amazonAssociatesTag } from "@/config/site";
@@ -588,6 +589,8 @@ export default function ArticleContentBlocks({
   articleSlug = "",
   bio,
   authorName,
+  showInArticleAd = false,
+  inArticleSlotId,
 }) {
   if (!Array.isArray(blocks) || blocks.length === 0) return null;
 
@@ -597,7 +600,17 @@ export default function ArticleContentBlocks({
   const { core, nostalgia, atw } = partitionArticleBlocks(blocks);
 
   const segments = [];
-  for (const b of core) segments.push({ kind: "block", block: b });
+  let insertedInArticleAd = false;
+  for (let i = 0; i < core.length; i++) {
+    const b = core[i];
+    segments.push({ kind: "block", block: b });
+    const isFeature = b?._type === "featureSection";
+    const nextIsFeature = core[i + 1]?._type === "featureSection";
+    if (showInArticleAd && isFeature && !nextIsFeature && !insertedInArticleAd) {
+      segments.push({ kind: "inArticleAd" });
+      insertedInArticleAd = true;
+    }
+  }
   if (showAuthorCard) segments.push({ kind: "author" });
   if (nostalgia.length > 0) {
     for (const b of nostalgia) segments.push({ kind: "block", block: b });
@@ -609,6 +622,13 @@ export default function ArticleContentBlocks({
   return (
     <div className={styles.blocks}>
       {segments.map((seg, i) => {
+        if (seg.kind === "inArticleAd") {
+          return (
+            <div key="in-article-ad" className={styles.inArticleAd}>
+              <AdSlot slotId={inArticleSlotId} format="rectangle" />
+            </div>
+          );
+        }
         if (seg.kind === "author") {
           return (
             <aside

@@ -17,7 +17,14 @@ const SHARED_CREATIVES = SHARED_BRAND ? sharedAdSets[SHARED_BRAND] : null;
  * (`HouseAdPool`) and falls back to the static creative from `shared-ads`
  * (or the default Hookup Lists card) when no house ad is available.
  */
-export default function AdSlot({ slotId, format = "auto", className, onCollapse }) {
+export default function AdSlot({
+  slotId,
+  format = "auto",
+  className,
+  onCollapse,
+  excludeBrands,
+  onHouseAd,
+}) {
   if (MODE === "cross_promo") {
     const staticCreative = SHARED_CREATIVES ? (
       <CrossPromoImageAd format={format} className={className} creatives={SHARED_CREATIVES} />
@@ -25,7 +32,12 @@ export default function AdSlot({ slotId, format = "auto", className, onCollapse 
       <CrossPromoAdCard format={format} className={className} />
     );
     return (
-      <HouseAdPool format={format} className={className}>
+      <HouseAdPool
+        format={format}
+        className={className}
+        excludeBrands={excludeBrands}
+        onHouseAd={onHouseAd}
+      >
         {staticCreative}
       </HouseAdPool>
     );

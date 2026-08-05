@@ -19,6 +19,8 @@ export default function AdSlot({
   onCollapse,
   sharedAdsBrand,
   promoUrl,
+  excludeBrands,
+  onHouseAd,
 }) {
   if (MODE === "cross_promo") {
     const brand = (sharedAdsBrand || "").trim();
@@ -33,7 +35,12 @@ export default function AdSlot({
       />
     ) : null;
     return (
-      <HouseAdPool format={format} className={className}>
+      <HouseAdPool
+        format={format}
+        className={className}
+        excludeBrands={excludeBrands}
+        onHouseAd={onHouseAd}
+      >
         {staticCreative}
       </HouseAdPool>
     );

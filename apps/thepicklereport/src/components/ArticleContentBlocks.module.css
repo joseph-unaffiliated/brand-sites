@@ -1,3 +1,7 @@
+.inArticleAd {
+  margin: 0;
+}
+
 .blocks {
   display: flex;
   flex-direction: column;

@@ -13,6 +13,7 @@ import SubscribedArticleView from "@/components/SubscribedArticleView";
 import NavLogoImageSync from "@/components/NavLogoImageSync";
 import ArticleContentBlocks from "@/components/ArticleContentBlocks";
 import AdSlot from "@/components/AdSlot";
+import ArticleRailAds from "@/components/ArticleRailAds";
 import ArticleStickyBottom from "@/components/ArticleStickyBottom";
 import JsonLd from "@/components/JsonLd";
 import { siteConfig, siteDisplayName } from "@/config/site";
@@ -249,6 +250,7 @@ export default async function ArticlePage({ params }) {
         </div>
         {/* Grid: copy left, rail right (rail only here, not beside hero) */}
         <div
+          data-article-body
           className={`${styles.articleBodyGrid} ${showBlocks ? styles.articleBodyGridBlocksFirst : ""}`}
         >
         <div className={styles.articleMain}>
@@ -263,6 +265,8 @@ export default async function ArticlePage({ params }) {
                       articleSlug={slug}
                       bio={article.bio ?? article.disclaimer}
                       authorName={article.authorName}
+                      showInArticleAd={SHOW_MID}
+                      inArticleSlotId={SLOT_MID}
                     />
                   ) : article.summary ? (
                     <>
@@ -291,9 +295,7 @@ export default async function ArticlePage({ params }) {
           </div>
         </div>
         {SHOW_RAIL && (
-          <div className={styles.articleRail}>
-            <AdSlot slotId={SLOT_RAIL} format="vertical" />
-          </div>
+          <ArticleRailAds slotId={SLOT_RAIL} className={styles.articleRail} />
         )}
         </div>
         <RecommendedArticleCards articles={readMore} />

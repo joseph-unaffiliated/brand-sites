@@ -4,6 +4,7 @@ import Link from "next/link";
 import { PortableText } from "next-sanity";
 import { createImageUrlBuilder } from "@sanity/image-url";
 import { authorBylineText } from "@/lib/article-helpers";
+import AdSlot from "@/components/AdSlot";
 import styles from "./ArticleContentBlocks.module.css";
 import { affiliateAnchorProps } from "@publication-websites/affiliate";
 import { amazonAssociatesTag } from "@/config/site";
@@ -176,20 +177,41 @@ export default function ArticleContentBlocks({
   dataset,
   bio,
   authorName,
+  showInArticleAd = false,
+  inArticleSlotId,
+  inArticleAdSlotProps,
 }) {
   if (!Array.isArray(blocks) || blocks.length === 0) return null;
 
   const bioTrim = typeof bio === "string" ? bio.trim() : "";
   const authorByline = authorBylineText(authorName);
   const showAuthorCard = Boolean(bioTrim);
+  let insertedInArticleAd = false;
 
   return (
     <div className={styles.blocks}>
-      {blocks.map((block, i) => (
-        <Fragment key={block._key || `block-${i}`}>
-          {renderContentBlock(block, projectId, dataset)}
-        </Fragment>
-      ))}
+      {blocks.map((block, i) => {
+        const rendered = renderContentBlock(block, projectId, dataset);
+        const isFeature =
+          block?._type === "proseSection" || block?._type === "featureSection";
+        const placeInArticleAd =
+          showInArticleAd && isFeature && rendered && !insertedInArticleAd;
+        if (placeInArticleAd) insertedInArticleAd = true;
+        return (
+          <Fragment key={block._key || `block-${i}`}>
+            {rendered}
+            {placeInArticleAd ? (
+              <div className={styles.inArticleAd}>
+                <AdSlot
+                  slotId={inArticleSlotId}
+                  format="rectangle"
+                  {...(inArticleAdSlotProps || {})}
+                />
+              </div>
+            ) : null}
+          </Fragment>
+        );
+      })}
       {showAuthorCard ? (
         <aside key="author-bio" className={styles.authorCard} aria-label="About the author">
           {authorByline ? <p className={styles.authorCardByline}>{authorByline}</p> : null}

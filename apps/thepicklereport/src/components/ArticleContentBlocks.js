@@ -1,9 +1,11 @@
+import { Fragment } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { PortableText } from "next-sanity";
 import { createImageUrlBuilder } from "@sanity/image-url";
 import { amazonAssociatesTag, siteConfig } from "@/config/site";
 import { buildPollVoteUrl, getOptionCode, isTriviaBlock } from "@/lib/vote-block";
+import AdSlot from "@/components/AdSlot";
 import styles from "./ArticleContentBlocks.module.css";
 import { affiliateAnchorProps } from "@publication-websites/affiliate";
 
@@ -275,9 +277,17 @@ function renderPickleVoteOption(opt, index, { siteUrl, articleSlug }) {
   );
 }
 
-export default function ArticleContentBlocks({ blocks, projectId, dataset, articleSlug = "" }) {
+export default function ArticleContentBlocks({
+  blocks,
+  projectId,
+  dataset,
+  articleSlug = "",
+  showInArticleAd = false,
+  inArticleSlotId,
+}) {
   const list = Array.isArray(blocks) ? blocks : [];
   const hasPhotoOfWeekBlock = list.some((b) => b?._type === "photoOfWeekBlock");
+  let insertedInArticleAd = false;
 
   if (list.length === 0) return null;
 
@@ -298,9 +308,12 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset, artic
             const { head, chartIntro, chartImage, tail } = splitBodyAroundMarketShareChart(body);
             const hasMarketShareModule = chartIntro && chartImage;
             const proseBody = hasMarketShareModule ? [...head, ...tail] : body;
+            const placeInArticleAd = showInArticleAd && !insertedInArticleAd;
+            if (placeInArticleAd) insertedInArticleAd = true;
 
             return (
-              <section key={key} className={styles.block}>
+              <Fragment key={key}>
+              <section className={styles.block}>
                 {showHeading ? <h2 className={styles.blockHeading}>{block.heading}</h2> : null}
                 {hasMarketShareModule ? (
                   <>
@@ -355,6 +368,12 @@ export default function ArticleContentBlocks({ blocks, projectId, dataset, artic
                   </div>
                 ) : null}
               </section>
+              {placeInArticleAd ? (
+                <div className={styles.inArticleAd}>
+                  <AdSlot slotId={inArticleSlotId} format="rectangle" />
+                </div>
+              ) : null}
+              </Fragment>
             );
           }
           case "nibblesBlock": {

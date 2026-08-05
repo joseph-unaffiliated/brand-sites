@@ -10,22 +10,41 @@ import HouseAdImage from "./HouseAdImage";
  * Wraps a static cross-promo creative (`children`) with an Airtable house ad
  * when one is available for this slot. Falls back to `children` while loading,
  * when Airtable is empty/unconfigured, or when the fetch fails.
+ *
+ * @param {string[]} [excludeBrands] Extra brand keys to exclude (e.g. the other rail ad).
+ * @param {(ad: object | null) => void} [onHouseAd] Called when the house-ad result settles.
  */
-export default function HouseAdPool({ format = "rectangle", className, children }) {
+export default function HouseAdPool({
+  format = "rectangle",
+  className,
+  children,
+  excludeBrands = [],
+  onHouseAd,
+}) {
   const [ad, setAd] = useState(null);
   const cancelledRef = useRef(false);
+  const onHouseAdRef = useRef(onHouseAd);
+  onHouseAdRef.current = onHouseAd;
+  const excludeKey = Array.isArray(excludeBrands)
+    ? excludeBrands.filter(Boolean).join(",")
+    : "";
 
   useEffect(() => {
     cancelledRef.current = false;
     const slot = houseSlotFromFormat(format);
 
     async function load() {
-      const excludeBrands = new Set();
+      const excluded = new Set(
+        excludeKey
+          .split(",")
+          .map((b) => b.trim())
+          .filter(Boolean)
+      );
       const readerToken = getReaderToken();
       if (readerToken) {
         try {
           const { subscribedBrands } = await fetchVerifiedSubscriptionsForSite(readerToken);
-          (subscribedBrands || []).forEach((brand) => excludeBrands.add(brand));
+          (subscribedBrands || []).forEach((brand) => excluded.add(brand));
         } catch {
           /* best-effort — an unverified reader just sees the normal pool */
         }
@@ -33,14 +52,21 @@ export default function HouseAdPool({ format = "rectangle", className, children 
 
       try {
         const params = new URLSearchParams({ slot });
-        if (excludeBrands.size) {
-          params.set("exclude", Array.from(excludeBrands).join(","));
+        if (excluded.size) {
+          params.set("exclude", Array.from(excluded).join(","));
         }
         const res = await fetch(`/api/house-ads?${params}`, { cache: "no-store" });
         const data = await res.json().catch(() => ({}));
-        if (!cancelledRef.current) setAd(data?.ad || null);
+        const next = data?.ad || null;
+        if (!cancelledRef.current) {
+          setAd(next);
+          onHouseAdRef.current?.(next);
+        }
       } catch {
-        if (!cancelledRef.current) setAd(null);
+        if (!cancelledRef.current) {
+          setAd(null);
+          onHouseAdRef.current?.(null);
+        }
       }
     }
 
@@ -48,7 +74,7 @@ export default function HouseAdPool({ format = "rectangle", className, children 
     return () => {
       cancelledRef.current = true;
     };
-  }, [format]);
+  }, [format, excludeKey]);
 
   if (ad) {
     return <HouseAdImage ad={ad} placement={houseSlotFromFormat(format)} className={className} />;
