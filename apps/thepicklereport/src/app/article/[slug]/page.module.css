@@ -169,12 +169,14 @@
   }
 }
 
+/* Stretch to article column height so two stacked sticky segments can hand off mid-body. */
 .articleRail {
-  position: sticky;
-  top: 24px;
-  align-self: start;
-  margin-top: 1.5rem;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  padding-top: 1.5rem;
   box-sizing: border-box;
+  min-height: 0;
 }
 
 @media (min-width: 769px) {

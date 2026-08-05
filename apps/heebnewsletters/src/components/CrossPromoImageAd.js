@@ -129,7 +129,7 @@ export default function CrossPromoImageAd({
           sizes={
             placement === "rail"
               ? `${lay.width}px`
-              : `(max-width: 640px) 100vw, ${lay.width}px`
+              : "(max-width: 640px) 100vw, 640px"
           }
         />
       </TrackedPromoLink>

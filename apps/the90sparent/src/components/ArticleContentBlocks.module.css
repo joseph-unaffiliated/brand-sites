@@ -592,7 +592,7 @@
 }
 
 .aroundTheWeb {
-  max-width: 480px;
+  max-width: 640px;
   width: 100%;
   margin-left: auto;
   margin-right: auto;
@@ -620,7 +620,7 @@
 }
 
 .nostalgiaCard {
-  max-width: 480px;
+  max-width: 640px;
   margin-left: auto;
   margin-right: auto;
   border-radius: 10px;

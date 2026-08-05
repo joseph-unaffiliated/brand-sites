@@ -10,9 +10,9 @@
   display: block;
 }
 
-/* Match article column / TNP–HR in-article cross-promo (max-width: 480px). */
+/* In-article display ads: full article column width (640px). */
 .cross-promo-image-ad-inArticle {
-  max-width: 480px;
+  max-width: 640px;
   width: 100%;
   margin-left: auto;
   margin-right: auto;
@@ -21,7 +21,7 @@
 
 .cross-promo-image-ad-inArticle .cross-promo-image-ad-link,
 .cross-promo-image-ad-inArticle .cross-promo-image-ad-img {
-  max-width: 480px;
+  max-width: 640px;
   width: 100%;
   height: auto;
 }
