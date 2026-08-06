@@ -600,18 +600,12 @@ export default function ArticleContentBlocks({
   const { core, nostalgia, atw } = partitionArticleBlocks(blocks);
 
   const segments = [];
-  let insertedInArticleAd = false;
   for (let i = 0; i < core.length; i++) {
-    const b = core[i];
-    segments.push({ kind: "block", block: b });
-    const isFeature = b?._type === "featureSection";
-    const nextIsFeature = core[i + 1]?._type === "featureSection";
-    if (showInArticleAd && isFeature && !nextIsFeature && !insertedInArticleAd) {
-      segments.push({ kind: "inArticleAd" });
-      insertedInArticleAd = true;
-    }
+    segments.push({ kind: "block", block: core[i] });
   }
   if (showAuthorCard) segments.push({ kind: "author" });
+  // First in-article ad sits immediately before Nostalgia of the Week (not before examples).
+  if (showInArticleAd) segments.push({ kind: "inArticleAd" });
   if (nostalgia.length > 0) {
     for (const b of nostalgia) segments.push({ kind: "block", block: b });
   } else {
