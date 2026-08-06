@@ -67,7 +67,14 @@ function EmailClickSessionInner({ brand, apiOrigin, onLocalStateUpdated }) {
           }
           window.dispatchEvent(new CustomEvent("magic-subscriber-updated"));
           onLocalStateUpdated?.();
-          stripSearchParams(["email", "userID"]);
+          // /subscribed (and siblings) need ?email= for executeAction; stripping
+          // mid-confirm races the landing page into a no-email "thanks" state.
+          const onSubscriptionLanding =
+            typeof document !== "undefined" &&
+            !!document.querySelector("[data-subscription-landing]");
+          if (!onSubscriptionLanding) {
+            stripSearchParams(["email", "userID"]);
+          }
         }
       })
       .catch(() => {

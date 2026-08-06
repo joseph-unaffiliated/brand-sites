@@ -78,17 +78,12 @@ export default function SubscribedContent({ recommendedArticles = [] }) {
     <div className={styles.wrap} data-subscription-landing>
       <div className={`${styles.card} ${actions.cardWide}`}>
         <h1 className={styles.heading}>
-          {status === 'confirming' && (
-            <>Confirming your subscription&hellip;</>
-          )}
-          {(status === 'success' || status === 'no-email') && (
-            <>Thanks for subscribing.</>
-          )}
           {status === 'error' && (
             <>Something went wrong when trying to confirm your subscription.</>
           )}
-          {status === 'bot' && (
-            <>One more step</>
+          {status === 'bot' && <>One more step</>}
+          {(status === 'confirming' || status === 'success' || status === 'no-email') && (
+            <>Thanks for subscribing.</>
           )}
         </h1>
 
