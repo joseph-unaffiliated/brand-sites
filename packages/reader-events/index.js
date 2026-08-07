@@ -4,6 +4,8 @@ export {
   SCROLL_MILESTONES,
   SESSION_ONLY_EVENT_TYPES,
   isSessionOnlyEventType,
+  ANONYMOUS_OK_EVENT_TYPES,
+  isAnonymousOkEventType,
   PREFERENCE_EVENT_TYPES,
   isPreferenceEventType,
   MAX_FAVORITE_SLUGS_PER_BRAND,

@@ -34,6 +34,16 @@ export function isSessionOnlyEventType(eventType) {
   return SESSION_ONLY_EVENT_TYPES.has(eventType);
 }
 
+/**
+ * Ad metrics: allowed without readerToken (sessionID → BQ).
+ * When a token is present, the API still ingests as identified (lead marking).
+ */
+export const ANONYMOUS_OK_EVENT_TYPES = new Set(["ad_impression", "ad_click"]);
+
+export function isAnonymousOkEventType(eventType) {
+  return ANONYMOUS_OK_EVENT_TYPES.has(eventType);
+}
+
 /** Preference actions: need readerToken, skip analytics consent gate. */
 export const PREFERENCE_EVENT_TYPES = new Set(["favorite_add", "favorite_remove"]);
 

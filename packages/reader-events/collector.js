@@ -5,6 +5,7 @@
 import { getReaderToken } from "@publication-websites/magic-client";
 import { hasAnalyticsConsent } from "./consent.js";
 import {
+  isAnonymousOkEventType,
   isPreferenceEventType,
   isReaderEventsEnabled,
   isSessionOnlyEventType,
@@ -45,14 +46,17 @@ function getSessionId() {
   }
 }
 
+function canSendWithoutToken(eventType) {
+  return isSessionOnlyEventType(eventType) || isAnonymousOkEventType(eventType);
+}
+
 export function enqueueEvent(eventType, properties = {}) {
   if (!isReaderEventsEnabled()) return;
 
   const preference = isPreferenceEventType(eventType);
   if (!preference && !hasAnalyticsConsent()) return;
 
-  const sessionOnly = isSessionOnlyEventType(eventType);
-  if (!sessionOnly && !getReaderToken()) return;
+  if (!canSendWithoutToken(eventType) && !getReaderToken()) return;
 
   const { articleSlug, ...restProps } = properties;
 
@@ -81,21 +85,36 @@ function postEvents(events, token, useBeacon) {
   const url = `${config.apiOrigin}/api/reader-events`;
   const body = JSON.stringify({ readerToken: token || undefined, events });
 
-  if (useBeacon && navigator.sendBeacon) {
-    const blob = new Blob([body], { type: "application/json" });
-    navigator.sendBeacon(url, blob);
+  // Authenticated events: prefer fetch + keepalive. sendBeacon omits Authorization
+  // and has been unreliable for cross-origin JSON (historically zero ad_clicks in BQ).
+  if (token) {
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body,
+      credentials: "omit",
+      keepalive: true,
+    }).catch(() => {
+      /* best effort */
+    });
     return;
   }
 
-  const headers = { "Content-Type": "application/json" };
-  if (token) headers.Authorization = `Bearer ${token}`;
+  if (useBeacon && typeof navigator !== "undefined" && navigator.sendBeacon) {
+    const blob = new Blob([body], { type: "application/json" });
+    const ok = navigator.sendBeacon(url, blob);
+    if (ok) return;
+  }
 
   fetch(url, {
     method: "POST",
-    headers,
+    headers: { "Content-Type": "application/json" },
     body,
     credentials: "omit",
-    keepalive: useBeacon,
+    keepalive: true,
   }).catch(() => {
     /* best effort */
   });
@@ -112,18 +131,30 @@ export function flush(useBeacon = false) {
   const batch = queue.splice(0, MAX_QUEUE);
   const token = getReaderToken();
 
-  const sessionEvents = batch.filter((ev) => isSessionOnlyEventType(ev.eventType));
-  const identifiedEvents = batch.filter((ev) => !isSessionOnlyEventType(ev.eventType));
+  const withoutToken = [];
+  const withToken = [];
+  const deferred = [];
 
-  if (sessionEvents.length) {
-    postEvents(sessionEvents, null, useBeacon);
+  for (const ev of batch) {
+    if (token && !isSessionOnlyEventType(ev.eventType)) {
+      // Identified path (includes ad_* when logged in — needed for lead marking)
+      withToken.push(ev);
+    } else if (canSendWithoutToken(ev.eventType)) {
+      withoutToken.push(ev);
+    } else if (token) {
+      withToken.push(ev);
+    } else {
+      deferred.push(ev);
+    }
   }
 
-  if (identifiedEvents.length) {
-    if (token) {
-      postEvents(identifiedEvents, token, useBeacon);
-    } else {
-      queue.unshift(...identifiedEvents);
-    }
+  if (withoutToken.length) {
+    postEvents(withoutToken, null, useBeacon);
+  }
+  if (withToken.length) {
+    postEvents(withToken, token, useBeacon);
+  }
+  if (deferred.length) {
+    queue.unshift(...deferred);
   }
 }
