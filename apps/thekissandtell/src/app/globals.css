@@ -337,7 +337,7 @@ a {
   .site-header--marketing .header-row-marketing .brand-name {
     display: inline-block;
     padding: var(--brand-chip-pad-y) var(--logo-line-pad-x);
-    background: var(--bg);
+    background: transparent;
     border-radius: 4px;
     position: relative;
     z-index: 3;
@@ -389,9 +389,6 @@ a {
     flex: unset;
   }
 
-  .site-header--marketing .header-row-marketing--subscribed .brand-name {
-    background: var(--bg);
-  }
 
   .site-header--article .header-row-1 {
     display: grid;
@@ -1161,7 +1158,7 @@ a {
     padding: 6px 12px;
   }
 
-  /* Marketing mobile: hairline gaps + white chip behind mark; tighter below header. */
+  /* Marketing mobile: hairline gaps around mark; tighter below header. */
   .site-header--marketing .header-row-marketing {
     position: relative;
     --header-mark-w: min(72px, 21vw);
@@ -1226,7 +1223,7 @@ a {
   .site-header--marketing .header-row-marketing .brand-name {
     display: inline-block;
     padding: var(--brand-chip-pad-y) var(--logo-line-pad-x);
-    background: var(--bg);
+    background: transparent;
     border-radius: 4px;
     position: relative;
     z-index: 3;

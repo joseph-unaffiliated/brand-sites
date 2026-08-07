@@ -322,7 +322,7 @@ a {
   .site-header--marketing .header-row-marketing .brand-name {
     display: inline-block;
     padding: 5px var(--logo-line-pad-x);
-    background: var(--bg);
+    background: transparent;
     border-radius: 4px;
     position: relative;
     z-index: 3;
@@ -383,9 +383,6 @@ a {
     z-index: 3;
   }
 
-  .site-header--marketing .header-row-marketing--subscribed .brand-name {
-    background: var(--bg);
-  }
 
   /* Article: equal-width side rails; large photo logomark like marketing. */
   .site-header--article .header-row-1 {
@@ -1279,7 +1276,7 @@ main.site-main > [data-subscription-landing] {
   .site-header--marketing .header-row-marketing .brand-name {
     display: inline-block;
     padding: 4px var(--logo-line-pad-x);
-    background: var(--bg);
+    background: transparent;
     border-radius: 4px;
     position: relative;
     z-index: 3;

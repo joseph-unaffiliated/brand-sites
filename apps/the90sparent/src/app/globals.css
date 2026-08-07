@@ -312,7 +312,7 @@ a {
   .site-header--marketing .header-row-marketing .brand-name {
     display: inline-block;
     padding: 5px var(--logo-line-pad-x);
-    background: var(--bg);
+    background: transparent;
     border-radius: 4px;
     position: relative;
     z-index: 3;
@@ -373,9 +373,6 @@ a {
     z-index: 3;
   }
 
-  .site-header--marketing .header-row-marketing--subscribed .brand-name {
-    background: var(--bg);
-  }
 
   /* Article: equal-width side rails so the wordmark stays centered in the container. */
   .site-header--article .header-row-1 {
@@ -1204,7 +1201,7 @@ main.site-main > [data-subscription-landing] {
     padding: 6px 12px;
   }
 
-  /* Marketing mobile: hairline gaps + white chip behind mark; tighter below header. */
+  /* Marketing mobile: hairline gaps around mark; tighter below header. */
   .site-header--marketing .header-row-marketing {
     position: relative;
     --header-mark-w: min(120px, 36vw);
@@ -1262,7 +1259,7 @@ main.site-main > [data-subscription-landing] {
   .site-header--marketing .header-row-marketing .brand-name {
     display: inline-block;
     padding: 4px var(--logo-line-pad-x);
-    background: var(--bg);
+    background: transparent;
     border-radius: 4px;
     position: relative;
     z-index: 3;
