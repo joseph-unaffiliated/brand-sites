@@ -50,9 +50,6 @@ export default function Header() {
       <div
         className={`header-row-1 ${isArticle ? "container" : `container-wide header-row-marketing${isSubscribed ? " header-row-marketing--subscribed" : ""}`}`}
       >
-        {!isArticle && isSubscribed ? (
-          <span className="header-marketing-subscribed-bg" aria-hidden />
-        ) : null}
         <button
           type="button"
           className="header-hamburger"

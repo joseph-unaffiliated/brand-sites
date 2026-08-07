@@ -245,11 +245,6 @@ a {
   justify-content: flex-end;
 }
 
-/* Decorative slab only when subscribed + marketing; hidden until desktop rules show it. */
-.header-marketing-subscribed-bg {
-  display: none;
-}
-
 @media (min-width: 769px) {
   /* Marketing & utility: edge-to-edge nav; hairline gaps around logomark (signed-out: flex + centered mark). */
   .site-header--marketing .header-row-marketing {
@@ -380,22 +375,6 @@ a {
     justify-self: start;
     justify-content: flex-start;
     flex: unset;
-  }
-
-  /* Wide chip behind Archive | logo | About; covers hairline; links stay vertically centered on the grid. */
-  .site-header--marketing .header-row-marketing--subscribed .header-marketing-subscribed-bg {
-    display: block;
-    position: absolute;
-    left: 50%;
-    top: 6px;
-    transform: translateX(-50%);
-    /* Logo + hairline gap + nav links, plus ~24px inset to chip edge on each side. */
-    width: min(calc(var(--logo-line-gap) + 140px + 2 * 24px), calc(100% - 48px));
-    height: calc(18px + var(--header-mark-h) + 22px);
-    border-radius: 6px;
-    background: var(--bg);
-    z-index: 2;
-    pointer-events: none;
   }
 
   .site-header--marketing .header-row-marketing--subscribed .site-nav-left,

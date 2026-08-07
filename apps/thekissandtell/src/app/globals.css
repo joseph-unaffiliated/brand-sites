@@ -262,10 +262,6 @@ a {
   padding-bottom: 12px;
 }
 
-.header-marketing-subscribed-bg {
-  display: none;
-}
-
 .site-nav-left {
   justify-content: flex-start;
 }
@@ -391,20 +387,6 @@ a {
     justify-self: start;
     justify-content: flex-start;
     flex: unset;
-  }
-
-  .site-header--marketing .header-row-marketing--subscribed .header-marketing-subscribed-bg {
-    display: block;
-    position: absolute;
-    left: 50%;
-    top: 6px;
-    transform: translateX(-50%);
-    width: min(calc(var(--logo-line-gap) + 140px + 2 * 24px), calc(100% - 48px));
-    height: calc(18px + var(--header-mark-h) + 22px);
-    border-radius: 6px;
-    background: var(--bg);
-    z-index: 2;
-    pointer-events: none;
   }
 
   .site-header--marketing .header-row-marketing--subscribed .brand-name {
