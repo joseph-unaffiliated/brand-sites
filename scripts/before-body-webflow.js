@@ -265,6 +265,15 @@ function executeSubscriptionAction(actionOverride = null) {
     console.warn('⚠️ No email parameter found');
     return;
   }
+
+  // Magic GET stamps pref_guard=1 for automated clients — never auto-write unsub/snooze.
+  if (
+    (action === 'unsubscribe' || action === 'snooze') &&
+    urlParams.get('pref_guard') === '1'
+  ) {
+    console.log('🛡️ pref_guard=1 — skipping auto ' + action);
+    return;
+  }
   
   // Get all other params for POST
   const brands = urlParams.get('brands');
@@ -273,11 +282,15 @@ function executeSubscriptionAction(actionOverride = null) {
   const utm_campaign = urlParams.get('utm_campaign');
   const articleID = urlParams.get('articleID');
   
-  // Bot detection - be lenient, only block clear bots
+  // Bot detection — hard-reject CIO scanners / headless; soft signals as backup
   function isRealBrowser() {
-    const checks = {
-      hasUserAgent: !!navigator.userAgent,
-      notHeadless: navigator.webdriver === undefined,
+    const ua = navigator.userAgent || '';
+    if (!ua) return false;
+    if (navigator.webdriver === true) return false;
+    if (/customer\.io|bot|crawler|spider|scanner|prefetch|headless|preview/i.test(ua)) {
+      return false;
+    }
+    const softChecks = {
       hasPlugins: navigator.plugins && navigator.plugins.length > 0,
       localStorageWorks: (() => {
         try { 
@@ -289,11 +302,8 @@ function executeSubscriptionAction(actionOverride = null) {
         }
       })(),
       pageVisible: document.visibilityState === 'visible',
-      notKnownBot: !/bot|crawler|spider|scanner|preview/i.test(navigator.userAgent)
     };
-    
-    const passed = Object.values(checks).filter(Boolean).length;
-    return passed >= 4; // At least 4/6 checks pass
+    return Object.values(softChecks).filter(Boolean).length >= 2;
   }
   
   // Find message elements

@@ -100,6 +100,14 @@ export async function executeAction(cfg, searchParams, action) {
   const encodedEmail = searchParams.get("email");
   if (!encodedEmail) throw new Error("No email");
 
+  // Magic GET stamped pref_guard=1 for automated clients — never auto-write unsub/snooze.
+  if (
+    (action === "unsubscribe" || action === "snooze") &&
+    searchParams.get("pref_guard") === "1"
+  ) {
+    return { success: true, skipped: true, reason: "pref_guard" };
+  }
+
   const email = decodeURIComponent(encodedEmail);
 
   const body = { email, brand: cfg.brand, action };
