@@ -8,9 +8,21 @@
 /** @typedef {{ brand: string; executeUrl: string }} MagicClientConfig */
 
 export function isRealBrowser() {
-  const checks = {
-    hasUserAgent: !!navigator.userAgent,
-    notHeadless: navigator.webdriver === undefined,
+  if (typeof navigator === "undefined" || typeof document === "undefined") {
+    return false;
+  }
+
+  const ua = navigator.userAgent || "";
+  // Hard rejects — CIO link scanners and headless clients must never auto-opt-out.
+  if (!ua) return false;
+  if (navigator.webdriver === true) return false;
+  if (
+    /customer\.io|bot|crawler|spider|scanner|prefetch|headless|preview/i.test(ua)
+  ) {
+    return false;
+  }
+
+  const softChecks = {
     hasPlugins: navigator.plugins && navigator.plugins.length > 0,
     localStorageWorks: (() => {
       try {
@@ -22,9 +34,9 @@ export function isRealBrowser() {
       }
     })(),
     pageVisible: document.visibilityState === "visible",
-    notKnownBot: !/bot|crawler|spider|scanner|preview/i.test(navigator.userAgent),
   };
-  return Object.values(checks).filter(Boolean).length >= 4;
+  // Require at least two soft signals in addition to hard rejects above.
+  return Object.values(softChecks).filter(Boolean).length >= 2;
 }
 
 export const READER_TOKEN_STORAGE_KEY = "magic_reader_token";
