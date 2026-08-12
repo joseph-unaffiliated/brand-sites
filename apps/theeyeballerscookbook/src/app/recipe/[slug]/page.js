@@ -10,6 +10,7 @@ import FavoriteButton from "@/components/FavoriteButton";
 import AdSlot from "@/components/AdSlot";
 import ArticleStickyBottom from "@/components/ArticleStickyBottom";
 import JsonLd from "@/components/JsonLd";
+import { ogImageFromMappedContent } from "@publication-websites/sanity-content";
 import { crossPromoForSlot } from "@/config/crossPromoAds";
 import { amazonAssociatesTag, siteConfig, siteDisplayName } from "@/config/site";
 import { affiliateAnchorProps } from "@publication-websites/affiliate";
@@ -58,17 +59,7 @@ export async function generateMetadata({ params }) {
     ? recipe.seoTitle
     : `${recipe.title} | ${siteDisplayName}`;
 
-  const social = recipe.socialImage;
-  const ogImageEntry = social?.url
-    ? { url: social.url, width: social.width || 1200, height: social.height || 630, alt: recipe.title }
-    : recipe.mainImage
-      ? {
-          url: recipe.mainImage,
-          width: recipe.mainImageWidth || 1200,
-          height: recipe.mainImageHeight || 630,
-          alt: recipe.title,
-        }
-      : null;
+  const ogImageEntry = ogImageFromMappedContent(recipe);
 
   return {
     title,

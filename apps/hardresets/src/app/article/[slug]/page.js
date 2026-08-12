@@ -17,6 +17,7 @@ import ArticleRailAds from "@/components/ArticleRailAds";
 import ArticleStickyBottom from "@/components/ArticleStickyBottom";
 import RecommendedArticleCards from "@/components/RecommendedArticleCards";
 import JsonLd from "@/components/JsonLd";
+import { ogImageFromMappedContent } from "@publication-websites/sanity-content";
 import { crossPromoForSlot } from "@/config/crossPromoAds";
 import { siteConfig, siteDisplayName } from "@/config/site";
 import styles from "./page.module.css";
@@ -60,22 +61,7 @@ export async function generateMetadata({ params }) {
     ? article.seoTitle
     : `${article.title} | ${siteDisplayName}`;
 
-  const social = article.socialImage;
-  const ogImageEntry = social?.url
-    ? {
-        url: social.url,
-        width: social.width || 1200,
-        height: social.height || 630,
-        alt: article.title,
-      }
-    : article.mainImage
-      ? {
-          url: article.mainImage,
-          width: article.mainImageWidth || 1200,
-          height: article.mainImageHeight || 630,
-          alt: article.title,
-        }
-      : null;
+  const ogImageEntry = ogImageFromMappedContent(article);
 
   const authors = article.authorName ? [{ name: article.authorName }] : undefined;
   const robots = article.noIndex
@@ -267,10 +253,10 @@ export default async function ArticlePage({ params }) {
             <div className={styles.articleHeroImage}>
               <div className="mainimage-block">
                 <Image
-                  src={article.mainImage}
+                  src={article.heroImage?.url || article.mainImage}
                   alt={article.title}
-                  width={article.mainImageWidth || 900}
-                  height={article.mainImageHeight || 600}
+                  width={article.heroImage?.width || article.mainImageWidth || 900}
+                  height={article.heroImage?.height || article.mainImageHeight || 600}
                   priority
                   className={styles.mainImage}
                 />

@@ -15,6 +15,7 @@ import VaultPodcastPromo from "@/components/VaultPodcastPromo";
 import AdSlot from "@/components/AdSlot";
 import ArticleAdStickyBottom from "@/components/ArticleAdStickyBottom";
 import JsonLd from "@/components/JsonLd";
+import { ogImageFromMappedContent } from "@publication-websites/sanity-content";
 import { crossPromoForSlot } from "@/config/crossPromoAds";
 import { amazonAssociatesTag, siteConfig, siteDisplayName } from "@/config/site";
 import { affiliateAnchorProps } from "@publication-websites/affiliate";
@@ -102,17 +103,7 @@ export async function generateMetadata({ params }) {
     ? issue.seoTitle
     : `${issue.title} | ${siteDisplayName}`;
 
-  const social = issue.socialImage;
-  const ogImageEntry = social?.url
-    ? { url: social.url, width: social.width || 1200, height: social.height || 630, alt: issue.title }
-    : issue.heroImage?.url
-      ? {
-          url: issue.heroImage.url,
-          width: issue.heroImage.width || 1200,
-          height: issue.heroImage.height || 630,
-          alt: issue.title,
-        }
-      : null;
+  const ogImageEntry = ogImageFromMappedContent(issue);
 
   const authors = issue.authorName ? [{ name: issue.authorName }] : undefined;
   const robots = issue.noIndex ? { index: false, follow: false } : undefined;

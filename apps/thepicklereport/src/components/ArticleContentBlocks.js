@@ -2,7 +2,7 @@ import { Fragment } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { PortableText } from "next-sanity";
-import { createImageUrlBuilder } from "@sanity/image-url";
+import { buildSanityImageUrl, SANITY_IMAGE_WIDTH } from "@publication-websites/sanity-content";
 import { amazonAssociatesTag, siteConfig } from "@/config/site";
 import { buildPollVoteUrl, getOptionCode, isTriviaBlock } from "@/lib/vote-block";
 import AdSlot from "@/components/AdSlot";
@@ -12,30 +12,12 @@ import { affiliateAnchorProps } from "@publication-websites/affiliate";
 const siteUrl = siteConfig.siteUrl.replace(/\/$/, "");
 
 function urlForImage(projectId, dataset, source) {
-  if (!projectId || !dataset || !source?.asset) return null;
-  const a = source.asset;
-  const ref = a._ref || (typeof a._id === "string" ? a._id : null);
-  if (ref) {
-    try {
-      const normalized = { ...source, asset: { _ref: ref } };
-      return createImageUrlBuilder({ projectId, dataset })
-        .image(normalized)
-        .width(1400)
-        .url();
-    } catch {
-      /* fall through to direct CDN URL when builder rejects an edge-case ref */
-    }
-  }
-  if (typeof a.url === "string" && /^https:\/\/cdn\.sanity\.io\//.test(a.url)) {
-    try {
-      const u = new URL(a.url);
-      if (!u.searchParams.has("w")) u.searchParams.set("w", "1400");
-      return u.toString();
-    } catch {
-      return a.url;
-    }
-  }
-  return null;
+  return buildSanityImageUrl({
+    projectId,
+    dataset,
+    source,
+    width: SANITY_IMAGE_WIDTH.article,
+  });
 }
 
 function dims(source) {

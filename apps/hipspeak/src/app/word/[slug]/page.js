@@ -12,6 +12,7 @@ import MyWordButton from "@/components/MyWordButton";
 import AdSlot from "@/components/AdSlot";
 import ArticleAdStickyBottom from "@/components/ArticleAdStickyBottom";
 import JsonLd from "@/components/JsonLd";
+import { ogImageFromMappedContent } from "@publication-websites/sanity-content";
 import { crossPromoForSlot } from "@/config/crossPromoAds";
 import { amazonAssociatesTag, siteConfig, siteDisplayName } from "@/config/site";
 import { affiliateAnchorProps } from "@publication-websites/affiliate";
@@ -57,17 +58,7 @@ export async function generateMetadata({ params }) {
     ? entry.seoTitle
     : `${entry.title} | ${siteDisplayName}`;
 
-  const social = entry.socialImage;
-  const ogImageEntry = social?.url
-    ? { url: social.url, width: social.width || 1200, height: social.height || 630, alt: entry.title }
-    : entry.mainImage
-      ? {
-          url: entry.mainImage,
-          width: entry.mainImageWidth || 1200,
-          height: entry.mainImageHeight || 630,
-          alt: entry.title,
-        }
-      : null;
+  const ogImageEntry = ogImageFromMappedContent(entry);
 
   return {
     title,

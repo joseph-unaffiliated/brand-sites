@@ -82,10 +82,10 @@ export default async function ArticlePage({ params }) {
           <div className={styles.articleHeroImage}>
             <div className="mainimage-block">
               <SanityMedia
-                src={article.mainImage}
+                src={article.heroImage?.url || article.mainImage}
                 alt=""
-                width={article.mainImageWidth || 900}
-                height={article.mainImageHeight || 600}
+                width={article.heroImage?.width || article.mainImageWidth || 900}
+                height={article.heroImage?.height || article.mainImageHeight || 600}
                 priority
                 className={styles.mainImage}
               />

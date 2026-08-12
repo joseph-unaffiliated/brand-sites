@@ -15,6 +15,123 @@ export function normalizeArticleSlug(slug) {
   return String(slug).trim();
 }
 
+/**
+ * Sanity Asset CDN sizing defaults — keep listing/card URLs smaller than heroes so
+ * homepage/archive traffic does not pull 1200–1400px sources for every thumbnail.
+ * `auto=format` + quality cut bytes further (WebP/AVIF when the client supports them).
+ */
+export const SANITY_IMAGE_QUALITY = 75;
+export const SANITY_IMAGE_WIDTH = {
+  listing: 800,
+  article: 1000,
+  hero: 1200,
+  social: 1200,
+  icon: 80,
+};
+
+/**
+ * Apply width + quality + auto-format on a `@sanity/image-url` builder chain.
+ * @param {object | null | undefined} builder
+ * @param {number} width
+ */
+export function withSanityImageDefaults(builder, width) {
+  if (!builder || typeof builder.width !== "function") return null;
+  return builder.width(width).quality(SANITY_IMAGE_QUALITY).auto("format");
+}
+
+/**
+ * @param {(source: unknown) => object | null} urlFor
+ * @param {unknown} source
+ * @param {number} width
+ * @returns {string | null}
+ */
+export function sanityImageUrl(urlFor, source, width) {
+  if (typeof urlFor !== "function" || !source) return null;
+  const builder = urlFor(source);
+  if (!builder) return null;
+  try {
+    return withSanityImageDefaults(builder, width)?.url() ?? null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Build a CDN URL from project/dataset + image field (for Portable Text / content blocks).
+ * @param {{ projectId?: string; dataset?: string; source: { asset?: Record<string, unknown> }; width?: number }} opts
+ * @returns {string | null}
+ */
+export function buildSanityImageUrl({
+  projectId,
+  dataset,
+  source,
+  width = SANITY_IMAGE_WIDTH.article,
+}) {
+  if (!projectId || !dataset || !source?.asset) return null;
+  const a = source.asset;
+  const ref = a._ref || (typeof a._id === "string" ? a._id : null);
+  if (ref) {
+    try {
+      const normalized = { ...source, asset: { _ref: ref } };
+      return (
+        withSanityImageDefaults(
+          createImageUrlBuilder({ projectId, dataset }).image(normalized),
+          width,
+        )?.url() ?? null
+      );
+    } catch {
+      /* fall through to direct CDN URL when builder rejects an edge-case ref */
+    }
+  }
+  if (typeof a.url === "string" && /^https:\/\/cdn\.sanity\.io\//.test(a.url)) {
+    try {
+      const u = new URL(a.url);
+      u.searchParams.set("w", String(width));
+      u.searchParams.set("q", String(SANITY_IMAGE_QUALITY));
+      u.searchParams.set("auto", "format");
+      return u.toString();
+    } catch {
+      return a.url;
+    }
+  }
+  return null;
+}
+
+/**
+ * Prefer social → hero (full) → listing mainImage for Open Graph / Twitter cards.
+ * @param {{ title?: string; socialImage?: { url?: string; width?: number; height?: number } | null; heroImage?: { url?: string; width?: number; height?: number } | null; mainImage?: string | null; mainImageWidth?: number; mainImageHeight?: number } | null | undefined} doc
+ * @returns {{ url: string; width: number; height: number; alt: string } | null}
+ */
+export function ogImageFromMappedContent(doc) {
+  if (!doc) return null;
+  const alt = doc.title || "";
+  if (doc.socialImage?.url) {
+    return {
+      url: doc.socialImage.url,
+      width: doc.socialImage.width || SANITY_IMAGE_WIDTH.social,
+      height: doc.socialImage.height || 630,
+      alt,
+    };
+  }
+  if (doc.heroImage?.url) {
+    return {
+      url: doc.heroImage.url,
+      width: doc.heroImage.width || SANITY_IMAGE_WIDTH.hero,
+      height: doc.heroImage.height || Math.round(SANITY_IMAGE_WIDTH.hero * 0.67),
+      alt,
+    };
+  }
+  if (doc.mainImage) {
+    return {
+      url: doc.mainImage,
+      width: doc.mainImageWidth || SANITY_IMAGE_WIDTH.listing,
+      height: doc.mainImageHeight || Math.round(SANITY_IMAGE_WIDTH.listing * 0.67),
+      alt,
+    };
+  }
+  return null;
+}
+
 /** GROQ fragment: subject icon with Sanity palette (for per-issue subject name color). */
 const subjectIconProjection = `subjectIcon {
   asset->{
@@ -474,23 +591,17 @@ const nextOptions = { next: { revalidate: 60 } };
  * @param {unknown} field Sanity image field `{asset, hotspot?}`
  * @param {(source: unknown) => unknown} urlFor
  */
-function imageDimensionsAndUrl(field, urlFor) {
+function imageDimensionsAndUrl(field, urlFor, width = SANITY_IMAGE_WIDTH.listing) {
   if (!field || typeof urlFor !== "function") return null;
-  const b = urlFor(field);
-  if (!b) return null;
-  try {
-    const url = b.width(1200).url();
-    if (!url) return null;
-    const w = field.asset?.metadata?.dimensions?.width;
-    const h = field.asset?.metadata?.dimensions?.height;
-    return {
-      url,
-      width: typeof w === "number" && w > 0 ? w : 1200,
-      height: typeof h === "number" && h > 0 ? h : 800,
-    };
-  } catch {
-    return null;
-  }
+  const url = sanityImageUrl(urlFor, field, width);
+  if (!url) return null;
+  const w = field.asset?.metadata?.dimensions?.width;
+  const h = field.asset?.metadata?.dimensions?.height;
+  return {
+    url,
+    width: typeof w === "number" && w > 0 ? w : width,
+    height: typeof h === "number" && h > 0 ? h : Math.round(width * 0.67),
+  };
 }
 
 /**
@@ -563,75 +674,51 @@ export function mapArticle(raw, urlFor, fallbackImage = "/hl-photo.png") {
 
   const fromBlocks = firstImageFromContentBlocks(raw.contentBlocks, urlFor);
 
-  const imageBuilder = urlFor(raw.mainImage);
-  let fromMain = null;
-  if (imageBuilder) {
-    try {
-      const url = imageBuilder.width(1200).url();
-      if (url) {
-        fromMain = {
-          url,
-          width: raw.mainImageWidth ?? 900,
-          height: raw.mainImageHeight ?? 600,
-        };
-      }
-    } catch {
-      /* ignore */
-    }
-  }
+  const listingFromMain = raw.mainImage
+    ? imageDimensionsAndUrl(raw.mainImage, urlFor, SANITY_IMAGE_WIDTH.listing)
+    : null;
+  const heroUrl = raw.mainImage
+    ? sanityImageUrl(urlFor, raw.mainImage, SANITY_IMAGE_WIDTH.hero)
+    : null;
 
-  /** Document main image wins for listings, archive, and OG; block images are fallback only. */
-  const chosen = fromMain ?? fromBlocks;
+  /** Document main image wins for listings/archive; block images are fallback only. */
+  const chosen = listingFromMain ?? fromBlocks;
   const mainImage = chosen?.url ?? fallbackImage;
-  const mainImageWidth = chosen?.width ?? 900;
-  const mainImageHeight = chosen?.height ?? 600;
+  const mainImageWidth = chosen?.width ?? SANITY_IMAGE_WIDTH.listing;
+  const mainImageHeight = chosen?.height ?? Math.round(SANITY_IMAGE_WIDTH.listing * 0.67);
 
-  /** Document main image only (for issue lead art when blocks are present). */
-  const heroImage = fromMain
+  /** Document main image only (issue lead art) — larger derivative than listing cards. */
+  const heroImage = heroUrl
     ? {
-        url: fromMain.url,
-        width: raw.mainImageWidth ?? fromMain.width,
-        height: raw.mainImageHeight ?? fromMain.height,
+        url: heroUrl,
+        width: raw.mainImageWidth ?? SANITY_IMAGE_WIDTH.hero,
+        height: raw.mainImageHeight ?? Math.round(SANITY_IMAGE_WIDTH.hero * 0.67),
       }
     : null;
 
-  /** Optional editor-controlled OG/Twitter image; falls back to mainImage downstream. */
+  /** Optional editor-controlled OG/Twitter image; falls back to hero/main downstream. */
   let socialImage = null;
   if (raw.socialImage) {
-    const socialBuilder = urlFor(raw.socialImage);
-    if (socialBuilder) {
-      try {
-        const url = socialBuilder.width(1200).url();
-        if (url) {
-          socialImage = {
-            url,
-            width: raw.socialImageWidth ?? 1200,
-            height: raw.socialImageHeight ?? 630,
-          };
-        }
-      } catch {
-        /* ignore */
-      }
+    const url = sanityImageUrl(urlFor, raw.socialImage, SANITY_IMAGE_WIDTH.social);
+    if (url) {
+      socialImage = {
+        url,
+        width: raw.socialImageWidth ?? SANITY_IMAGE_WIDTH.social,
+        height: raw.socialImageHeight ?? 630,
+      };
     }
   }
 
   let subjectIcon = null;
   let subjectColor = null;
   if (raw.subjectIcon) {
-    const iconBuilder = urlFor(raw.subjectIcon);
-    if (iconBuilder) {
-      try {
-        const url = iconBuilder.width(80).url();
-        if (url) {
-          subjectIcon = {
-            url,
-            width: raw.subjectIcon?.asset?.metadata?.dimensions?.width ?? 40,
-            height: raw.subjectIcon?.asset?.metadata?.dimensions?.height ?? 40,
-          };
-        }
-      } catch {
-        /* ignore */
-      }
+    const url = sanityImageUrl(urlFor, raw.subjectIcon, SANITY_IMAGE_WIDTH.icon);
+    if (url) {
+      subjectIcon = {
+        url,
+        width: raw.subjectIcon?.asset?.metadata?.dimensions?.width ?? 40,
+        height: raw.subjectIcon?.asset?.metadata?.dimensions?.height ?? 40,
+      };
     }
     subjectColor = subjectColorFromPalette(raw.subjectIcon?.asset?.metadata?.palette);
   }
@@ -781,39 +868,25 @@ export const categoriesQuery = `*[_type == "category" && !(_id in path("drafts.*
 export function mapRecipe(raw, urlFor, fallbackImage = "/tec-logo.svg") {
   if (!raw) return null;
 
-  const imageBuilder = urlFor(raw.mainImage);
-  let heroImage = null;
-  if (imageBuilder) {
-    try {
-      const url = imageBuilder.width(1200).url();
-      if (url) {
-        heroImage = {
-          url,
-          width: raw.mainImageWidth ?? 1200,
-          height: raw.mainImageHeight ?? 800,
-        };
+  const listingUrl = sanityImageUrl(urlFor, raw.mainImage, SANITY_IMAGE_WIDTH.listing);
+  const heroUrl = sanityImageUrl(urlFor, raw.mainImage, SANITY_IMAGE_WIDTH.hero);
+  const heroImage = heroUrl
+    ? {
+        url: heroUrl,
+        width: raw.mainImageWidth ?? SANITY_IMAGE_WIDTH.hero,
+        height: raw.mainImageHeight ?? Math.round(SANITY_IMAGE_WIDTH.hero * 0.67),
       }
-    } catch {
-      /* ignore */
-    }
-  }
+    : null;
 
   let socialImage = null;
   if (raw.socialImage) {
-    const socialBuilder = urlFor(raw.socialImage);
-    if (socialBuilder) {
-      try {
-        const url = socialBuilder.width(1200).url();
-        if (url) {
-          socialImage = {
-            url,
-            width: raw.socialImageWidth ?? 1200,
-            height: raw.socialImageHeight ?? 630,
-          };
-        }
-      } catch {
-        /* ignore */
-      }
+    const url = sanityImageUrl(urlFor, raw.socialImage, SANITY_IMAGE_WIDTH.social);
+    if (url) {
+      socialImage = {
+        url,
+        width: raw.socialImageWidth ?? SANITY_IMAGE_WIDTH.social,
+        height: raw.socialImageHeight ?? 630,
+      };
     }
   }
 
@@ -823,9 +896,9 @@ export function mapRecipe(raw, urlFor, fallbackImage = "/tec-logo.svg") {
     title: raw.title,
     issueNumber: raw.issueNumber ?? null,
     description: raw.description ?? null,
-    mainImage: heroImage?.url ?? fallbackImage,
-    mainImageWidth: heroImage?.width ?? 1200,
-    mainImageHeight: heroImage?.height ?? 800,
+    mainImage: listingUrl ?? fallbackImage,
+    mainImageWidth: raw.mainImageWidth ?? SANITY_IMAGE_WIDTH.listing,
+    mainImageHeight: raw.mainImageHeight ?? Math.round(SANITY_IMAGE_WIDTH.listing * 0.67),
     heroImage,
     publishedDate: raw.publishedDate ?? null,
     equipment: raw.equipment ?? null,
@@ -896,39 +969,25 @@ export const slangEntrySlugsQuery = `*[${publishedSlangEntryFilter}].slug.curren
 export function mapSlangEntry(raw, urlFor, fallbackImage = "/hip-photo.png") {
   if (!raw) return null;
 
-  const imageBuilder = urlFor(raw.mainImage);
-  let heroImage = null;
-  if (imageBuilder) {
-    try {
-      const url = imageBuilder.width(1200).url();
-      if (url) {
-        heroImage = {
-          url,
-          width: raw.mainImageWidth ?? 1200,
-          height: raw.mainImageHeight ?? 800,
-        };
+  const listingUrl = sanityImageUrl(urlFor, raw.mainImage, SANITY_IMAGE_WIDTH.listing);
+  const heroUrl = sanityImageUrl(urlFor, raw.mainImage, SANITY_IMAGE_WIDTH.hero);
+  const heroImage = heroUrl
+    ? {
+        url: heroUrl,
+        width: raw.mainImageWidth ?? SANITY_IMAGE_WIDTH.hero,
+        height: raw.mainImageHeight ?? Math.round(SANITY_IMAGE_WIDTH.hero * 0.67),
       }
-    } catch {
-      /* ignore */
-    }
-  }
+    : null;
 
   let socialImage = null;
   if (raw.socialImage) {
-    const socialBuilder = urlFor(raw.socialImage);
-    if (socialBuilder) {
-      try {
-        const url = socialBuilder.width(1200).url();
-        if (url) {
-          socialImage = {
-            url,
-            width: raw.socialImageWidth ?? 1200,
-            height: raw.socialImageHeight ?? 630,
-          };
-        }
-      } catch {
-        /* ignore */
-      }
+    const url = sanityImageUrl(urlFor, raw.socialImage, SANITY_IMAGE_WIDTH.social);
+    if (url) {
+      socialImage = {
+        url,
+        width: raw.socialImageWidth ?? SANITY_IMAGE_WIDTH.social,
+        height: raw.socialImageHeight ?? 630,
+      };
     }
   }
 
@@ -942,9 +1001,9 @@ export function mapSlangEntry(raw, urlFor, fallbackImage = "/hip-photo.png") {
     inUseAttribution: raw.inUseAttribution ?? null,
     authorName: raw.authorName ?? null,
     disclaimer: raw.disclaimer ?? null,
-    mainImage: heroImage?.url ?? fallbackImage,
-    mainImageWidth: heroImage?.width ?? 1200,
-    mainImageHeight: heroImage?.height ?? 800,
+    mainImage: listingUrl ?? fallbackImage,
+    mainImageWidth: raw.mainImageWidth ?? SANITY_IMAGE_WIDTH.listing,
+    mainImageHeight: raw.mainImageHeight ?? Math.round(SANITY_IMAGE_WIDTH.listing * 0.67),
     heroImage,
     publishedDate: raw.publishedDate ?? null,
     pollQuestion: raw.pollQuestion ?? null,
@@ -1099,39 +1158,25 @@ function summaryFromEditorIntro(editorIntro, maxWords = 40) {
 export function mapVaultIssue(raw, urlFor, fallbackImage = "/ftv-logo-black.png") {
   if (!raw) return null;
 
-  const imageBuilder = urlFor(raw.mainImage);
-  let heroImage = null;
-  if (imageBuilder) {
-    try {
-      const url = imageBuilder.width(1200).url();
-      if (url) {
-        heroImage = {
-          url,
-          width: raw.mainImageWidth ?? 1200,
-          height: raw.mainImageHeight ?? 800,
-        };
+  const listingUrl = sanityImageUrl(urlFor, raw.mainImage, SANITY_IMAGE_WIDTH.listing);
+  const heroUrl = sanityImageUrl(urlFor, raw.mainImage, SANITY_IMAGE_WIDTH.hero);
+  const heroImage = heroUrl
+    ? {
+        url: heroUrl,
+        width: raw.mainImageWidth ?? SANITY_IMAGE_WIDTH.hero,
+        height: raw.mainImageHeight ?? Math.round(SANITY_IMAGE_WIDTH.hero * 0.67),
       }
-    } catch {
-      /* ignore */
-    }
-  }
+    : null;
 
   let socialImage = null;
   if (raw.socialImage) {
-    const socialBuilder = urlFor(raw.socialImage);
-    if (socialBuilder) {
-      try {
-        const url = socialBuilder.width(1200).url();
-        if (url) {
-          socialImage = {
-            url,
-            width: raw.socialImageWidth ?? 1200,
-            height: raw.socialImageHeight ?? 630,
-          };
-        }
-      } catch {
-        /* ignore */
-      }
+    const url = sanityImageUrl(urlFor, raw.socialImage, SANITY_IMAGE_WIDTH.social);
+    if (url) {
+      socialImage = {
+        url,
+        width: raw.socialImageWidth ?? SANITY_IMAGE_WIDTH.social,
+        height: raw.socialImageHeight ?? 630,
+      };
     }
   }
 
@@ -1156,9 +1201,9 @@ export function mapVaultIssue(raw, urlFor, fallbackImage = "/ftv-logo-black.png"
     editorName: raw.editorName ?? null,
     editorTitle: raw.editorTitle ?? null,
     editorSignature,
-    mainImage: heroImage?.url ?? fallbackImage,
-    mainImageWidth: heroImage?.width ?? 1200,
-    mainImageHeight: heroImage?.height ?? 800,
+    mainImage: listingUrl ?? fallbackImage,
+    mainImageWidth: raw.mainImageWidth ?? SANITY_IMAGE_WIDTH.listing,
+    mainImageHeight: raw.mainImageHeight ?? Math.round(SANITY_IMAGE_WIDTH.listing * 0.67),
     heroImage,
     photoCredit: raw.photoCredit ?? null,
     publishedDate: raw.publishedDate ?? null,
