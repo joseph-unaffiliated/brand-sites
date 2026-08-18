@@ -12,9 +12,9 @@ export default function WordCard({ entry }) {
           <Image
             src={entry.mainImage}
             alt=""
-            width={400}
-            height={267}
+            fill
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            style={{ objectFit: "cover" }}
           />
         </div>
         <div className={styles.issueCardBody}>

@@ -68,16 +68,17 @@
 }
 
 .issueCardImage {
+  position: relative;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
   line-height: 0;
   background: var(--surface-muted);
 }
 
 .issueCardImage img {
-  width: 100%;
-  height: auto;
-  display: block;
-  aspect-ratio: 3 / 2;
   object-fit: cover;
+  /* Source PNGs include a drop shadow; scale past it so color fills the frame. */
+  transform: scale(1.12);
 }
 
 .issueCardBody {

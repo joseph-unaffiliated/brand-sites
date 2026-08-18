@@ -83,6 +83,7 @@ function decodeEntities(s) {
     .replace(/&mdash;/gi, '\u2014')
     .replace(/&ndash;/gi, '\u2013')
     .replace(/&hellip;/gi, '\u2026')
+    .replace(/&emsp;|&ensp;|&thinsp;/gi, ' ')
     .replace(/&#8203;/g, '')
     .replace(/&#8195;|&#8202;/g, ' ')
     .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)))
@@ -255,27 +256,43 @@ function pollOptionsFromLinks(links) {
 }
 
 const INTERNAL_LINK_RE =
-  /hipspeak\.com|customeriomail|customer\.io|unsubscribe|snooze|mailto:|^#|track\.|\/pollresults|[?&]poll=/i
+  /hipspeak\.com|customeriomail|customer\.io|unsubscribe|snooze|mailto:|^#|track\.|\/pollresults|[?&]poll=|parentingweakly|google\.com\/maps/i
 
-function furtherReadingFromBlocks(blocks) {
+const FURTHER_READING_STOP_RE = /^got a word\b/i
+
+function sourceNameFromUrl(href) {
+  try {
+    return new URL(href).hostname.replace(/^www\./, '')
+  } catch {
+    return null
+  }
+}
+
+function furtherReadingFromDocument(html, blocks, whatElseIdx) {
+  const from = whatElseIdx >= 0 ? blocks[whatElseIdx].index : 0
+  const slice = html.slice(from)
+  const links = extractLinks(slice).filter(
+    ({href}) => /^https?:\/\//i.test(href) && !INTERNAL_LINK_RE.test(href)
+  )
+  const teasers = []
+  if (whatElseIdx >= 0) {
+    for (let i = whatElseIdx + 1; i < blocks.length; i++) {
+      const b = blocks[i]
+      if (b.isBoilerplate || FURTHER_READING_STOP_RE.test(markerText(b.text))) break
+      if (ANY_MARKER(b.text)) break
+      if (b.tag === 'p' && b.line) teasers.push(b.line)
+    }
+  }
   const items = []
   const seen = new Set()
-  for (const block of blocks) {
-    for (const {href, label} of block.links) {
-      if (INTERNAL_LINK_RE.test(href)) continue
-      if (!/^https?:\/\//i.test(href)) continue
-      if (seen.has(href)) continue
-      seen.add(href)
-      let sourceName = null
-      try {
-        sourceName = new URL(href).hostname.replace(/^www\./, '')
-      } catch {
-        /* leave null */
-      }
-      // The teaser is the sentence around the link, not just the anchor text.
-      const teaser = block.line && block.line.length > (label?.length || 0) ? block.line : label
-      items.push({label: teaser || label || sourceName, sourceName, url: href})
-    }
+  const n = Math.max(links.length, teasers.length)
+  for (let i = 0; i < n; i++) {
+    const href = links[i]?.href
+    if (!href || seen.has(href)) continue
+    seen.add(href)
+    const sourceName = sourceNameFromUrl(href)
+    const label = teasers[i] || links[i]?.label || sourceName
+    items.push({label, sourceName, url: href})
   }
   return items
 }
@@ -346,31 +363,25 @@ function parseSlangEmail(html, catalogRow = {}) {
   if (!inUse) warnings.push('No "In Use" dialogue found.')
 
   // Pop Quiz: question text plus the a/b/c options encoded in the vote links.
+  // Parcel/Design Studio puts those <a> buttons in layout divs, not inside <p>.
   let pollQuestion = null
   let pollOptions = []
   if (popQuizIdx >= 0) {
     const end = whatElseIdx > popQuizIdx ? whatElseIdx : blocks.length
     const section = blocks.slice(popQuizIdx, end)
-    // The label ("Pop Quiz") and the question can be separate blocks; prefer the
-    // one that actually asks something.
     const questionBlock =
       section.find((b) => b.line.includes('?') && !b.links.length) || section[0]
     pollQuestion = markerText(questionBlock.line) || null
-    pollOptions = pollOptionsFromLinks(section.flatMap((b) => b.links))
   }
-  if (!pollOptions.length) {
-    // Vote links may sit outside the section when the template puts them in a button row.
-    pollOptions = pollOptionsFromLinks(blocks.flatMap((b) => b.links))
-  }
+  pollOptions = pollOptionsFromLinks(extractLinks(html))
   if (popQuizIdx >= 0 && !pollOptions.length) {
     warnings.push('Pop Quiz found but no poll=a/b/c vote links; options left empty.')
   }
 
-  // "What else?" links.
+  // "What else?" teasers live in <p>; the source buttons are sibling <a> tags.
   let furtherReading = []
   if (whatElseIdx >= 0) {
-    const end = disclaimerIdx > whatElseIdx ? disclaimerIdx : blocks.length
-    furtherReading = furtherReadingFromBlocks(blocks.slice(whatElseIdx, end))
+    furtherReading = furtherReadingFromDocument(html, blocks, whatElseIdx)
   }
 
   const disclaimer = disclaimerIdx >= 0 ? markerText(blocks[disclaimerIdx].text) || null : null
@@ -407,6 +418,37 @@ function parseSlangEmail(html, catalogRow = {}) {
  * Sanity
  * ------------------------------------------------------------------ */
 
+/** HTTP fallback when @sanity/client is not installed (this machine has no npm). */
+function httpSanityClient() {
+  const base = `https://${projectId}.api.sanity.io/v2024-01-01`
+  const auth = {Authorization: `Bearer ${token}`}
+  return {
+    async createOrReplace(doc) {
+      const res = await fetch(`${base}/data/mutate/${dataset}`, {
+        method: 'POST',
+        headers: {...auth, 'Content-Type': 'application/json'},
+        body: JSON.stringify({mutations: [{createOrReplace: doc}]}),
+      })
+      const text = await res.text()
+      if (!res.ok) throw new Error(`Sanity mutate ${res.status}: ${text.slice(0, 400)}`)
+      return JSON.parse(text)
+    },
+    assets: {
+      async upload(_type, buffer, opts = {}) {
+        const filename = encodeURIComponent(opts.filename || 'image')
+        const res = await fetch(`${base}/assets/images/${dataset}?filename=${filename}`, {
+          method: 'POST',
+          headers: {...auth, 'Content-Type': opts.contentType || 'image/jpeg'},
+          body: buffer,
+        })
+        const text = await res.text()
+        if (!res.ok) throw new Error(`Sanity asset upload ${res.status}: ${text.slice(0, 400)}`)
+        return JSON.parse(text).document
+      },
+    },
+  }
+}
+
 /** Imported lazily so --dry-run and --inspect work without studio deps installed. */
 async function makeClient() {
   if (!token) {
@@ -415,14 +457,13 @@ async function makeClient() {
     )
     process.exit(1)
   }
-  let createClient
   try {
-    ;({createClient} = await import('@sanity/client'))
+    const {createClient} = await import('@sanity/client')
+    return createClient({projectId, dataset, apiVersion: '2024-01-01', token, useCdn: false})
   } catch {
-    console.error('Missing @sanity/client. Run `npm install` in studio-hipspeak first.')
-    process.exit(1)
+    console.log('Using Sanity HTTP API (no @sanity/client installed).')
+    return httpSanityClient()
   }
-  return createClient({projectId, dataset, apiVersion: '2024-01-01', token, useCdn: false})
 }
 
 async function uploadFromUrl(client, url, filename) {
@@ -435,7 +476,9 @@ async function uploadFromUrl(client, url, filename) {
 
 function buildDoc(parsed, row, {assetId, publish}) {
   const slug = row.slug || slugify(parsed.title || '')
-  const baseId = `slangEntry.${slug}`
+  // Hyphen, not a dot: Sanity treats `.` as a document path (like `drafts.`),
+  // so `slangEntry.rizz` is invisible to the public API the Vercel site uses.
+  const baseId = `slangEntry-${slug}`
   const doc = {
     _id: publish ? baseId : `drafts.${baseId}`,
     _type: 'slangEntry',
