@@ -9,6 +9,7 @@
     "deploy": "sanity deploy",
     "deploy-graphql": "sanity graphql deploy",
     "dev": "sanity dev",
+    "import-slang-issues": "node scripts/import-slang-issues.mjs",
     "start": "sanity start"
   },
   "keywords": ["sanity"],
@@ -20,6 +21,7 @@
     "styled-components": "^6.1.18"
   },
   "devDependencies": {
+    "@sanity/client": "^7.20.0",
     "@sanity/eslint-config-studio": "^6.0.0",
     "@types/react": "^19.2.14",
     "eslint": "^9.28",
