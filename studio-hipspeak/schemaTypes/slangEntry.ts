@@ -35,6 +35,14 @@ export const slangEntryType = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: 'issueNumber',
+      title: 'Issue number',
+      description:
+        'Email issue this entry came from (the N in the "HIP - Issue N - Word" broadcast name).',
+      type: 'number',
+      validation: (rule) => rule.integer().positive(),
+    }),
+    defineField({
       name: 'pronunciation',
       title: 'Pronunciation / phonetic line',
       description: 'Gray line under the word, e.g. "sounds exactly how you think it does".',
@@ -188,6 +196,11 @@ export const slangEntryType = defineType({
       name: 'publishedDateDesc',
       by: [{field: 'publishedDate', direction: 'desc'}],
     },
+    {
+      title: 'Issue number, newest first',
+      name: 'issueNumberDesc',
+      by: [{field: 'issueNumber', direction: 'desc'}],
+    },
   ],
   preview: {
     select: {
@@ -195,11 +208,14 @@ export const slangEntryType = defineType({
       subtitle: 'pronunciation',
       media: 'mainImage',
       publishedDate: 'publishedDate',
+      issueNumber: 'issueNumber',
     },
-    prepare({title, subtitle, media, publishedDate}) {
+    prepare({title, subtitle, media, publishedDate, issueNumber}) {
       const date = publishedDate ? new Date(publishedDate).toLocaleDateString() : 'No date'
       return {
-        title: title || 'Untitled word',
+        title: [issueNumber ? `#${issueNumber}` : null, title || 'Untitled word']
+          .filter(Boolean)
+          .join(' '),
         subtitle: [subtitle, date].filter(Boolean).join(' — '),
         media,
       }
