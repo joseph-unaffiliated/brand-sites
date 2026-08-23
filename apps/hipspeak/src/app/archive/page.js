@@ -1,6 +1,5 @@
 import { getSlangEntries } from "@/lib/slang";
-import HideWhenSubscribed from "@/components/HideWhenSubscribed";
-import WordCard from "@/components/WordCard";
+import WordsBrowser from "@/components/WordsBrowser";
 import { siteDisplayName } from "@/config/site";
 import styles from "./page.module.css";
 
@@ -29,32 +28,11 @@ export default async function ArchivePage() {
       <div className="container">
         <header className={styles.header}>
           <div>
-            <p className={styles.kicker}>Archive</p>
-            <h1>Every word so far</h1>
+            <h1>The Dictionary of Slang</h1>
           </div>
         </header>
 
-        <div className={styles.issueMosaic}>
-          {entries.map((entry) => (
-            <WordCard key={entry._id ?? entry.slug} entry={entry} />
-          ))}
-          <HideWhenSubscribed>
-            <article className={styles.issueCard}>
-              <div className={styles.issueCardPlaceholder}>
-                <div className={styles.issueCardBody}>
-                  <p className={styles.issueDate}>—</p>
-                  <h3>More words coming soon</h3>
-                  <p className={styles.issueDek}>
-                    New words drop weekly. Subscribe to get them in your inbox.
-                  </p>
-                  <a className={styles.issueCta} href="/#subscribe">
-                    Subscribe
-                  </a>
-                </div>
-              </div>
-            </article>
-          </HideWhenSubscribed>
-        </div>
+        <WordsBrowser entries={entries} />
       </div>
     </div>
   );

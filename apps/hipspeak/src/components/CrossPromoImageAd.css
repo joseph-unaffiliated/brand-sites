@@ -62,8 +62,8 @@
   display: none;
 }
 
-/* Fixed logical widths (2× assets in shared-ads); max-width only shrinks when the bar is narrower */
-@media (min-width: 769px) {
+/* Fixed logical widths (2× assets in shared-ads); tablet uses desktop creative */
+@media (min-width: 641px) {
   .cross-promo-image-sticky-desktop {
     max-width: 100%;
   }
@@ -73,9 +73,13 @@
     max-width: 100%;
     height: auto;
   }
+
+  .cross-promo-image-sticky-mobile {
+    display: none;
+  }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 640px) {
   .cross-promo-image-sticky-desktop {
     display: none;
   }
@@ -86,7 +90,7 @@
   }
 
   .cross-promo-image-sticky-mobile .cross-promo-image-sticky-img-mobile {
-    width: 320px;
+    width: min(100vw - 24px, 640px);
     max-width: 100%;
     height: auto;
   }

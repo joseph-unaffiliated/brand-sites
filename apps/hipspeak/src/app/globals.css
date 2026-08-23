@@ -280,7 +280,7 @@ a {
     position: relative;
     gap: 16px 28px;
     --header-mark-w: min(132px, 16vw);
-    --header-mark-h: calc(var(--header-mark-w) * 24 / 33);
+    --header-mark-h: calc(var(--header-mark-w) * 34 / 33);
     --logo-line-pad-x: 34px;
     --logo-line-gap: calc(var(--header-mark-w) + 2 * var(--logo-line-pad-x));
     --brand-top: 24px;
@@ -400,7 +400,7 @@ a {
     padding-bottom: 22px;
     min-height: 0;
     --header-wordmark-w: min(200px, 32vw);
-    --header-wordmark-h: calc(var(--header-wordmark-w) * 31 / 229);
+    --header-wordmark-h: calc(var(--header-wordmark-w) * 34 / 139);
     /* Optical center: R descender hangs below cap height. */
     --header-wordmark-offset-y: 8px;
     --logo-mark-center-y: calc(
@@ -464,6 +464,7 @@ a {
 .brand-logo-img {
   display: block;
   height: auto;
+  width: 100%;
   object-fit: contain;
 }
 
@@ -528,9 +529,9 @@ a {
   flex-shrink: 0;
   width: var(--header-mark-w, min(132px, 16vw));
   max-width: min(132px, 16vw);
-  height: var(--header-mark-h, calc(var(--header-mark-w, 132px) * 24 / 33));
-  -webkit-mask-image: url(/tpr-logo-mask.svg);
-  mask-image: url(/tpr-logo-mask.svg);
+  height: var(--header-mark-h, calc(var(--header-mark-w, 132px) * 34 / 33));
+  -webkit-mask-image: url(/hip-logo.svg);
+  mask-image: url(/hip-logo.svg);
   -webkit-mask-size: contain;
   mask-size: contain;
   -webkit-mask-repeat: no-repeat;
@@ -546,9 +547,9 @@ a {
   flex-shrink: 0;
   width: var(--header-wordmark-w, min(200px, 32vw));
   max-width: min(200px, 32vw);
-  height: var(--header-wordmark-h, calc(var(--header-wordmark-w, 200px) * 31 / 229));
-  -webkit-mask-image: url(/tpr-wordmark-mask.svg);
-  mask-image: url(/tpr-wordmark-mask.svg);
+  height: var(--header-wordmark-h, calc(var(--header-wordmark-w, 200px) * 34 / 139));
+  -webkit-mask-image: url(/hip-wordmark-wide.svg);
+  mask-image: url(/hip-wordmark-wide.svg);
   -webkit-mask-size: contain;
   mask-size: contain;
   -webkit-mask-repeat: no-repeat;
@@ -561,10 +562,10 @@ a {
 .site-header--article .brand-logo-wordmark-fill::before {
   content: "";
   position: fixed;
-  top: -32px;
-  left: -32px;
-  width: calc(100vw + 64px);
-  height: calc(100vh + 64px);
+  top: -80px;
+  left: -80px;
+  width: calc(100vw + 160px);
+  height: calc(100vh + 160px);
   background-color: var(--bg);
   background-image:
     linear-gradient(
@@ -576,7 +577,7 @@ a {
   /* Align image center with logomark (not viewport center). */
   background-position: 50% calc(50% + (var(--logo-mark-center-y, 50vh) - 50vh));
   background-repeat: no-repeat;
-  filter: blur(5px);
+  filter: blur(32px);
   pointer-events: none;
 }
 
@@ -709,12 +710,17 @@ a {
   line-height: 1.45;
 }
 
+.footer-text.footer-tagline {
+  white-space: pre-line;
+}
+
 .footer-brand {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 4px;
+  gap: 12px;
   margin: 0;
+  margin-bottom: 16px;
   padding: 0;
 }
 
@@ -736,7 +742,8 @@ a {
   line-height: 0;
 }
 
-.footer-logo-wordmark {
+.footer-logo-wordmark,
+.footer-logo-img.footer-logo-wordmark {
   display: none;
 }
 
@@ -755,7 +762,8 @@ a {
     max-width: min(180px, 30vw);
   }
 
-  .footer-logo-wordmark {
+  .footer-logo-wordmark,
+  .footer-logo-img.footer-logo-wordmark {
     display: block;
     box-sizing: border-box;
     width: min(180px, 30vw);
@@ -774,6 +782,9 @@ a {
 
 .footer-logo-img {
   object-fit: contain;
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
 @media (min-width: 769px) {
@@ -782,16 +793,16 @@ a {
   }
 }
 
-.footer-logo path {
-  fill: #fff;
-}
-
 .footer-links {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
   color: var(--footer-accent);
   font-size: 12px;
+}
+
+.footer-links > .footer-text {
+  padding-top: 2px;
 }
 
 .footer-links a:hover {
@@ -1163,7 +1174,7 @@ a {
   .site-header--marketing .header-row-marketing {
     position: relative;
     --header-mark-w: min(96px, 28vw);
-    --header-mark-h: calc(var(--header-mark-w) * 24 / 33);
+    --header-mark-h: calc(var(--header-mark-w) * 34 / 33);
     --logo-line-pad-x: 24px;
     --logo-line-gap: calc(var(--header-mark-w) + 2 * var(--logo-line-pad-x));
     --brand-top: 14px;
@@ -1254,7 +1265,7 @@ a {
 
   .site-header--article .header-row-1 {
     --header-wordmark-w: min(200px, 72vw);
-    --header-wordmark-h: calc(var(--header-wordmark-w) * 31 / 229);
+    --header-wordmark-h: calc(var(--header-wordmark-w) * 34 / 139);
     --header-wordmark-offset-y: 8px;
     --logo-mark-center-y: calc(
       20px + var(--header-wordmark-offset-y) + var(--header-wordmark-h) / 2
@@ -1294,29 +1305,3 @@ a {
 }
 
 
-/* Hipspeak PNG marks as CSS masks (currentColor fill) */
-.brand-mask {
-  display: inline-block;
-  background-color: currentColor;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-  mask-position: center;
-  -webkit-mask-size: contain;
-  mask-size: contain;
-  vertical-align: middle;
-}
-.brand-mask-logo {
-  aspect-ratio: 131 / 136;
-  width: 1.75rem;
-  height: auto;
-  -webkit-mask-image: url("/hip-logo-black.png");
-  mask-image: url("/hip-logo-black.png");
-}
-.brand-mask-wordmark {
-  aspect-ratio: 314 / 136;
-  width: 8.5rem;
-  height: auto;
-  -webkit-mask-image: url("/hip-wordmark-black.png");
-  mask-image: url("/hip-wordmark-black.png");
-}

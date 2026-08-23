@@ -15,6 +15,8 @@ export default function robots() {
           "/subscribed",
           "/unsubscribed",
           "/snoozed",
+          "/opted-out-comps",
+          "/opted-in-comps",
           "/profile",
           "/request",
           "/poll",

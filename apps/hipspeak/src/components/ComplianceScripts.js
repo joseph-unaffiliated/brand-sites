@@ -4,11 +4,10 @@ const PLACEHOLDER_ONETRUST = "YOUR_ONETRUST_ID_HERE";
 const PLACEHOLDER_RETENTION = "YOUR_RETENTION_ID_HERE";
 
 /**
- * Hipspeak OneTrust domain script — MUST be set per-brand via
- * NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT on Vercel once the OneTrust domain is
- * provisioned. Until then this falls back to the network default (Pickle's).
+ * Hipspeak OneTrust domain script. Override with NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT
+ * on Vercel if the provisioned domain id changes.
  */
-const DEFAULT_ONETRUST_DOMAIN_SCRIPT = "019a7160-715f-710a-9141-d7af1513ef88";
+const DEFAULT_ONETRUST_DOMAIN_SCRIPT = "019a7167-e6eb-7fa2-ae9f-60338480c772";
 /** Network-wide Retention site id (same as The '90s Parent). */
 const DEFAULT_RETENTION_SITE_ID = "X2JHJ4WE";
 

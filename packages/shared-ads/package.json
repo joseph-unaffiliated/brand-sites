@@ -5,6 +5,7 @@
   "sideEffects": false,
   "exports": {
     ".": "./index.js",
-    "./house-ads": "./house-ads.js"
+    "./house-ads": "./house-ads.js",
+    "./brand-paths": "./brand-paths.js"
   }
 }

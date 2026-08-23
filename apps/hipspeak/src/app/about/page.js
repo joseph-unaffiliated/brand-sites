@@ -3,12 +3,11 @@ import Link from "next/link";
 import { Suspense } from "react";
 import styles from "../basic-page.module.css";
 import aboutStyles from "./page.module.css";
-import archiveStyles from "../archive/page.module.css";
+import articleStyles from "../word/[slug]/page.module.css";
 import AboutOutreach from "./AboutOutreach";
 import { siteDisplayName } from "@/config/site";
 import { getSlangEntries } from "@/lib/slang";
 import { pickRandomArticles } from "@/lib/pickRandomArticles";
-import WordCard from "@/components/WordCard";
 
 export const metadata = {
   title: `About | ${siteDisplayName}`,
@@ -49,17 +48,37 @@ export default async function AboutPage() {
                 in the wild, and a quick pop quiz. No homework. Just the Dictionary of Slang
                 delivered to your inbox.
               </p>
+
+              <h2>What we publish</h2>
+              <p>
+                One entry a week. A pronunciation, a plain-English definition, a{" "}
+                <em>Think:</em> line you can actually remember, an in-use example, and a
+                quick quiz. We skip the 2,000-word origin essay. The publicly available
+                word pages are the full record — browse them anytime in the{" "}
+                <Link href="/archive">archive</Link>.
+              </p>
+
               <h2>How it works</h2>
               <p>
-                Subscribe once, and a new word arrives each week. Browse past entries in the{" "}
-                <Link href="/archive">archive</Link> anytime, and save favorites to{" "}
-                <Link href="/my-words">My words</Link>.
+                Subscribe once, and a new word arrives each week. Save favorites to{" "}
+                <Link href="/my-words">My words</Link>. Take the{" "}
+                <Link href="/quiz">slang quiz</Link> when you want to check whether
+                you&apos;re fluent or just vibing. Snooze and unsubscribe stay a click
+                away in every email.
               </p>
+
+              <h2>Who it&apos;s for</h2>
               <p>
-                Got a word we should unpack? Hit reply on any issue, or{" "}
-                <Link href="/contact">get in touch</Link>.
+                Parents, managers, and anyone who has nodded along in a conversation
+                they did not fully understand. If you&apos;ve ever googled a word after
+                a group chat, you&apos;re in the right place.
               </p>
+
               <h2>Get in touch</h2>
+              <p>
+                Got a word we should unpack? Hit reply on any issue, or use the
+                contact link below.
+              </p>
               <Suspense fallback={null}>
                 <AboutOutreach />
               </Suspense>
@@ -83,14 +102,34 @@ export default async function AboutPage() {
       </div>
 
       {readMore.length > 0 ? (
-        <section className={archiveStyles.archive} aria-label="Sample words">
-          <h2 className={aboutStyles.aboutTitle}>Start here</h2>
-          <div className={archiveStyles.issueGrid}>
-            {readMore.map((entry) => (
-              <WordCard key={entry.slug} entry={entry} />
-            ))}
-          </div>
-        </section>
+        <div className={articleStyles.readMoreOuter}>
+          <section className={articleStyles.readMore} aria-label="Sample words">
+            <h2 className={articleStyles.readMoreTitle}>Start here</h2>
+            <div className={articleStyles.readMoreGrid}>
+              {readMore.map((entry) => (
+                <Link
+                  key={entry.slug}
+                  href={`/word/${entry.slug}`}
+                  className={articleStyles.readMoreCard}
+                >
+                  <div className={articleStyles.readMoreThumb}>
+                    <Image
+                      src={entry.mainImage}
+                      alt=""
+                      width={280}
+                      height={187}
+                      sizes="(max-width: 640px) 100vw, 280px"
+                    />
+                  </div>
+                  <h3 className={articleStyles.readMoreHeadline}>{entry.title}</h3>
+                  {entry.think ? (
+                    <p className={articleStyles.readMoreDek}>{entry.think}</p>
+                  ) : null}
+                </Link>
+              ))}
+            </div>
+          </section>
+        </div>
       ) : null}
     </>
   );

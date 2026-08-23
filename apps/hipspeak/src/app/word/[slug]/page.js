@@ -10,7 +10,7 @@ import NavLogoImageSync from "@/components/NavLogoImageSync";
 import ArticleSubscribeForm from "@/components/ArticleSubscribeForm";
 import MyWordButton from "@/components/MyWordButton";
 import AdSlot from "@/components/AdSlot";
-import ArticleAdStickyBottom from "@/components/ArticleAdStickyBottom";
+import ArticleStickyBottom from "@/components/ArticleStickyBottom";
 import JsonLd from "@/components/JsonLd";
 import { ogImageFromMappedContent } from "@publication-websites/sanity-content";
 import { crossPromoForSlot } from "@/config/crossPromoAds";
@@ -39,6 +39,33 @@ function absoluteUrl(maybeUrl) {
   } catch {
     return null;
   }
+}
+
+/** Bold the defined term (and a simple plural like “hits different”) in In Use copy. */
+function emphasizeTerm(text, term) {
+  if (!text || !term) return text;
+  const parts = term.trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return text;
+  const variants = [parts.join(" ")];
+  if (!/s$/i.test(parts[0])) {
+    variants.push([`${parts[0]}s`, ...parts.slice(1)].join(" "));
+  }
+  const pattern = variants
+    .sort((a, b) => b.length - a.length)
+    .map((v) => v.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/\s+/g, "\\s+"))
+    .join("|");
+  const re = new RegExp(`(${pattern})`, "gi");
+  const nodes = [];
+  let last = 0;
+  let match;
+  let i = 0;
+  while ((match = re.exec(text))) {
+    if (match.index > last) nodes.push(text.slice(last, match.index));
+    nodes.push(<strong key={`t${i++}`}>{match[0]}</strong>);
+    last = match.index + match[0].length;
+  }
+  if (last < text.length) nodes.push(text.slice(last));
+  return nodes.length ? nodes : text;
 }
 
 function descriptionForEntry(entry) {
@@ -154,10 +181,30 @@ export default async function WordPage({ params }) {
           <div className={styles.articleHero}>
             <div className={styles.articleHeroContent}>
               <div className="spacer-3rem" />
-              <div className="headline-block">
-                <h1 className="headline-text">{entry.title}</h1>
-                {entry.pronunciation ? (
-                  <p className={styles.pronunciation}>{entry.pronunciation}</p>
+              {entry.heroImage?.url || entry.mainImage ? (
+                <div className={styles.leadImageSection}>
+                  <div className={styles.leadImageFrame}>
+                    <Image
+                      src={entry.heroImage?.url || entry.mainImage}
+                      alt={entry.title}
+                      width={entry.heroImage?.width || 1200}
+                      height={entry.heroImage?.height || 800}
+                      priority
+                      className={styles.leadImage}
+                      sizes="(max-width: 640px) 100vw, 640px"
+                    />
+                  </div>
+                  {entry.pronunciation ? (
+                    <p className={styles.pronunciation}>{entry.pronunciation}</p>
+                  ) : null}
+                </div>
+              ) : entry.pronunciation ? (
+                <p className={styles.pronunciation}>{entry.pronunciation}</p>
+              ) : null}
+              <div className={`headline-block ${styles.headlineBlock}`}>
+                <h1 className={`headline-text ${styles.visuallyHidden}`}>{entry.title}</h1>
+                {entry.think ? (
+                  <p className={`headline-text ${styles.thinkHeadline}`}>{entry.think}</p>
                 ) : null}
               </div>
               <div className={styles.wordMetaRow}>
@@ -172,21 +219,6 @@ export default async function WordPage({ params }) {
                 ) : null}
                 <MyWordButton slug={slug} />
               </div>
-              {entry.heroImage?.url ? (
-                <div className={styles.leadImageSection}>
-                  <div className={styles.leadImageFrame}>
-                    <Image
-                      src={entry.heroImage.url}
-                      alt={entry.title}
-                      width={entry.heroImage.width || 1200}
-                      height={entry.heroImage.height || 800}
-                      priority
-                      className={styles.leadImage}
-                      sizes="(max-width: 640px) 100vw, 640px"
-                    />
-                  </div>
-                </div>
-              ) : null}
             </div>
           </div>
         </div>
@@ -196,31 +228,20 @@ export default async function WordPage({ params }) {
               <div className="articlecopy-wrapper">
                 <div className="articlecopy-richtext">
                   <article className={styles.wordBody}>
-                    {entry.think ? (
-                      <p className={styles.thinkLine}>
-                        <span className={styles.thinkLabel}>Think: </span>
-                        {entry.think}
-                      </p>
-                    ) : null}
-
                     {inUseParagraphs.length > 0 ? (
                       <section className={styles.inUseSection} aria-label="In use">
-                        <h2 className={styles.inUseHeading}>In Use</h2>
                         <div className={styles.inUseDialogue}>
+                          <h2 className={styles.inUseHeading}>In Use</h2>
+                          {entry.inUseAttribution ? (
+                            <p className={styles.inUseAttribution}>
+                              {entry.inUseAttribution}
+                            </p>
+                          ) : null}
                           {inUseParagraphs.map((line, index) => (
-                            <p key={index}>{line}</p>
+                            <p key={index}>{emphasizeTerm(line, entry.title)}</p>
                           ))}
                         </div>
-                        {entry.inUseAttribution ? (
-                          <p className={styles.inUseAttribution}>
-                            — {entry.inUseAttribution}
-                          </p>
-                        ) : null}
                       </section>
-                    ) : null}
-
-                    {entry.authorName ? (
-                      <p className={styles.authorLine}>Defined by {entry.authorName}</p>
                     ) : null}
 
                     {entry.pollOptions?.length ? (
@@ -256,20 +277,24 @@ export default async function WordPage({ params }) {
                     ) : null}
 
                     {entry.furtherReading?.length ? (
-                      <section className={styles.furtherReadingSection} aria-label="What else?">
-                        <h2 className={styles.furtherReadingTitle}>What else?</h2>
-                        <ul className={styles.furtherReadingList}>
+                      <section className={styles.aroundTheWeb} aria-label="What else?">
+                        <h2 className={styles.aroundTheWebTitle}>What else?</h2>
+                        <ul className={styles.aroundTheWebList}>
                           {entry.furtherReading.map((item) => (
-                            <li key={item._key ?? item.url} className={styles.furtherReadingItem}>
-                              <p>{item.label}</p>
+                            <li key={item._key ?? item.url ?? item.label}>
                               {item.url ? (
                                 <a
                                   {...affiliateAnchorProps(item.url, amazonAssociatesTag)}
-                                  className={styles.furtherReadingLink}
+                                  className={styles.aroundTheWebItemLink}
                                 >
-                                  {item.sourceName || "Read more"} &gt;
+                                  <h3 className={styles.aroundTheWebItemTitle}>{item.label}</h3>
+                                  <span className={styles.aroundTheWebCta}>
+                                    {item.sourceName || "Read more"}
+                                  </span>
                                 </a>
-                              ) : null}
+                              ) : (
+                                <h3 className={styles.aroundTheWebItemTitle}>{item.label}</h3>
+                              )}
                             </li>
                           ))}
                         </ul>
@@ -338,7 +363,7 @@ export default async function WordPage({ params }) {
           </div>
         )}
       </section>
-      <ArticleAdStickyBottom />
+      <ArticleStickyBottom />
     </div>
   );
 }

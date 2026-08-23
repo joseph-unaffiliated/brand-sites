@@ -94,7 +94,7 @@ export default function CrossPromoImageAd({
             width={desk.width}
             height={desk.height}
             className="cross-promo-image-sticky-img cross-promo-image-sticky-img-desktop"
-            sizes="(min-width: 769px) 728px, 1px"
+            sizes="(min-width: 641px) 728px, 1px"
           />
         </TrackedPromoLink>
         <TrackedPromoLink
@@ -109,7 +109,7 @@ export default function CrossPromoImageAd({
             width={mob.width}
             height={mob.height}
             className="cross-promo-image-sticky-img cross-promo-image-sticky-img-mobile"
-            sizes="(max-width: 768px) 320px, 1px"
+            sizes="(max-width: 640px) 100vw, 1px"
           />
         </TrackedPromoLink>
       </div>

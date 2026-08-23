@@ -24,17 +24,16 @@
 }
 
 .pronunciation {
-  margin: 0.5rem auto 0;
-  max-width: 640px;
-  font-size: 1.05rem;
+  margin: 0.65rem 0 0;
+  font-size: 0.9rem;
   font-style: italic;
   color: var(--text-muted);
   text-align: center;
 }
 
-/* Below headline / byline */
+/* First on the word page */
 .leadImageSection {
-  margin: 2.5rem auto 2.5rem;
+  margin: 0 auto 1.5rem;
   max-width: min(640px, 100%);
   width: 100%;
 }
@@ -265,14 +264,27 @@
   max-width: 100%;
 }
 
-.thinkLine {
-  font-size: 1.2rem;
-  line-height: 1.5;
-  margin: 0 0 2.5rem;
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
-.thinkLabel {
-  font-weight: 600;
+.headlineBlock {
+  align-items: center;
+}
+
+.thinkHeadline {
+  align-self: center;
+  width: 100%;
+  max-width: 40rem;
+  text-align: center;
 }
 
 .inUseSection {
@@ -281,9 +293,16 @@
 
 .inUseHeading {
   font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
-  font-size: 1.35rem;
+  font-size: 1.25rem;
   font-weight: 300;
-  margin: 0 0 0.75rem;
+  margin: 0 0 0.35rem;
+}
+
+:global(.articlebody-section) :global(.articlecopy-richtext) .inUseDialogue h2.inUseHeading {
+  font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
+  font-size: 1.8rem;
+  font-weight: 300;
+  margin: 0 0 0.35rem;
 }
 
 .inUseDialogue {
@@ -296,24 +315,23 @@
 
 .inUseDialogue p {
   margin: 0 0 0.75rem;
+  font-size: 1.2rem;
+  line-height: 1.5;
+  color: var(--text-primary);
 }
 
-.inUseDialogue p:last-child {
+.inUseDialogue p:last-of-type {
   margin-bottom: 0;
 }
 
-.inUseAttribution {
-  margin: 0.75rem 0 0;
+.inUseDialogue .inUseAttribution {
+  margin: 0 0 1.25rem;
   font-size: 0.85rem;
+  line-height: 1.4;
+  font-weight: 300;
   font-style: italic;
   color: var(--text-muted);
-  text-align: right;
-}
-
-.authorLine {
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  margin: 0 0 2.5rem;
+  text-align: left;
 }
 
 .disclaimer {
@@ -345,7 +363,11 @@
   font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
   font-size: 1.25rem;
   font-weight: 300;
-  margin: 0 0 1rem;
+  margin: 0 0 2.25rem;
+}
+
+:global(.articlebody-section) :global(.articlecopy-richtext) h2.pollQuestion {
+  margin: 0 0 2.25rem;
 }
 
 .pollOptions {
@@ -373,36 +395,74 @@
   background: var(--surface-muted);
 }
 
-.furtherReadingSection {
-  margin-bottom: 2.5rem;
+.aroundTheWeb {
+  max-width: 640px;
+  width: 100%;
+  margin: 0 auto 2.5rem;
+  box-sizing: border-box;
+  padding: 0.875rem 1rem 3.25rem;
+  background: var(--surface);
+  border-radius: 12px;
+  border: 1px solid var(--border);
 }
 
-.furtherReadingTitle {
+:global(.articlebody-section) :global(.articlecopy-richtext) .aroundTheWeb h2.aroundTheWebTitle {
   font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
-  font-size: 1.25rem;
+  font-size: 2rem;
   font-weight: 300;
-  margin: 0 0 1rem;
+  line-height: 1.25;
+  text-align: center;
+  letter-spacing: -0.02em;
+  margin: 1.5rem 0 2rem;
 }
 
-.furtherReadingList {
-  margin: 0;
-  padding: 0;
+.aroundTheWebList {
   list-style: none;
+  padding: 0;
+  margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.75rem;
 }
 
-.furtherReadingItem p {
-  margin: 0 0 0.25rem;
-  color: var(--text-secondary);
-  line-height: 1.4;
+.aroundTheWebItemLink {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  text-align: center;
 }
 
-.furtherReadingLink {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--accent);
+.aroundTheWebItemLink:focus-visible {
+  outline: 2px solid var(--text-primary);
+  outline-offset: 2px;
+}
+
+.aroundTheWebItemTitle {
+  font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
+  font-size: 1.15rem;
+  line-height: 1.25;
+  margin: 0 0 0.35rem;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+.aroundTheWebCta {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: calc(0.45rem - 2px) 0.65rem 0.45rem;
+  border: 1px solid var(--text-primary);
+  border-radius: 2px;
+  font-size: 13px;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  transition: background 0.15s;
+}
+
+.aroundTheWebItemLink:hover .aroundTheWebCta {
+  background: var(--surface-muted);
 }
 
 /* Full-width band below word + rail; rail sticky does not extend beside this */
@@ -472,6 +532,7 @@
   height: 100%;
   object-fit: cover;
   display: block;
+  transform: scale(1.18);
 }
 
 .readMoreKicker {

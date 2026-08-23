@@ -12,6 +12,7 @@
     "@publication-websites/magic-client": "workspace:*",
     "@publication-websites/reader-events": "workspace:*",
     "@publication-websites/reader-profile": "workspace:*",
+    "@publication-websites/shared-ads": "workspace:*",
     "@publication-websites/platform-redirects": "workspace:*",
     "@publication-websites/sanity-content": "workspace:*",
     "@publication-websites/web-shell": "workspace:*",

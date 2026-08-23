@@ -9,7 +9,6 @@ import BrandLogoMarkLarge from "@/components/BrandLogoMarkLarge";
 import BrandWordmark from "@/components/BrandWordmark";
 import { useNavLogoFillImage } from "@/context/NavLogoImageContext";
 import { ContactCopyLink } from "@publication-websites/web-shell/contact-copy";
-import SubmissionsCopyLink from "@/components/SubmissionsCopyLink";
 import AdvertiseCopyLink from "@/components/AdvertiseCopyLink";
 import { contactEmail, siteDisplayName } from "@/config/site";
 
@@ -116,6 +115,9 @@ export default function Header() {
           <Link href="/archive" onClick={closeMenu}>
             Words
           </Link>
+          <Link href="/quiz" onClick={closeMenu}>
+            Quiz
+          </Link>
           <Link href="/my-words" onClick={closeMenu}>
             My words
           </Link>
@@ -125,7 +127,6 @@ export default function Header() {
           <ContactCopyLink email={contactEmail} onClick={closeMenu}>
             Contact
           </ContactCopyLink>
-          <SubmissionsCopyLink onClick={closeMenu} />
           <AdvertiseCopyLink onClick={closeMenu} />
           <Link href="/terms" onClick={closeMenu}>
             Terms
@@ -169,13 +170,9 @@ export default function Header() {
         </button>
         <nav className="site-nav site-nav-left header-nav-desktop" aria-label="Main">
           <Link href="/archive">Words</Link>
-          <Link href="/my-words">My words</Link>
-          {!isSubscribed && (
-            <>
-              <Link href="/about">About</Link>
-              <SubmissionsCopyLink />
-            </>
-          )}
+          {!isSubscribed && <Link href="/quiz">Quiz</Link>}
+          {!isSubscribed && <Link href="/my-words">My words</Link>}
+          {!isSubscribed && <Link href="/about">About</Link>}
         </nav>
         <div className="brand">
           <Link
@@ -199,7 +196,7 @@ export default function Header() {
         </div>
         <nav className="site-nav site-nav-right header-nav-desktop" aria-label="Main">
           {isSubscribed ? (
-            <Link href="/about">About</Link>
+            <Link href="/my-words">My words</Link>
           ) : (
             <>
               <ContactCopyLink email={contactEmail}>Contact</ContactCopyLink>

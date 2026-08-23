@@ -88,6 +88,8 @@ export default async function Home({ searchParams: searchParamsProp }) {
             {totalCount > 0 && (
               <p className={styles.heroMeta}>
                 {totalCount} word{totalCount !== 1 ? "s" : ""} in the archive
+                {" · "}
+                <Link href="/quiz">Take the slang quiz</Link>
                 <HideWhenSubscribed>
                   <>
                     {" • "}
@@ -114,8 +116,7 @@ export default async function Home({ searchParams: searchParamsProp }) {
                     <Image
                       src={entry.mainImage}
                       alt=""
-                      width={400}
-                      height={267}
+                      fill
                       sizes="(max-width: 900px) 100vw, 320px"
                     />
                   </div>
@@ -145,8 +146,7 @@ export default async function Home({ searchParams: searchParamsProp }) {
                   <Image
                     src={entry.mainImage}
                     alt=""
-                    width={entry.mainImageWidth || 900}
-                    height={entry.mainImageHeight || 600}
+                    fill
                     priority={index === 0}
                     sizes="(max-width: 900px) 100vw, 560px"
                   />
@@ -164,7 +164,7 @@ export default async function Home({ searchParams: searchParamsProp }) {
                       <p className={styles.featuredEntrySnippet}>Think: {entry.think}</p>
                     </div>
                   ) : null}
-                  <span className={styles.featuredLink}>Get the word</span>
+                  <span className={styles.featuredLink}>View word</span>
                 </div>
               </Link>
             ))}

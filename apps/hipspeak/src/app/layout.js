@@ -25,13 +25,13 @@ import {
 import { OneTrustScripts, RetentionScript } from "@/components/ComplianceScripts";
 import { GoogleAnalyticsScript } from "@/components/GoogleAnalytics";
 import { GoogleTagManagerNoscript, GoogleTagManagerScript } from "@/components/GoogleTagManager";
-import SubmissionsCopyLink from "@/components/SubmissionsCopyLink";
 import AdvertiseCopyLink from "@/components/AdvertiseCopyLink";
 import Header from "@/components/Header";
 import { getSlangEntries, getSlangEntryBySlug } from "@/lib/slang";
 import { NavLogoImageProvider } from "@/context/NavLogoImageContext";
 import SubscribePopup from "@/components/SubscribePopup";
 import { SubscriberProvider } from "@/context/SubscriberContext";
+import { HouseAdClaimProvider } from "@/context/HouseAdClaimContext";
 import { ReaderEventsInit } from "@publication-websites/reader-events";
 import EmailClickSession from "@publication-websites/magic-client/email-click-session";
 import SubscriberSessionBootstrap from "@publication-websites/magic-client/subscriber-session-bootstrap";
@@ -143,6 +143,7 @@ export default async function RootLayout({ children }) {
         <GoogleTagManagerNoscript />
         <MarketingScripts adsenseClient={ADSENSE_CLIENT} metaPixelId={META_PIXEL_ID} />
         <SubscriberProvider>
+          <HouseAdClaimProvider>
           <ReaderEventsInit
             brandId={siteConfig.brandId}
             apiOrigin={siteConfig.magicReaderApiOrigin}
@@ -178,18 +179,19 @@ export default async function RootLayout({ children }) {
                 <div>
                   <div className="footer-links">
                     <Link href="/archive">Words</Link>
+                    <Link href="/quiz">Quiz</Link>
                     <Link href="/my-words">My words</Link>
                     <Link href="/about">About</Link>
-                    <Link href="/terms">Terms</Link>
-                    <Link href="/privacy">Policy</Link>
-                    <Link href="/affiliate-disclosure">Affiliate</Link>
+                    <ContactCopyLink email={contactEmail}>Contact</ContactCopyLink>
+                    <AdvertiseCopyLink />
                   </div>
                 </div>
                 <div>
                   <div className="footer-links">
-                    <ContactCopyLink email={contactEmail}>Contact</ContactCopyLink>
-                    <SubmissionsCopyLink>Submissions</SubmissionsCopyLink>
-                    <AdvertiseCopyLink />
+                    <Link href="/terms">Terms</Link>
+                    <Link href="/privacy">Policy</Link>
+                    <Link href="/ai-policy">AI Policy</Link>
+                    <Link href="/affiliate-disclosure">Affiliate</Link>
                     <p className="footer-text">© {siteDisplayName}. 2026.</p>
                   </div>
                 </div>
@@ -197,6 +199,7 @@ export default async function RootLayout({ children }) {
             </footer>
           </div>
           </NavLogoImageProvider>
+          </HouseAdClaimProvider>
         </SubscriberProvider>
       </body>
     </html>

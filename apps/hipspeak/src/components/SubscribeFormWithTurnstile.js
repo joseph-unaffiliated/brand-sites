@@ -24,7 +24,14 @@ function articleSlugFromPath(pathname) {
   return pathname.split("/").filter(Boolean)[1] || undefined;
 }
 
-export default function SubscribeFormWithTurnstile({ initialEmail, layout = "stack" }) {
+export default function SubscribeFormWithTurnstile({
+  initialEmail,
+  layout = "stack",
+  magicPath = "",
+  utmCampaign,
+  /** If set, run this instead of leaving the page for magic. */
+  onStaySubmit,
+}) {
   const pathname = usePathname();
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -61,10 +68,20 @@ export default function SubscribeFormWithTurnstile({ initialEmail, layout = "sta
         if (v) params.set(k, v);
       });
       if (!params.has("utm_source")) params.set("utm_source", BRAND);
-      if (!params.has("utm_campaign")) params.set("utm_campaign", "form_submit");
+      if (utmCampaign) params.set("utm_campaign", utmCampaign);
+      else if (!params.has("utm_campaign")) params.set("utm_campaign", "form_submit");
     }
     if (token) params.set("cf-turnstile-response", token);
-    window.location.href = `${MAGIC_BASE}?${params.toString()}`;
+    if (onStaySubmit) {
+      Promise.resolve(onStaySubmit(email, params)).catch(() => {
+        setLoading(false);
+      });
+      return;
+    }
+    const base = magicPath
+      ? `${MAGIC_BASE.replace(/\/?$/, "/")}${String(magicPath).replace(/^\//, "")}`
+      : MAGIC_BASE;
+    window.location.href = `${base}?${params.toString()}`;
   };
 
   const verified = !TURNSTILE_SITE_KEY || token || (mounted && isLocalhost());

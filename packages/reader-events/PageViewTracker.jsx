@@ -3,14 +3,9 @@
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { getReaderToken } from "@publication-websites/magic-client";
+import { contentSlugFromPathname } from "@publication-websites/shared-ads/brand-paths";
 import { ANALYTICS_CONSENT_EVENT, hasAnalyticsConsent } from "./consent.js";
 import { track } from "./track.js";
-
-function articleSlugFromPath(pathname) {
-  if (!pathname?.startsWith("/article/")) return null;
-  const slug = pathname.split("/").filter(Boolean)[1];
-  return slug || null;
-}
 
 /** Records page_view once per route when reader token + consent allow. */
 export default function PageViewTracker() {
@@ -22,7 +17,7 @@ export default function PageViewTracker() {
       if (!pathname || lastTrackedPath.current === pathname) return;
       if (!getReaderToken() || !hasAnalyticsConsent()) return;
 
-      const articleSlug = articleSlugFromPath(pathname);
+      const articleSlug = contentSlugFromPathname(pathname);
       track("page_view", articleSlug ? { articleSlug } : {});
       lastTrackedPath.current = pathname;
     };

@@ -9,6 +9,7 @@ import {
   trackSubscribeFormSubmit,
 } from "@publication-websites/reader-events";
 import { siteConfig } from "@/config/site";
+import { callGiveawayApi } from "@/lib/giveaway-api";
 import styles from "./SubscribeBlock.module.css";
 
 const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
@@ -32,6 +33,7 @@ export default function SubscribeFormWithTurnstile({
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [notice, setNotice] = useState(null);
   const emailRef = useRef(null);
   const funnelStartedRef = useRef(false);
   const isBanner = layout === "banner";
@@ -49,18 +51,36 @@ export default function SubscribeFormWithTurnstile({
     trackSubscribeFormStart(funnelProps);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const email = emailRef.current?.value?.trim();
     if (!email) return;
     if (TURNSTILE_SITE_KEY && !token && !(mounted && isLocalhost())) return;
     trackSubscribeFormSubmit(funnelProps);
     setLoading(true);
+    setNotice(null);
+
+    try {
+      const check = await callGiveawayApi({
+        action: "subscribe_or_signin",
+        email,
+        brand: siteConfig.brandId,
+        returnPath: pathname || "/",
+      });
+      if (check.action === "magic_link_sent") {
+        setNotice("Check your email for your sign-in link.");
+        setLoading(false);
+        return;
+      }
+    } catch {
+      /* fall through to subscribe redirect */
+    }
+
     const params = new URLSearchParams();
     params.set("email", email);
     if (typeof window !== "undefined") {
       const u = new URL(window.location.href);
-      ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"].forEach((k) => {
+      ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "ref"].forEach((k) => {
         const v = u.searchParams.get(k);
         if (v) params.set(k, v);
       });
@@ -107,7 +127,7 @@ export default function SubscribeFormWithTurnstile({
               <button
                 type="submit"
                 className={styles.submitArrow}
-                aria-label="Subscribe"
+                aria-label="Subscribe / Sign in"
                 disabled={!verified || loading}
               >
                 {loading ? "…" : "→"}
@@ -118,8 +138,8 @@ export default function SubscribeFormWithTurnstile({
                 <Turnstile
                   siteKey={TURNSTILE_SITE_KEY}
                   onVerify={setToken}
+                  onError={() => setToken(null)}
                   onExpire={() => setToken(null)}
-                  theme="light"
                 />
               </div>
             )}
@@ -142,8 +162,8 @@ export default function SubscribeFormWithTurnstile({
                 <Turnstile
                   siteKey={TURNSTILE_SITE_KEY}
                   onVerify={setToken}
+                  onError={() => setToken(null)}
                   onExpire={() => setToken(null)}
-                  theme="light"
                 />
               </div>
             )}
@@ -152,12 +172,17 @@ export default function SubscribeFormWithTurnstile({
               className="button button-primary"
               disabled={!verified || loading}
             >
-              {loading ? "Submitting…" : "Subscribe"}
+              {loading ? "Submitting…" : "Subscribe / Sign in"}
             </button>
           </>
         )}
       </form>
-      {!isArticle && (
+      {notice && (
+        <p className={isCta ? styles.noteCta : styles.note} role="status">
+          {notice}
+        </p>
+      )}
+      {!isArticle && !notice && (
         <p className={isCta ? styles.noteCta : styles.note}>
           By entering your email you agree to our{" "}
           <Link href="/terms">Terms</Link> and{" "}

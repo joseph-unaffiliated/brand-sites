@@ -6,7 +6,7 @@
 2. **Root Directory:** `apps/hookuplists`, `apps/thepicklereport`, `apps/thekissandtell`, `apps/the90sparent`, `apps/theeyeballerscookbook`, `apps/hipspeak`, `apps/heebnewsletters`, `apps/hardresets`, etc. (one Vercel project per app).
 3. **Production branch:** your default branch (`main` / `master`).
 4. **Ignored Build Step:** each app’s `vercel.json` sets `ignoreCommand` to `npx turbo-ignore --fallback=HEAD^1`, so a push only builds projects whose app (or shared `packages/*` dependencies) changed. Skipped builds leave the current production deployment untouched.
-5. **Environment variables:** see `docs/ENVIRONMENT.md` for that app.
+5. **Environment variables:** see `docs/ENVIRONMENT.md` for that app. New brand launches: [`LAUNCH_PLAYBOOK.md`](./LAUNCH_PLAYBOOK.md).
 6. If the GitHub repo or URL changes, confirm the Vercel Git integration still points at the correct repo (re-link if needed).
 
 ## Magic (`subscription-functions`)
@@ -15,6 +15,7 @@
 - Topology inventory (hosts, env, reader rollout): [`subscription-functions/docs/MAGIC_DEPLOY_TOPOLOGY.md`](https://github.com/joseph-unaffiliated/subscription-functions/blob/main/docs/MAGIC_DEPLOY_TOPOLOGY.md) (also under `../subscription-functions/docs/` locally).
 - Ensure **`READER_TOKEN_SECRET`** and **`READERS_CORS_ORIGINS`** are set for profile / reader APIs.
 - Reader routes: `/api/reader-health`, `/api/reader-events`, `/api/reader-profile`, `/api/reader-subscriptions`, `/api/reader-identity`, `/api/ga-client-id`.
+- Giveaways (TPR): deploy magic with `POST /api/giveaway`; run `docs/sql/CREATE_GIVEAWAY_TABLES.sql` once; set `TPR_SITE_URL` / `READERS_CORS_ORIGINS` as needed. CIO campaigns for `giveaway_confirm_email`, `giveaway_enter_link`, `reader_sign_in_link` — see **`docs/GIVEAWAYS.md`**.
 
 ## Cloudflare (per brand)
 

@@ -23,8 +23,8 @@ Set `NEXT_PUBLIC_SHARED_ADS_BRAND` to the folder key (e.g. `the90sparent`). Opti
 
 `house-ads.js` (exported as `@publication-websites/shared-ads/house-ads`) is a second,
 dynamic pool of cross-promo creatives sourced from an Airtable base instead of files in
-this package. Each of the four network brand sites (The '90s Parent, The Pickle Report,
-Hard Resets, The Eyeballer's Cookbook) calls this from a server-side `/api/house-ads`
+this package. Each of the five network brand sites (The '90s Parent, The Pickle Report,
+Hard Resets, The Eyeballer's Cookbook, Hipspeak) calls this from a server-side `/api/house-ads`
 route, which is fetched client-side by `HouseAdPool` and rendered by `HouseAdImage` in
 each app (`apps/<brand>/src/components/`). A house ad always takes priority over the
 static per-app creative above; the static creative is only shown as a fallback when
@@ -47,7 +47,7 @@ Airtable is empty/unconfigured or has no eligible creative for that slot + reade
 | `Destination Brands` | Link to All Brands | Host sites allowed to show this creative. Empty = all hosts. Required in practice for Commerce Ads targeting. |
 | `Slot` | Single select | One of `inArticle`, `rail`, `stickyDesktop`, `stickyMobile`. Sticky ads need **both** a `stickyDesktop` and a `stickyMobile` row for the same `Brand key` — an unpaired sticky creative is skipped. |
 | `Image` | Attachment | Upload the creative image here; the first attachment's URL is used. |
-| `Click URL` | Formula | Auto-built for **House Ads** only (`https://{brand}.com/article/{slug}`). Blank for Commerce Ads. |
+| `Click URL` | Formula | Auto-built for **House Ads** only. Must be **brand-aware** (keep in sync with `@publication-websites/shared-ads/brand-paths`): most brands `https://{brand}.com/article/{slug}`; TEC `…/recipe/{slug}`; Hipspeak `…/word/{slug}`. Blank for Commerce Ads. |
 | `Commerce URL` | URL | Amazon/affiliate destination for **Commerce Ads**. Preferred over Click URL when Ad type is Commerce Ads. |
 | `Ad type` | Single select | `House Ads` (cross-promo network) or `Commerce Ads` (Amazon/affiliate commerce). Existing rows defaulted to `House Ads`. Tracked as `house_ad` / `commerce_ad` in ad events. |
 | `Active` | Checkbox | Only checked rows are eligible. |

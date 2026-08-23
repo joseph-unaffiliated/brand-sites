@@ -39,20 +39,23 @@ After saving: **Redeploy** Production (and Preview if you added vars there).
 | `NEXT_PUBLIC_SUBSCRIBE_CARD_TITLE` | `Get Hipspeak` |
 | `NEXT_PUBLIC_SUBSCRIBE_CARD_DEK` | Subscribe card blurb |
 | `NEXT_PUBLIC_TYPEKIT_KIT_ID` | `xon1hcs` |
-| `NEXT_PUBLIC_ADS_MODE` | `cross_promo` (slot → brand map is in `apps/hipspeak/src/config/crossPromoAds.js` — Pickle + '90s Parent only; never Hipspeak) |
+| `NEXT_PUBLIC_ADS_MODE` | `cross_promo` (static fallback in `crossPromoAds.js`; Airtable house ads take priority when configured) |
 | `NEXT_PUBLIC_ADSENSE_CLIENT` | ⏭️ OPTIONAL — only if switching to `adsense` mode |
-| `NEXT_PUBLIC_META_PIXEL_ID` | ⚠️ UPDATE — new Meta pixel for this brand |
-| `NEXT_PUBLIC_GTM_ID` | Same GTM container as other Unaffiliated sites |
-| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | ⚠️ UPDATE — create a new GA4 property for this brand |
-| `NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT` | ⚠️ UPDATE — OneTrust domain script UUID for **hipspeak.com** |
+| `NEXT_PUBLIC_META_PIXEL_ID` | ⚠️ UPDATE — set on Vercel (network or brand pixel) |
+| `NEXT_PUBLIC_GTM_ID` | ⚠️ UPDATE — same GTM container as other Unaffiliated sites when ready |
+| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | ⚠️ UPDATE — Hipspeak GA4 web stream when ready |
+| `NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT` | `019a7167-e6eb-7fa2-ae9f-60338480c772` ✅ (also baked into `ComplianceScripts.js`) |
 | `NEXT_PUBLIC_RETENTION_SITE_ID` | `X2JHJ4WE` (network default) |
 | `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` | Optional — Search Console token when ready |
 | `NEXT_PUBLIC_BING_SITE_VERIFICATION` | Optional — Bing token when ready |
+| `AIRTABLE_HOUSE_ADS_BASE_ID` | `appXFQv3Hy0wUDDnb` — house-ads pool (`/api/house-ads`) |
+| `AIRTABLE_HOUSE_ADS_TABLE_ID` | `tblB3emRodWIzabTP` |
+| `AIRTABLE_API_KEY` | ⚠️ UPDATE — **server-only.** Token from Keys — do not commit. |
 | `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Optional — omit unless enabling Turnstile |
 
 **Do not add to marketing:** `SANITY_API_TOKEN`, `GCP_*`, `READER_TOKEN_SECRET`, `RETENTION_API_KEY`, `RETENTION_API_ID`.
 
-**Do not set** `NEXT_PUBLIC_SHARED_ADS_BRAND=hipspeak` — house ads rotate other brands via `crossPromoAds.js`.
+House ads rotate **other** brands onto Hipspeak via Airtable Destination Brands (never self-promo). Static `crossPromoAds.js` is fallback only.
 
 ### Magic (`magic.hipspeak.com`) — separate Vercel project
 
@@ -92,13 +95,18 @@ NEXT_PUBLIC_SUBSCRIBE_CARD_DEK=One word a week — decoded for humans who don't 
 NEXT_PUBLIC_TYPEKIT_KIT_ID=xon1hcs
 
 NEXT_PUBLIC_ADS_MODE=cross_promo
-# No NEXT_PUBLIC_SHARED_ADS_BRAND — see apps/hipspeak/src/config/crossPromoAds.js
 
+# Set on Vercel when ready (Meta / GTM / GA4)
 NEXT_PUBLIC_META_PIXEL_ID=
 NEXT_PUBLIC_GTM_ID=
 NEXT_PUBLIC_GA_MEASUREMENT_ID=
-NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT=
+NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT=019a7167-e6eb-7fa2-ae9f-60338480c772
 NEXT_PUBLIC_RETENTION_SITE_ID=X2JHJ4WE
+
+# House ads (server-only — do not prefix NEXT_PUBLIC_)
+# AIRTABLE_HOUSE_ADS_BASE_ID=appXFQv3Hy0wUDDnb
+# AIRTABLE_HOUSE_ADS_TABLE_ID=tblB3emRodWIzabTP
+# AIRTABLE_API_KEY=
 ```
 
 ## Routes smoke-check
@@ -107,4 +115,19 @@ NEXT_PUBLIC_RETENTION_SITE_ID=X2JHJ4WE
 - `/word/coded` — Coded sample entry
 - `/archive` — chronological word list
 - `/my-words` — client-side favorites
+- `/quiz` — slang knowledge quiz (subscribe to see results)
 - `/pollresults/coded?poll=a` — pop quiz results
+- `/opted-out-comps` / `/opted-in-comps` — compilations preference confirmation
+- `/ai-policy` — AI policy
+
+---
+
+## Go-live cutover (manual)
+
+Full checklist: [`LAUNCH_PLAYBOOK.md`](./LAUNCH_PLAYBOOK.md#hipspeak-go-live-manual-cutover).
+
+1. **Airtable** — Add Hipspeak to Destination Brands; brand-aware Click URL (`/word/{slug}`).
+2. **Vercel marketing** — Env above; attach `hipspeak.com` / `www`; production green.
+3. **Magic** — CORS + deploy with branded comps; `reader-health` OK.
+4. **Cloudflare** — Disable webflow-proxy worker routes; CNAME to Vercel DNS-only; SSL Full (strict).
+5. **Smoke** — home, `/word/…`, subscribe, profile, `/quiz`, house ad, comps.

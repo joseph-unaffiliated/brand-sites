@@ -19,10 +19,14 @@
 
 ## When adding a new publication
 
-1. Copy an existing app under `apps/` (see `apps/thepicklereport` template).
-2. Edit `src/config/site.js` defaults and brand-specific `public/` assets.
-3. Create **new** Vercel + Sanity + `magic.*` wiring; set env vars per `docs/ENVIRONMENT.md`.
+1. Follow **[`docs/LAUNCH_PLAYBOOK.md`](docs/LAUNCH_PLAYBOOK.md)** (canonical network launch checklist).
+2. Copy an existing app under `apps/` (see `apps/thepicklereport` template).
+3. Edit `src/config/site.js` defaults and brand-specific `public/` assets.
+4. Create **new** Vercel + Sanity + `magic.*` wiring; set env vars per `docs/ENVIRONMENT.md` and the brand `*_VERCEL_ENV.md`.
+5. If the brand’s content path is not `/article/`, register it in `packages/shared-ads/brand-paths.js` and keep Airtable Click URL formulas in sync.
 
 ## Docs to keep updated
 
 When you change deploy topology or auth flows, update **`docs/ARCHITECTURE.md`** and **`docs/DEPLOYMENT.md`**.
+
+When you add network functionality that new brands need (house ads, comps pages, path map, quiz patterns, compliance, etc.), update **`docs/LAUNCH_PLAYBOOK.md` in the same PR**.

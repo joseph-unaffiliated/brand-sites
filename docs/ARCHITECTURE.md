@@ -38,9 +38,11 @@ Homepage query parameters (`/?subscribed=true`, `/?poll`, …) are normalized by
 
 If no token (legacy flow), profile shows **this site’s** subscription from local state only.
 
-## Planned reader auth (not built yet)
+## Reader sign-in + first-party giveaways (TPR)
 
-A fuller **magic-link sign-in for existing subscribers**, **Customer.io** transactional mail, and **network profile** UX is spec’d in **`docs/reader-magic-link-and-network-profile-spec.md`**. Implementing it will extend magic + marketing flows described above.
+- **Subscribe / Sign in:** marketing forms call magic `POST /api/giveaway` (`subscribe_or_signin`). Existing subscribers get a CIO `reader_sign_in_link` instead of a new-sub success path; redeem on `/sign-in`.
+- **Giveaways (The Pickle Report):** config-driven campaigns in `apps/thepicklereport/src/config/giveaways.js`; pages `/giveaway/[slug]` and `/giveaway/[slug]/entered`. Attribution codes + entries live in BigQuery (`giveaway_codes`, `giveaway_entries`); all writes/reads go through magic `/api/giveaway` (never BQ-from-browser). Sparkloop remains optional and orthogonal — giveaway credit keys off first-party `ref` only.
+- ESP merge tags + QA: **`docs/GIVEAWAYS.md`**. Broader magic-link profile spec: **`docs/reader-magic-link-and-network-profile-spec.md`**.
 
 ## Shared packages
 
@@ -49,8 +51,11 @@ A fuller **magic-link sign-in for existing subscribers**, **Customer.io** transa
 | `platform-redirects` | Homepage intent → redirect |
 | `magic-client` | `/execute` fetch + token storage |
 | `sanity-content` | GROQ + article/recipe/slang/vault mapping (`createArticleQueries`, `createRecipeQueries`, `createSlangEntryQueries`, `createVaultIssueQueries`) |
+| `shared-ads` | Static cross-promo creatives + Airtable house-ads fetch; **`brand-paths`** maps brand → `/article` / `/recipe` / `/word` |
 | `web-shell` | AdSense / Meta Script wrappers |
 
 ## Publications in this repo
 
-Marketing apps under `apps/` include Hookup Lists, The Pickle Report, The Kiss and Tell, The ’90s Parent, Eyeballer’s Cookbook, Hipspeak, From the Vault (Heeb), and **Hard Resets** (`apps/hardresets`, Sanity `0vm5rx64`, magic `magic.hardresets.com`). Env checklist: [`HARDRESETS_VERCEL_ENV.md`](./HARDRESETS_VERCEL_ENV.md).
+Marketing apps under `apps/` include Hookup Lists, The Pickle Report, The Kiss and Tell, The ’90s Parent, Eyeballer’s Cookbook, Hipspeak, From the Vault (Heeb), and **Hard Resets** (`apps/hardresets`, Sanity `0vm5rx64`, magic `magic.hardresets.com`). Env checklist: [`HARDRESETS_VERCEL_ENV.md`](./HARDRESETS_VERCEL_ENV.md). Hipspeak env: [`HIPSPEAK_VERCEL_ENV.md`](./HIPSPEAK_VERCEL_ENV.md).
+
+**New brand launch:** follow [`LAUNCH_PLAYBOOK.md`](./LAUNCH_PLAYBOOK.md) (and update it when adding reusable network features).

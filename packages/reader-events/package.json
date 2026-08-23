@@ -12,6 +12,7 @@
     "react-dom": ">=18"
   },
   "dependencies": {
-    "@publication-websites/magic-client": "workspace:*"
+    "@publication-websites/magic-client": "workspace:*",
+    "@publication-websites/shared-ads": "workspace:*"
   }
 }

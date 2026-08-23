@@ -16,6 +16,7 @@ import {
   getReaderToken,
   isReaderProfileV2Enabled,
 } from "@/lib/reader-profile";
+import { contentUrlForBrand } from "@publication-websites/shared-ads/brand-paths";
 import {
   networkBrands,
   discoverMoreSubscribeIds,
@@ -23,6 +24,7 @@ import {
 } from "@/data/networkNewsletters";
 import { fetchReaderTriviaStats } from "@/lib/fetch-reader-trivia-stats";
 import { readTriviaState } from "@/lib/trivia-points";
+import GiveawayPartnerPanel from "@/components/GiveawayPartnerPanel";
 import styles from "./page.module.css";
 
 const READ_ARTICLES_KEY = `read_articles_${BRAND}`;
@@ -40,15 +42,11 @@ function getLocalReadSlugs() {
 }
 
 function articleUrlForBrand(brandId, slug, brandById, currentBrandId) {
-  if (brandId === currentBrandId) return `/article/${slug}`;
   const brand = brandById[brandId];
-  if (!brand?.signupUrl) return null;
-  try {
-    const host = new URL(brand.signupUrl).hostname.replace(/^magic\./, "");
-    return `https://${host}/article/${encodeURIComponent(slug)}`;
-  } catch {
-    return null;
-  }
+  return contentUrlForBrand(brandId, slug, {
+    currentBrandId,
+    signupUrl: brand?.signupUrl,
+  });
 }
 
 function buildReadingItems(readArticles, localSlugs, brandById, currentBrandId) {
@@ -197,6 +195,8 @@ export default function ProfilePage() {
           </button>
         </p>
       </section>
+
+      <GiveawayPartnerPanel />
 
       <section className={styles.section}>
         <h2 className={styles.sectionTitle}>Your subscriptions</h2>

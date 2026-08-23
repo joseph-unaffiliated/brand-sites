@@ -16,6 +16,7 @@ import {
   getReaderToken,
   isReaderProfileV2Enabled,
 } from "@/lib/reader-profile";
+import { contentUrlForBrand } from "@publication-websites/shared-ads/brand-paths";
 import {
   networkBrands,
   discoverMoreSubscribeIds,
@@ -39,15 +40,11 @@ function getLocalReadSlugs() {
 }
 
 function articleUrlForBrand(brandId, slug, brandById, currentBrandId) {
-  if (brandId === currentBrandId) return `/recipe/${slug}`;
   const brand = brandById[brandId];
-  if (!brand?.signupUrl) return null;
-  try {
-    const host = new URL(brand.signupUrl).hostname.replace(/^magic\./, "");
-    return `https://${host}/article/${encodeURIComponent(slug)}`;
-  } catch {
-    return null;
-  }
+  return contentUrlForBrand(brandId, slug, {
+    currentBrandId,
+    signupUrl: brand?.signupUrl,
+  });
 }
 
 function buildReadingItems(readArticles, localSlugs, brandById, currentBrandId) {

@@ -90,7 +90,7 @@ export default function Header() {
 
   const subscribeDesktop = (
     <a className="button button-secondary" href="/#subscribe">
-      Subscribe
+      Subscribe / Sign in
     </a>
   );
 
@@ -100,7 +100,7 @@ export default function Header() {
       href="/#subscribe"
       onClick={closeMenu}
     >
-      Subscribe
+      Subscribe / Sign in
     </a>
   );
 
@@ -138,7 +138,7 @@ export default function Header() {
               href="/#subscribe"
               onClick={closeMenu}
             >
-              Subscribe
+              Subscribe / Sign in
             </a>
           </div>
         ) : null}

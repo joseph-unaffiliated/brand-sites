@@ -1,6 +1,7 @@
 /**
  * Edge redirects: email links hit "/" with query params; we send readers to the right page.
  * Recipe routes: pass slug to the root layout for SSR nav logo fill.
+ * Legacy /article/ links (older emails/ads/profile cross-links) permanently redirect to /recipe/.
  * @see @publication-websites/platform-redirects
  */
 
@@ -16,6 +17,15 @@ export default function middleware(request) {
     return homeQueryMiddleware(request);
   }
 
+  if (pathname.startsWith("/article/")) {
+    const slug = pathname.split("/").filter(Boolean)[1];
+    if (slug) {
+      const url = request.nextUrl.clone();
+      url.pathname = `/recipe/${slug}`;
+      return NextResponse.redirect(url, 308);
+    }
+  }
+
   if (pathname.startsWith("/recipe/")) {
     const slug = pathname.split("/").filter(Boolean)[1];
     if (slug) {
@@ -29,5 +39,5 @@ export default function middleware(request) {
 }
 
 export const config = {
-  matcher: ["/", "/recipe/:path*"],
+  matcher: ["/", "/article/:path*", "/recipe/:path*"],
 };
