@@ -2,7 +2,11 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { GIVEAWAYS, getCurrentOrUpcoming } from "@/config/giveaways";
+import {
+  GIVEAWAYS,
+  getCurrentOrUpcoming,
+  isGiveawayListed,
+} from "@/config/giveaways";
 import { callGiveawayApi } from "@/lib/giveaway-api";
 import { siteConfig } from "@/config/site";
 import styles from "../app/profile/page.module.css";
@@ -91,7 +95,7 @@ export default function GiveawayPartnerPanel() {
   }
 
   if (!isPartner && !entries.length && !codes.length) {
-    if (!featured) return null;
+    if (!featured || !isGiveawayListed(featured)) return null;
     return (
       <section className={styles.section}>
         <h2 className={styles.sectionTitle}>Giveaways</h2>

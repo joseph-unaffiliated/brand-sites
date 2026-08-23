@@ -4,6 +4,14 @@ First-party giveaway attribution uses `?ref=CODE` on marketing URLs and magic `P
 
 Campaign copy/dates live in `apps/thepicklereport/src/config/giveaways.js` (Sanity deferred).
 
+## Unlisted vs public
+
+Set `listed: true` on a campaign to put it in the sitemap, allow `/giveaway` in robots.txt, and show an “Enter …” promo on profile for people who have not entered.
+
+Until then (`listed: false` or omitted): landing and `/entered` stay **noindex**, robots **Disallow: /giveaway**, and the profile does not advertise the contest. Direct URLs, `?ref=` partner links, and CIO emails still work. Flip `listed` when you want the contest findable.
+
+`/sign-in` is always noindex and disallowed in robots (utility page). Header **Subscribe / Sign in** stays visible; that is not the contest.
+
 ## Tracking links
 
 | Surface | URL pattern |

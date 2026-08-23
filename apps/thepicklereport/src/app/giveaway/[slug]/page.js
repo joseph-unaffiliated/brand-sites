@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { getGiveaway, GIVEAWAYS, giveawayStatus } from "@/config/giveaways";
+import { getGiveaway, GIVEAWAYS, giveawayIndexRobots } from "@/config/giveaways";
 import GiveawayLanding from "./GiveawayLanding";
 
 export function generateStaticParams() {
@@ -10,12 +10,11 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const giveaway = getGiveaway(slug);
-  if (!giveaway) return { title: "Giveaway" };
-  const ended = giveawayStatus(giveaway) === "ended";
+  if (!giveaway) return { title: "Giveaway", robots: { index: false, follow: false } };
   return {
     title: giveaway.seoTitle || `${giveaway.title} | The Pickle Report`,
     description: giveaway.seoDescription || giveaway.prizeBody,
-    robots: ended ? { index: true, follow: true } : undefined,
+    robots: giveawayIndexRobots(giveaway),
   };
 }
 

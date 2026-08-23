@@ -1,5 +1,6 @@
 import { getArticles } from "@/lib/articles";
 import { siteConfig } from "@/config/site";
+import { getListedLiveGiveaways } from "@/config/giveaways";
 
 const SITE_URL = siteConfig.siteUrl.replace(/\/$/, "");
 
@@ -35,6 +36,13 @@ export default async function sitemap() {
       priority: 0.8,
     }));
 
+  const giveawayEntries = getListedLiveGiveaways(now).map((g) => ({
+    url: `${SITE_URL}/giveaway/${encodeURIComponent(g.slug)}`,
+    lastModified: now,
+    changeFrequency: "weekly",
+    priority: 0.7,
+  }));
+
   const staticEntries = STATIC_ROUTES.map((route) => ({
     url: `${SITE_URL}${route.path === "/" ? "" : route.path}` || SITE_URL,
     lastModified: now,
@@ -42,5 +50,5 @@ export default async function sitemap() {
     priority: route.priority,
   }));
 
-  return [...staticEntries, ...articleEntries];
+  return [...staticEntries, ...giveawayEntries, ...articleEntries];
 }

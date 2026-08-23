@@ -1,4 +1,5 @@
 import { siteConfig } from "@/config/site";
+import { anyGiveawayListed } from "@/config/giveaways";
 
 const SITE_URL = siteConfig.siteUrl.replace(/\/$/, "").replace(/^http:/, "https:");
 
@@ -18,6 +19,8 @@ export default function robots() {
           "/profile",
           "/request",
           "/poll",
+          "/sign-in",
+          ...(anyGiveawayListed() ? [] : ["/giveaway"]),
         ],
       },
     ],

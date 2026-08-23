@@ -115,6 +115,7 @@ Pattern from Hard Resets:
 - [ ] Sticky: subscribed sees ad; anonymous sees subscribe CTA
 - [ ] `/ai-policy` + footer
 - [ ] Brand-specific extras (e.g. Hipspeak `/quiz` gate → subscribe → score)
+- [ ] TPR giveaways: keep `listed: false` until public; URLs + CIO still work (see [`GIVEAWAYS.md`](./GIVEAWAYS.md))
 
 ---
 

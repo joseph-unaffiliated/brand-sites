@@ -20,7 +20,11 @@
  *   successBodyExisting?: string;
  *   ctaSubscribeLabel?: string;
  *   ctaEnterLabel?: string;
+ *   listed?: boolean;
  * }} GiveawayConfig
+ *
+ * `listed: true` puts the campaign in sitemap, robots, and profile promo.
+ * Omit or `false` = unlisted: URLs and emails still work; crawlers and nav do not.
  */
 
 /** @type {GiveawayConfig[]} */
@@ -45,8 +49,17 @@ export const GIVEAWAYS = [
     successBodyExisting: "You’re entered for a year’s supply of pickles.",
     ctaSubscribeLabel: "Enter the draw + subscribe",
     ctaEnterLabel: "Enter the draw",
+    listed: false,
   },
 ];
+
+/**
+ * Public promo / sitemap / index. Unlisted campaigns stay reachable by URL.
+ * @param {GiveawayConfig | null | undefined} g
+ */
+export function isGiveawayListed(g) {
+  return Boolean(g?.listed);
+}
 
 /**
  * @param {string | null | undefined} slug
@@ -76,6 +89,21 @@ export function giveawayStatus(g, now = new Date()) {
  */
 export function getLiveGiveaways(now = new Date()) {
   return GIVEAWAYS.filter((g) => giveawayStatus(g, now) === "live");
+}
+
+/** Live campaigns that may appear in nav, profile promo, and sitemap. */
+export function getListedLiveGiveaways(now = new Date()) {
+  return getLiveGiveaways(now).filter(isGiveawayListed);
+}
+
+export function anyGiveawayListed() {
+  return GIVEAWAYS.some(isGiveawayListed);
+}
+
+/** robots / Open Graph: unlisted campaigns are noindex. */
+export function giveawayIndexRobots(g) {
+  if (!isGiveawayListed(g)) return { index: false, follow: false };
+  return { index: true, follow: true };
 }
 
 /**
