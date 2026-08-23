@@ -29,3 +29,11 @@ export function notifyEmailCopiedToClipboard(email) {
   if (typeof window === "undefined") return;
   window.dispatchEvent(new CustomEvent("clipboard-email-copied", { detail: { email } }));
 }
+
+/** Show the global site toast (ContactCopyToast). */
+export function showSiteToast(message, { durationMs = 4000 } = {}) {
+  if (typeof window === "undefined" || !message) return;
+  window.dispatchEvent(
+    new CustomEvent("site-toast", { detail: { message, durationMs } })
+  );
+}

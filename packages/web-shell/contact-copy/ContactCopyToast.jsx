@@ -9,18 +9,31 @@ export default function ContactCopyToast() {
   const timeoutRef = useRef(null);
 
   useEffect(() => {
-    const showToast = (event) => {
-      const email = event?.detail?.email;
-      if (!email || typeof email !== "string") return;
+    const present = (text, durationMs) => {
+      if (!text || typeof text !== "string") return;
       if (timeoutRef.current) window.clearTimeout(timeoutRef.current);
-      setMessage(`"${email}" has been copied to your clipboard`);
+      setMessage(text);
       setVisible(true);
-      timeoutRef.current = window.setTimeout(() => setVisible(false), 2600);
+      timeoutRef.current = window.setTimeout(() => setVisible(false), durationMs);
     };
 
-    window.addEventListener("clipboard-email-copied", showToast);
+    const onCopied = (event) => {
+      const email = event?.detail?.email;
+      if (!email || typeof email !== "string") return;
+      present(`"${email}" has been copied to your clipboard`, 2600);
+    };
+
+    const onSiteToast = (event) => {
+      const text = event?.detail?.message;
+      const durationMs = Number(event?.detail?.durationMs) || 4000;
+      present(text, durationMs);
+    };
+
+    window.addEventListener("clipboard-email-copied", onCopied);
+    window.addEventListener("site-toast", onSiteToast);
     return () => {
-      window.removeEventListener("clipboard-email-copied", showToast);
+      window.removeEventListener("clipboard-email-copied", onCopied);
+      window.removeEventListener("site-toast", onSiteToast);
       if (timeoutRef.current) window.clearTimeout(timeoutRef.current);
     };
   }, []);

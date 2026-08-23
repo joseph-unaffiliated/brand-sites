@@ -8,6 +8,7 @@ import {
   trackSubscribeFormStart,
   trackSubscribeFormSubmit,
 } from "@publication-websites/reader-events";
+import { showSiteToast } from "@publication-websites/web-shell/contact-copy";
 import { siteConfig } from "@/config/site";
 import { callGiveawayApi } from "@/lib/giveaway-api";
 import styles from "./SubscribeBlock.module.css";
@@ -33,7 +34,6 @@ export default function SubscribeFormWithTurnstile({
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const [notice, setNotice] = useState(null);
   const emailRef = useRef(null);
   const funnelStartedRef = useRef(false);
   const isBanner = layout === "banner";
@@ -58,7 +58,6 @@ export default function SubscribeFormWithTurnstile({
     if (TURNSTILE_SITE_KEY && !token && !(mounted && isLocalhost())) return;
     trackSubscribeFormSubmit(funnelProps);
     setLoading(true);
-    setNotice(null);
 
     try {
       const check = await callGiveawayApi({
@@ -68,7 +67,8 @@ export default function SubscribeFormWithTurnstile({
         returnPath: pathname || "/",
       });
       if (check.action === "magic_link_sent") {
-        setNotice("Check your email for your sign-in link.");
+        if (emailRef.current) emailRef.current.value = "";
+        showSiteToast("Check your email for your sign-in link.");
         setLoading(false);
         return;
       }
@@ -177,12 +177,7 @@ export default function SubscribeFormWithTurnstile({
           </>
         )}
       </form>
-      {notice && (
-        <p className={isCta ? styles.noteCta : styles.note} role="status">
-          {notice}
-        </p>
-      )}
-      {!isArticle && !notice && (
+      {!isArticle && (
         <p className={isCta ? styles.noteCta : styles.note}>
           By entering your email you agree to our{" "}
           <Link href="/terms">Terms</Link> and{" "}
