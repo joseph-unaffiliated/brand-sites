@@ -150,6 +150,22 @@ export const quizWordTitles = Object.fromEntries(
     .map((q) => [q.wordSlug, q.term])
 );
 
+/** Richer quiz-term meta for My words cards when no Sanity entry exists yet. */
+export const quizWordMeta = Object.fromEntries(
+  slangQuiz.questions
+    .filter((q) => q.wordSlug)
+    .map((q) => {
+      const answer = q.options.find((o) => o.id === q.correctOptionId);
+      return [
+        q.wordSlug,
+        {
+          title: q.term,
+          think: answer?.label ?? null,
+        },
+      ];
+    })
+);
+
 /** @param {Record<string, string>} answers questionId → optionId */
 export function scoreQuiz(answers) {
   let correct = 0;

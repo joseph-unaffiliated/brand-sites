@@ -204,14 +204,10 @@ export default function SlangQuizClient() {
               >
                 <div className={styles.reviewTop}>
                   <p className={styles.reviewBody}>
-                    {wrong ? (
-                      <span className={styles.reviewCorrect}>{correct?.label}</span>
-                    ) : (
-                      <>
-                        {q.prompt}{" "}
-                        <strong>{correct?.label}</strong>
-                      </>
-                    )}
+                    {q.prompt}{" "}
+                    <strong className={wrong ? styles.reviewCorrect : undefined}>
+                      {correct?.label}
+                    </strong>
                   </p>
                   {q.wordSlug ? (
                     <MyWordButton slug={q.wordSlug} variant="card" />

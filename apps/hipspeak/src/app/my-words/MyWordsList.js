@@ -3,9 +3,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import WordCard from "@/components/WordCard";
-import MyWordButton from "@/components/MyWordButton";
 import { getFavoriteSlugs, onFavoritesChange } from "@/lib/myWords";
-import { quizWordTitles } from "@/data/slangQuiz";
+import { quizWordMeta, quizWordTitles } from "@/data/slangQuiz";
 import styles from "../archive/page.module.css";
 
 export default function MyWordsList({ entries }) {
@@ -20,17 +19,27 @@ export default function MyWordsList({ entries }) {
   // null until mounted: avoids a hydration flash of the empty state.
   if (slugs === null) return null;
 
-  const favoriteSet = new Set(slugs);
-  // Most recently saved first.
-  const myWords = [...entries]
-    .filter((e) => favoriteSet.has(e.slug))
-    .sort((a, b) => slugs.indexOf(b.slug) - slugs.indexOf(a.slug));
-  const known = new Set(entries.map((e) => e.slug));
-  const quizOnly = slugs
-    .filter((slug) => !known.has(slug) && quizWordTitles[slug])
-    .reverse();
+  const bySlug = new Map(entries.map((e) => [e.slug, e]));
+  // Most recently saved first — full archive cards when available.
+  const cards = [...slugs]
+    .reverse()
+    .map((slug) => {
+      const entry = bySlug.get(slug);
+      if (entry) return entry;
+      const meta = quizWordMeta[slug];
+      if (!meta && !quizWordTitles[slug]) return null;
+      return {
+        slug,
+        title: meta?.title || quizWordTitles[slug],
+        think: meta?.think || null,
+        mainImage: null,
+        quizOnly: true,
+        href: null,
+      };
+    })
+    .filter(Boolean);
 
-  if (myWords.length === 0 && quizOnly.length === 0) {
+  if (cards.length === 0) {
     return (
       <div className={styles.emptyState}>
         <p>
@@ -45,24 +54,10 @@ export default function MyWordsList({ entries }) {
   }
 
   return (
-    <>
-      {quizOnly.length > 0 ? (
-        <ul className={styles.quizSavedList}>
-          {quizOnly.map((slug) => (
-            <li key={slug} className={styles.quizSavedItem}>
-              <span>{quizWordTitles[slug]}</span>
-              <MyWordButton slug={slug} variant="card" />
-            </li>
-          ))}
-        </ul>
-      ) : null}
-      {myWords.length > 0 ? (
-        <div className={styles.issueMosaic}>
-          {myWords.map((entry) => (
-            <WordCard key={entry._id ?? entry.slug} entry={entry} />
-          ))}
-        </div>
-      ) : null}
-    </>
+    <div className={styles.issueMosaic}>
+      {cards.map((entry) => (
+        <WordCard key={entry._id ?? entry.slug} entry={entry} />
+      ))}
+    </div>
   );
 }
