@@ -32,7 +32,6 @@ export default function GiveawayLanding({ giveaway }) {
 
   const [email, setEmail] = useState("");
   const [busy, setBusy] = useState(false);
-  const [notice, setNotice] = useState(null);
   const [error, setError] = useState(null);
 
   const signedIn = isSubscribed || !!getReaderToken();
@@ -40,7 +39,6 @@ export default function GiveawayLanding({ giveaway }) {
   async function enterSignedIn() {
     setBusy(true);
     setError(null);
-    setNotice(null);
     try {
       await callGiveawayApi(
         {
@@ -73,29 +71,13 @@ export default function GiveawayLanding({ giveaway }) {
     if (!value) return;
     setBusy(true);
     setError(null);
-    setNotice(null);
-    try {
-      const data = await callGiveawayApi({
-        action: "start",
-        email: value,
-        brand: siteConfig.brandId,
-        giveawaySlug: giveaway.slug,
-        ref: ref || undefined,
-        prizeHeadline: giveaway.prizeHeadline,
-        drawAt: giveaway.drawAt,
-      });
-      if (data.action === "confirm_email_sent") {
-        setNotice("Check your email to confirm and enter the draw.");
-      } else if (data.action === "enter_link_sent") {
-        setNotice("Check your email for your link to enter the draw.");
-      } else {
-        setNotice("Check your email to continue.");
-      }
-    } catch {
-      setError("Something went wrong. Please try again.");
-    } finally {
-      setBusy(false);
-    }
+    // Subscribe + enter on /entered — no confirm/enter email required.
+    const q = new URLSearchParams();
+    q.set("email", value);
+    if (ref) q.set("ref", ref);
+    q.set("utm_source", "giveaway");
+    q.set("utm_campaign", giveaway.slug);
+    window.location.href = `/giveaway/${giveaway.slug}/entered?${q.toString()}`;
   }
 
   return (
@@ -162,7 +144,6 @@ export default function GiveawayLanding({ giveaway }) {
           </form>
         )}
 
-        {notice && <p className={styles.body}>{notice}</p>}
         {error && <p className={styles.body}>{error}</p>}
 
         {next && (

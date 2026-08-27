@@ -19,7 +19,7 @@ export default function GiveawayEntered({ giveaway }) {
   const searchParams = useSearchParams();
   const { refresh } = useSubscriber();
   const [status, setStatus] = useState("working");
-  const [message, setMessage] = useState("Confirming…");
+  const [message, setMessage] = useState("Entering…");
   const [shareUrl, setShareUrl] = useState(null);
   const [credited, setCredited] = useState(null);
   const [tickets, setTickets] = useState(null);
@@ -178,7 +178,7 @@ export default function GiveawayEntered({ giveaway }) {
     <div className={styles.wrap} data-subscription-landing>
       <div className={`${styles.card} ${actions.cardWide}`}>
         <h1 className={styles.heading}>
-          {status === "working" && <>Confirming your entry…</>}
+          {status === "working" && <>Entering you in the draw…</>}
           {status === "success" && <>{message}</>}
           {status === "error" && <>Something went wrong</>}
         </h1>

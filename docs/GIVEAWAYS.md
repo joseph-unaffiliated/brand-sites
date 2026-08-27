@@ -10,16 +10,17 @@ Set `listed: true` on a campaign to put it in the sitemap, allow `/giveaway` in 
 
 Until then (`listed: false` or omitted): landing and `/entered` stay **noindex**, robots **Disallow: /giveaway**, and the profile does not advertise the contest. Direct URLs, `?ref=` partner links, and CIO emails still work. Flip `listed` when you want the contest findable.
 
-`/sign-in` is always noindex and disallowed in robots (utility page). Header **Subscribe / Sign in** stays visible; that is not the contest.
+`/sign-in` is always noindex and disallowed in robots (utility page). Header **Subscribe** stays visible; that is not the contest.
 
 ## Tracking links
 
 | Surface | URL pattern |
 |--------|-------------|
 | Landing | `https://www.thepicklereport.com/giveaway/{slug}?ref={CODE}` |
+| Instant enter (no email confirm) | `/giveaway/{slug}/entered?email=…&ref={CODE}` — page runs subscribe + enter |
 | Magic one-click subscribe (ESP) | `{magicSubscribeBase}?email={{customer.email}}&ref={CODE}&giveaway={slug}&utm_source=…&utm_campaign=…` |
 
-On successful subscribe/enter, magic credits the code owner (no self-credit).
+On successful subscribe/enter, magic credits the code owner (no self-credit). The landing form sends people straight to `/entered` (subscribe + enter in-browser). Confirm/enter emails from `POST /api/giveaway` `start` remain available for ESP or legacy links.
 
 ## Customer.io events (Track API)
 
@@ -46,13 +47,13 @@ Confirm / enter links redeem on `/giveaway/{slug}/entered?token=…`. Sign-in li
 - [ ] Live slug `/giveaway/{slug}` shows prize, countdown, rules
 - [ ] Ended slug still renders + links to current/upcoming
 - [ ] Signed-in: one-click Enter → `/entered` with share link + tickets
-- [ ] Unsigned new email: confirm email → redeem → subscribe + enter
-- [ ] Unsigned existing email: enter-link email → redeem + enter
+- [ ] Unsigned email: form → `/entered` subscribe + enter (no confirm email)
 - [ ] `?ref=` credits referrer; self-ref does not
 - [ ] Subscribe form already-subscribed → toast + sign-in email (not new-sub success)
-- [ ] Header shows Subscribe / Sign in when logged out
+- [ ] Header shows Subscribe when logged out
 - [ ] Partner (`isPartner` in BQ): profile create/copy links + credited counts
 - [ ] Non-partner: personal referral stats for entered giveaways only
+- [ ] `listed: true` → sitemap + robots allow + profile promo; `false` → unlisted
 
 ## Ops
 

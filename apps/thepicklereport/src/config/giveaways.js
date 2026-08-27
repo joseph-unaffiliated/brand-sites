@@ -49,7 +49,7 @@ export const GIVEAWAYS = [
     successBodyExisting: "You’re entered for a year’s supply of pickles.",
     ctaSubscribeLabel: "Enter the draw + subscribe",
     ctaEnterLabel: "Enter the draw",
-    listed: false,
+    listed: true,
   },
 ];
 
