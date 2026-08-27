@@ -7,10 +7,19 @@ import { BRAND, executeAction, isRealBrowser } from "@/lib/subscription";
 import { useSubscriber } from "@/context/SubscriberContext";
 import { getReaderToken } from "@/lib/reader-profile";
 import { callGiveawayApi, daysUntilCopy } from "@/lib/giveaway-api";
+import { readGiveawayRef } from "@/lib/giveaway-ref";
 import { daysUntilDraw, giveawayStatus } from "@/config/giveaways";
 import { siteConfig } from "@/config/site";
 import actions from "@/components/SubscriptionPageActions.module.css";
 import styles from "../../../subscribed/page.module.css";
+
+function asCount(value) {
+  if (value == null) return 0;
+  if (typeof value === "object" && value !== null && "value" in value) {
+    return Number(value.value) || 0;
+  }
+  return Number(value) || 0;
+}
 
 /**
  * @param {{ giveaway: import("@/config/giveaways").GiveawayConfig }} props
@@ -45,16 +54,16 @@ export default function GiveawayEntered({ giveaway }) {
       const referral = (stats.codes || []).find((c) => c.type === "referral");
       const entry = (stats.entries || []).find((e) => e.giveawaySlug === giveaway.slug);
       if (referral?.code) {
-        const origin = siteConfig.siteUrl.replace(/\/$/, "");
+        const origin =
+          (typeof window !== "undefined" && window.location.origin) ||
+          siteConfig.siteUrl.replace(/\/$/, "");
         setShareUrl(
           `${origin}/giveaway/${giveaway.slug}?ref=${encodeURIComponent(referral.code)}`,
         );
-        setCredited(Number(referral.creditedSubs) || 0);
+        setCredited(asCount(referral.creditedSubs));
       }
       if (entry) {
-        setTickets(
-          (Number(entry.baseTickets) || 0) + (Number(entry.bonusTickets) || 0),
-        );
+        setTickets(asCount(entry.baseTickets) + asCount(entry.bonusTickets));
       }
     }
 
@@ -67,7 +76,7 @@ export default function GiveawayEntered({ giveaway }) {
         },
         { bearer: true },
       );
-      applyStats(stats);
+      if (!cancelled) applyStats(stats);
     }
 
     /**
@@ -80,7 +89,7 @@ export default function GiveawayEntered({ giveaway }) {
         email: emailParam,
         brand: siteConfig.brandId,
         giveawaySlug: giveaway.slug,
-        ref,
+        ref: ref || undefined,
         source: "entered_page_email",
       });
       markLocalSubscriber(data.email || emailParam);
@@ -90,7 +99,7 @@ export default function GiveawayEntered({ giveaway }) {
     async function run() {
       const token = searchParams.get("token");
       const emailParam = searchParams.get("email");
-      const ref = searchParams.get("ref") || undefined;
+      const ref = readGiveawayRef(giveaway.slug, searchParams.get("ref")) || undefined;
       const already = searchParams.get("entered") === "1";
 
       try {
@@ -176,8 +185,21 @@ export default function GiveawayEntered({ giveaway }) {
     }
 
     run();
+
+    function onFocus() {
+      if (cancelled || !getReaderToken()) return;
+      loadStats().catch(() => {});
+    }
+    function onVisibility() {
+      if (document.visibilityState === "visible") onFocus();
+    }
+    window.addEventListener("focus", onFocus);
+    document.addEventListener("visibilitychange", onVisibility);
+
     return () => {
       cancelled = true;
+      window.removeEventListener("focus", onFocus);
+      document.removeEventListener("visibilitychange", onVisibility);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps -- run once per landing params
   }, [searchParams]);

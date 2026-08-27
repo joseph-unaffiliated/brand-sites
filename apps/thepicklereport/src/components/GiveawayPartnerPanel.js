@@ -119,7 +119,8 @@ export default function GiveawayPartnerPanel() {
               (c) => c.giveawaySlug === entry.giveawaySlug && c.type === "referral",
             );
             const tickets =
-              (Number(entry.baseTickets) || 0) + (Number(entry.bonusTickets) || 0);
+              (Number(entry.baseTickets?.value ?? entry.baseTickets) || 0) +
+              (Number(entry.bonusTickets?.value ?? entry.bonusTickets) || 0);
             return (
               <li key={entry.giveawaySlug} className={styles.brandItem}>
                 <span className={styles.brandName}>

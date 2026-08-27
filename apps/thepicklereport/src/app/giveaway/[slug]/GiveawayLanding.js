@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useSubscriber } from "@/context/SubscriberContext";
@@ -12,6 +12,7 @@ import {
   giveawayStatus,
 } from "@/config/giveaways";
 import { siteConfig } from "@/config/site";
+import { readGiveawayRef } from "@/lib/giveaway-ref";
 import styles from "./GiveawayLanding.module.css";
 
 /**
@@ -19,8 +20,13 @@ import styles from "./GiveawayLanding.module.css";
  */
 export default function GiveawayLanding({ giveaway }) {
   const searchParams = useSearchParams();
-  const ref = searchParams.get("ref") || "";
+  const urlRef = searchParams.get("ref");
+  const [ref, setRef] = useState(() => (urlRef ? String(urlRef).toLowerCase().trim() : ""));
   const { isSubscribed, refresh } = useSubscriber();
+
+  useEffect(() => {
+    setRef(readGiveawayRef(giveaway.slug, urlRef));
+  }, [giveaway.slug, urlRef]);
   const status = giveawayStatus(giveaway);
   const days = daysUntilDraw(giveaway);
   const next = useMemo(() => {
