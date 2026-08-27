@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useSubscriber } from "@/context/SubscriberContext";
 import MyWordButton from "@/components/MyWordButton";
+import SubscribeFormWithTurnstile from "@/components/SubscribeFormWithTurnstile";
 import { BRAND, executeAction } from "@/lib/subscription";
 import {
   clearQuizProgress,
