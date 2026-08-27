@@ -146,6 +146,24 @@
   margin-top: 1.5rem;
 }
 
+.shareUrl {
+  word-break: break-all;
+  font-size: 1rem;
+  line-height: 1.45;
+  color: var(--text-primary);
+}
+
+.textLink {
+  color: var(--text-primary);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  font-size: 1rem;
+}
+
+.textLink:hover {
+  color: var(--accent-strong);
+}
+
 @media (max-width: 768px) {
   .page {
     padding-top: 1rem;

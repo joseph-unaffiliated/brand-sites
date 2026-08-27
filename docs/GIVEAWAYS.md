@@ -55,9 +55,21 @@ Confirm / enter links redeem on `/giveaway/{slug}/entered?token=…`. Sign-in li
 - [ ] Non-partner: personal referral stats for entered giveaways only
 - [ ] `listed: true` → sitemap + robots allow + profile promo; `false` → unlisted
 
+## Partner / influencer tracking
+
+Same `?ref=` system as personal share links; partner codes are a separate type.
+
+1. In BigQuery `analytics.users`, set `isPartner = TRUE` for the partner’s email (one-time ops).
+2. Partner signs in on thepicklereport.com → **Profile** → Giveaways → **Create tracking link**.
+3. They get a durable URL: `https://www.thepicklereport.com/giveaway/{slug}?ref={partnerCode}` (codes are `p…`).
+4. Each new subscriber who enters through that link increments `creditedSubs` on their code (shown on profile). Self-referral does not credit.
+5. Optional: append UTMs for analytics (`utm_source=partner&utm_campaign={slug}&utm_content={name}`) — credit still keys off `ref` only.
+
+You do **not** need a separate landing page per partner. One giveaway URL + unique `ref` is enough. For paid affiliates who never enter the draw themselves, they still see counts on profile as long as `isPartner` is set.
+
 ## Ops
 
 - Run `subscription-functions/docs/sql/CREATE_GIVEAWAY_TABLES.sql` once in GCP.
 - Optional: `ALTER TABLE …users ADD COLUMN IF NOT EXISTS isPartner BOOL;` then flag partners manually.
 - Secrets stay on magic (`READER_TOKEN_SECRET`, `CIO_*`, `GCP_*`); marketing apps never query BQ by email.
-- Magic route: `POST /api/giveaway` actions `start | enter | redeem | create_code | stats | subscribe_or_signin`.
+- Magic route: `POST /api/giveaway` actions `start | enter | redeem | create_code | stats | subscribe_or_signin | subscribe_and_enter`.

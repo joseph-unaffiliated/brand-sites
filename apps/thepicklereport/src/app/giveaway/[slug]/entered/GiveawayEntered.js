@@ -10,8 +10,7 @@ import { callGiveawayApi, daysUntilCopy } from "@/lib/giveaway-api";
 import { readGiveawayRef } from "@/lib/giveaway-ref";
 import { daysUntilDraw, giveawayStatus } from "@/config/giveaways";
 import { siteConfig } from "@/config/site";
-import actions from "@/components/SubscriptionPageActions.module.css";
-import styles from "../../../subscribed/page.module.css";
+import styles from "../GiveawayLanding.module.css";
 
 function asCount(value) {
   if (value == null) return 0;
@@ -33,6 +32,8 @@ export default function GiveawayEntered({ giveaway }) {
   const [credited, setCredited] = useState(null);
   const [tickets, setTickets] = useState(null);
   const [copied, setCopied] = useState(false);
+  /** true = was already a subscriber before this enter flow */
+  const [alreadySubscribed, setAlreadySubscribed] = useState(false);
 
   const days = daysUntilDraw(giveaway);
   const ended = giveawayStatus(giveaway) === "ended";
@@ -92,6 +93,9 @@ export default function GiveawayEntered({ giveaway }) {
         ref: ref || undefined,
         source: "entered_page_email",
       });
+      if (!cancelled) {
+        setAlreadySubscribed(Boolean(data.alreadySubscribed));
+      }
       markLocalSubscriber(data.email || emailParam);
       applyStats(data);
     }
@@ -111,6 +115,7 @@ export default function GiveawayEntered({ giveaway }) {
           }
 
           if (redeemed.needsSubscribe && redeemed.email && isRealBrowser()) {
+            setAlreadySubscribed(false);
             const params = new URLSearchParams();
             params.set("email", redeemed.email);
             params.set("utm_source", "giveaway");
@@ -122,6 +127,8 @@ export default function GiveawayEntered({ giveaway }) {
               setMessage("We couldn’t confirm your subscription. Try again.");
               return;
             }
+          } else {
+            setAlreadySubscribed(true);
           }
 
           if (!redeemed.entered) {
@@ -147,6 +154,7 @@ export default function GiveawayEntered({ giveaway }) {
           );
           return;
         } else if (!already) {
+          setAlreadySubscribed(true);
           await callGiveawayApi(
             {
               action: "enter",
@@ -160,6 +168,7 @@ export default function GiveawayEntered({ giveaway }) {
           if (cancelled) return;
           await loadStats();
         } else {
+          setAlreadySubscribed(true);
           await loadStats();
         }
 
@@ -215,47 +224,54 @@ export default function GiveawayEntered({ giveaway }) {
     }
   }
 
+  const successBody = alreadySubscribed
+    ? giveaway.successBodyExisting ||
+      "You’re entered for a year’s worth of McClure’s Pickles."
+    : giveaway.successBodyNew ||
+      "Thanks for subscribing — you’ve been entered for a year’s worth of McClure’s Pickles.";
+
   return (
-    <div className={styles.wrap} data-subscription-landing>
-      <div className={`${styles.card} ${actions.cardWide}`}>
-        <h1 className={styles.heading}>
+    <article className={styles.page}>
+      <header className={styles.hero}>
+        <h1 className={styles.headline}>
           {status === "working" && <>Entering you in the draw…</>}
           {status === "success" && <>{message}</>}
           {status === "error" && <>Something went wrong</>}
         </h1>
+        {status === "success" && !ended && days != null ? (
+          <p className={styles.statusNote}>{daysUntilCopy(days)}</p>
+        ) : null}
+      </header>
 
-        {status === "working" && (
-          <p className={styles.body}>Please wait just a moment.</p>
-        )}
+      <div className={styles.prose}>
+        {status === "working" && <p>Please wait just a moment.</p>}
 
         {status === "success" && !ended && (
           <>
-            <p className={styles.body}>
-              {giveaway.successBodyNew ||
-                giveaway.successBodyExisting ||
-                giveaway.prizeBody}
-            </p>
-            <p className={styles.body}>{daysUntilCopy(days)}</p>
+            <p>{successBody}</p>
             {tickets != null && (
-              <p className={styles.body}>
+              <p>
                 You have {tickets} ticket{tickets === 1 ? "" : "s"}.
               </p>
             )}
             {shareUrl && (
               <>
-                <p className={styles.body}>
+                <h2>Get more tickets</h2>
+                <p>
                   Share your link — each friend who subscribes through it adds another
                   ticket.
                   {credited != null ? ` Friends subscribed so far: ${credited}.` : ""}
                 </p>
-                <p className={styles.body} style={{ wordBreak: "break-all" }}>
-                  {shareUrl}
-                </p>
-                <div className={actions.actionRow}>
-                  <button type="button" className={actions.btnPrimary} onClick={copyShare}>
+                <p className={styles.shareUrl}>{shareUrl}</p>
+                <div className={styles.enterBlock}>
+                  <button
+                    type="button"
+                    className="button button-primary"
+                    onClick={copyShare}
+                  >
                     {copied ? "Copied" : "Copy share link"}
                   </button>
-                  <Link className={actions.btn} href={`/giveaway/${giveaway.slug}`}>
+                  <Link className={styles.textLink} href={`/giveaway/${giveaway.slug}`}>
                     Back to giveaway
                   </Link>
                 </div>
@@ -264,21 +280,17 @@ export default function GiveawayEntered({ giveaway }) {
           </>
         )}
 
-        {status === "success" && ended && (
-          <p className={styles.body}>{message}</p>
-        )}
+        {status === "success" && ended && <p>{message}</p>}
 
         {status === "error" && (
           <>
-            <p className={styles.body}>{message}</p>
-            <div className={actions.actionRow}>
-              <Link className={actions.btn} href={`/giveaway/${giveaway.slug}`}>
-                Back to giveaway
-              </Link>
-            </div>
+            <p>{message}</p>
+            <p className={styles.nextLink}>
+              <Link href={`/giveaway/${giveaway.slug}`}>Back to giveaway</Link>
+            </p>
           </>
         )}
       </div>
-    </div>
+    </article>
   );
 }
