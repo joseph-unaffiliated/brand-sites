@@ -12,8 +12,7 @@ import {
   giveawayStatus,
 } from "@/config/giveaways";
 import { siteConfig } from "@/config/site";
-import actions from "@/components/SubscriptionPageActions.module.css";
-import styles from "../../subscribed/page.module.css";
+import styles from "./GiveawayLanding.module.css";
 
 /**
  * @param {{ giveaway: import("@/config/giveaways").GiveawayConfig }} props
@@ -35,6 +34,11 @@ export default function GiveawayLanding({ giveaway }) {
   const [error, setError] = useState(null);
 
   const signedIn = isSubscribed || !!getReaderToken();
+  const intro = giveaway.intro?.length ? giveaway.intro : [giveaway.prizeBody];
+  const steps = giveaway.howToEnter || [];
+  const stepsBeforeCta = steps.slice(0, 2);
+  const stepsAfterCta = steps.slice(2);
+  const socialLinks = giveaway.socialLinks || [];
 
   async function enterSignedIn() {
     setBusy(true);
@@ -71,7 +75,6 @@ export default function GiveawayLanding({ giveaway }) {
     if (!value) return;
     setBusy(true);
     setError(null);
-    // Subscribe + enter on /entered — no confirm/enter email required.
     const q = new URLSearchParams();
     q.set("email", value);
     if (ref) q.set("ref", ref);
@@ -81,79 +84,107 @@ export default function GiveawayLanding({ giveaway }) {
   }
 
   return (
-    <div className={styles.wrap}>
-      <div className={`${styles.card} ${actions.cardWide}`}>
-        <h1 className={styles.heading}>{giveaway.prizeHeadline}</h1>
-        <p className={styles.body}>{giveaway.prizeBody}</p>
-
+    <article className={styles.page}>
+      <header className={styles.hero}>
+        <h1 className={styles.headline}>{giveaway.prizeHeadline}</h1>
         {status === "live" && (
-          <p className={styles.body}>{daysUntilCopy(days)}</p>
+          <p className={styles.statusNote}>{daysUntilCopy(days)}</p>
         )}
         {status === "scheduled" && (
-          <p className={styles.body}>This giveaway has not started yet.</p>
+          <p className={styles.statusNote}>This giveaway has not started yet.</p>
         )}
         {status === "ended" && (
-          <p className={styles.body}>This draw has closed.</p>
+          <p className={styles.statusNote}>This draw has closed.</p>
         )}
+      </header>
+
+      <div className={styles.prose}>
+        {intro.map((paragraph, i) => (
+          <p key={`intro-${i}`}>{paragraph}</p>
+        ))}
+
+        {steps.length > 0 && (
+          <>
+            <h2>How to enter</h2>
+            {stepsBeforeCta.length > 0 && (
+              <ol className={styles.steps}>
+                {stepsBeforeCta.map((step, i) => (
+                  <li key={`step-before-${i}`}>{step}</li>
+                ))}
+              </ol>
+            )}
+          </>
+        )}
+
+        {status === "live" && (
+          <div className={styles.enterBlock}>
+            {signedIn ? (
+              <button
+                type="button"
+                className="button button-primary"
+                disabled={busy}
+                onClick={enterSignedIn}
+              >
+                {busy ? "…" : giveaway.ctaEnterLabel || "Enter to win"}
+              </button>
+            ) : (
+              <form className={styles.form} onSubmit={submitEmail} noValidate>
+                <input
+                  type="email"
+                  name="email"
+                  required
+                  placeholder="Email address"
+                  value={email}
+                  onChange={(ev) => setEmail(ev.target.value)}
+                  disabled={busy}
+                  autoComplete="email"
+                />
+                <button type="submit" className="button button-primary" disabled={busy}>
+                  {busy ? "…" : giveaway.ctaSubscribeLabel || "Enter to win"}
+                </button>
+              </form>
+            )}
+            {error && <p className={styles.error}>{error}</p>}
+          </div>
+        )}
+
+        {stepsAfterCta.length > 0 && (
+          <ol className={styles.steps} start={stepsBeforeCta.length + 1}>
+            {stepsAfterCta.map((step, i) => (
+              <li key={`step-after-${i}`}>{step}</li>
+            ))}
+          </ol>
+        )}
+
+        {socialLinks.length > 0 && (
+          <p className={styles.social}>
+            Follow{" "}
+            {socialLinks.map((link, i) => (
+              <span key={link.href}>
+                {i > 0 && (i === socialLinks.length - 1 ? " and " : ", ")}
+                <a href={link.href} target="_blank" rel="noopener noreferrer">
+                  {link.label}
+                </a>
+              </span>
+            ))}{" "}
+            on Instagram to never miss a moment of high-octane pickled content.
+          </p>
+        )}
+
+        {(giveaway.closing || []).map((paragraph, i) => (
+          <p key={`closing-${i}`}>{paragraph}</p>
+        ))}
 
         {giveaway.rulesText ? (
-          <p className={styles.body}>{giveaway.rulesText}</p>
+          <p className={styles.rules}>{giveaway.rulesText}</p>
         ) : null}
 
-        {status === "live" && signedIn && (
-          <div className={actions.actionRow}>
-            <button
-              type="button"
-              className={actions.btnPrimary}
-              disabled={busy}
-              onClick={enterSignedIn}
-            >
-              {busy ? "…" : giveaway.ctaEnterLabel || "Enter the draw"}
-            </button>
-          </div>
-        )}
-
-        {status === "live" && !signedIn && (
-          <form
-            onSubmit={submitEmail}
-            style={{ marginTop: "1.75rem", maxWidth: "28rem", marginInline: "auto" }}
-          >
-            <input
-              type="email"
-              name="email"
-              required
-              placeholder="Email address"
-              value={email}
-              onChange={(ev) => setEmail(ev.target.value)}
-              disabled={busy}
-              style={{
-                width: "100%",
-                boxSizing: "border-box",
-                padding: "0.75rem 1rem",
-                borderRadius: "999px",
-                border: "1px solid var(--border)",
-                fontSize: "1rem",
-                marginBottom: "0.75rem",
-              }}
-            />
-            <div className={actions.actionRow} style={{ marginTop: 0 }}>
-              <button type="submit" className={actions.btnPrimary} disabled={busy}>
-                {busy ? "…" : giveaway.ctaSubscribeLabel || "Enter the draw + subscribe"}
-              </button>
-            </div>
-          </form>
-        )}
-
-        {error && <p className={styles.body}>{error}</p>}
-
         {next && (
-          <div className={actions.actionRow}>
-            <Link className={actions.btn} href={`/giveaway/${next.slug}`}>
-              See {next.title}
-            </Link>
-          </div>
+          <p className={styles.nextLink}>
+            <Link href={`/giveaway/${next.slug}`}>See {next.title}</Link>
+          </p>
         )}
       </div>
-    </div>
+    </article>
   );
 }

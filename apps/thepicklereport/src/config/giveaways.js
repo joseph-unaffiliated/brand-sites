@@ -8,11 +8,17 @@
  *   title: string;
  *   prizeHeadline: string;
  *   prizeBody: string;
+ *   intro?: string[];
+ *   howToEnter?: string[];
+ *   socialHtml?: string;
+ *   socialLinks?: { label: string; href: string }[];
+ *   closing?: string[];
  *   rulesUrl?: string;
  *   rulesText?: string;
  *   startsAt: string;
  *   drawAt: string;
  *   endsAt?: string;
+ *   drawDateLabel?: string;
  *   seoTitle?: string;
  *   seoDescription?: string;
  *   successHeadline?: string;
@@ -31,24 +37,48 @@
 export const GIVEAWAYS = [
   {
     slug: "years-supply-of-pickles",
-    title: "Win a Year’s Supply of Pickles",
-    prizeHeadline: "Win a year’s supply of pickles!",
+    title: "Win a Year’s Worth of Pickles",
+    prizeHeadline: "Win a year’s worth of pickles!",
     prizeBody:
-      "Subscribe to The Pickle Report (or enter if you already get the newsletter) for a chance to win a year’s supply of pickles. After you enter, you’ll get a personal link to share for extra tickets.",
+      "The Pickle Report is partnering with McClure’s Pickles to give one lucky winner a year’s supply of pickles — 12 jars delivered to their door.",
+    intro: [
+      "The Pickle Report is partnering with our friends at McClure’s Pickles to give one lucky winner a year’s supply of pickles.",
+      "One lucky winner will be sent 12 jars of McClure’s Pickles right to their door. Start your 2027 off right with a whole year’s worth of briny, salty crunch.",
+      "When the world turns to chaos, we turn to pickles. And now, so can you.",
+    ],
+    howToEnter: [
+      "Sign up for The Pickle Report’s weekly newsletter. Only those signed up will be eligible.",
+      "Click the button below to enter to win pickles for a year. Our winner will be selected on September 30 so keep an eye on your email.",
+      "Pray to the pickle gods.",
+    ],
+    socialLinks: [
+      {
+        label: "The Pickle Report",
+        href: "https://www.instagram.com/thepicklereport/",
+      },
+      {
+        label: "McClure’s Pickles",
+        href: "https://www.instagram.com/mcclurespickles/",
+      },
+    ],
+    closing: [
+      "Ready for more opportunities to win? Keep an eye on The Pickle Report page for more giveaways coming down the pickled pipeline.",
+    ],
     rulesText:
-      "One entry per email. Extra tickets for each friend who subscribes through your personal link (shown after you enter). Void where prohibited. We will announce the winner by email after the draw.",
+      "One entry per email. Extra tickets for each friend who subscribes through your personal link (shown after you enter). Void where prohibited. Winner announced by email after the draw.",
     startsAt: "2026-08-21T00:00:00.000Z",
     drawAt: "2026-09-30T23:59:59.000Z",
     endsAt: "2026-09-30T23:59:59.000Z",
-    seoTitle: "Win a Year’s Supply of Pickles | The Pickle Report",
+    drawDateLabel: "September 30",
+    seoTitle: "Win a Year’s Worth of Pickles | The Pickle Report",
     seoDescription:
-      "Enter The Pickle Report giveaway for a chance to win a year’s supply of pickles. Subscribe to enter.",
+      "Enter The Pickle Report × McClure’s Pickles giveaway for a chance to win 12 jars — a year’s supply of pickles. Subscribe to enter. Winner selected September 30.",
     successHeadline: "You’re entered in the draw!",
     successBodyNew:
-      "Thanks for subscribing — you’ve been entered for a year’s supply of pickles.",
-    successBodyExisting: "You’re entered for a year’s supply of pickles.",
-    ctaSubscribeLabel: "Enter the draw + subscribe",
-    ctaEnterLabel: "Enter the draw",
+      "Thanks for subscribing — you’ve been entered for a year’s worth of McClure’s Pickles.",
+    successBodyExisting: "You’re entered for a year’s worth of McClure’s Pickles.",
+    ctaSubscribeLabel: "Enter to win",
+    ctaEnterLabel: "Enter to win",
     listed: true,
   },
 ];

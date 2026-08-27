@@ -31,6 +31,62 @@ export default function GiveawayEntered({ giveaway }) {
   useEffect(() => {
     let cancelled = false;
 
+    function markLocalSubscriber(email) {
+      if (!email) return;
+      localStorage.setItem(`subscribed_${BRAND}`, "true");
+      localStorage.setItem(`email_${BRAND}`, email);
+      if (!localStorage.getItem(`subscribed_at_${BRAND}`)) {
+        localStorage.setItem(`subscribed_at_${BRAND}`, new Date().toISOString());
+      }
+      refresh();
+    }
+
+    function applyStats(stats) {
+      const referral = (stats.codes || []).find((c) => c.type === "referral");
+      const entry = (stats.entries || []).find((e) => e.giveawaySlug === giveaway.slug);
+      if (referral?.code) {
+        const origin = siteConfig.siteUrl.replace(/\/$/, "");
+        setShareUrl(
+          `${origin}/giveaway/${giveaway.slug}?ref=${encodeURIComponent(referral.code)}`,
+        );
+        setCredited(Number(referral.creditedSubs) || 0);
+      }
+      if (entry) {
+        setTickets(
+          (Number(entry.baseTickets) || 0) + (Number(entry.bonusTickets) || 0),
+        );
+      }
+    }
+
+    async function loadStats() {
+      const stats = await callGiveawayApi(
+        {
+          action: "stats",
+          brand: siteConfig.brandId,
+          giveawaySlug: giveaway.slug,
+        },
+        { bearer: true },
+      );
+      applyStats(stats);
+    }
+
+    /**
+     * Instant enter for unsigned email form (no confirm link).
+     * Magic subscribe_and_enter forces subscription (avoids EO catch-all trap) + entry.
+     */
+    async function enterFromEmail(emailParam, ref) {
+      const data = await callGiveawayApi({
+        action: "subscribe_and_enter",
+        email: emailParam,
+        brand: siteConfig.brandId,
+        giveawaySlug: giveaway.slug,
+        ref,
+        source: "entered_page_email",
+      });
+      markLocalSubscriber(data.email || emailParam);
+      applyStats(data);
+    }
+
     async function run() {
       const token = searchParams.get("token");
       const emailParam = searchParams.get("email");
@@ -42,12 +98,7 @@ export default function GiveawayEntered({ giveaway }) {
           const redeemed = await callGiveawayApi({ action: "redeem", token });
           if (cancelled) return;
           if (redeemed.email) {
-            localStorage.setItem(`subscribed_${BRAND}`, "true");
-            localStorage.setItem(`email_${BRAND}`, redeemed.email);
-            if (!localStorage.getItem(`subscribed_at_${BRAND}`)) {
-              localStorage.setItem(`subscribed_at_${BRAND}`, new Date().toISOString());
-            }
-            refresh();
+            markLocalSubscriber(redeemed.email);
           }
 
           if (redeemed.needsSubscribe && redeemed.email && isRealBrowser()) {
@@ -76,27 +127,10 @@ export default function GiveawayEntered({ giveaway }) {
               { bearer: true },
             );
           }
+          if (cancelled) return;
+          await loadStats();
         } else if (emailParam && isRealBrowser() && !already) {
-          localStorage.setItem(`subscribed_${BRAND}`, "true");
-          localStorage.setItem(`email_${BRAND}`, emailParam);
-          if (!localStorage.getItem(`subscribed_at_${BRAND}`)) {
-            localStorage.setItem(`subscribed_at_${BRAND}`, new Date().toISOString());
-          }
-          refresh();
-          const params = new URLSearchParams(searchParams.toString());
-          params.set("utm_source", params.get("utm_source") || "giveaway");
-          params.set("utm_campaign", params.get("utm_campaign") || giveaway.slug);
-          await executeAction(params, "subscribe");
-          await callGiveawayApi(
-            {
-              action: "enter",
-              brand: siteConfig.brandId,
-              giveawaySlug: giveaway.slug,
-              ref,
-              source: "entered_page_email",
-            },
-            { bearer: true },
-          );
+          await enterFromEmail(emailParam, ref);
         } else if (!getReaderToken() && !already) {
           setStatus("error");
           setMessage(
@@ -114,33 +148,13 @@ export default function GiveawayEntered({ giveaway }) {
             },
             { bearer: true },
           );
+          if (cancelled) return;
+          await loadStats();
+        } else {
+          await loadStats();
         }
 
         if (cancelled) return;
-
-        const stats = await callGiveawayApi(
-          {
-            action: "stats",
-            brand: siteConfig.brandId,
-            giveawaySlug: giveaway.slug,
-          },
-          { bearer: true },
-        );
-
-        const referral = (stats.codes || []).find((c) => c.type === "referral");
-        const entry = (stats.entries || []).find((e) => e.giveawaySlug === giveaway.slug);
-        if (referral?.code) {
-          const origin = siteConfig.siteUrl.replace(/\/$/, "");
-          setShareUrl(
-            `${origin}/giveaway/${giveaway.slug}?ref=${encodeURIComponent(referral.code)}`,
-          );
-          setCredited(Number(referral.creditedSubs) || 0);
-        }
-        if (entry) {
-          setTickets(
-            (Number(entry.baseTickets) || 0) + (Number(entry.bonusTickets) || 0),
-          );
-        }
 
         setStatus("success");
         setMessage(
@@ -148,10 +162,15 @@ export default function GiveawayEntered({ giveaway }) {
             ? "This draw has closed. Thanks for playing."
             : giveaway.successHeadline || "You’re entered in the draw!",
         );
-      } catch {
+      } catch (err) {
+        console.error("[giveaway entered]", err);
         if (!cancelled) {
           setStatus("error");
-          setMessage("Something went wrong confirming your entry.");
+          const detail =
+            err?.data?.action === "subscribe_required"
+              ? "Subscribe to The Pickle Report first, then enter the draw."
+              : "Something went wrong entering you in the draw. Please try again.";
+          setMessage(detail);
         }
       }
     }

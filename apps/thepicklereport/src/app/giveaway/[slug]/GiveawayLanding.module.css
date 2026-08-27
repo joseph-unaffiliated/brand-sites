@@ -1,0 +1,162 @@
+/* Article-width giveaway landing (matches issue prose column). */
+
+.page {
+  width: 100%;
+  max-width: min(100%, 840px);
+  margin: 0 auto;
+  padding: 1.5rem 24px 4rem;
+  box-sizing: border-box;
+}
+
+.hero {
+  max-width: min(100%, 640px);
+  margin: 0 auto 2.5rem;
+  text-align: center;
+}
+
+.headline {
+  font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
+  font-size: clamp(2.5rem, 6vw, 3.75rem);
+  font-weight: 300;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin: 0;
+  text-wrap: balance;
+  color: var(--text-primary);
+  text-transform: uppercase;
+}
+
+.statusNote {
+  margin: 1rem 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.4;
+  color: var(--text-muted);
+  font-weight: 300;
+}
+
+.prose {
+  max-width: min(100%, 640px);
+  margin: 0 auto;
+  font-size: 1.2rem;
+  line-height: 1.5;
+  font-weight: 300;
+  color: var(--text-secondary);
+}
+
+.prose p {
+  margin: 0 0 1.15rem;
+}
+
+.prose h2 {
+  font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
+  font-size: 1.8rem;
+  font-weight: 300;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  margin: 2rem 0 0.75rem;
+}
+
+.steps {
+  margin: 0 0 0;
+  padding-left: 1.35rem;
+}
+
+.steps li {
+  margin-bottom: 0.75rem;
+  padding-left: 0.25rem;
+}
+
+.steps li::marker {
+  color: var(--text-muted);
+}
+
+.enterBlock {
+  margin: 1.75rem auto 1.75rem;
+  max-width: 440px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  align-items: center;
+}
+
+.form input {
+  width: 100%;
+  max-width: 440px;
+  height: 48px;
+  padding: 0 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text-primary);
+  font-size: 15px;
+  font-family: "halyard-display", "Helvetica Neue", Arial, sans-serif;
+  font-weight: 300;
+  box-sizing: border-box;
+}
+
+.form input::placeholder {
+  color: var(--text-muted);
+}
+
+.form input:focus,
+.form input:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.form :global(.button),
+.enterBlock :global(.button) {
+  width: 100%;
+  max-width: 440px;
+}
+
+.error {
+  margin: 0.5rem 0 0;
+  font-size: 1rem;
+  color: var(--text-primary);
+}
+
+.social a {
+  color: var(--text-primary);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.social a:hover {
+  color: var(--accent-strong);
+}
+
+.rules {
+  margin-top: 2.5rem;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  color: var(--text-muted);
+}
+
+.nextLink {
+  margin-top: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .page {
+    padding-top: 1rem;
+    padding-bottom: 3rem;
+  }
+
+  .headline {
+    font-size: clamp(2.15rem, 10vw, 3.25rem);
+  }
+
+  .prose {
+    font-size: 1.1rem;
+  }
+}
