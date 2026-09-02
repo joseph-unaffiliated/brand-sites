@@ -59,17 +59,28 @@ Confirm / enter links redeem on `/giveaway/{slug}/entered?token=…`. Sign-in li
 
 Same `?ref=` system as personal share links; partner codes are a separate type.
 
-1. In BigQuery `analytics.users`, set `isPartner = TRUE` for the partner’s email (one-time ops).
-2. Partner signs in on thepicklereport.com → **Profile** → Giveaways → **Create tracking link**.
-3. They get a durable URL: `https://www.thepicklereport.com/giveaway/{slug}?ref={partnerCode}` (codes are `p…`).
-4. Each new subscriber who enters through that link increments `creditedSubs` on their code (shown on profile). Self-referral does not credit.
-5. Optional: append UTMs for analytics (`utm_source=partner&utm_campaign={slug}&utm_content={name}`) — credit still keys off `ref` only.
+### Ops (preferred): Unaffiliated Analytics
 
-You do **not** need a separate landing page per partner. One giveaway URL + unique `ref` is enough. For paid affiliates who never enter the draw themselves, they still see counts on profile as long as `isPartner` is set.
+1. Open **[Giveaway partners](https://my.unaffiliated.co/tools/giveaways)** (Tools access).
+2. Enter the partner’s email + optional label → **Create / reuse tracking link**.
+   - Sets `isPartner = TRUE` in BigQuery
+   - Mints (or reuses) a `p…` partner code for the campaign
+3. Copy and send them:
+   - **Tracking URL** — `https://www.thepicklereport.com/giveaway/{slug}?ref={code}`
+   - **Dashboard URL** — `https://my.unaffiliated.co/partner/giveaway/{code}` (public performance page)
+4. When the giveaway ends: **Deactivate link** or **End partner** from the same tool.
+
+### Manual / profile fallback
+
+1. In BigQuery `analytics.users`, set `isPartner = TRUE` for the partner’s email.
+2. Partner signs in on thepicklereport.com → **Profile** → Giveaways → **Create tracking link**.
+3. Optional UTMs for analytics (`utm_source=partner&utm_campaign={slug}`) — credit still keys off `ref` only.
+
+You do **not** need a separate landing page per partner. One giveaway URL + unique `ref` is enough.
 
 ## Ops
 
 - Run `subscription-functions/docs/sql/CREATE_GIVEAWAY_TABLES.sql` once in GCP.
-- Optional: `ALTER TABLE …users ADD COLUMN IF NOT EXISTS isPartner BOOL;` then flag partners manually.
-- Secrets stay on magic (`READER_TOKEN_SECRET`, `CIO_*`, `GCP_*`); marketing apps never query BQ by email.
-- Magic route: `POST /api/giveaway` actions `start | enter | redeem | create_code | stats | subscribe_or_signin | subscribe_and_enter`.
+- Optional: `ALTER TABLE …users ADD COLUMN IF NOT EXISTS isPartner BOOL;` then flag partners via Analytics tool or manually.
+- Secrets stay on magic (`READER_TOKEN_SECRET`, `CIO_*`, `GCP_*`, `INTERNAL_ANALYTICS_SECRET`); marketing apps never query BQ by email.
+- Magic routes: `POST /api/giveaway` (reader) and `POST /api/internal/giveaway-admin` (Analytics staff).
