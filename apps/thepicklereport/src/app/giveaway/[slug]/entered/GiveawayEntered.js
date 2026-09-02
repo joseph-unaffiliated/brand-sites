@@ -105,8 +105,26 @@ export default function GiveawayEntered({ giveaway }) {
       const emailParam = searchParams.get("email");
       const ref = readGiveawayRef(giveaway.slug, searchParams.get("ref")) || undefined;
       const already = searchParams.get("entered") === "1";
+      const preview = searchParams.get("preview") === "1";
 
       try {
+        if (preview) {
+          const origin =
+            (typeof window !== "undefined" && window.location.origin) ||
+            siteConfig.siteUrl.replace(/\/$/, "");
+          setAlreadySubscribed(searchParams.get("existing") === "1");
+          setShareUrl(`${origin}/giveaway/${giveaway.slug}?ref=rpreview`);
+          setCredited(0);
+          setTickets(1);
+          setStatus("success");
+          setMessage(
+            ended
+              ? "This draw has closed. Thanks for playing."
+              : giveaway.successHeadline || "You’re entered in the draw!",
+          );
+          return;
+        }
+
         if (token) {
           const redeemed = await callGiveawayApi({ action: "redeem", token });
           if (cancelled) return;
@@ -243,23 +261,22 @@ export default function GiveawayEntered({ giveaway }) {
         ) : null}
       </header>
 
-      <div className={styles.prose}>
+      <div className={`${styles.prose} ${styles.entered}`}>
         {status === "working" && <p>Please wait just a moment.</p>}
 
         {status === "success" && !ended && (
           <>
             <p>{successBody}</p>
             {tickets != null && (
-              <p>
+              <p className={styles.ticketBox}>
                 You have {tickets} ticket{tickets === 1 ? "" : "s"}.
               </p>
             )}
             {shareUrl && (
               <>
-                <h2>Get more tickets</h2>
                 <p>
-                  Share your link — each friend who subscribes through it adds another
-                  ticket.
+                  To get more tickets, share your unique referral link. Each friend who
+                  subscribes through it adds another ticket.
                   {credited != null ? ` Friends subscribed so far: ${credited}.` : ""}
                 </p>
                 <p className={styles.shareUrl}>{shareUrl}</p>

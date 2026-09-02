@@ -15,6 +15,14 @@ import { siteConfig } from "@/config/site";
 import { readGiveawayRef } from "@/lib/giveaway-ref";
 import styles from "./GiveawayLanding.module.css";
 
+function asCount(value) {
+  if (value == null) return 0;
+  if (typeof value === "object" && value !== null && "value" in value) {
+    return Number(value.value) || 0;
+  }
+  return Number(value) || 0;
+}
+
 /**
  * @param {{ giveaway: import("@/config/giveaways").GiveawayConfig }} props
  */
@@ -27,6 +35,7 @@ export default function GiveawayLanding({ giveaway }) {
   useEffect(() => {
     setRef(readGiveawayRef(giveaway.slug, urlRef));
   }, [giveaway.slug, urlRef]);
+
   const status = giveawayStatus(giveaway);
   const days = daysUntilDraw(giveaway);
   const next = useMemo(() => {
@@ -38,13 +47,98 @@ export default function GiveawayLanding({ giveaway }) {
   const [email, setEmail] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
+  const [entryCheck, setEntryCheck] = useState("pending"); // pending | none | entered
+  const [shareUrl, setShareUrl] = useState(null);
+  const [credited, setCredited] = useState(null);
+  const [tickets, setTickets] = useState(null);
+  const [copied, setCopied] = useState(false);
 
   const signedIn = isSubscribed || !!getReaderToken();
   const intro = giveaway.intro?.length ? giveaway.intro : [giveaway.prizeBody];
   const steps = giveaway.howToEnter || [];
-  const stepsBeforeCta = steps.slice(0, 2);
-  const stepsAfterCta = steps.slice(2);
   const socialLinks = giveaway.socialLinks || [];
+  const previewEntered = searchParams.get("preview") === "entered";
+  const alreadyEntered = previewEntered || entryCheck === "entered";
+
+  useEffect(() => {
+    if (previewEntered) {
+      const origin =
+        (typeof window !== "undefined" && window.location.origin) ||
+        siteConfig.siteUrl.replace(/\/$/, "");
+      setShareUrl(`${origin}/giveaway/${giveaway.slug}?ref=rpreview`);
+      setCredited(0);
+      setTickets(1);
+      setEntryCheck("entered");
+      return;
+    }
+
+    if (!getReaderToken()) {
+      setEntryCheck("none");
+      return;
+    }
+
+    let cancelled = false;
+    (async () => {
+      try {
+        const stats = await callGiveawayApi(
+          {
+            action: "stats",
+            brand: siteConfig.brandId,
+            giveawaySlug: giveaway.slug,
+          },
+          { bearer: true },
+        );
+        if (cancelled) return;
+        const entry = (stats.entries || []).find((e) => e.giveawaySlug === giveaway.slug);
+        const referral = (stats.codes || []).find((c) => c.type === "referral");
+        if (!entry) {
+          setEntryCheck("none");
+          return;
+        }
+        const origin =
+          (typeof window !== "undefined" && window.location.origin) ||
+          siteConfig.siteUrl.replace(/\/$/, "");
+        if (referral?.code) {
+          setShareUrl(
+            `${origin}/giveaway/${giveaway.slug}?ref=${encodeURIComponent(referral.code)}`,
+          );
+          setCredited(asCount(referral.creditedSubs));
+        }
+        setTickets(asCount(entry.baseTickets) + asCount(entry.bonusTickets));
+        setEntryCheck("entered");
+      } catch {
+        if (!cancelled) setEntryCheck("none");
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [giveaway.slug, previewEntered, signedIn]);
+
+  function renderIntroParagraph(text, key) {
+    const mark = "12 jars of McClure’s Pickles";
+    const at = text.indexOf(mark);
+    if (at === -1) return <p key={key}>{text}</p>;
+    return (
+      <p key={key}>
+        {text.slice(0, at)}
+        <strong>{mark}</strong>
+        {text.slice(at + mark.length)}
+      </p>
+    );
+  }
+
+  async function copyShare() {
+    if (!shareUrl) return;
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      /* ignore */
+    }
+  }
 
   async function enterSignedIn() {
     setBusy(true);
@@ -102,64 +196,97 @@ export default function GiveawayLanding({ giveaway }) {
         {status === "ended" && (
           <p className={styles.statusNote}>This draw has closed.</p>
         )}
+        {giveaway.heroImage ? (
+          <figure className={styles.heroMedia}>
+            {/* eslint-disable-next-line @next/next/no-img-element -- local giveaway asset; swap file in public/ */}
+            <img
+              src={giveaway.heroImage}
+              alt={giveaway.heroImageAlt || giveaway.title}
+              width={1200}
+              height={800}
+            />
+          </figure>
+        ) : null}
       </header>
 
       <div className={styles.prose}>
-        {intro.map((paragraph, i) => (
-          <p key={`intro-${i}`}>{paragraph}</p>
-        ))}
+        {intro.map((paragraph, i) => renderIntroParagraph(paragraph, `intro-${i}`))}
 
-        {steps.length > 0 && (
-          <>
-            <h2>How to enter</h2>
-            {stepsBeforeCta.length > 0 && (
-              <ol className={styles.steps}>
-                {stepsBeforeCta.map((step, i) => (
-                  <li key={`step-before-${i}`}>{step}</li>
-                ))}
-              </ol>
+        {alreadyEntered ? (
+          <div className={`${styles.howToEnter} ${styles.entered}`}>
+            <h2>{giveaway.successHeadline || "You’re entered in the draw!"}</h2>
+            {tickets != null && (
+              <p className={styles.ticketBox}>
+                You have {tickets} ticket{tickets === 1 ? "" : "s"}.
+              </p>
             )}
-          </>
-        )}
-
-        {status === "live" && (
-          <div className={styles.enterBlock}>
-            {signedIn ? (
-              <button
-                type="button"
-                className="button button-primary"
-                disabled={busy}
-                onClick={enterSignedIn}
-              >
-                {busy ? "…" : giveaway.ctaEnterLabel || "Enter to win"}
-              </button>
-            ) : (
-              <form className={styles.form} onSubmit={submitEmail} noValidate>
-                <input
-                  type="email"
-                  name="email"
-                  required
-                  placeholder="Email address"
-                  value={email}
-                  onChange={(ev) => setEmail(ev.target.value)}
-                  disabled={busy}
-                  autoComplete="email"
-                />
-                <button type="submit" className="button button-primary" disabled={busy}>
-                  {busy ? "…" : giveaway.ctaSubscribeLabel || "Enter to win"}
-                </button>
-              </form>
+            {shareUrl && (
+              <>
+                <p>
+                  To get more tickets, share your unique referral link. Each friend who
+                  subscribes through it adds another ticket.
+                  {credited != null ? ` Friends subscribed so far: ${credited}.` : ""}
+                </p>
+                <p className={styles.shareUrl}>{shareUrl}</p>
+                <div className={styles.enterBlock}>
+                  <button
+                    type="button"
+                    className="button button-primary"
+                    onClick={copyShare}
+                  >
+                    {copied ? "Copied" : "Copy share link"}
+                  </button>
+                </div>
+              </>
             )}
-            {error && <p className={styles.error}>{error}</p>}
           </div>
-        )}
+        ) : (
+          (steps.length > 0 || status === "live") && (
+            <div className={styles.howToEnter}>
+              {steps.length > 0 && (
+                <>
+                  <h2>How to enter</h2>
+                  <ol className={styles.steps}>
+                    {steps.map((step, i) => (
+                      <li key={`step-${i}`}>{step}</li>
+                    ))}
+                  </ol>
+                </>
+              )}
 
-        {stepsAfterCta.length > 0 && (
-          <ol className={styles.steps} start={stepsBeforeCta.length + 1}>
-            {stepsAfterCta.map((step, i) => (
-              <li key={`step-after-${i}`}>{step}</li>
-            ))}
-          </ol>
+              {status === "live" && (
+                <div className={styles.enterBlock}>
+                  {signedIn ? (
+                    <button
+                      type="button"
+                      className="button button-primary"
+                      disabled={busy}
+                      onClick={enterSignedIn}
+                    >
+                      {busy ? "Submitting..." : giveaway.ctaEnterLabel || "Enter to win"}
+                    </button>
+                  ) : (
+                    <form className={styles.form} onSubmit={submitEmail} noValidate>
+                      <input
+                        type="email"
+                        name="email"
+                        required
+                        placeholder="Email address"
+                        value={email}
+                        onChange={(ev) => setEmail(ev.target.value)}
+                        disabled={busy}
+                        autoComplete="email"
+                      />
+                      <button type="submit" className="button button-primary" disabled={busy}>
+                        {busy ? "Submitting..." : giveaway.ctaSubscribeLabel || "Enter to win"}
+                      </button>
+                    </form>
+                  )}
+                  {error && <p className={styles.error}>{error}</p>}
+                </div>
+              )}
+            </div>
+          )
         )}
 
         {socialLinks.length > 0 && (
@@ -181,7 +308,7 @@ export default function GiveawayLanding({ giveaway }) {
           <p key={`closing-${i}`}>{paragraph}</p>
         ))}
 
-        {giveaway.rulesText ? (
+        {giveaway.rulesText && !alreadyEntered ? (
           <p className={styles.rules}>{giveaway.rulesText}</p>
         ) : null}
 

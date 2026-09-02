@@ -26,6 +26,8 @@
  *   successBodyExisting?: string;
  *   ctaSubscribeLabel?: string;
  *   ctaEnterLabel?: string;
+ *   heroImage?: string;
+ *   heroImageAlt?: string;
  *   listed?: boolean;
  * }} GiveawayConfig
  *
@@ -47,7 +49,7 @@ export const GIVEAWAYS = [
       "When the world turns to chaos, we turn to pickles. And now, so can you.",
     ],
     howToEnter: [
-      "Sign up for The Pickle Report’s weekly newsletter. Only those signed up will be eligible.",
+      "Sign up for The Pickle Report’s weekly newsletter. Only active subscribers are eligible.",
       "Click the button below to enter to win pickles for a year. Our winner will be selected on September 30 so keep an eye on your email.",
       "Pray to the pickle gods.",
     ],
@@ -79,6 +81,8 @@ export const GIVEAWAYS = [
     successBodyExisting: "You’re entered for a year’s worth of McClure’s Pickles.",
     ctaSubscribeLabel: "Enter to win",
     ctaEnterLabel: "Enter to win",
+    heroImage: "/giveaway/years-supply-of-pickles.jpg",
+    heroImageAlt: "A dump truck dumping a year’s worth of pickles onto a front lawn",
     listed: true,
   },
 ];
