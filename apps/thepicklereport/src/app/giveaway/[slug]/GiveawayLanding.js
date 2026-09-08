@@ -207,11 +207,14 @@ export default function GiveawayLanding({ giveaway }) {
               height={800}
             />
             <figcaption className={styles.heroDisclaimer}>
-              Disclaimer: Objects in image are larger than they appear... the actual prize
-              is 12 jars of pickles, not a dumptruck
+              Disclaimer: Objects in image are larger than they appear. Prize includes 12
+              jars of pickles. Dump truck sold separately.
             </figcaption>
           </figure>
         ) : null}
+        <p className={styles.photoHeadline}>
+          Start your 2027 off right with a whole year’s worth of briny, salty crunch.
+        </p>
       </header>
 
       <div className={styles.prose}>

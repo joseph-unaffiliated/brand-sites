@@ -40,16 +40,16 @@ export const GIVEAWAYS = [
   {
     slug: "years-supply-of-pickles",
     title: "Win a Year’s Worth of Pickles",
-    prizeHeadline: "Win a year’s worth of pickles",
+    prizeHeadline: "Win a year’s supply of pickles",
     prizeBody:
       "The Pickle Report is partnering with McClure’s Pickles to give one lucky winner a year’s supply of pickles — 12 jars delivered to their door.",
     intro: [
       "The Pickle Report is partnering with our friends at McClure’s Pickles to give one lucky winner a year’s supply of pickles.",
-      "One lucky winner will be sent 12 jars of McClure’s Pickles right to their door. Start your 2027 off right with a whole year’s worth of briny, salty crunch.",
+      "One lucky winner will be sent 12 jars of McClure’s Pickles right to their door.",
       "When the world turns to chaos, we turn to pickles. And now, so can you.",
     ],
     howToEnter: [
-      "Sign up for The Pickle Report’s weekly newsletter. Only active subscribers are eligible.",
+      "Enter your email to sign up for The Pickle Report’s weekly newsletter and enter the giveaway. Only active subscribers are eligible.",
       "Click the button below to enter to win pickles for a year. Our winner will be selected on September 30 so keep an eye on your email.",
       "Pray to the pickle gods.",
     ],
