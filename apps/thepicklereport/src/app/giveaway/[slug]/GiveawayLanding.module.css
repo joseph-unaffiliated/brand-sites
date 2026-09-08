@@ -34,6 +34,7 @@
 }
 
 .heroMedia {
+  position: relative;
   max-width: min(100%, 640px);
   width: 100%;
   margin: 2.5rem auto 0;
@@ -41,6 +42,23 @@
   overflow: hidden;
   border-radius: 4px;
   background: var(--surface, #e8e6e1);
+}
+
+.heroDisclaimer {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  max-width: min(72%, 280px);
+  margin: 0;
+  padding: 0.45rem 0.6rem;
+  border-radius: 4px;
+  background: rgba(20, 20, 20, 0.72);
+  color: #fff;
+  font-size: 0.7rem;
+  line-height: 1.35;
+  font-weight: 300;
+  text-align: right;
+  text-wrap: balance;
 }
 
 .heroMedia img {

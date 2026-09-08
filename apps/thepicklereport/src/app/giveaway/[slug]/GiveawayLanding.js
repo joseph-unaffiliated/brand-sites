@@ -55,7 +55,8 @@ export default function GiveawayLanding({ giveaway }) {
 
   const signedIn = isSubscribed || !!getReaderToken();
   const intro = giveaway.intro?.length ? giveaway.intro : [giveaway.prizeBody];
-  const steps = giveaway.howToEnter || [];
+  const allSteps = giveaway.howToEnter || [];
+  const steps = signedIn ? allSteps.slice(1) : allSteps;
   const socialLinks = giveaway.socialLinks || [];
   const previewEntered = searchParams.get("preview") === "entered";
   const alreadyEntered = previewEntered || entryCheck === "entered";
@@ -205,6 +206,10 @@ export default function GiveawayLanding({ giveaway }) {
               width={1200}
               height={800}
             />
+            <figcaption className={styles.heroDisclaimer}>
+              Disclaimer: Objects in image are larger than they appear... the actual prize
+              is 12 jars of pickles, not a dumptruck
+            </figcaption>
           </figure>
         ) : null}
       </header>

@@ -40,7 +40,7 @@ export const GIVEAWAYS = [
   {
     slug: "years-supply-of-pickles",
     title: "Win a Year’s Worth of Pickles",
-    prizeHeadline: "Win a year’s worth of pickles!",
+    prizeHeadline: "Win a year’s worth of pickles",
     prizeBody:
       "The Pickle Report is partnering with McClure’s Pickles to give one lucky winner a year’s supply of pickles — 12 jars delivered to their door.",
     intro: [
@@ -79,7 +79,7 @@ export const GIVEAWAYS = [
     successBodyNew:
       "Thanks for subscribing — you’ve been entered for a year’s worth of McClure’s Pickles.",
     successBodyExisting: "You’re entered for a year’s worth of McClure’s Pickles.",
-    ctaSubscribeLabel: "Enter to win",
+    ctaSubscribeLabel: "Subscribe and Enter",
     ctaEnterLabel: "Enter to win",
     heroImage: "/giveaway/years-supply-of-pickles.jpg",
     heroImageAlt: "A dump truck dumping a year’s worth of pickles onto a front lawn",
