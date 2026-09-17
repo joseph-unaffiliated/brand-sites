@@ -50,7 +50,7 @@ export const GIVEAWAYS = [
     ],
     howToEnter: [
       "Enter your email to sign up for The Pickle Report’s weekly newsletter and enter the giveaway. Only active subscribers are eligible.",
-      "Click the button below to enter to win pickles for a year. Our winner will be selected on September 30 so keep an eye on your email.",
+      "Click the button below to enter to win pickles for a year. Our winner will be selected on October 6 so keep an eye on your email.",
       "Pray to the pickle gods.",
     ],
     socialLinks: [
@@ -69,12 +69,12 @@ export const GIVEAWAYS = [
     rulesText:
       "One entry per email. Extra tickets for each friend who subscribes through your personal link (shown after you enter). Void where prohibited. Winner announced by email after the draw.",
     startsAt: "2026-08-21T00:00:00.000Z",
-    drawAt: "2026-09-30T23:59:59.000Z",
-    endsAt: "2026-09-30T23:59:59.000Z",
-    drawDateLabel: "September 30",
+    drawAt: "2026-10-06T23:59:59.000Z",
+    endsAt: "2026-10-06T23:59:59.000Z",
+    drawDateLabel: "October 6",
     seoTitle: "Win a Year’s Worth of Pickles | The Pickle Report",
     seoDescription:
-      "Enter The Pickle Report × McClure’s Pickles giveaway for a chance to win 12 jars — a year’s supply of pickles. Subscribe to enter. Winner selected September 30.",
+      "Enter The Pickle Report × McClure’s Pickles giveaway for a chance to win 12 jars — a year’s supply of pickles. Subscribe to enter. Winner selected October 6.",
     successHeadline: "You’re entered in the draw!",
     successBodyNew:
       "Thanks for subscribing — you’ve been entered for a year’s worth of McClure’s Pickles.",

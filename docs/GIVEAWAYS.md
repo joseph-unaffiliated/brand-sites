@@ -68,6 +68,7 @@ Same `?ref=` system as personal share links; partner codes are a separate type.
 3. Copy and send them:
    - **Tracking URL** — `https://www.thepicklereport.com/giveaway/{slug}?ref={code}`
    - **Dashboard URL** — `https://my.unaffiliated.co/partner/giveaway/{code}` (public performance page)
+   - **Entrants total** — `https://my.unaffiliated.co/giveaway/{slug}` (public; all entrants, not partner-scoped)
 4. When the giveaway ends: **Deactivate link** or **End partner** from the same tool.
 
 ### Manual / profile fallback
