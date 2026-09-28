@@ -7,13 +7,15 @@ const PLACEHOLDER_RETENTION = "YOUR_RETENTION_ID_HERE";
 const DEFAULT_RETENTION_SITE_ID = "X2JHJ4WE";
 
 /**
- * From the Vault needs its own OneTrust domain script (NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT).
- * There is deliberately no network fallback: another brand's script is scoped to that
- * brand's domain, so OneTrust stays off until FTV's UUID is set.
+ * From the Vault OneTrust domain script (fromthevault.heebnewsletters.com). Override with
+ * NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT. Never fall back to another brand's script: each is
+ * scoped to that brand's domain.
  */
+const DEFAULT_ONETRUST_DOMAIN_SCRIPT = "019bc871-7fd9-72d4-b5b2-73c9d4d51d4b";
+
 function resolveOnetrustDomainScript() {
   const v = process.env.NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT?.trim();
-  if (!v || v === PLACEHOLDER_ONETRUST) return null;
+  if (!v || v === PLACEHOLDER_ONETRUST) return DEFAULT_ONETRUST_DOMAIN_SCRIPT;
   return v;
 }
 
