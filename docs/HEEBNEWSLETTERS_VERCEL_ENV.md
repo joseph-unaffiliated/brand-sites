@@ -46,7 +46,7 @@ After saving: **Redeploy** Production (and Preview if you added vars there).
 | `NEXT_PUBLIC_META_PIXEL_ID` | `809409995127436` ✅ |
 | `NEXT_PUBLIC_GTM_ID` | `GTM-TVHD6JMG` ✅ (same container as other Unaffiliated sites) |
 | `NEXT_PUBLIC_GA_MEASUREMENT_ID` | ⚠️ UPDATE — create a new GA4 property for this brand |
-| `NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT` | ⚠️ UPDATE — OneTrust domain script UUID for **heebnewsletters.com** |
+| `NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT` | `019bc871-7fd9-72d4-b5b2-73c9d4d51d4b` ✅ (OneTrust domain `fromthevault.heebnewsletters.com`; also baked into `ComplianceScripts.js`) |
 | `NEXT_PUBLIC_RETENTION_SITE_ID` | `X2JHJ4WE` (network default) |
 | `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` | Optional — Search Console token when ready |
 | `NEXT_PUBLIC_BING_SITE_VERIFICATION` | Optional — Bing token when ready |
@@ -56,7 +56,7 @@ After saving: **Redeploy** Production (and Preview if you added vars there).
 | `NEXT_PUBLIC_READER_EVENTS_ENABLED` / `NEXT_PUBLIC_READER_PROFILE_V2` | `true` |
 | `AIRTABLE_HOUSE_ADS_BASE_ID` | `appXFQv3Hy0wUDDnb` |
 | `AIRTABLE_HOUSE_ADS_TABLE_ID` | `tblB3emRodWIzabTP` |
-| `AIRTABLE_API_KEY` | ⚠️ UPDATE — **server-only, Sensitive.** Same token as the other brands. Used once FTV adopts the shared house-ad pool (post Oct 6). |
+| `AIRTABLE_API_KEY` | ✅ **Server-only, Sensitive.** `Keys/AIRTABLE_HOUSEADS.txt`. Used once FTV adopts the shared house-ad pool (post Oct 6). |
 
 **Do not add to marketing:** `SANITY_API_TOKEN` (published content is public; removed 2026-09-28), `GCP_*`, `READER_TOKEN_SECRET`, `RETENTION_API_KEY`, `RETENTION_API_ID`.
 
@@ -108,7 +108,7 @@ NEXT_PUBLIC_ADS_MODE=cross_promo
 NEXT_PUBLIC_META_PIXEL_ID=809409995127436
 NEXT_PUBLIC_GTM_ID=GTM-TVHD6JMG
 NEXT_PUBLIC_GA_MEASUREMENT_ID=
-NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT=
+NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT=019bc871-7fd9-72d4-b5b2-73c9d4d51d4b
 NEXT_PUBLIC_RETENTION_SITE_ID=X2JHJ4WE
 
 NEXT_PUBLIC_READER_EVENTS_ENABLED=true
@@ -146,14 +146,14 @@ FTV stays on **`https://heebnewsletters.vercel.app`** with noindex only (no Verc
 | `NEXT_PUBLIC_GTM_ID` / `NEXT_PUBLIC_META_PIXEL_ID` | ✅ `GTM-TVHD6JMG` / `809409995127436` |
 | Reader flags | ✅ |
 | `SANITY_API_TOKEN` | ✅ removed from the marketing project |
-| `AIRTABLE_HOUSE_ADS_*` | ✅ base/table set; ⚠️ `AIRTABLE_API_KEY` still to add (Sensitive) |
+| `AIRTABLE_HOUSE_ADS_*` / `AIRTABLE_API_KEY` | ✅ base/table set; key Sensitive from `Keys/AIRTABLE_HOUSEADS.txt` |
 | `NEXT_PUBLIC_GA_MEASUREMENT_ID` | ⚠️ waiting on a new FTV GA4 property |
-| `NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT` | ⚠️ waiting on an FTV OneTrust domain script. `ComplianceScripts.js` has no fallback, so no banner loads until it's set (no more borrowing TPR's). |
+| `NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT` | ✅ `019bc871-7fd9-72d4-b5b2-73c9d4d51d4b` (also the default in `ComplianceScripts.js`). It's configured in OneTrust for `fromthevault.heebnewsletters.com`, so the banner may not appear on `*.vercel.app`. |
 | Magic CORS | ✅ staging, apex, www, `fromthevault.` subdomain, `localhost:3007` |
 | Magic comps / retention / cross-brand / configurable return host | ⚠️ local in `subscription-functions`; ships with the post-Oct 6 magic push |
 | Airtable Destination Brands | ✅ From the Vault added to every active House Ads creative except its own |
 | Hosted studio | ✅ [fromthevault.sanity.studio](https://fromthevault.sanity.studio/) (body images enabled) |
-| Content | ⚠️ newest issue in Sanity is #31. Sent issues #32–35 are ready to import with `scripts/import-vault-issues.py` (see `studio-heebnewsletters/README.md`) once approved. |
+| Content | ⚠️ Sanity has #1–31 except **#28 (Reverend Billy)**. Newer sent issues come from HTML you supply. `publishedDate` on all 30 issues corrected to the Customer.io send time (2026-09-28). |
 | Shared sign-in toast, `/sign-in`, `/redirect`, house-ad pool | ⏳ post Oct 6 (shared packages) |
 
 ## Host decision (open)

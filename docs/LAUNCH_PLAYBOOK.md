@@ -101,7 +101,7 @@ All `magic.*` hosts run on **one shared Vercel project**, so every env var is ne
   - TEC → `/recipe/{slug}`
   - Hipspeak → `/word/{slug}`
 - [ ] Spot-check creatives targeting the new host after formula change
-- [ ] Marketing env: `AIRTABLE_HOUSE_ADS_BASE_ID`, `AIRTABLE_HOUSE_ADS_TABLE_ID`, `AIRTABLE_API_KEY` (Sensitive; same token as the other brands)
+- [ ] Marketing env: `AIRTABLE_HOUSE_ADS_BASE_ID`, `AIRTABLE_HOUSE_ADS_TABLE_ID`, `AIRTABLE_API_KEY` (Sensitive; `Keys/AIRTABLE_HOUSEADS.txt`)
 - [ ] Verify: `curl -s "https://<host>/api/house-ads?slot=inArticle"` returns an `ad`. `{"ad":null}` means no eligible creatives or a bad token — check runtime logs for `[house-ads] Airtable fetch failed 403`.
 
 ---
@@ -174,7 +174,7 @@ Status as of 2026-09-28. The step-by-step cutover checklist, rollback and Airtab
 - [x] Marketing project Root Directory `apps/hipspeak`; env from `HIPSPEAK_VERCEL_ENV.md`
 - [x] OneTrust `019a7167-e6eb-7fa2-ae9f-60338480c772`; Meta / GTM; Airtable house-ads base/table
 - [ ] GA4 measurement ID (new Hipspeak property)
-- [ ] `AIRTABLE_API_KEY`: replace (current value gets 403) and mark Sensitive
+- [x] `AIRTABLE_API_KEY` Sensitive, from `Keys/AIRTABLE_HOUSEADS.txt`
 - [x] `NEXT_PUBLIC_SITE_URL=https://www.hipspeak.com`
 - [x] Attach `www.hipspeak.com` (production) and `hipspeak.com` (308 → www); both verified
 - [x] Reader flags on
@@ -215,7 +215,8 @@ Use alongside [`HEEBNEWSLETTERS_VERCEL_ENV.md`](./HEEBNEWSLETTERS_VERCEL_ENV.md)
 ### Before production
 
 - [ ] Choose the host (apex/www or `fromthevault.heebnewsletters.com`)
-- [ ] FTV OneTrust domain script UUID and GA4 measurement ID; `AIRTABLE_API_KEY` (Sensitive)
+- [x] FTV OneTrust domain script; `AIRTABLE_API_KEY` (Sensitive)
+- [ ] GA4 measurement ID
 - [ ] Post-Oct 6: shared house-ad pool, sign-in toast, `/sign-in`, `/redirect`; magic push (comps, retention, return host)
-- [ ] Import sent issues #32–35 (approval needed); check `publishedDate` on older issues against Customer.io send dates
+- [ ] Import newer sent issues and missing #28 from supplied HTML (`publishedDate` = Customer.io send time; older issues corrected 2026-09-28)
 - [ ] Legacy Webflow URL 308s; cutover steps in `HEEBNEWSLETTERS_VERCEL_ENV.md`; delete `NEXT_PUBLIC_NOINDEX`

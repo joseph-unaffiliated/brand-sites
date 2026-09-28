@@ -57,7 +57,7 @@ schema, upload steps, and the `Flag for CE` / `Target for CE` flags.
 
 | Variable | Browser? | Purpose |
 |----------|----------|---------|
-| `AIRTABLE_API_KEY` | **no — server only** | Airtable personal access token, read access to base `appXFQv3Hy0wUDDnb`. Value lives in `Keys/AIRTABLE_ACCESS_TOKEN.txt` locally — copy it into each brand's marketing Vercel project as a server env var; **do not** commit it or prefix it `NEXT_PUBLIC_`. `AIRTABLE_ACCESS_TOKEN` also works as a fallback name. |
+| `AIRTABLE_API_KEY` | **no — server only** | Airtable personal access token, read access to base `appXFQv3Hy0wUDDnb`. Value lives in `Keys/AIRTABLE_HOUSEADS.txt` locally (**not** `AIRTABLE_ACCESS_TOKEN.txt`, which has no access to this base and gets a 403) — copy it into each brand's marketing Vercel project as a server env var; **do not** commit it or prefix it `NEXT_PUBLIC_`. `AIRTABLE_ACCESS_TOKEN` also works as a fallback name. |
 | `AIRTABLE_HOUSE_ADS_BASE_ID` | no | Optional override; defaults to `appXFQv3Hy0wUDDnb`. |
 | `AIRTABLE_HOUSE_ADS_TABLE_ID` | no | Optional override; defaults to `tblB3emRodWIzabTP` (Creatives table). |
 

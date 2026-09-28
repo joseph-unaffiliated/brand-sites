@@ -50,7 +50,7 @@ After saving: **Redeploy** Production (and Preview if you added vars there).
 | `NEXT_PUBLIC_BING_SITE_VERIFICATION` | Optional — Bing token when ready |
 | `AIRTABLE_HOUSE_ADS_BASE_ID` | `appXFQv3Hy0wUDDnb` — house-ads pool (`/api/house-ads`) |
 | `AIRTABLE_HOUSE_ADS_TABLE_ID` | `tblB3emRodWIzabTP` |
-| `AIRTABLE_API_KEY` | ⚠️ UPDATE — **server-only.** Token from Keys — do not commit. |
+| `AIRTABLE_API_KEY` | **Server-only, Sensitive.** `Keys/AIRTABLE_HOUSEADS.txt` — do not commit. |
 | `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Optional — omit unless enabling Turnstile |
 
 **Do not add to marketing:** `SANITY_API_TOKEN`, `GCP_*`, `READER_TOKEN_SECRET`, `RETENTION_API_KEY`, `RETENTION_API_ID`.
@@ -132,7 +132,7 @@ Canonical host is **`https://www.hipspeak.com`**; the apex 308s to `www` (Vercel
 | `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` | ✅ `kr8Lng5KcVPHt8VuzQrT9kyMAxJOBzzUtx3WeUXPC04` (same token as the Webflow page; the zone also has a DNS TXT verification) |
 | `NEXT_PUBLIC_GTM_ID` / `NEXT_PUBLIC_META_PIXEL_ID` | ✅ `GTM-TVHD6JMG` / `809409995127436` |
 | `NEXT_PUBLIC_GA_MEASUREMENT_ID` | ⚠️ waiting on the new Hipspeak GA4 property. Re-checked 2026-09-28: published `GTM-TVHD6JMG` has no `G-*` IDs, so direct gtag won't double count. |
-| `AIRTABLE_API_KEY` | ⚠️ current value gets **403** from Airtable (runtime logs: `[house-ads] Airtable fetch failed 403`), so `/api/house-ads` returns `{"ad":null}` and the static cross-promo shows. Replace it with the token the other brands use and save as **Sensitive**, then redeploy. |
+| `AIRTABLE_API_KEY` | ✅ Sensitive, from `Keys/AIRTABLE_HOUSEADS.txt` (2026-09-28); `/api/house-ads` serves pool ads |
 | Airtable Destination Brands | ✅ Hipspeak added to every active House Ads creative except its own (2026-09-28) |
 | Domains on Vercel project `hipspeak` | ✅ `www.hipspeak.com` (production) and `hipspeak.com` (308 → www), both verified; DNS still points at Cloudflare/Webflow |
 | Magic CORS (`READERS_CORS_ORIGINS`) | ✅ apex, www, `hipspeak.vercel.app`, `http://localhost:3006` |

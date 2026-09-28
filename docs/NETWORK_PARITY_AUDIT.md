@@ -24,7 +24,7 @@ Legend: ✅ in place · ⏳ planned (see note) · — intentionally absent (see 
 | `/redirect` (magic external links) | ⏳ | ✅ local | ✅ local | ⏳ | ⏳ | ⏳ |
 | Profile via Bearer token (magic) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | Reader events / profile v2 flags | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Airtable house-ad pool (`/api/house-ads`) | ✅ | ✅ | ✅ | ✅ | ✅ (token fix pending) | ⏳ static cross-promo only |
+| Airtable house-ad pool (`/api/house-ads`) | ✅ | ✅ | ✅ | ✅ | ✅ | ⏳ static cross-promo only |
 | Subscribe-gated sticky (CTA vs ad) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | Sticky ad refresh cycle (45s, then 30s) | ✅ | ✅ | ✅ | ✅ | ⏳ | ⏳ |
 | Comps pages (`/opted-out-comps`, `/opted-in-comps`) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
@@ -36,7 +36,7 @@ Legend: ✅ in place · ⏳ planned (see note) · — intentionally absent (see 
 | Giveaways | ✅ | — | — | — | — | — |
 | Submissions | ✅ | ✅ | ✅ | ✅ | — | — |
 | Rabbit Hole + podcast promo | — | — | — | — | — | ✅ |
-| Own OneTrust domain script | ✅ | ✅ | ✅ | ✅ | ✅ | ⏳ UUID needed (no banner until set) |
+| Own OneTrust domain script | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | GTM + Meta pixel | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | Own GA4 property | ✅ | ✅ | ✅ | ✅ | ⏳ ID needed | ⏳ ID needed |
 | `isJewishContent` on article view tracking | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
@@ -47,7 +47,6 @@ Legend: ✅ in place · ⏳ planned (see note) · — intentionally absent (see 
 Notes on the ⏳ rows:
 
 - **Sign-in toast, `/sign-in`, `/redirect`, house-ad stack, sticky refresh:** these move into `packages/magic-client` and `packages/shared-ads` after the TPR giveaway draw on 2026-10-06. Any `packages/*` change redeploys TPR through `turbo-ignore`, so nothing shared ships before then. FTV adopts the shared house-ad pool at the same time.
-- **HIP house ads:** the route and Airtable targeting are correct (every active House Ads creative lists Hipspeak and From the Vault in Destination Brands, except each brand's own creatives). The HIP project's `AIRTABLE_API_KEY` gets a 403 from Airtable, so `/api/house-ads` returns `{"ad":null}` and the static cross-promo shows instead. Replace it with the same token the other brands use, stored as **Sensitive**.
 - **Branded comps confirmation:** `hipspeak` and `heebnewsletters` are in `BRANDED_COMPS_CONFIRMATION` locally in `subscription-functions`. They ship with the post-Oct 6 magic push.
 
 ## Accepted differences
@@ -64,9 +63,9 @@ These are deliberate. Don't count them as gaps.
 
 ## Open items before each launch
 
-**Hipspeak (DNS cutover):** GA4 measurement ID; working `AIRTABLE_API_KEY` (Sensitive); you run the Cloudflare checklist and paste the Airtable Click URL formula from [`HIPSPEAK_VERCEL_ENV.md`](./HIPSPEAK_VERCEL_ENV.md); the post-Oct 6 shared-package and magic pushes; smoke tests.
+**Hipspeak (DNS cutover):** GA4 measurement ID; you run the Cloudflare checklist and paste the Airtable Click URL formula from [`HIPSPEAK_VERCEL_ENV.md`](./HIPSPEAK_VERCEL_ENV.md); the post-Oct 6 shared-package and magic pushes; smoke tests.
 
-**From the Vault (production):** choose the host; OneTrust domain script UUID; GA4 measurement ID; `AIRTABLE_API_KEY` (Sensitive); post-Oct 6 shared-package and magic pushes; import sent issues #32–35; then the cutover steps in [`HEEBNEWSLETTERS_VERCEL_ENV.md`](./HEEBNEWSLETTERS_VERCEL_ENV.md).
+**From the Vault (production):** choose the host; GA4 measurement ID; post-Oct 6 shared-package and magic pushes; import newer sent issues (and missing #28) from supplied HTML; then the cutover steps in [`HEEBNEWSLETTERS_VERCEL_ENV.md`](./HEEBNEWSLETTERS_VERCEL_ENV.md).
 
 ## Follow-ups (post-launch)
 
