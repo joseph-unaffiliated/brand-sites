@@ -64,7 +64,7 @@ After saving: **Redeploy** Production (and Preview if you added vars there).
 | `GCP_PROJECT_ID` | Your GCP project |
 | `GCP_SERVICE_ACCOUNT_KEY` | Service account JSON for BigQuery/subscribers |
 
-The brand also needs entries in the **subscription-functions** repo — follow `subscription-functions-copy/docs/ADDING_A_NEW_BRAND.md` with brand id `theeyeballerscookbook`.
+The brand also needs entries in the **subscription-functions** repo — follow `docs/ADDING_A_NEW_BRAND.md` in `../subscription-functions` with brand id `theeyeballerscookbook`.
 
 See [MAGIC_READER_ENV.md](./MAGIC_READER_ENV.md) for reader token + CORS detail.
 

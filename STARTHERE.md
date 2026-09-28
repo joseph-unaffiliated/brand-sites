@@ -6,7 +6,7 @@ This Git repository is **`brand-sites`** on GitHub—the shared home for our **p
 
 - **`apps/<brand>/`** — one **Next.js** website per publication (e.g. Hookup Lists, The Pickle Report). Each app can have its own design, domain, and Vercel project.
 - **`packages/*`** — **shared building blocks**: how email-link redirects work, how we talk to Sanity and to “magic” subscription servers, and how ads/pixels load. Change something here and it can affect **every** site—ask before editing.
-- **`subscription-functions-copy/`** — reference **serverless** code for Customer.io / BigQuery / magic links; production deploys for **magic.*.com** often live from this tree (or a sibling repo). Not imported by the marketing sites directly.
+- **`subscription-functions-copy/`** — a **stale snapshot** of the serverless “magic” code (Customer.io / BigQuery / magic links). The live code that serves every **magic.*.com** host is the separate [`subscription-functions`](https://github.com/joseph-unaffiliated/subscription-functions) repo (checked out as `../subscription-functions`). Don't edit or deploy from the copy.
 - **`studio-hookup-lists/`** — optional Sanity Studio variant; prefer env-driven project IDs (see `docs/ENVIRONMENT.md`).
 
 ## Where you probably work day to day

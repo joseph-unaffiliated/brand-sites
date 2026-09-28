@@ -30,7 +30,7 @@ pnpm exec turbo dev --filter=thepicklereport
 | `apps/hookuplists` | Hookup Lists production site |
 | `apps/thepicklereport` | Second publication template |
 | `packages/*` | `@publication-websites/*` shared code |
-| `subscription-functions-copy` | Magic / BigQuery / CIO serverless (reference + deploy) |
+| `subscription-functions-copy` | Stale snapshot of magic / BigQuery / CIO serverless. Live code and deploys: the [`subscription-functions`](https://github.com/joseph-unaffiliated/subscription-functions) repo (`../subscription-functions`) |
 | `studio-hookup-lists` | Optional Sanity studio (env-driven project id) |
 | `docs/` | Architecture, env, deployment |
 

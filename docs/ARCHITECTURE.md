@@ -21,13 +21,13 @@ flowchart TB
 ```
 
 1. **Marketing app** (`apps/*`): pages, Sanity-backed articles, ads, email-link landing behavior.
-2. **Magic host** (`subscription-functions-copy` deploy, e.g. `magic.brand.com`): validates/executes subscribe / snooze / unsubscribe; can issue **short-lived reader tokens**; serves **authenticated** subscription snapshot for profile pages.
+2. **Magic host** (sibling repo `../subscription-functions`, one shared Vercel project serving every `magic.<brand>.com`): validates/executes subscribe / snooze / unsubscribe; can issue **short-lived reader tokens**; serves **authenticated** subscription snapshot for profile pages. Because it's one project, `READERS_CORS_ORIGINS` is a single network-wide list and a magic push deploys every brand. (`subscription-functions-copy/` in this repo is a stale snapshot.)
 3. **Sanity**: content; each publication typically has its **own** project.
 4. **BigQuery** (`analytics.users`): network-wide subscription map; **read from marketing apps is not allowed**; magic verifies token then reads BQ.
 
 ## Middleware
 
-Homepage query parameters (`/?subscribed=true`, `/?poll`, …) are normalized by **`@publication-websites/platform-redirects`** and redirected to internal routes (`/subscribed`, `/poll`, …). Each app can override target paths via a route map if a brand needs different URLs later.
+Homepage query parameters (`/?subscribed=true`, `/?poll`, …) are normalized by **`@publication-websites/platform-redirects`** and redirected to internal routes (`/subscribed`, `/poll`, …). Each app can override target paths via a route map if a brand needs different URLs later; a `null` route skips that redirect (From the Vault uses `{ poll: null }` because it has no polls).
 
 ## Reader profile flow
 

@@ -11,7 +11,8 @@
 
 ## Magic (`subscription-functions`)
 
-- Deploy a **separate Vercel project** per `magic.<brand>` from the **`subscription-functions`** repo (branch `main`, root `/`).
+- All `magic.<brand>` hosts are served by **one shared Vercel project** deployed from the **`subscription-functions`** repo (branch `main`, root `/`). A push there deploys every brand's magic host at once, so respect freezes (e.g. a live TPR giveaway). New brands attach their `magic.<brand>` domain to that project; env vars such as `READERS_CORS_ORIGINS` are network-wide.
+- Env-only changes (e.g. appending CORS origins) can ship by redeploying the current production build, without a code push.
 - Topology inventory (hosts, env, reader rollout): [`subscription-functions/docs/MAGIC_DEPLOY_TOPOLOGY.md`](https://github.com/joseph-unaffiliated/subscription-functions/blob/main/docs/MAGIC_DEPLOY_TOPOLOGY.md) (also under `../subscription-functions/docs/` locally).
 - Ensure **`READER_TOKEN_SECRET`** and **`READERS_CORS_ORIGINS`** are set for profile / reader APIs.
 - Reader routes: `/api/reader-health`, `/api/reader-events`, `/api/reader-profile`, `/api/reader-subscriptions`, `/api/reader-identity`, `/api/ga-client-id`.
@@ -29,3 +30,7 @@
 - Article listing and `/article/[slug]` load from Sanity (for theeyeballerscookbook: `/recipes` and `/recipe/[slug]`; for hipspeak: `/archive` and `/word/[slug]`; for heebnewsletters: `/archive` and `/article/[slug]` sourced from the `vaultIssue` document type).
 - Poll / subscribed flows POST to correct `NEXT_PUBLIC_MAGIC_EXECUTE_URL`.
 - Profile: with token from subscribe flow, network list loads from magic; without token, at least current brand from local state.
+
+## Staging-only sites
+
+A brand can run on its `*.vercel.app` host before its production domain is chosen (From the Vault today). Set `NEXT_PUBLIC_NOINDEX=true` on the Vercel project: `robots.txt` disallows everything and pages emit `noindex, nofollow`. Delete the variable at go-live. No Vercel Deployment Protection is used, so magic, reader APIs and smoke tests work unchanged.

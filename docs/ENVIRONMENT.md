@@ -47,7 +47,7 @@
 
 **Do not** set `GCP_*` on marketing apps for reader profile; removed BigQuery route.
 
-## House ads (Airtable) — the90sparent, thepicklereport, hardresets, theeyeballerscookbook
+## House ads (Airtable) — the90sparent, thepicklereport, hardresets, theeyeballerscookbook, hipspeak (heebnewsletters after the shared package ships)
 
 Airtable-backed cross-promo pool that a brand's `/api/house-ads` route reads and
 `HouseAdPool`/`HouseAdImage` render client-side, ahead of the static `shared-ads`
@@ -61,19 +61,24 @@ schema, upload steps, and the `Flag for CE` / `Target for CE` flags.
 | `AIRTABLE_HOUSE_ADS_BASE_ID` | no | Optional override; defaults to `appXFQv3Hy0wUDDnb`. |
 | `AIRTABLE_HOUSE_ADS_TABLE_ID` | no | Optional override; defaults to `tblB3emRodWIzabTP` (Creatives table). |
 
-Set the same `AIRTABLE_API_KEY` (+ optional base/table overrides) on all four brands'
-marketing Vercel projects — `the90sparent`, `thepicklereport`, `hardresets`,
-`theeyeballerscookbook`. Leaving `AIRTABLE_API_KEY` unset is safe: `/api/house-ads`
-returns `{ ad: null }` and every app falls back to its existing static creative.
+Set the same `AIRTABLE_API_KEY` (type **Sensitive**, + optional base/table overrides) on each brand's
+marketing Vercel project — `the90sparent`, `thepicklereport`, `hardresets`,
+`theeyeballerscookbook`, `hipspeak`, and `heebnewsletters` (FTV adopts the pool with the
+shared `packages/shared-ads` house-ad stack). Leaving `AIRTABLE_API_KEY` unset (or invalid) is safe: `/api/house-ads`
+returns `{ ad: null }` and every app falls back to its existing static creative. A new brand
+also needs adding to Airtable **Destination Brands**, or its pool stays empty.
 
-## Magic deploy (`subscription-functions-copy` on Vercel)
+## Magic deploy (`subscription-functions` repo on Vercel)
+
+Lives in the sibling repo `../subscription-functions` ([GitHub](https://github.com/joseph-unaffiliated/subscription-functions)). All `magic.*` hosts are one shared Vercel project, so these values are network-wide. The in-repo `subscription-functions-copy/` is a stale snapshot; don't edit or deploy from it.
 
 | Variable | Secret? | Purpose |
 |----------|---------|---------|
 | `GCP_PROJECT_ID` | — | BigQuery project. |
 | `GCP_SERVICE_ACCOUNT_KEY` | **yes** | JSON or base64 service account. |
 | `READER_TOKEN_SECRET` | **yes** | HMAC secret for `readerToken` + `/api/reader-subscriptions`. |
-| `READERS_CORS_ORIGINS` | — | Comma-separated **origins** (no trailing slash). See [MAGIC_READER_ENV.md](./MAGIC_READER_ENV.md) for examples. |
+| `READERS_CORS_ORIGINS` | — | Comma-separated **origins** (no trailing slash), one list for every brand. See [MAGIC_READER_ENV.md](./MAGIC_READER_ENV.md). |
+| `BRAND_SITE_ORIGIN_<SLUG>` | — | Optional. Marketing origin for a brand not on `https://<slug>.com` (e.g. `BRAND_SITE_ORIGIN_HEEBNEWSLETTERS=https://fromthevault.heebnewsletters.com`); used for unsubscribe/snooze/comps return URLs. |
 
 ## Sanity Studio (`studio-hookup-lists/`)
 

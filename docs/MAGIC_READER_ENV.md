@@ -57,17 +57,26 @@ https://hookuplists.com,https://www.hookuplists.com,https://thepicklereport.com,
 https://hookuplists.com,https://www.hookuplists.com,https://thepicklereport.com,https://www.thepicklereport.com
 ```
 
-**Per magic deploy:** Each `magic.<brand>` Vercel project only needs origins for sites that call **that** magic host for profile. Today each marketing app uses its **own** `magicReaderApiOrigin` (e.g. HL → `magic.hookuplists.com`). So:
+**One shared magic project:** every `magic.<brand>` host is served by the **same** Vercel project (`subscription-functions`), so `READERS_CORS_ORIGINS` is **one network-wide list** containing every brand's origins. Each marketing app still calls its **own** magic host (e.g. HL → `magic.hookuplists.com`), but they all read this one variable. When adding a brand, **append** its origins and keep every existing one. An unlisted origin gets the first entry echoed back, so the browser blocks the response and profile/favorites silently fail. That happened to TEC until 2026-09-28.
 
-| Magic Vercel project | `READERS_CORS_ORIGINS` should include |
-|----------------------|----------------------------------------|
-| `magic.hookuplists.com` | `https://hookuplists.com`, optional `www`, optional `http://localhost:3000` |
-| `magic.thepicklereport.com` | **Pickle only:** `https://thepicklereport.com`, optional `www`, optional `http://localhost:3001` — do not point Pickle marketing at `magic.hookuplists.com` |
-| `magic.hardresets.com` | **Hard Resets only:** `https://hardresets.com`, optional `www`, optional `http://localhost:3004` — see [`HARDRESETS_VERCEL_ENV.md`](./HARDRESETS_VERCEL_ENV.md) |
+| Brand | Origins that must be in the shared list |
+|-------|------------------------------------------|
+| Hookup Lists | `https://hookuplists.com`, `https://www.hookuplists.com`, `http://localhost:3000` |
+| The Pickle Report | `https://thepicklereport.com`, `https://www.thepicklereport.com`, `http://localhost:3001` |
+| Hard Resets | `https://hardresets.com`, `https://www.hardresets.com`, `http://localhost:3004` — see [`HARDRESETS_VERCEL_ENV.md`](./HARDRESETS_VERCEL_ENV.md) |
+| The Eyeballer's Cookbook | `https://theeyeballerscookbook.com`, `https://www.theeyeballerscookbook.com` |
+| Hipspeak | `https://hipspeak.com`, `https://www.hipspeak.com`, `https://hipspeak.vercel.app`, `http://localhost:3006` |
+| From the Vault, by Heeb | `https://heebnewsletters.vercel.app`, `https://heebnewsletters.com`, `https://www.heebnewsletters.com`, `https://fromthevault.heebnewsletters.com`, `http://localhost:3007` |
 
-Pickle copy/paste env: [`THEPICKLEREPORT_VERCEL_ENV.md`](./THEPICKLEREPORT_VERCEL_ENV.md).
+Other live brands (TNP, TKT) follow the same apex + www pattern. Verify each origin after any change with a preflight probe; the response must echo the same origin:
 
-If one magic deployment serves **multiple** brands (unusual), merge all relevant marketing origins into one comma list (still no spaces unless your parser trims—our code uses `.trim()` per segment).
+```bash
+curl -s -o /dev/null -D - -X OPTIONS \
+  -H "Origin: https://www.hipspeak.com" -H "Access-Control-Request-Method: GET" \
+  https://magic.hipspeak.com/api/reader-subscriptions | grep -i access-control-allow-origin
+```
+
+Pickle copy/paste env: [`THEPICKLEREPORT_VERCEL_ENV.md`](./THEPICKLEREPORT_VERCEL_ENV.md). The list is comma-separated; the code trims each segment.
 
 ### Common mistakes
 
@@ -80,7 +89,7 @@ If one magic deployment serves **multiple** brands (unusual), merge all relevant
 ## Quick checklist
 
 1. Set `READER_TOKEN_SECRET` on magic Vercel (Production).
-2. Set `READERS_CORS_ORIGINS` on **each** magic Vercel project to match **that** site’s real origins.
+2. Append the brand's real origins to the shared `READERS_CORS_ORIGINS` on the magic Vercel project (keep every existing origin).
 3. Redeploy magic.
 4. Subscribe via a flow that hits `/execute`; confirm JSON includes `readerToken`.
 5. Open **Profile** on the marketing site; network tab should show `GET …/api/reader-subscriptions` **200** with `Access-Control-Allow-Origin` matching your site.

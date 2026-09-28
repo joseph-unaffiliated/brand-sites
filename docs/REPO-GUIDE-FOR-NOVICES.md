@@ -46,7 +46,7 @@ The repo **does not** send newsletters by itself. Email delivery and subscriber 
 | [`apps/`](https://github.com/joseph-unaffiliated/brand-sites/tree/main/apps) | **Four separate storefronts** in one mall | One subfolder per **live brand website** (`hookuplists`, `thepicklereport`, `thekissandtell`, `the90sparent`). They do **not** import each other’s code—only shared packages. |
 | [`packages/`](https://github.com/joseph-unaffiliated/brand-sites/tree/main/packages) | **Shared supply room** | Reusable JavaScript: redirects, Sanity fetching, magic client, ad shell wrappers, ad images. |
 | [`docs/`](https://github.com/joseph-unaffiliated/brand-sites/tree/main/docs) | **Operations manual** | Architecture, deployment, environment variables, launch guides. |
-| [`subscription-functions-copy/`](https://github.com/joseph-unaffiliated/brand-sites/tree/main/subscription-functions-copy) | **Back office copy** | Serverless **API** code for subscriptions, webhooks, BigQuery, Customer.io—deployed as **magic.*.com** style hosts, not bundled into the marketing Next apps. |
+| [`subscription-functions-copy/`](https://github.com/joseph-unaffiliated/brand-sites/tree/main/subscription-functions-copy) | **Old photocopy of the back office** | A **stale snapshot** of the magic server code. The real, deployed code lives in the separate [`subscription-functions`](https://github.com/joseph-unaffiliated/subscription-functions) repo (checked out next to this one as `../subscription-functions`). Don't edit or deploy from the copy. |
 | [`studio-*`](https://github.com/joseph-unaffiliated/brand-sites/tree/main) | **Editor desks** | Sanity Studio projects so editorial can define schemas and sometimes run imports. |
 | [`scripts/`](https://github.com/joseph-unaffiliated/brand-sites/tree/main/scripts) | **Toolbox drawer** | One-off scripts for importing or migrating content. |
 | [`webflow-export/`](https://github.com/joseph-unaffiliated/brand-sites/tree/main/webflow-export) | **Photo album of an old design** | Static HTML/CSS/images exported from **Webflow** for reference or migration—not the live Next sites. |
@@ -84,9 +84,9 @@ If you open the appendix and skim **one app** end-to-end, you will recognize the
 
 ---
 
-## Part 7 — `subscription-functions-copy/` (the “magic” side)
+## Part 7 — `subscription-functions` (the “magic” side)
 
-This tree is a **sibling world** to the marketing apps. It contains dozens of **API** files—each is a **mini program** that runs when a specific URL is hit on the deployed magic host. Together they:
+The magic server lives in its **own repo**, [`subscription-functions`](https://github.com/joseph-unaffiliated/subscription-functions) (locally `../subscription-functions`). The `subscription-functions-copy/` folder in this repo is an out-of-date snapshot kept for reference. One Vercel project serves every `magic.<brand>.com` host. The repo contains dozens of **API** files—each is a **mini program** that runs when a specific URL is hit on the magic host. Together they:
 
 - Accept **subscribe**, **unsubscribe**, and **snooze** actions from forms and email links.
 - Talk to **BigQuery** tables of users and to **Customer.io** for email automation.
@@ -109,7 +109,7 @@ When explaining to someone else, you can say:
 1. **“Monorepo”** — Many related projects in **one** Git repository so shared packages stay in sync.
 2. **“Next.js app per brand”** — Each `apps/<name>` is an independent website codebase deployed to its **own** Vercel project (root directory set to that folder).
 3. **“Sanity is the CMS”** — Articles and media live in Sanity; the site **fetches** them at build or request time depending on the route.
-4. **“Magic is the secure subscription brain”** — Heavy lifting and secrets stay in `subscription-functions-copy` (deployed separately); browsers only see public keys and HTTPS calls.
+4. **“Magic is the secure subscription brain”** — Heavy lifting and secrets stay in the `subscription-functions` repo (deployed separately); browsers only see public keys and HTTPS calls.
 5. **“Turbo + pnpm”** — Install once at the repo root; build or lint **all** packages in the right order, in parallel when safe.
 
 That is the **architecture in spoken form**—the appendix below is the **inventory** that maps every tracked path to a short role.
@@ -667,7 +667,7 @@ Each bullet is **`path` — plain-English role** — and the path links to GitHu
 - [studio-the-pickle-report/static/.gitkeep](https://github.com/joseph-unaffiliated/brand-sites/blob/main/studio-the-pickle-report/static/.gitkeep) — Keeps an empty `static/` folder in Git.
 - [studio-the-pickle-report/tsconfig.json](https://github.com/joseph-unaffiliated/brand-sites/blob/main/studio-the-pickle-report/tsconfig.json) — TypeScript or lint settings for the Studio package.
 
-### subscription-functions-copy (magic / email / data backend) (86 files)
+### subscription-functions-copy (stale snapshot of the magic backend; the live code is the `subscription-functions` repo) (86 files)
 - [subscription-functions-copy/ANALYSIS_INSTRUCTIONS.md](https://github.com/joseph-unaffiliated/brand-sites/blob/main/subscription-functions-copy/ANALYSIS_INSTRUCTIONS.md) — Runbook or design note for subscription infrastructure.
 - [subscription-functions-copy/BOT_BLOCKING_IMPLEMENTATION.md](https://github.com/joseph-unaffiliated/brand-sites/blob/main/subscription-functions-copy/BOT_BLOCKING_IMPLEMENTATION.md) — Runbook or design note for subscription infrastructure.
 - [subscription-functions-copy/BOT_BLOCKING_NEXT_STEPS.md](https://github.com/joseph-unaffiliated/brand-sites/blob/main/subscription-functions-copy/BOT_BLOCKING_NEXT_STEPS.md) — Runbook or design note for subscription infrastructure.

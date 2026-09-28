@@ -32,6 +32,10 @@ Related:
 - [ ] Schema matches content type (article / recipe / slang / vault)
 - [ ] Seed at least one publishable document for smoke tests
 - [ ] `NEXT_PUBLIC_SANITY_PROJECT_ID` / `DATASET` recorded in brand `*_VERCEL_ENV.md`
+- [ ] Hosted studio: `deployment.appId` in `sanity.cli.ts`, `npx sanity deploy` (e.g. `hipspeak.sanity.studio`, `fromthevault.sanity.studio`)
+- [ ] **Never create documents with dotted IDs** (`slangEntry.coded`). Sanity treats any ID containing `.` as private: invisible to the public API and the site. Use `type-slug` IDs.
+- [ ] Marketing apps read published content without a token; do **not** put `SANITY_API_TOKEN` on the marketing Vercel project
+- [ ] Backfilling sent issues from Customer.io: `scripts/fetch-hipspeak-issues.mjs --brand=<CODE>` then a dry-run-first importer (FTV: `scripts/import-vault-issues.py`)
 
 ---
 
@@ -53,6 +57,11 @@ Prefer cloning the closest live peer (TPR / TNP / HR / TEC / Hipspeak).
 - [ ] Compilations: `/opted-out-comps` + `/opted-in-comps` (snooze-card pattern)
 - [ ] Network newsletters data includes this brand where appropriate
 - [ ] Brand `docs/<BRAND>_VERCEL_ENV.md` paste checklist
+- [ ] Staging noindex: wire `NEXT_PUBLIC_NOINDEX` into `site.js` (`isNoindex`), `robots.js` (`Disallow: /`) and layout/article `robots` metadata; set it on Vercel until go-live (see FTV)
+- [ ] No polls? Pass `createHomeQueryMiddleware({ poll: null })` in `src/middleware.js` so `/?poll=` stays on the homepage instead of redirecting to a missing `/poll`
+- [ ] Already-subscribed sign-in toast, `/sign-in`, `/redirect`: today TPR-local (toast, `/sign-in`) and TNP/HR-local (`/redirect`); moving into `packages/magic-client` after 2026-10-06 — use the shared components once they exist
+- [ ] Every absolute URL comes from `NEXT_PUBLIC_SITE_URL` (no hardcoded host), so staging and production hosts can differ
+- [ ] Add the brand to [`NETWORK_PARITY_AUDIT.md`](./NETWORK_PARITY_AUDIT.md)
 
 Do **not** import from sibling `apps/*` — share via `packages/*`.
 
@@ -60,10 +69,15 @@ Do **not** import from sibling `apps/*` — share via `packages/*`.
 
 ## 3. Magic (`subscription-functions`)
 
-- [ ] Follow `ADDING_A_NEW_BRAND.md` (maps, CIO, DNS, Vercel project for `magic.<brand>`)
-- [ ] `READERS_CORS_ORIGINS` includes apex, www, and local dev port
+All `magic.*` hosts run on **one shared Vercel project**, so every env var is network-wide and every magic push deploys every brand (check for freezes such as a live giveaway first).
+
+- [ ] Follow `ADDING_A_NEW_BRAND.md` (maps, CIO, DNS; attach `magic.<brand>` to the shared magic project)
+- [ ] `READERS_CORS_ORIGINS` (one network-wide list) includes apex, www, `<app>.vercel.app`, and the local dev port. **Keep every existing origin.** Unlisted origins fall back to the first entry, which silently breaks profile/favorites for that brand. Verify with a preflight probe per origin:
+  `curl -s -o /dev/null -D - -X OPTIONS -H "Origin: https://www.<brand>.com" -H "Access-Control-Request-Method: GET" https://magic.<brand>.com/api/reader-subscriptions | grep -i access-control-allow-origin`
 - [ ] Reader flags readiness: `READER_TOKEN_SECRET`, Firestore/BQ as for other live brands
 - [ ] Add brand to `BRANDED_COMPS_CONFIRMATION` in `api/comps-preference.js` when branded comps pages ship
+- [ ] Site not on `https://<brand>.com`? Set `BRAND_SITE_ORIGIN_<SLUG>` on magic (unsubscribe/snooze/comps return URLs)
+- [ ] Subdomain host? Add it to `api/process-retention-csv.js` and check the regex in `lib/cross-brand-email-lead.js`
 - [ ] Update `MAGIC_DEPLOY_TOPOLOGY.md` row + CORS table
 - [ ] Deploy magic; `curl` `https://magic.<brand>/api/reader-health`
 
@@ -81,13 +95,14 @@ Do **not** import from sibling `apps/*` — share via `packages/*`.
 
 ## 5. Airtable house ads
 
-- [ ] Add brand to **Brands** / **Destination Brands** (and any host multi-selects)
+- [ ] Add brand to **All Brands** and to **Destination Brands** on every creative that should run there. An empty Destination Brands list means "everywhere", but most creatives have explicit lists, so a new brand's pool is **empty** until it's added (Hipspeak's pool was empty for this reason until 2026-09-28). Never add a brand to its own creatives.
 - [ ] **Click URL** formula brand-aware (keep in sync with `brand-paths.js`):
   - Default → `https://{host}/article/{slug}`
   - TEC → `/recipe/{slug}`
   - Hipspeak → `/word/{slug}`
 - [ ] Spot-check creatives targeting the new host after formula change
-- [ ] Marketing env: `AIRTABLE_HOUSE_ADS_BASE_ID`, `AIRTABLE_HOUSE_ADS_TABLE_ID`, `AIRTABLE_API_KEY`
+- [ ] Marketing env: `AIRTABLE_HOUSE_ADS_BASE_ID`, `AIRTABLE_HOUSE_ADS_TABLE_ID`, `AIRTABLE_API_KEY` (Sensitive; same token as the other brands)
+- [ ] Verify: `curl -s "https://<host>/api/house-ads?slot=inArticle"` returns an `ad`. `{"ad":null}` means no eligible creatives or a bad token — check runtime logs for `[house-ads] Airtable fetch failed 403`.
 
 ---
 
@@ -146,28 +161,61 @@ Airtable Click URL formulas must match.
 
 Use alongside [`HIPSPEAK_VERCEL_ENV.md`](./HIPSPEAK_VERCEL_ENV.md).
 
+Status as of 2026-09-28. The step-by-step cutover checklist, rollback and Airtable formula are in `HIPSPEAK_VERCEL_ENV.md`.
+
 ### Airtable (you)
 
-- [ ] Add **Hipspeak** to Brands / Destination Brands
-- [ ] Revise House Ads **Click URL** formula for brand-aware paths (Hipspeak → `/word/{slug}`, TEC → `/recipe/{slug}`, else `/article/{slug}`)
+- [x] Add **Hipspeak** to All Brands / Destination Brands (every active House Ads creative except its own)
+- [ ] Paste the brand-aware **Click URL** formula on cutover day (Hipspeak → `https://www.hipspeak.com/word/{slug}`)
 - [ ] Spot-check TEC + Hipspeak destination creatives
 
 ### Vercel
 
-- [ ] Marketing project Root Directory `apps/hipspeak`; env from `HIPSPEAK_VERCEL_ENV.md`
-- [ ] OneTrust `019a7167-e6eb-7fa2-ae9f-60338480c772`; Meta / GTM / GA4; Airtable house-ads vars
-- [ ] `NEXT_PUBLIC_SITE_URL` = canonical host once DNS final
-- [ ] Attach `hipspeak.com` / `www.hipspeak.com`; production deploy green
-- [ ] Enable reader flags when ready
+- [x] Marketing project Root Directory `apps/hipspeak`; env from `HIPSPEAK_VERCEL_ENV.md`
+- [x] OneTrust `019a7167-e6eb-7fa2-ae9f-60338480c772`; Meta / GTM; Airtable house-ads base/table
+- [ ] GA4 measurement ID (new Hipspeak property)
+- [ ] `AIRTABLE_API_KEY`: replace (current value gets 403) and mark Sensitive
+- [x] `NEXT_PUBLIC_SITE_URL=https://www.hipspeak.com`
+- [x] Attach `www.hipspeak.com` (production) and `hipspeak.com` (308 → www); both verified
+- [x] Reader flags on
+
+### Code
+
+- [x] My Words at TEC-favorites parity: subscription-gated, synced via reader events, `/my-words?add=` deep link, profile merge
+- [x] Quiz hardened, with GA events (`quiz_start`, `quiz_complete`)
+- [x] Legacy Webflow URLs checked (only `/privacy`, `/terms`, `/pollresults/{slug}`, all native routes)
+- [ ] Shared sign-in toast, `/sign-in`, `/redirect`, sticky refresh (post Oct 6 shared packages)
 
 ### Magic
 
-- [ ] `magic.hipspeak.com` on subscription-functions; CORS includes apex, www, `http://localhost:3006`
-- [ ] Deploy magic with `hipspeak` in `BRANDED_COMPS_CONFIRMATION`
-- [ ] `reader-health` 200
+- [x] `magic.hipspeak.com` on the shared magic project; CORS includes apex, www, `hipspeak.vercel.app`, `http://localhost:3006`
+- [ ] Deploy magic with `hipspeak` in `BRANDED_COMPS_CONFIRMATION` (post Oct 6)
+- [x] `reader-health` 200
 
-### Cloudflare
+### Cloudflare (you)
 
-- [ ] Disable **webflow-proxy** (or equivalent) worker routes on hipspeak.com
-- [ ] DNS CNAME apex/`www` → Vercel **DNS-only**; SSL Full (strict)
-- [ ] Post-cutover smoke: `/`, `/word/{slug}`, subscribe, profile, `/quiz`, house ad, comps links
+- [ ] Disable **webflow-proxy** worker routes on hipspeak.com
+- [ ] DNS apex/`www` → Vercel **DNS-only**; SSL Full (strict)
+- [ ] Post-cutover smoke (list in `HIPSPEAK_VERCEL_ENV.md`)
+
+---
+
+## From the Vault go-live
+
+Use alongside [`HEEBNEWSLETTERS_VERCEL_ENV.md`](./HEEBNEWSLETTERS_VERCEL_ENV.md) (staging status, host options, Airtable formula). FTV runs on `heebnewsletters.vercel.app` with `NEXT_PUBLIC_NOINDEX=true` until the host is chosen.
+
+### Done (staging-ready)
+
+- [x] OneTrust with no borrowed fallback; subscribe-gated sticky; `/ai-policy`; comps pages; archive search; `isJewishContent`; no submissions; no polls (`poll: null`)
+- [x] Vercel: GTM, Meta, reader flags, Airtable base/table, noindex; `SANITY_API_TOKEN` removed
+- [x] Magic CORS covers staging, apex, www and `fromthevault.` subdomain
+- [x] Airtable: From the Vault in Destination Brands
+- [x] Hosted studio with body images; Customer.io → Sanity import tooling
+
+### Before production
+
+- [ ] Choose the host (apex/www or `fromthevault.heebnewsletters.com`)
+- [ ] FTV OneTrust domain script UUID and GA4 measurement ID; `AIRTABLE_API_KEY` (Sensitive)
+- [ ] Post-Oct 6: shared house-ad pool, sign-in toast, `/sign-in`, `/redirect`; magic push (comps, retention, return host)
+- [ ] Import sent issues #32–35 (approval needed); check `publishedDate` on older issues against Customer.io send dates
+- [ ] Legacy Webflow URL 308s; cutover steps in `HEEBNEWSLETTERS_VERCEL_ENV.md`; delete `NEXT_PUBLIC_NOINDEX`

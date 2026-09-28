@@ -132,7 +132,8 @@ Canonical host is **`https://www.hipspeak.com`**; the apex 308s to `www` (Vercel
 | `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` | ✅ `kr8Lng5KcVPHt8VuzQrT9kyMAxJOBzzUtx3WeUXPC04` (same token as the Webflow page; the zone also has a DNS TXT verification) |
 | `NEXT_PUBLIC_GTM_ID` / `NEXT_PUBLIC_META_PIXEL_ID` | ✅ `GTM-TVHD6JMG` / `809409995127436` |
 | `NEXT_PUBLIC_GA_MEASUREMENT_ID` | ⚠️ waiting on the new Hipspeak GA4 property. Re-checked 2026-09-28: published `GTM-TVHD6JMG` has no `G-*` IDs, so direct gtag won't double count. |
-| `AIRTABLE_API_KEY` | ⚠️ still type `encrypted`; switch to `sensitive` (Vercel → Settings → Environment Variables → edit → Sensitive) |
+| `AIRTABLE_API_KEY` | ⚠️ current value gets **403** from Airtable (runtime logs: `[house-ads] Airtable fetch failed 403`), so `/api/house-ads` returns `{"ad":null}` and the static cross-promo shows. Replace it with the token the other brands use and save as **Sensitive**, then redeploy. |
+| Airtable Destination Brands | ✅ Hipspeak added to every active House Ads creative except its own (2026-09-28) |
 | Domains on Vercel project `hipspeak` | ✅ `www.hipspeak.com` (production) and `hipspeak.com` (308 → www), both verified; DNS still points at Cloudflare/Webflow |
 | Magic CORS (`READERS_CORS_ORIGINS`) | ✅ apex, www, `hipspeak.vercel.app`, `http://localhost:3006` |
 | Magic `BRANDED_COMPS_CONFIRMATION` includes `hipspeak` | ⚠️ local only; ships with the post-Oct 6 magic push |
@@ -176,7 +177,7 @@ IF(
 )
 ```
 
-Also add **Hipspeak** to Destination Brands on the creatives that should run on it.
+Hipspeak is already in Destination Brands on every active House Ads creative except its own.
 
 ## Cloudflare cutover checklist (hipspeak.com zone)
 
