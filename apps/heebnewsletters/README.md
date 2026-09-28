@@ -1,16 +1,20 @@
-# The Pickle Report (site app)
+# From the Vault, by Heeb (site app)
 
-Next.js publication in the **`brand-sites`** monorepo. **Pickle-only** magic: `magic.thepicklereport.com` (see `src/config/site.js`).
+Next.js publication in the **`brand-sites`** monorepo: a weekly resurfaced piece from the Heeb archive. Brand id `heebnewsletters`; magic on `magic.heebnewsletters.com` (see `src/config/site.js`). Sanity project `m4gmd2lf` (studio: `studio-heebnewsletters/`).
 
-## Before first deploy
+Still on staging (`heebnewsletters.vercel.app`). The production host is undecided, so every absolute URL comes from `NEXT_PUBLIC_SITE_URL`; nothing hardcodes a host. Keep `NEXT_PUBLIC_NOINDEX=true` until launch (robots.txt disallows everything and pages send `noindex`).
 
-1. Copy or replace `public/` (logos, favicon, OG image) for this brand.
-2. Create a **Sanity project** for Pickle; set `NEXT_PUBLIC_SANITY_PROJECT_ID` / dataset in Vercel.
-3. Point **`NEXT_PUBLIC_MAGIC_*`** at `magic.thepicklereport.com` (or your real magic host).
-4. Set **Vercel Root Directory** to `apps/thepicklereport`.
-5. Set display strings: `NEXT_PUBLIC_SITE_DISPLAY_NAME`, `NEXT_PUBLIC_SITE_DESCRIPTION`, optional `NEXT_PUBLIC_SITE_OG_IMAGE`, etc.
+## Routes
 
-Vercel env copy/paste: [`docs/THEPICKLEREPORT_VERCEL_ENV.md`](../../docs/THEPICKLEREPORT_VERCEL_ENV.md).  
-Launch checklist: [`docs/THEPICKLEREPORT_LAUNCH_GUIDE.md`](../../docs/THEPICKLEREPORT_LAUNCH_GUIDE.md).
+- `/` — latest issue + mosaic; `/article/[slug]` — vault issue (editor intro, archive piece, Rabbit Hole)
+- `/archive` — all issues with search (`?q=`)
+- `/profile`, `/subscribed`, `/unsubscribed`, `/snoozed`, `/request`
+- `/opted-in-comps`, `/opted-out-comps` — compilations preference confirmation
+- `/about`, `/ai-policy`, `/affiliate-disclosure`, `/privacy`, `/terms`, `/contact`
 
-<!-- First production deploy trigger for turbo-ignore -->
+No polls, favorites, quiz, or submissions on this brand. `/?poll=` stays on the homepage.
+
+Local dev: `pnpm --filter heebnewsletters dev` (port 3007). Vercel **Root Directory** = `apps/heebnewsletters`.
+
+Vercel env copy/paste + go-live status: [`docs/HEEBNEWSLETTERS_VERCEL_ENV.md`](../../docs/HEEBNEWSLETTERS_VERCEL_ENV.md).  
+Network launch checklist: [`docs/LAUNCH_PLAYBOOK.md`](../../docs/LAUNCH_PLAYBOOK.md).

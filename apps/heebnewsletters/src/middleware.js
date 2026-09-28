@@ -7,7 +7,8 @@
 import { NextResponse } from "next/server";
 import { createHomeQueryMiddleware } from "@publication-websites/platform-redirects";
 
-const homeQueryMiddleware = createHomeQueryMiddleware();
+/** From the Vault has no polls: a null route leaves `/?poll=` on the homepage instead of 404ing. */
+const homeQueryMiddleware = createHomeQueryMiddleware({ poll: null });
 
 export default function middleware(request) {
   const { pathname } = request.nextUrl;

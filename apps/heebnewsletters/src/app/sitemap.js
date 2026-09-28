@@ -10,6 +10,8 @@ const STATIC_ROUTES = [
   { path: "/contact", changeFrequency: "yearly", priority: 0.4 },
   { path: "/privacy", changeFrequency: "yearly", priority: 0.3 },
   { path: "/terms", changeFrequency: "yearly", priority: 0.3 },
+  { path: "/affiliate-disclosure", changeFrequency: "yearly", priority: 0.3 },
+  { path: "/ai-policy", changeFrequency: "yearly", priority: 0.3 },
 ];
 
 function toDate(value) {

@@ -63,3 +63,6 @@ export const amazonAssociatesTag =
   process.env.NEXT_PUBLIC_AMAZON_ASSOCIATES_TAG || "fromthevault-20";
 
 export const BRAND = siteConfig.brandId;
+
+/** Staging guard: `NEXT_PUBLIC_NOINDEX=true` blocks crawlers site-wide (robots.txt + meta robots). */
+export const isNoindex = process.env.NEXT_PUBLIC_NOINDEX === "true";

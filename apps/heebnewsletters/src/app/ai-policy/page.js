@@ -1,0 +1,121 @@
+import Link from "next/link";
+import styles from "../basic-page.module.css";
+import { contactEmail, siteDisplayName, siteConfig } from "@/config/site";
+
+export const metadata = {
+  title: `AI Usage Policy | ${siteDisplayName}`,
+  description: `How AI systems and answer engines may reference, quote, and link to ${siteDisplayName}'s issues.`,
+  alternates: { canonical: "/ai-policy" },
+  openGraph: {
+    title: `AI Usage Policy | ${siteDisplayName}`,
+    description: `How AI systems and answer engines may reference, quote, and link to ${siteDisplayName}'s issues.`,
+    url: "/ai-policy",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `AI Usage Policy | ${siteDisplayName}`,
+    description: `How AI systems and answer engines may reference, quote, and link to ${siteDisplayName}'s issues.`,
+  },
+};
+
+function siteHostLabel() {
+  try {
+    return new URL(siteConfig.siteUrl).hostname;
+  } catch {
+    return "heebnewsletters.com";
+  }
+}
+
+export default function AiPolicyPage() {
+  const host = siteHostLabel();
+
+  return (
+    <div className={`${styles.page} ${styles.pageLegal}`}>
+      <div className="container">
+        <header className={styles.legalHeader}>
+          <h1>AI Usage Policy</h1>
+          <p className={styles.legalMeta}>
+            How AI systems and answer engines may use {siteDisplayName} content
+          </p>
+        </header>
+
+        <p>
+          {siteDisplayName} (a publication of Unaffiliated Inc., in partnership
+          with Heeb) welcomes thoughtful use of our public issues by AI
+          assistants, search engines, and answer engines. This page explains
+          what is allowed, what is not, and how to get in touch about licensing.
+        </p>
+
+        <h2>What we publish</h2>
+        <p>
+          Each week we resurface a piece from the Heeb archive — subversive
+          Jewish counter-culture from the 2000s — with fresh context from our
+          editors. Original pieces are credited to their authors and to Heeb.
+          The publicly available issue pages are the canonical record of our
+          editorial work; previews, snippets, and email-only variants are not.
+        </p>
+
+        <h2>What is allowed</h2>
+        <ul className={styles.list}>
+          <li>
+            <strong>Citing and linking:</strong> AI tools may quote short
+            excerpts and answer questions about our issues when each response
+            includes the canonical issue URL on{" "}
+            <Link href="/">{host}</Link> and attributes the publication as
+            &quot;{siteDisplayName}.&quot;
+          </li>
+          <li>
+            <strong>Indexing for retrieval:</strong> Crawlers from search and
+            answer engines may index our public pages so users can discover and
+            navigate to the original issues.
+          </li>
+          <li>
+            <strong>Summaries that drive readers to the source:</strong> Brief,
+            non-substitutive summaries that link back to the full issue are
+            welcome.
+          </li>
+        </ul>
+
+        <h2>What is not allowed without permission</h2>
+        <ul className={styles.list}>
+          <li>
+            <strong>Training large language models:</strong> We do not grant a
+            license to use {siteDisplayName} or Heeb archive content as
+            training data for large language models or other AI systems
+            without prior written permission.
+          </li>
+          <li>
+            <strong>Republishing material amounts of an issue:</strong>{" "}
+            Reproducing entire issues or archive pieces, or large portions
+            thereof, without attribution and a link to the canonical URL.
+          </li>
+          <li>
+            <strong>Stripping attribution:</strong> Surfacing our content
+            without naming {siteDisplayName} and the original author, or
+            without linking back to the source issue.
+          </li>
+        </ul>
+
+        <h2>Robots and machine-readable signals</h2>
+        <p>
+          We publish a <a href="/sitemap.xml">sitemap</a> and a{" "}
+          <a href="/robots.txt">robots.txt</a>. If you operate an AI crawler,
+          please respect those signals.
+        </p>
+
+        <h2>Licensing and contact</h2>
+        <p>
+          For licensing requests, training-data inquiries, takedowns, or
+          questions about this policy, email{" "}
+          <a href={`mailto:${contactEmail}`}>{contactEmail}</a>.
+        </p>
+
+        <p>
+          See also our <Link href="/privacy">Privacy Policy</Link> and{" "}
+          <Link href="/terms">Terms of Use</Link>.
+        </p>
+      </div>
+    </div>
+  );
+}

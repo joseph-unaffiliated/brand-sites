@@ -1,8 +1,12 @@
-import { siteConfig } from "@/config/site";
+import { isNoindex, siteConfig } from "@/config/site";
 
 const SITE_URL = siteConfig.siteUrl.replace(/\/$/, "").replace(/^http:/, "https:");
 
 export default function robots() {
+  if (isNoindex) {
+    return { rules: [{ userAgent: "*", disallow: "/" }] };
+  }
+
   return {
     rules: [
       {
@@ -15,9 +19,11 @@ export default function robots() {
           "/subscribed",
           "/unsubscribed",
           "/snoozed",
+          "/opted-in-comps",
+          "/opted-out-comps",
           "/profile",
           "/request",
-          "/poll",
+          "/sign-in",
         ],
       },
     ],

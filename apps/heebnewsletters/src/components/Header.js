@@ -8,7 +8,6 @@ import { useSubscriber } from "@/context/SubscriberContext";
 import BrandWordmark from "@/components/BrandWordmark";
 import { useNavLogoFillImage } from "@/context/NavLogoImageContext";
 import { ContactCopyLink } from "@publication-websites/web-shell/contact-copy";
-import SubmissionsCopyLink from "@/components/SubmissionsCopyLink";
 import AdvertiseCopyLink from "@/components/AdvertiseCopyLink";
 import { contactEmail, siteDisplayName } from "@/config/site";
 
@@ -167,7 +166,6 @@ export default function Header() {
           <ContactCopyLink email={contactEmail} onClick={closeMenu}>
             Contact
           </ContactCopyLink>
-          <SubmissionsCopyLink onClick={closeMenu} />
           <AdvertiseCopyLink onClick={closeMenu} />
           <Link href="/terms" onClick={closeMenu}>
             Terms
@@ -220,12 +218,7 @@ export default function Header() {
           </button>
           <nav className="site-nav site-nav-left header-nav-desktop" aria-label="Main">
             <Link href="/archive">Archive</Link>
-            {!isSubscribed && (
-              <>
-                <Link href="/about">About</Link>
-                <SubmissionsCopyLink />
-              </>
-            )}
+            {!isSubscribed && <Link href="/about">About</Link>}
           </nav>
           <div className="brand">
             <Link

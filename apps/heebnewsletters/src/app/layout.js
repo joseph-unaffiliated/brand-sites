@@ -1,8 +1,8 @@
 /**
  * Site chrome: fonts, global ad/pixel loaders (via web-shell), header/footer.
  *
- * OneTrust + Retention: `ComplianceScripts.js` (network defaults baked in; override with
- * NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT / NEXT_PUBLIC_RETENTION_SITE_ID on Vercel if needed).
+ * OneTrust + Retention: `ComplianceScripts.js` (OneTrust needs FTV's own
+ * NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT; Retention defaults to the network site id).
  *
  * Google Tag Manager: set `NEXT_PUBLIC_GTM_ID` on Vercel; see `GoogleTagManager.js`.
  * GA4: set `NEXT_PUBLIC_GA_MEASUREMENT_ID` (e.g. `G-XXXX`) on Vercel; see `GoogleAnalytics.js`.
@@ -16,6 +16,7 @@ import { FontAwesomeStylesheet, MarketingScripts, TypekitStylesheet } from "@pub
 import { ContactCopyLink, ContactCopyToast } from "@publication-websites/web-shell/contact-copy";
 import {
   contactEmail,
+  isNoindex,
   siteConfig,
   siteDefaultDescription,
   siteDisplayName,
@@ -23,7 +24,6 @@ import {
 import { OneTrustScripts, RetentionScript } from "@/components/ComplianceScripts";
 import { GoogleAnalyticsScript } from "@/components/GoogleAnalytics";
 import { GoogleTagManagerNoscript, GoogleTagManagerScript } from "@/components/GoogleTagManager";
-import SubmissionsCopyLink from "@/components/SubmissionsCopyLink";
 import AdvertiseCopyLink from "@/components/AdvertiseCopyLink";
 import Header from "@/components/Header";
 import { getVaultIssues, getVaultIssueBySlug } from "@/lib/vault";
@@ -100,6 +100,7 @@ export const metadata = {
     description: siteDescription,
     images: ogImagePath ? [`${siteUrl}${ogImagePath}`] : undefined,
   },
+  ...(isNoindex ? { robots: { index: false, follow: false } } : {}),
   verification: {
     ...(googleSiteVerification ? { google: googleSiteVerification } : {}),
     ...(bingSiteVerification ? { other: { "msvalidate.01": bingSiteVerification } } : {}),
@@ -178,12 +179,12 @@ export default async function RootLayout({ children }) {
                     <Link href="/terms">Terms</Link>
                     <Link href="/privacy">Policy</Link>
                     <Link href="/affiliate-disclosure">Affiliate</Link>
+                    <Link href="/ai-policy">AI Policy</Link>
                   </div>
                 </div>
                 <div>
                   <div className="footer-links">
                     <ContactCopyLink email={contactEmail}>Contact</ContactCopyLink>
-                    <SubmissionsCopyLink>Submissions</SubmissionsCopyLink>
                     <AdvertiseCopyLink />
                     <p className="footer-text">© {siteDisplayName}. 2026.</p>
                   </div>

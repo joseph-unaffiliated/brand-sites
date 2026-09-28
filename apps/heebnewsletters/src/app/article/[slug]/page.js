@@ -13,11 +13,11 @@ import ArticleSubscribeForm from "@/components/ArticleSubscribeForm";
 import VaultIssueBody from "@/components/VaultIssueBody";
 import VaultPodcastPromo from "@/components/VaultPodcastPromo";
 import AdSlot from "@/components/AdSlot";
-import ArticleAdStickyBottom from "@/components/ArticleAdStickyBottom";
+import ArticleStickyBottom from "@/components/ArticleStickyBottom";
 import JsonLd from "@/components/JsonLd";
 import { ogImageFromMappedContent } from "@publication-websites/sanity-content";
 import { crossPromoForSlot } from "@/config/crossPromoAds";
-import { amazonAssociatesTag, siteConfig, siteDisplayName } from "@/config/site";
+import { amazonAssociatesTag, isNoindex, siteConfig, siteDisplayName } from "@/config/site";
 import { affiliateAnchorProps } from "@publication-websites/affiliate";
 import styles from "./page.module.css";
 
@@ -106,7 +106,7 @@ export async function generateMetadata({ params }) {
   const ogImageEntry = ogImageFromMappedContent(issue);
 
   const authors = issue.authorName ? [{ name: issue.authorName }] : undefined;
-  const robots = issue.noIndex ? { index: false, follow: false } : undefined;
+  const robots = issue.noIndex || isNoindex ? { index: false, follow: false } : undefined;
 
   return {
     title,
@@ -406,7 +406,7 @@ export default async function VaultIssuePage({ params }) {
           </div>
         )}
       </section>
-      <ArticleAdStickyBottom />
+      <ArticleStickyBottom />
     </div>
   );
 }

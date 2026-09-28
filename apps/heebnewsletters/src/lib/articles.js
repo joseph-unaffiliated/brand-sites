@@ -28,6 +28,37 @@ export function ensureDescriptionOnly(text) {
   return text.trim();
 }
 
+function portableTextToPlain(value) {
+  if (typeof value === "string") return value;
+  if (!Array.isArray(value)) return "";
+  return value
+    .filter((block) => block?._type === "block")
+    .map((block) => (block.children || []).map((child) => child?.text || "").join(""))
+    .join(" ");
+}
+
+/** Lowercased text the archive search matches against (title, credits, intro, body, rabbit hole). */
+export function searchTextFromArticle(article) {
+  if (!article) return "";
+  return [
+    article.title,
+    article.summary,
+    article.eraLabel,
+    article.originalPublication,
+    article.originalYear,
+    article.authorName,
+    article.editorName,
+    portableTextToPlain(article.editorIntro),
+    portableTextToPlain(article.body),
+    ...(article.rabbitHole || []).map((item) => `${item?.title || ""} ${item?.sourceLabel || ""}`),
+    ...(article.tags || []),
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .replace(/\s+/g, " ")
+    .toLowerCase();
+}
+
 /**
  * Vault issues have no subtitle/demographic line — the era pill fills that
  * role. Kept for components (`HomeSnippetsList`, mosaic cards) that expect

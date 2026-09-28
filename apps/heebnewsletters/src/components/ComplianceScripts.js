@@ -3,20 +3,17 @@ import Script from "next/script";
 const PLACEHOLDER_ONETRUST = "YOUR_ONETRUST_ID_HERE";
 const PLACEHOLDER_RETENTION = "YOUR_RETENTION_ID_HERE";
 
-/**
- * From the Vault OneTrust domain script — MUST be set per-brand via
- * NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT on Vercel once the OneTrust domain is
- * provisioned. Until then this falls back to the network default (Pickle's).
- */
-const DEFAULT_ONETRUST_DOMAIN_SCRIPT = "019a7160-715f-710a-9141-d7af1513ef88";
 /** Network-wide Retention site id (same as The '90s Parent). */
 const DEFAULT_RETENTION_SITE_ID = "X2JHJ4WE";
 
+/**
+ * From the Vault needs its own OneTrust domain script (NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT).
+ * There is deliberately no network fallback: another brand's script is scoped to that
+ * brand's domain, so OneTrust stays off until FTV's UUID is set.
+ */
 function resolveOnetrustDomainScript() {
-  const raw = process.env.NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT;
-  if (raw == null || raw === "") return DEFAULT_ONETRUST_DOMAIN_SCRIPT;
-  const v = raw.trim();
-  if (!v || v === PLACEHOLDER_ONETRUST) return DEFAULT_ONETRUST_DOMAIN_SCRIPT;
+  const v = process.env.NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT?.trim();
+  if (!v || v === PLACEHOLDER_ONETRUST) return null;
   return v;
 }
 
@@ -31,6 +28,7 @@ function resolveRetentionSiteId() {
 /** OneTrust cookie consent — load early in <head>. */
 export function OneTrustScripts() {
   const domainScript = resolveOnetrustDomainScript();
+  if (!domainScript) return null;
   return (
     <>
       <Script
