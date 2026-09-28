@@ -19,16 +19,27 @@ const queries = createSlangEntryQueries({
   fallbackImage: process.env.NEXT_PUBLIC_SITE_OG_IMAGE || "/hip-photo.png",
 });
 
+/** Future-dated entries stay hidden until their publish date (matches the vault filter). */
+function isPublished(entry) {
+  if (!entry) return false;
+  if (!entry.publishedDate) return true;
+  const t = Date.parse(entry.publishedDate);
+  return Number.isNaN(t) || t <= Date.now();
+}
+
 export async function getSlangEntries() {
-  return queries.getSlangEntries();
+  const entries = await queries.getSlangEntries();
+  return entries.filter(isPublished);
 }
 
 export async function getSlangEntryBySlug(slug) {
-  return queries.getSlangEntryBySlug(slug);
+  const entry = await queries.getSlangEntryBySlug(slug);
+  return isPublished(entry) ? entry : null;
 }
 
 export async function getSlangEntrySlugs() {
-  return queries.getSlangEntrySlugs();
+  const entries = await getSlangEntries();
+  return entries.map((e) => ({ slug: e.slug }));
 }
 
 /** The featured word is simply the newest published slang entry. */

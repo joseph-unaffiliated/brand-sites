@@ -60,8 +60,10 @@ export default async function AboutPage() {
 
               <h2>How it works</h2>
               <p>
-                Subscribe once, and a new word arrives each week. Save favorites to{" "}
-                <Link href="/my-words">My words</Link>. Take the{" "}
+                Subscribe once, and a new word arrives each week. Subscribers can tap
+                the heart on any word to save it to{" "}
+                <Link href="/my-words">My words</Link>, and it follows you to any device
+                you sign in on. Take the{" "}
                 <Link href="/quiz">slang quiz</Link> when you want to check whether
                 you&apos;re fluent or just vibing. Snooze and unsubscribe stay a click
                 away in every email.

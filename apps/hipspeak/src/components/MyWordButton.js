@@ -1,7 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { isFavorite, onFavoritesChange, toggleFavorite } from "@/lib/myWords";
+import { useSubscriber } from "@/context/SubscriberContext";
+import {
+  isFavorite,
+  onFavoritesChange,
+  promptSubscribeToSaveWord,
+  toggleFavorite,
+} from "@/lib/myWords";
 import styles from "./MyWordButton.module.css";
 
 /**
@@ -29,27 +35,40 @@ function HeartIcon({ filled }) {
 }
 
 /**
- * Heart toggle for saving a word to "My words". `variant="card"` renders a
- * compact icon-only button for word cards; the default renders icon + label.
+ * Heart toggle for saving a word to "My words". Requires subscription —
+ * otherwise opens the subscribe banner and saves the word after they subscribe.
+ * `variant="card"` renders a compact icon-only button for word cards.
  */
 export default function MyWordButton({ slug, variant = "full" }) {
+  const { isSubscribed } = useSubscriber();
   const [favorited, setFavorited] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    setFavorited(isFavorite(slug));
-    return onFavoritesChange(() => setFavorited(isFavorite(slug)));
-  }, [slug]);
+    setFavorited(isSubscribed ? isFavorite(slug) : false);
+    return onFavoritesChange(() => {
+      setFavorited(isSubscribed ? isFavorite(slug) : false);
+    });
+  }, [slug, isSubscribed]);
 
   const handleClick = (e) => {
+    // Cards wrap the button in a Link; don't navigate when toggling.
     e.preventDefault();
     e.stopPropagation();
+    if (!isSubscribed) {
+      promptSubscribeToSaveWord(slug);
+      return;
+    }
     setFavorited(toggleFavorite(slug));
   };
 
-  const showFilled = mounted && favorited;
-  const label = favorited ? "Saved to My words" : "Save to My words";
+  const showFilled = mounted && isSubscribed && favorited;
+  const label = !isSubscribed
+    ? "Subscribe to save words"
+    : favorited
+      ? "Saved to My words"
+      : "Save to My words";
 
   return (
     <button

@@ -4,9 +4,11 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useSubscriber } from "@/context/SubscriberContext";
+import { track } from "@publication-websites/reader-events";
 import MyWordButton from "@/components/MyWordButton";
 import SubscribeFormWithTurnstile from "@/components/SubscribeFormWithTurnstile";
 import { BRAND, executeAction } from "@/lib/subscription";
+import { addFavorite } from "@/lib/myWords";
 import {
   clearQuizProgress,
   loadQuizProgress,
@@ -23,6 +25,16 @@ function fireEvent(name, params = {}) {
   }
 }
 
+/** Reader-events signal (subscribers only, so it lands on the reader profile). */
+function trackQuizComplete(score) {
+  track("trivia_complete", {
+    source: "slang_quiz",
+    quizId: slangQuiz.id,
+    correct: score.correct,
+    total: score.total,
+  });
+}
+
 export default function SlangQuizClient() {
   const searchParams = useSearchParams();
   const { isSubscribed, refresh } = useSubscriber();
@@ -32,6 +44,8 @@ export default function SlangQuizClient() {
   const [index, setIndex] = useState(0);
   const [phase, setPhase] = useState("intro"); // intro | questions | gate | results
   const [hydrated, setHydrated] = useState(false);
+  const [savedMissedCount, setSavedMissedCount] = useState(null);
+  const completeTrackedRef = useRef(false);
 
   const questions = slangQuiz.questions;
   const current = questions[index];
@@ -102,6 +116,13 @@ export default function SlangQuizClient() {
       }
     }, 220);
   }
+
+  useEffect(() => {
+    if (!hydrated || phase !== "results" || !allAnswered) return;
+    if (completeTrackedRef.current) return;
+    completeTrackedRef.current = true;
+    trackQuizComplete(score);
+  }, [allAnswered, hydrated, phase, score]);
 
   useEffect(() => {
     if (!hydrated || phase !== "gate") return;
@@ -182,6 +203,14 @@ export default function SlangQuizClient() {
     const detailById = Object.fromEntries(
       score.detail.map((d) => [d.questionId, d])
     );
+    const missedSlugs = questions
+      .filter((q) => q.wordSlug && detailById[q.id] && !detailById[q.id].isCorrect)
+      .map((q) => q.wordSlug);
+    const saveMissed = () => {
+      missedSlugs.forEach((slug) => addFavorite(slug));
+      setSavedMissedCount(missedSlugs.length);
+      fireEvent("quiz_save_missed", { quiz_id: slangQuiz.id, count: missedSlugs.length });
+    };
     return (
       <div className={`${styles.wrap} ${styles.wrapResults}`}>
         <header className={styles.header}>
@@ -190,6 +219,21 @@ export default function SlangQuizClient() {
             {score.correct} / {score.total}
           </h1>
           <p className={styles.dek}>{commentary}</p>
+          {isSubscribed && missedSlugs.length > 0 ? (
+            savedMissedCount === null ? (
+              <button
+                type="button"
+                className={`${styles.secondaryBtn} ${styles.saveMissed}`}
+                onClick={saveMissed}
+              >
+                Save the {missedSlugs.length} word{missedSlugs.length === 1 ? "" : "s"} you missed to My words
+              </button>
+            ) : (
+              <p className={styles.muted}>
+                Saved to <Link href="/my-words">My words</Link>.
+              </p>
+            )
+          ) : null}
         </header>
         <ol className={styles.review}>
           {questions.map((q) => {
@@ -235,6 +279,8 @@ export default function SlangQuizClient() {
             clearQuizProgress();
             setAnswers({});
             setIndex(0);
+            setSavedMissedCount(null);
+            completeTrackedRef.current = false;
             setPhase("intro");
           }}
         >

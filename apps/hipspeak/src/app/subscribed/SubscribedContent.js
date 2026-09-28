@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { BRAND, executeAction, isRealBrowser } from '@/lib/subscription';
 import { resolveEmailFromUrlOrStorage } from '@/lib/subscriptionLandingEmail';
 import { useSubscriber } from '@/context/SubscriberContext';
+import { addFavorite, consumePendingFavorite } from '@/lib/myWords';
 import SubscriptionSuccessRecs from '@/components/SubscriptionSuccessRecs';
 import SubscriptionSuccessArticleRecs from '@/components/SubscriptionSuccessArticleRecs';
 import actions from '@/components/SubscriptionPageActions.module.css';
@@ -35,6 +36,8 @@ export default function SubscribedContent({ recommendedArticles = [] }) {
     if (!localStorage.getItem(`subscribed_at_${BRAND}`)) {
       localStorage.setItem(`subscribed_at_${BRAND}`, new Date().toISOString());
     }
+    const pendingSlug = consumePendingFavorite();
+    if (pendingSlug) addFavorite(pendingSlug);
     refresh();
 
     if (typeof gtag !== 'undefined') {
@@ -53,6 +56,8 @@ export default function SubscribedContent({ recommendedArticles = [] }) {
     let cancelled = false;
     executeAction(searchParams, 'subscribe')
       .then((data) => {
+        // Re-sync now that execute has issued the reader token.
+        if (data.success && pendingSlug) addFavorite(pendingSlug);
         if (!cancelled) setStatus(data.success ? 'success' : 'error');
       })
       .catch(() => {

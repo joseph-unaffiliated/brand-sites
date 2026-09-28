@@ -473,7 +473,7 @@ a {
   height: var(--header-wordmark-h);
 }
 
-/* Mobile: pickle mark only; desktop: horizontal wordmark */
+/* Mobile: logo mark only; desktop: horizontal wordmark */
 .brand-logo-wordmark {
   display: none;
 }

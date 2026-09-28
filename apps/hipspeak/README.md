@@ -1,14 +1,15 @@
-# The Pickle Report (site app)
+# Hipspeak (site app)
 
-Next.js publication in the **`brand-sites`** monorepo. **Pickle-only** magic: `magic.thepicklereport.com` (see `src/config/site.js`).
+Next.js publication in the **`brand-sites`** monorepo — *The Dictionary of Slang*. Hipspeak-only magic: `magic.hipspeak.com` (see `src/config/site.js`). Sanity project `idpyzq1z` (studio: `studio-hipspeak/`).
 
-## Before first deploy
+## Routes
 
-1. Copy or replace `public/` (logos, favicon, OG image) for this brand.
-2. Create a **Sanity project** for Pickle; set `NEXT_PUBLIC_SANITY_PROJECT_ID` / dataset in Vercel.
-3. Point **`NEXT_PUBLIC_MAGIC_*`** at `magic.thepicklereport.com` (or your real magic host).
-4. Set **Vercel Root Directory** to `apps/thepicklereport`.
-5. Set display strings: `NEXT_PUBLIC_SITE_DISPLAY_NAME`, `NEXT_PUBLIC_SITE_DESCRIPTION`, optional `NEXT_PUBLIC_SITE_OG_IMAGE`, etc.
+- `/` — word of the week + mosaic; `/word/[slug]` — slang entry (Pop Quiz poll, My words heart); `/article/[slug]` 308s to `/word/[slug]`
+- `/archive` — all words with search; `/my-words` — saved words (subscription required; syncs to reader profile; `?add={slug}` email deep link)
+- `/quiz` — Hipspeak-only slang quiz (subscribe gate → score)
+- `/pollresults/[slug]` — Pop Quiz results; `/opted-in-comps`, `/opted-out-comps`, `/ai-policy`, `/profile`
 
-Vercel env copy/paste: [`docs/THEPICKLEREPORT_VERCEL_ENV.md`](../../docs/THEPICKLEREPORT_VERCEL_ENV.md).  
-Launch checklist: [`docs/THEPICKLEREPORT_LAUNCH_GUIDE.md`](../../docs/THEPICKLEREPORT_LAUNCH_GUIDE.md).
+Local dev: `pnpm --filter hipspeak dev` (port 3006). Vercel **Root Directory** = `apps/hipspeak`.
+
+Vercel env copy/paste + go-live status: [`docs/HIPSPEAK_VERCEL_ENV.md`](../../docs/HIPSPEAK_VERCEL_ENV.md).  
+Network launch checklist: [`docs/LAUNCH_PLAYBOOK.md`](../../docs/LAUNCH_PLAYBOOK.md).

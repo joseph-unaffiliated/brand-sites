@@ -1,14 +1,12 @@
 # Hipspeak — Sanity Studio
 
-Content studio for [hipspeak.com](https://hipspeak.com). One `slangEntry` document per Dictionary of Slang email issue.
+Content studio for [www.hipspeak.com](https://www.hipspeak.com) (Sanity project `idpyzq1z`, dataset `production`). One `slangEntry` document per Dictionary of Slang email issue.
 
-## First-time setup
-
-1. Create a Sanity project (or use the project id wired in `sanity.config.ts`).
-2. `npm install`, then `npm run dev`.
-3. `npx sanity deploy` — host `hipspeak`.
-4. Set `NEXT_PUBLIC_SANITY_PROJECT_ID` on the Vercel project for `apps/hipspeak`.
-5. CORS: `http://localhost:3006` and `https://hipspeak.com`.
+- **Hosted studio:** [hipspeak.sanity.studio](https://hipspeak.sanity.studio/) (`deployment.appId` in `sanity.cli.ts`, auto-updates on).
+- **Local:** `npm install`, then `npm run dev`.
+- **Redeploy after schema changes:** `npm run deploy`.
+- **Site wiring:** `NEXT_PUBLIC_SANITY_PROJECT_ID=idpyzq1z` on the Vercel project for `apps/hipspeak` (see `docs/HIPSPEAK_VERCEL_ENV.md`).
+- **CORS origins:** `http://localhost:3006`, `https://hipspeak.vercel.app`, `https://www.hipspeak.com`, `https://hipspeak.com`.
 
 ## Importing past email issues
 
@@ -40,7 +38,9 @@ SANITY_API_TOKEN=… npm run import-slang-issues -- --publish # write published 
 ```
 
 Drafts are the default so you can review in Studio before publishing. Documents use
-a stable id (`slangEntry.<slug>`), so re-running updates in place rather than duplicating.
+a stable id (`slangEntry-<slug>`), so re-running updates in place rather than duplicating.
+Never use a dot in the id (`slangEntry.<slug>`): Sanity treats dotted ids as private, so
+the public API the site reads never returns them.
 
 Customer.io generates per-template hashed CSS class names, so the parser keys on the
 brand-stable copy markers instead: `Think:`, `In Use`, `Pop Quiz`, `What else?`, and

@@ -6,7 +6,7 @@ import Link from "next/link";
 import { trackAdClick, useAdImpression } from "@publication-websites/reader-events";
 import "./CrossPromoImageAd.css";
 
-const DEFAULT_URL = process.env.NEXT_PUBLIC_CROSS_PROMO_URL || "https://hookuplists.com";
+const DEFAULT_URL = process.env.NEXT_PUBLIC_CROSS_PROMO_URL || "https://thepicklereport.com";
 
 /** Per-placement URLs; unset values fall back to `NEXT_PUBLIC_CROSS_PROMO_URL`. */
 function urlForPlacement(placement) {

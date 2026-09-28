@@ -1,5 +1,5 @@
-const STORAGE_KEY = "pickle_trivia_v1";
-const LEGACY_SESSION_KEY = "pickleTriviaPoints";
+const STORAGE_KEY = "hipspeak_trivia_v1";
+const LEGACY_SESSION_KEY = "hipspeakTriviaPoints";
 
 function safeParse(json) {
   try {

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getSlangEntries } from "@/lib/slang";
 import MyWordsList from "./MyWordsList";
+import MyWordFromEmail from "@/components/MyWordFromEmail";
 import { siteDisplayName } from "@/config/site";
 import styles from "../archive/page.module.css";
 
@@ -16,6 +17,7 @@ export default async function MyWordsPage() {
 
   return (
     <div className={styles.page}>
+      <MyWordFromEmail />
       <div className="container">
         <header className={styles.header}>
           <div>

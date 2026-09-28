@@ -1,5 +1,6 @@
 /**
- * Helpers for pickleVoteBlock (trivia when correctOptionCode set, else poll).
+ * Helpers for Pop Quiz polls on slang entries (trivia when correctOptionCode set, else poll).
+ * `pickleVoteBlock` is the shared Sanity block type name for article-style vote blocks.
  * Option letters a–d are determined by array order (not stored in Sanity).
  */
 

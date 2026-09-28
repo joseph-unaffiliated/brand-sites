@@ -6,6 +6,7 @@ import HideWhenSubscribed from "@/components/HideWhenSubscribed";
 import HomeSnippetsList from "@/components/HomeSnippetsList";
 import HomeAboutSection from "@/components/HomeAboutSection";
 import HomeHeroTagline from "@/components/HomeHeroTagline";
+import MyWordButton from "@/components/MyWordButton";
 import JsonLd from "@/components/JsonLd";
 import {
   siteConfig,
@@ -119,6 +120,9 @@ export default async function Home({ searchParams: searchParamsProp }) {
                       fill
                       sizes="(max-width: 900px) 100vw, 320px"
                     />
+                    <div className={styles.cardHeart}>
+                      <MyWordButton slug={entry.slug} variant="card" />
+                    </div>
                   </div>
                   <div className={styles.mosaicCardBody}>
                     <h3 className={styles.mosaicCardHeadline}>{entry.title}</h3>
@@ -150,6 +154,9 @@ export default async function Home({ searchParams: searchParamsProp }) {
                     priority={index === 0}
                     sizes="(max-width: 900px) 100vw, 560px"
                   />
+                  <div className={styles.cardHeart}>
+                    <MyWordButton slug={entry.slug} variant="card" />
+                  </div>
                 </div>
                 <div className={styles.featuredBody}>
                   {index === 0 && (

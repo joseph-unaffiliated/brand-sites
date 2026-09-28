@@ -2,6 +2,7 @@
 
 import { networkBrands } from "@/data/networkNewsletters";
 import { subscriptionSuccessRecs } from "@/data/subscriptionSuccessRecs";
+import { BRAND } from "@/config/site";
 import actions from "./SubscriptionPageActions.module.css";
 
 const byId = Object.fromEntries(networkBrands.map((b) => [b.id, b]));
@@ -14,7 +15,7 @@ export default function SubscriptionSuccessRecs({ email }) {
     <section className={actions.recs} aria-label="You might also enjoy">
       <p className={actions.recsTitle}>You might also enjoy&hellip;</p>
       <ul className={actions.recsList}>
-        {subscriptionSuccessRecs.map((row) => {
+        {subscriptionSuccessRecs.filter((row) => row.id !== BRAND).map((row) => {
           const brand = byId[row.id];
           if (!brand) return null;
           const name = brand.displayName || brand.name;

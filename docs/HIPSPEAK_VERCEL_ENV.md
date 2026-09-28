@@ -1,6 +1,6 @@
 # Hipspeak — Vercel environment variables (copy/paste)
 
-Hipspeak is **its own brand**: marketing on `hipspeak.com`, subscriptions and reader APIs on **`magic.hipspeak.com`**. It does **not** share magic hosts or env defaults with any other brand.
+Hipspeak is **its own brand**: marketing on `www.hipspeak.com` (apex 308s to www), subscriptions and reader APIs on **`magic.hipspeak.com`**. It does **not** share magic hosts or env defaults with any other brand.
 
 Use this on the **marketing** Vercel project: **Root Directory** = `apps/hipspeak`.
 
@@ -20,11 +20,11 @@ After saving: **Redeploy** Production (and Preview if you added vars there).
 
 ## Plain checklist (two Vercel projects)
 
-### Marketing (`hipspeak.com`) — Root Directory `apps/hipspeak`
+### Marketing (`www.hipspeak.com`) — Root Directory `apps/hipspeak`
 
 | Name | Value |
 |------|-------|
-| `NEXT_PUBLIC_SITE_URL` | `https://hipspeak.com` |
+| `NEXT_PUBLIC_SITE_URL` | `https://www.hipspeak.com` |
 | `NEXT_PUBLIC_BRAND_ID` | `hipspeak` |
 | `NEXT_PUBLIC_MAGIC_EXECUTE_URL` | `https://magic.hipspeak.com/execute` |
 | `NEXT_PUBLIC_MAGIC_READER_API_ORIGIN` | `https://magic.hipspeak.com` |
@@ -57,26 +57,26 @@ After saving: **Redeploy** Production (and Preview if you added vars there).
 
 House ads rotate **other** brands onto Hipspeak via Airtable Destination Brands (never self-promo). Static `crossPromoAds.js` is fallback only.
 
-### Magic (`magic.hipspeak.com`) — separate Vercel project
+### Magic (`magic.hipspeak.com`) — shared `subscription-functions` Vercel project
 
 | Name | Value |
 |------|-------|
 | `READER_TOKEN_SECRET` | Generate once: `openssl rand -hex 32` |
-| `READERS_CORS_ORIGINS` | `https://hipspeak.com,https://www.hipspeak.com,http://localhost:3006` |
+| `READERS_CORS_ORIGINS` | Shared network list; must include `https://hipspeak.com`, `https://www.hipspeak.com`, `https://hipspeak.vercel.app`, `http://localhost:3006` |
 | `GCP_PROJECT_ID` | Your GCP project |
 | `GCP_SERVICE_ACCOUNT_KEY` | Service account JSON for BigQuery/subscribers |
 
-The brand also needs entries in the **subscription-functions** repo — follow `subscription-functions-copy/docs/ADDING_A_NEW_BRAND.md` with brand id `hipspeak`.
+The brand also needs entries in the **subscription-functions** repo — follow `subscription-functions/docs/ADDING_A_NEW_BRAND.md` with brand id `hipspeak`.
 
 See [MAGIC_READER_ENV.md](./MAGIC_READER_ENV.md) for reader token + CORS detail.
 
 ---
 
-## A) Marketing site (`hipspeak.com`)
+## A) Marketing site (`www.hipspeak.com`)
 
 ```env
 # --- Core site & Hipspeak magic only ---
-NEXT_PUBLIC_SITE_URL=https://hipspeak.com
+NEXT_PUBLIC_SITE_URL=https://www.hipspeak.com
 NEXT_PUBLIC_BRAND_ID=hipspeak
 NEXT_PUBLIC_MAGIC_EXECUTE_URL=https://magic.hipspeak.com/execute
 NEXT_PUBLIC_MAGIC_READER_API_ORIGIN=https://magic.hipspeak.com
@@ -114,7 +114,7 @@ NEXT_PUBLIC_RETENTION_SITE_ID=X2JHJ4WE
 - `/` — latest slang entry (“word of the week”)
 - `/word/coded` — Coded sample entry
 - `/archive` — chronological word list
-- `/my-words` — client-side favorites
+- `/my-words` — saved words (subscribers; synced to the reader profile)
 - `/quiz` — slang knowledge quiz (subscribe to see results)
 - `/pollresults/coded?poll=a` — pop quiz results
 - `/opted-out-comps` / `/opted-in-comps` — compilations preference confirmation
@@ -122,12 +122,93 @@ NEXT_PUBLIC_RETENTION_SITE_ID=X2JHJ4WE
 
 ---
 
-## Go-live cutover (manual)
+## Go-live status
 
-Full checklist: [`LAUNCH_PLAYBOOK.md`](./LAUNCH_PLAYBOOK.md#hipspeak-go-live-manual-cutover).
+Canonical host is **`https://www.hipspeak.com`**; the apex 308s to `www` (Vercel domain redirect, path and query preserved, so magic's `https://hipspeak.com/?subscribed=true&email=…` and `/my-words?add=…` links survive).
 
-1. **Airtable** — Add Hipspeak to Destination Brands; brand-aware Click URL (`/word/{slug}`).
-2. **Vercel marketing** — Env above; attach `hipspeak.com` / `www`; production green.
-3. **Magic** — CORS + deploy with branded comps; `reader-health` OK.
-4. **Cloudflare** — Disable webflow-proxy worker routes; CNAME to Vercel DNS-only; SSL Full (strict).
-5. **Smoke** — home, `/word/…`, subscribe, profile, `/quiz`, house ad, comps.
+| Item | Status |
+|------|--------|
+| `NEXT_PUBLIC_SITE_URL=https://www.hipspeak.com` | ✅ set 2026-09-28 |
+| `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` | ✅ `kr8Lng5KcVPHt8VuzQrT9kyMAxJOBzzUtx3WeUXPC04` (same token as the Webflow page; the zone also has a DNS TXT verification) |
+| `NEXT_PUBLIC_GTM_ID` / `NEXT_PUBLIC_META_PIXEL_ID` | ✅ `GTM-TVHD6JMG` / `809409995127436` |
+| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | ⚠️ waiting on the new Hipspeak GA4 property. Re-checked 2026-09-28: published `GTM-TVHD6JMG` has no `G-*` IDs, so direct gtag won't double count. |
+| `AIRTABLE_API_KEY` | ⚠️ still type `encrypted`; switch to `sensitive` (Vercel → Settings → Environment Variables → edit → Sensitive) |
+| Domains on Vercel project `hipspeak` | ✅ `www.hipspeak.com` (production) and `hipspeak.com` (308 → www), both verified; DNS still points at Cloudflare/Webflow |
+| Magic CORS (`READERS_CORS_ORIGINS`) | ✅ apex, www, `hipspeak.vercel.app`, `http://localhost:3006` |
+| Magic `BRANDED_COMPS_CONFIRMATION` includes `hipspeak` | ⚠️ local only; ships with the post-Oct 6 magic push |
+| Hosted studio | ✅ [hipspeak.sanity.studio](https://hipspeak.sanity.studio/) |
+| Legacy Webflow URLs | ✅ only `/privacy`, `/terms`, `/pollresults/{slug}` existed; all three are native Next routes |
+
+## Airtable Click URL formula (Creatives → `Click URL`)
+
+Paste on cutover day (not before: `www.hipspeak.com/word/…` 404s until DNS moves).
+
+Before:
+
+```text
+IF(
+  {Ad type} = "House Ads",
+  "https://" & {Brand} & ".com/" &
+    IF(
+      {Slug},
+      IF(
+        {Code} = "FTV", "",
+        IF({Code} = "TEC", "recipe/", "article/")
+      ) & {Slug}
+    )
+)
+```
+
+After (Hipspeak → `https://www.hipspeak.com/word/{slug}`; everything else unchanged):
+
+```text
+IF(
+  {Ad type} = "House Ads",
+  "https://" & IF({Code} = "HIP", "www.", "") & {Brand} & ".com/" &
+    IF(
+      {Slug},
+      IF(
+        {Code} = "FTV", "",
+        IF({Code} = "TEC", "recipe/",
+          IF({Code} = "HIP", "word/", "article/"))
+      ) & {Slug}
+    )
+)
+```
+
+Also add **Hipspeak** to Destination Brands on the creatives that should run on it.
+
+## Cloudflare cutover checklist (hipspeak.com zone)
+
+Pre-flight (all must be true):
+
+- [ ] Latest `apps/hipspeak` production deploy is green on `https://hipspeak.vercel.app`
+- [ ] `curl -s https://magic.hipspeak.com/api/reader-health` returns 200
+- [ ] Note the current DNS records and worker routes (screenshot) for rollback
+
+Cutover:
+
+1. **Workers Routes** → disable or delete the `webflow-proxy` routes for `hipspeak.com/*` and `www.hipspeak.com/*`. Leave `magic.hipspeak.com` alone.
+2. **DNS**, both **DNS only** (grey cloud):
+   - `A` `hipspeak.com` → `76.76.21.21`
+   - `CNAME` `www` → `cname.vercel-dns.com`
+3. **SSL/TLS** → Full (strict).
+4. Do **not** touch MX (Google Workspace), SPF, or the `google-site-verification` / `yahoo-verification-key` TXT records.
+5. Vercel → Project `hipspeak` → Domains: wait for both to show "Valid Configuration" and certificates issued.
+6. Paste the Airtable formula above.
+
+7. After smoke passes: retire the **Webflow Poll Results** staff tool in `unaffiliated-analytics` (remove the `/tools/webflow-poll` entry from `src/lib/tools-catalog.ts`, then delete `src/app/(dashboard)/tools/webflow-poll/`, `src/app/api/tools/webflow-poll/` and `src/lib/webflow/`). Hipspeak polls now come from `slangEntry.pollOptions`, which the **Email → Sanity** tool already fills. Do this after the Oct 6 draw, since that app hosts the giveaway entrants page.
+
+Rollback (if smoke fails): re-enable the `webflow-proxy` routes, set the two records back to proxied (orange cloud) as in the pre-flight screenshot, and revert the Airtable formula. Vercel domains can stay attached.
+
+Post-cutover smoke:
+
+- [ ] `curl -sI https://hipspeak.com/word/coded?poll=a` → 308 to `https://www.hipspeak.com/word/coded?poll=a`
+- [ ] `https://hipspeak.com/?subscribed=true&email=test%40example.com` lands on `/subscribed` on www with params intact
+- [ ] `/`, `/word/{slug}`, `/archive`, `/my-words`, `/quiz`, `/pollresults/npc?poll=a`, `/privacy`, `/terms`
+- [ ] Subscribe → magic → back with reader token; `/profile` loads subscriptions
+- [ ] Heart a word as a subscriber; it appears on another device via `/my-words`
+- [ ] Quiz: gate → subscribe → score; returning subscriber skips the gate
+- [ ] House ad renders and click URL is correct; `/opted-out-comps` and `/opted-in-comps`
+- [ ] OneTrust banner, GTM, Meta pixel fire on `www.hipspeak.com`
+- [ ] `https://www.hipspeak.com/sitemap.xml` and `robots.txt` use the www host

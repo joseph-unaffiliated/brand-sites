@@ -148,6 +148,10 @@
   cursor: not-allowed;
 }
 
+.saveMissed {
+  margin-top: 1rem;
+}
+
 .textBtn {
   margin-top: 1.5rem;
   background: none;
