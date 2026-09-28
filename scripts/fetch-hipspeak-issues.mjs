@@ -12,6 +12,10 @@
  *
  * Writes one HTML file per issue plus issues-catalog.json, which
  * studio-hipspeak/scripts/import-slang-issues.mjs consumes.
+ *
+ * From the Vault uses the same naming (`FTV - Issue 32 - Jeff Goldblum`):
+ *   node scripts/fetch-hipspeak-issues.mjs --brand=FTV --out=issues/fromthevault
+ * then scripts/import-vault-issues.py.
  */
 
 import {existsSync, mkdirSync, readFileSync, writeFileSync} from 'fs'
@@ -23,6 +27,7 @@ const repoRoot = join(__dirname, '..')
 
 const DEFAULT_OUT = join(repoRoot, 'issues/hipspeak')
 const CATALOG_NAME = 'issues-catalog.json'
+const CATALOG_BRANDS = {HIP: 'hipspeak', FTV: 'heebnewsletters'}
 
 /**
  * `HIP - Issue 17 - Nasty` → issue 17, word "Nasty". Tolerates en/em dashes and
@@ -323,7 +328,7 @@ async function main() {
 
   writeFileSync(
     catalogPath,
-    `${JSON.stringify({brand: 'hipspeak', generatedAt: new Date().toISOString(), issues: merged}, null, 2)}\n`,
+    `${JSON.stringify({brand: CATALOG_BRANDS[brand.toUpperCase()] || brand.toLowerCase(), generatedAt: new Date().toISOString(), issues: merged}, null, 2)}\n`,
     'utf8'
   )
 
@@ -332,7 +337,11 @@ async function main() {
     console.log(`Skipped ${skipped.length}:`)
     for (const s of skipped) console.log(`  ${s.messageName} (${s.reason})`)
   }
-  console.log('\nNext: node studio-hipspeak/scripts/import-slang-issues.mjs --dry-run')
+  console.log(
+    brand.toUpperCase() === 'FTV'
+      ? `\nNext: python3 scripts/import-vault-issues.py --dir=${outDir}`
+      : '\nNext: node studio-hipspeak/scripts/import-slang-issues.mjs --dry-run'
+  )
 }
 
 main().catch((err) => {

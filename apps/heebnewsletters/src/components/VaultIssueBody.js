@@ -29,7 +29,7 @@ const components = {
         <figure className={styles.figure}>
           <Image
             src={src}
-            alt=""
+            alt={value.alt || ""}
             width={w}
             height={h}
             className={styles.figureImage}
