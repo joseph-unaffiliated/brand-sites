@@ -194,9 +194,9 @@ Status as of 2026-09-28. The step-by-step cutover checklist, rollback and Airtab
 
 ### Cloudflare (you)
 
-- [ ] Disable **webflow-proxy** worker routes on hipspeak.com
-- [ ] DNS apex/`www` → Vercel **DNS-only**; SSL Full (strict)
-- [ ] Post-cutover smoke (list in `HIPSPEAK_VERCEL_ENV.md`)
+- [x] Disable **webflow-proxy** worker routes on hipspeak.com
+- [x] DNS apex/`www` → Vercel **DNS-only** (project-specific CNAME from the Vercel Domains page)
+- [x] Post-cutover smoke (list in `HIPSPEAK_VERCEL_ENV.md`), live 2026-09-29
 
 ---
 

@@ -134,7 +134,9 @@ Canonical host is **`https://www.hipspeak.com`**; the apex 308s to `www` (Vercel
 | `NEXT_PUBLIC_GA_MEASUREMENT_ID` | ✅ `G-V8T90TBR3Z` set 2026-09-28 and live in the page. Re-checked 2026-09-28: published `GTM-TVHD6JMG` has no `G-*` IDs, so direct gtag won't double count. |
 | `AIRTABLE_API_KEY` | ✅ Sensitive, from `Keys/AIRTABLE_HOUSEADS.txt` (2026-09-28); `/api/house-ads` serves pool ads |
 | Airtable Destination Brands | ✅ Hipspeak added to every active House Ads creative except its own (2026-09-28) |
-| Domains on Vercel project `hipspeak` | ✅ `www.hipspeak.com` (production) and `hipspeak.com` (308 → www), both verified; DNS still points at Cloudflare/Webflow |
+| Domains on Vercel project `hipspeak` | ✅ `www.hipspeak.com` (production) and `hipspeak.com` (308 → www), both verified |
+| Cloudflare cutover | ✅ 2026-09-29: webflow-proxy routes disabled, apex/www CNAME → `143f5568a99746ca.vercel-dns-016.com` (DNS only); post-cutover curl smoke passed |
+| Airtable Click URL formula | ⚠️ not yet pasted; Hipspeak creatives still resolve to `https://hipspeak.com/` (works via the 308) |
 | Magic CORS (`READERS_CORS_ORIGINS`) | ✅ apex, www, `hipspeak.vercel.app`, `http://localhost:3006` |
 | Magic `BRANDED_COMPS_CONFIRMATION` includes `hipspeak` | ⚠️ local only; ships with the post-Oct 6 magic push |
 | Hosted studio | ✅ [hipspeak.sanity.studio](https://hipspeak.sanity.studio/) |
