@@ -25,18 +25,17 @@
   width: 100%;
 }
 
-.kicker {
-  font-size: 0.8125rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--color-text-muted, #666);
-  margin: 0 0 0.75rem;
-}
-
 .title {
   font-size: clamp(1.75rem, 4vw, 2.5rem);
   line-height: 1.15;
   margin: 0 0 0.75rem;
+}
+
+@media (max-width: 640px) {
+  .scoreTitle {
+    font-size: 3.25rem;
+    line-height: 1.05;
+  }
 }
 
 .dek {
@@ -44,6 +43,7 @@
   line-height: 1.55;
   color: var(--color-text-muted, #555);
   margin: 0;
+  text-wrap: balance;
 }
 
 .muted {
@@ -178,6 +178,12 @@
   border: 1px solid var(--color-border, #ccc);
   background: #fff;
   color: inherit;
+}
+
+.gateCard input[type="email"]:focus,
+.gateCard input[type="email"]:focus-visible {
+  outline: none;
+  border-color: var(--text-secondary);
 }
 
 .gateCard input[type="email"]::placeholder {

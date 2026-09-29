@@ -208,15 +208,6 @@ export default async function WordPage({ params }) {
                 ) : null}
               </div>
               <div className={styles.wordMetaRow}>
-                {entry.publishedDate ? (
-                  <span className={styles.wordMetaItem}>
-                    {new Date(entry.publishedDate).toLocaleDateString("en-US", {
-                      month: "long",
-                      day: "numeric",
-                      year: "numeric",
-                    })}
-                  </span>
-                ) : null}
                 <MyWordButton slug={slug} />
               </div>
             </div>
@@ -246,7 +237,6 @@ export default async function WordPage({ params }) {
 
                     {entry.pollOptions?.length ? (
                       <section className={styles.pollSection} aria-label="Pop quiz">
-                        <p className={styles.pollEyebrow}>Pop Quiz</p>
                         {entry.pollQuestion ? (
                           <h2 className={styles.pollQuestion}>{entry.pollQuestion}</h2>
                         ) : null}
@@ -323,7 +313,7 @@ export default async function WordPage({ params }) {
           )}
         </div>
         <HideWhenSubscribed>
-          <section className="newslettercta-section">
+          <section className={`newslettercta-section ${styles.inlineSubscribeCta}`}>
             <div className="newslettercta-block">
               <div className="newslettercta-prompt">
                 <span>Subscribe for more from </span>

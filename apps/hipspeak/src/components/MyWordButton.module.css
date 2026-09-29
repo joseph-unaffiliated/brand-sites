@@ -26,7 +26,7 @@
   border: none;
   background: transparent;
   box-shadow: none;
-  color: #000;
+  color: var(--my-word-card-color, #000);
   filter: none;
 }
 
@@ -34,7 +34,7 @@
 .card.active,
 .card.active:hover {
   background: transparent;
-  color: #000;
+  color: var(--my-word-card-color, #000);
 }
 
 .card .heart {

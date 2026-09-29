@@ -106,8 +106,10 @@ export default function MyWordsList({ entries }) {
         <p>
           You haven&apos;t saved any words yet. Tap the ♡ on any word to keep it here.
         </p>
-        <p>
-          <Link href="/archive">Browse all words</Link>
+        <p className={styles.emptyStateAction}>
+          <Link href="/archive" className="button button-secondary">
+            Browse all words
+          </Link>
         </p>
       </div>
     );

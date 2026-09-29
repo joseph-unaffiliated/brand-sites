@@ -86,11 +86,6 @@
   flex-wrap: wrap;
 }
 
-.wordMetaItem {
-  font-size: 13px;
-  color: var(--text-muted);
-}
-
 .articleHeroContent {
   padding-bottom: 0;
 }
@@ -284,6 +279,7 @@
   align-self: center;
   width: 100%;
   max-width: 40rem;
+  padding-bottom: 1rem;
   text-align: center;
 }
 
@@ -307,6 +303,7 @@
 
 .inUseDialogue {
   background: var(--surface-muted);
+  border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 1.25rem 1.5rem;
   color: var(--text-secondary);
@@ -349,14 +346,6 @@
   border-radius: var(--radius);
   border: 1px solid var(--border);
   background: var(--surface-muted);
-}
-
-.pollEyebrow {
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  font-size: var(--text-label);
-  color: var(--text-muted);
-  margin: 0 0 0.5rem;
 }
 
 .pollQuestion {
@@ -439,13 +428,15 @@
   outline-offset: 2px;
 }
 
-.aroundTheWebItemTitle {
-  font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
-  font-size: 1.15rem;
-  line-height: 1.25;
+:global(.site) h3.aroundTheWebItemTitle {
+  font-family: inherit;
+  font-size: 1.2rem;
+  line-height: 1.5;
   margin: 0 0 0.35rem;
-  font-weight: 400;
-  letter-spacing: -0.02em;
+  font-weight: 300;
+  letter-spacing: 0.005em;
+  text-wrap: wrap;
+  color: var(--text-primary);
 }
 
 .aroundTheWebCta {
@@ -481,6 +472,11 @@
     padding-left: 24px;
     padding-right: 24px;
   }
+}
+
+/* Matches .readMore margin-top so the CTA sits evenly between the bottom ad and More words */
+.inlineSubscribeCta {
+  margin-top: 2.5rem;
 }
 
 /* Read more module */
@@ -576,11 +572,17 @@
 
 @media (max-width: 480px) {
   .readMoreGrid {
-    grid-template-columns: 1fr;
+    gap: 10px;
   }
 
-  .readMoreCard:nth-child(3) {
-    display: flex;
+  .readMoreHeadline {
+    font-size: 20px;
+    margin: 10px 12px 4px;
+  }
+
+  .readMoreDek {
+    font-size: 13px;
+    margin: 0 12px 12px;
   }
 }
 

@@ -140,7 +140,6 @@ export default function SlangQuizClient() {
     return (
       <div className={styles.wrap}>
         <header className={styles.header}>
-          <p className={styles.kicker}>Hipspeak quiz</p>
           <h1 className={styles.title}>{slangQuiz.title}</h1>
           <p className={styles.dek}>{slangQuiz.dek}</p>
         </header>
@@ -214,8 +213,7 @@ export default function SlangQuizClient() {
     return (
       <div className={`${styles.wrap} ${styles.wrapResults}`}>
         <header className={styles.header}>
-          <p className={styles.kicker}>Your results</p>
-          <h1 className={styles.title}>
+          <h1 className={`${styles.title} ${styles.scoreTitle}`}>
             {score.correct} / {score.total}
           </h1>
           <p className={styles.dek}>{commentary}</p>

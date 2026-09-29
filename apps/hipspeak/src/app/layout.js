@@ -179,7 +179,6 @@ export default async function RootLayout({ children }) {
                 <div>
                   <div className="footer-links">
                     <Link href="/archive">Words</Link>
-                    <Link href="/quiz">Quiz</Link>
                     <Link href="/my-words">My words</Link>
                     <Link href="/about">About</Link>
                     <ContactCopyLink email={contactEmail}>Contact</ContactCopyLink>

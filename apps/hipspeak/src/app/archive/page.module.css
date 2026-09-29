@@ -53,12 +53,6 @@
   }
 }
 
-@media (max-width: 640px) {
-  .issueMosaic {
-    column-count: 1;
-  }
-}
-
 .issueCard {
   break-inside: avoid;
   margin-bottom: 12px;
@@ -104,6 +98,22 @@
   font-weight: 300;
   line-height: 1.2;
   font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
+}
+
+.issueCardBody > p:last-child {
+  margin-bottom: 0;
+}
+
+.issueCardBody h3.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .issueDek {
@@ -154,6 +164,7 @@
   top: 10px;
   right: 10px;
   z-index: 2;
+  --my-word-card-color: #fff;
 }
 
 .wordCardPlaceholderTitle {
@@ -185,7 +196,7 @@
   flex-direction: column;
   align-items: center;
   gap: 0;
-  margin: 0 0 2rem;
+  margin: 0 0 3rem;
 }
 
 .searchControl {
@@ -247,6 +258,10 @@
   text-align: center;
 }
 
+.emptyStateAction {
+  margin-top: 1.5rem;
+}
+
 .inlineSubscribe {
   appearance: none;
   background: none;
@@ -262,15 +277,6 @@
 
 .inlineSubscribe:hover {
   color: var(--text-primary);
-}
-
-.kickerLink {
-  color: inherit;
-  text-decoration: none;
-}
-
-.kickerLink:hover {
-  text-decoration: underline;
 }
 
 .quizSavedList {
@@ -291,4 +297,32 @@
   border: 1px solid var(--border);
   border-radius: var(--radius, 12px);
   background: var(--surface);
+}
+
+@media (max-width: 640px) {
+  .issueMosaic {
+    column-count: 2;
+    column-gap: 10px;
+  }
+
+  .issueCard {
+    margin-bottom: 10px;
+  }
+
+  .issueCardBody {
+    padding: 10px 12px 12px;
+  }
+
+  .issueDek {
+    font-size: 0.85rem;
+  }
+
+  .wordPronunciation {
+    font-size: 0.75rem;
+  }
+
+  .wordCardHeart {
+    top: 4px;
+    right: 4px;
+  }
 }

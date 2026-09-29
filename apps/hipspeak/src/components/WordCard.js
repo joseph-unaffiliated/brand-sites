@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import MyWordButton from "@/components/MyWordButton";
+import { cardPronunciation } from "@/lib/pronunciation";
 import styles from "@/app/archive/page.module.css";
 
 const PLACEHOLDER_COLORS = [
@@ -46,17 +47,15 @@ export default function WordCard({ entry }) {
     </div>
   );
 
+  const pronunciation = cardPronunciation(entry.pronunciation);
+
   const body = (
     <div className={styles.issueCardBody}>
-      <h3>{entry.title}</h3>
-      {entry.pronunciation ? (
-        <p className={styles.wordPronunciation}>{entry.pronunciation}</p>
+      <h3 className={hasImage ? styles.visuallyHidden : undefined}>{entry.title}</h3>
+      {pronunciation ? (
+        <p className={styles.wordPronunciation}>{pronunciation}</p>
       ) : null}
-      {entry.think ? (
-        <p className={styles.issueDek}>
-          {entry.quizOnly ? entry.think : `Think: ${entry.think}`}
-        </p>
-      ) : null}
+      {entry.think ? <p className={styles.issueDek}>{entry.think}</p> : null}
     </div>
   );
 

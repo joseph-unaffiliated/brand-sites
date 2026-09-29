@@ -8,7 +8,7 @@ export const QUIZ_STORAGE_KEY = "hipspeak_slang_quiz_v1";
 export const slangQuiz = {
   id: "slang-knowledge-v1",
   title: "How fluent is your slang?",
-  dek: "Ten questions. No judgment (okay, a little judgment). Subscribe to unlock your score.",
+  dek: "Ten questions. No judgment (okay, a little judgment).",
   questions: [
     {
       id: "q1",

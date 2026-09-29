@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { getSlangEntries } from "@/lib/slang";
 import MyWordsList from "./MyWordsList";
 import MyWordFromEmail from "@/components/MyWordFromEmail";
@@ -21,11 +20,6 @@ export default async function MyWordsPage() {
       <div className="container">
         <header className={styles.header}>
           <div>
-            <p className={styles.kicker}>
-              <Link href="/archive" className={styles.kickerLink}>
-                Words
-              </Link>
-            </p>
             <h1>My words</h1>
           </div>
         </header>

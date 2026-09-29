@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { getSlangEntries } from "@/lib/slang";
+import { cardPronunciation } from "@/lib/pronunciation";
 import SubscribeBlock from "@/components/SubscribeBlock";
 import HideWhenSubscribed from "@/components/HideWhenSubscribed";
 import HomeSnippetsList from "@/components/HomeSnippetsList";
@@ -126,11 +127,13 @@ export default async function Home({ searchParams: searchParamsProp }) {
                   </div>
                   <div className={styles.mosaicCardBody}>
                     <h3 className={styles.mosaicCardHeadline}>{entry.title}</h3>
-                    {entry.pronunciation && (
-                      <p className={styles.mosaicCardDemographic}>{entry.pronunciation}</p>
+                    {cardPronunciation(entry.pronunciation) && (
+                      <p className={styles.mosaicCardDemographic}>
+                        {cardPronunciation(entry.pronunciation)}
+                      </p>
                     )}
                     {entry.think && (
-                      <p className={styles.mosaicCardDek}>Think: {entry.think}</p>
+                      <p className={styles.mosaicCardDek}>{entry.think}</p>
                     )}
                   </div>
                 </Link>
@@ -163,21 +166,20 @@ export default async function Home({ searchParams: searchParamsProp }) {
                     <p className={styles.featuredKicker}>Word of the week</p>
                   )}
                   <h2 className={styles.featuredHeadline}>{entry.title}</h2>
-                  {entry.pronunciation && (
-                    <p className={styles.featuredDek}>{entry.pronunciation}</p>
+                  {cardPronunciation(entry.pronunciation) && (
+                    <p className={styles.featuredDek}>{cardPronunciation(entry.pronunciation)}</p>
                   )}
                   {entry.think ? (
                     <div className={styles.featuredEntryPreview}>
-                      <p className={styles.featuredEntrySnippet}>Think: {entry.think}</p>
+                      <p className={styles.featuredEntrySnippet}>{entry.think}</p>
                     </div>
                   ) : null}
-                  <span className={styles.featuredLink}>View word</span>
                 </div>
               </Link>
             ))}
           </div>
 
-          {/* Right column: stack (snippets with thumb) then subscribe at bottom */}
+          {/* Right column: stack (snippets) then subscribe at bottom */}
           <div className={styles.mosaicRight}>
             <HideWhenSubscribed>
               <SubscribeBlock initialEmail={initialEmail} />
