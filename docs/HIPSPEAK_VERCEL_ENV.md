@@ -43,7 +43,7 @@ After saving: **Redeploy** Production (and Preview if you added vars there).
 | `NEXT_PUBLIC_ADSENSE_CLIENT` | ⏭️ OPTIONAL — only if switching to `adsense` mode |
 | `NEXT_PUBLIC_META_PIXEL_ID` | ⚠️ UPDATE — set on Vercel (network or brand pixel) |
 | `NEXT_PUBLIC_GTM_ID` | ⚠️ UPDATE — same GTM container as other Unaffiliated sites when ready |
-| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | ⚠️ UPDATE — Hipspeak GA4 web stream when ready |
+| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | ✅ `G-V8T90TBR3Z` (production + preview) |
 | `NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT` | `019a7167-e6eb-7fa2-ae9f-60338480c772` ✅ (also baked into `ComplianceScripts.js`) |
 | `NEXT_PUBLIC_RETENTION_SITE_ID` | `X2JHJ4WE` (network default) |
 | `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` | Optional — Search Console token when ready |
@@ -99,7 +99,7 @@ NEXT_PUBLIC_ADS_MODE=cross_promo
 # Set on Vercel when ready (Meta / GTM / GA4)
 NEXT_PUBLIC_META_PIXEL_ID=
 NEXT_PUBLIC_GTM_ID=
-NEXT_PUBLIC_GA_MEASUREMENT_ID=
+NEXT_PUBLIC_GA_MEASUREMENT_ID=G-V8T90TBR3Z
 NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT=019a7167-e6eb-7fa2-ae9f-60338480c772
 NEXT_PUBLIC_RETENTION_SITE_ID=X2JHJ4WE
 
@@ -131,7 +131,7 @@ Canonical host is **`https://www.hipspeak.com`**; the apex 308s to `www` (Vercel
 | `NEXT_PUBLIC_SITE_URL=https://www.hipspeak.com` | ✅ set 2026-09-28 |
 | `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` | ✅ `kr8Lng5KcVPHt8VuzQrT9kyMAxJOBzzUtx3WeUXPC04` (same token as the Webflow page; the zone also has a DNS TXT verification) |
 | `NEXT_PUBLIC_GTM_ID` / `NEXT_PUBLIC_META_PIXEL_ID` | ✅ `GTM-TVHD6JMG` / `809409995127436` |
-| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | ⚠️ waiting on the new Hipspeak GA4 property. Re-checked 2026-09-28: published `GTM-TVHD6JMG` has no `G-*` IDs, so direct gtag won't double count. |
+| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | ✅ `G-V8T90TBR3Z` set 2026-09-28 and live in the page. Re-checked 2026-09-28: published `GTM-TVHD6JMG` has no `G-*` IDs, so direct gtag won't double count. |
 | `AIRTABLE_API_KEY` | ✅ Sensitive, from `Keys/AIRTABLE_HOUSEADS.txt` (2026-09-28); `/api/house-ads` serves pool ads |
 | Airtable Destination Brands | ✅ Hipspeak added to every active House Ads creative except its own (2026-09-28) |
 | Domains on Vercel project `hipspeak` | ✅ `www.hipspeak.com` (production) and `hipspeak.com` (308 → www), both verified; DNS still points at Cloudflare/Webflow |
@@ -190,9 +190,10 @@ Pre-flight (all must be true):
 Cutover:
 
 1. **Workers Routes** → disable or delete the `webflow-proxy` routes for `hipspeak.com/*` and `www.hipspeak.com/*`. Leave `magic.hipspeak.com` alone.
-2. **DNS**, both **DNS only** (grey cloud):
-   - `A` `hipspeak.com` → `76.76.21.21`
-   - `CNAME` `www` → `cname.vercel-dns.com`
+2. **DNS**: use the project-specific records Vercel shows under Project `hipspeak` → Domains. Set both to **DNS only** (grey cloud), and replace any existing `A`/`AAAA`/`CNAME` records for these names:
+   - `CNAME` `@` → `143f5568a99746ca.vercel-dns-016.com` (Cloudflare flattens this at the apex)
+   - `CNAME` `www` → `143f5568a99746ca.vercel-dns-016.com`
+   - The legacy `A 76.76.21.21` / `CNAME cname.vercel-dns.com` records still work but are no longer Vercel's recommendation.
 3. **SSL/TLS** → Full (strict).
 4. Do **not** touch MX (Google Workspace), SPF, or the `google-site-verification` / `yahoo-verification-key` TXT records.
 5. Vercel → Project `hipspeak` → Domains: wait for both to show "Valid Configuration" and certificates issued.

@@ -173,7 +173,7 @@ Status as of 2026-09-28. The step-by-step cutover checklist, rollback and Airtab
 
 - [x] Marketing project Root Directory `apps/hipspeak`; env from `HIPSPEAK_VERCEL_ENV.md`
 - [x] OneTrust `019a7167-e6eb-7fa2-ae9f-60338480c772`; Meta / GTM; Airtable house-ads base/table
-- [ ] GA4 measurement ID (new Hipspeak property)
+- [x] GA4 measurement ID (new Hipspeak property: `G-V8T90TBR3Z`)
 - [x] `AIRTABLE_API_KEY` Sensitive, from `Keys/AIRTABLE_HOUSEADS.txt`
 - [x] `NEXT_PUBLIC_SITE_URL=https://www.hipspeak.com`
 - [x] Attach `www.hipspeak.com` (production) and `hipspeak.com` (308 → www); both verified
