@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import PollResult from "@/components/PollResult";
-import { getSlangEntryBySlug, getSlangEntries } from "@/lib/slang";
+import { getSlangEntryBySlug, getSlangEntries, getPollAnswerKey } from "@/lib/slang";
 import { pickRandomArticles } from "@/lib/pickRandomArticles";
 import { normalizeChoiceCode, voteBlockFromSlangEntry } from "@/lib/vote-block";
 import styles from "./page.module.css";
@@ -23,9 +23,12 @@ export default async function PollResultsPage({
   let recommendations = [];
 
   if (wordSlug) {
-    const entry = await getSlangEntryBySlug(wordSlug);
+    const [entry, answerKey] = await Promise.all([
+      getSlangEntryBySlug(wordSlug),
+      getPollAnswerKey(wordSlug),
+    ]);
     if (entry) {
-      voteBlock = voteBlockFromSlangEntry(entry);
+      voteBlock = voteBlockFromSlangEntry(entry, answerKey);
     }
     const entries = await getSlangEntries();
     recommendations = pickRandomArticles(entries, {

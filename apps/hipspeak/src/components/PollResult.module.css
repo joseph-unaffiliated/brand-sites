@@ -34,28 +34,84 @@
   margin: 0;
 }
 
-.yourPick,
-.correctAnswer,
-.correctMsg {
+.yourPick {
   font-size: 1.05rem;
   line-height: 1.5;
-  margin: 0;
+  margin: 0 0 1.75rem;
 }
 
-.yourPick {
-  margin-bottom: 1.75rem;
+.verdictRight,
+.verdictWrong {
+  font-size: var(--text-section-headline, 28px);
+  line-height: 1.2;
+  margin: -1.25rem 0 2rem;
 }
 
-.correctAnswer,
-.correctMsg {
-  margin-bottom: 0;
-  padding-bottom: 0.35rem;
+.verdictRight {
+  color: var(--accent);
 }
 
-.correctAnswer {
-  color: var(--color-text-muted, var(--muted));
+.verdictWrong {
+  color: var(--text-muted);
 }
 
-.correctMsg {
-  color: var(--text-primary, inherit);
+.options {
+  list-style: none;
+  margin: 0 auto;
+  padding: 0;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  text-align: left;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.9rem 1.1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  font-size: 1.05rem;
+  line-height: 1.4;
+}
+
+.optionAnswer {
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.optionWrongPick {
+  border-color: var(--text-muted-light);
+}
+
+.optionTags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+
+.tagAnswer,
+.tagPick {
+  font-size: var(--text-label, 12px);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.tagAnswer {
+  background: var(--accent);
+  color: #fff;
+}
+
+.tagPick {
+  background: var(--surface-muted);
+  color: var(--text-secondary);
 }

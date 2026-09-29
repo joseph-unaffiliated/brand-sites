@@ -11,6 +11,7 @@ import { recordPollAnswer } from "@/lib/trivia-points";
 import { submitVoteToMagic } from "@/lib/submit-vote";
 import { track, flush } from "@publication-websites/reader-events";
 import {
+  getOptionCode,
   getOptionLabel,
   isTriviaBlock,
   normalizeChoiceCode,
@@ -115,10 +116,10 @@ export default function PollResult({
         {isSubscribed && (
           <p className={styles.thanks}>
             {subscribeStatus === "success"
-              ? `You're now subscribed to ${siteDisplayName} — thanks for voting!`
+              ? `You're now subscribed to ${siteDisplayName} — thanks for playing!`
               : subscribeStatus === "error"
-                ? "We had trouble confirming your subscription, but your vote was counted."
-                : "Thanks for subscribing and voting!"}
+                ? "We had trouble confirming your subscription, but your answer was counted."
+                : "Thanks for subscribing and playing!"}
           </p>
         )}
 
@@ -135,25 +136,44 @@ export default function PollResult({
               {voteBlock.question?.trim() || fallbackHeading}
             </h1>
 
-            {isTrivia && isCorrect && correctLabel ? (
-              <p className={styles.correctMsg}>
-                You&apos;re right! The answer was &apos;{correctLabel}&apos;
-              </p>
-            ) : (
+            {isTrivia && correctLabel ? (
               <>
-                {selectedLabel ? (
-                  <p className={styles.yourPick}>
-                    Your answer: <strong>{selectedLabel}</strong>
-                  </p>
-                ) : null}
-
-                {isTrivia && !isCorrect && correctLabel ? (
-                  <p className={styles.correctAnswer}>
-                    The correct answer was: <strong>{correctLabel}</strong>
-                  </p>
-                ) : null}
+                <p className={isCorrect ? styles.verdictRight : styles.verdictWrong}>
+                  {isCorrect ? "You got it!" : "Not quite."}
+                </p>
+                <ul className={styles.options}>
+                  {(voteBlock.options || []).map((opt, index) => {
+                    const code = getOptionCode(opt, index);
+                    const isAnswer = code === correctCode;
+                    const isPick = code === choice;
+                    const rowClass = [
+                      styles.option,
+                      isAnswer ? styles.optionAnswer : "",
+                      isPick && !isAnswer ? styles.optionWrongPick : "",
+                    ]
+                      .filter(Boolean)
+                      .join(" ");
+                    return (
+                      <li key={opt._key ?? code} className={rowClass}>
+                        <span className={styles.optionLabel}>{opt.label}</span>
+                        {isAnswer || isPick ? (
+                          <span className={styles.optionTags}>
+                            {isAnswer ? (
+                              <span className={styles.tagAnswer}>Correct answer</span>
+                            ) : null}
+                            {isPick ? <span className={styles.tagPick}>Your answer</span> : null}
+                          </span>
+                        ) : null}
+                      </li>
+                    );
+                  })}
+                </ul>
               </>
-            )}
+            ) : selectedLabel ? (
+              <p className={styles.yourPick}>
+                Your answer: <strong>{selectedLabel}</strong>
+              </p>
+            ) : null}
           </>
         )}
         </div>

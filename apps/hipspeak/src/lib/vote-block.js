@@ -42,11 +42,12 @@ export function findVoteBlock(blocks) {
 
 /**
  * Build a vote-block-shaped object (`{ question, options }`) from a slang entry's
- * "Pop Quiz" poll (`pollQuestion` + `pollOptions[]{key,label}`). Slang entries have
- * no `correctOptionCode`, so these always render as a plain poll, never trivia.
+ * "Pop Quiz" (`pollQuestion` + `pollOptions[]{key,label}`). With an answer key it
+ * renders as trivia; without one it falls back to a plain poll.
  * @param {unknown} entry — mapped slang entry from `@/lib/slang`
+ * @param {string | null} [answerKey] — `pollAnswerKey` from Sanity
  */
-export function voteBlockFromSlangEntry(entry) {
+export function voteBlockFromSlangEntry(entry, answerKey = null) {
   if (!entry || !Array.isArray(entry.pollOptions) || entry.pollOptions.length === 0) {
     return null;
   }
@@ -57,6 +58,7 @@ export function voteBlockFromSlangEntry(entry) {
       code: opt.key,
       label: opt.label,
     })),
+    correctOptionCode: normalizeChoiceCode(answerKey) || null,
   };
 }
 

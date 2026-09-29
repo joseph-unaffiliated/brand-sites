@@ -37,6 +37,17 @@ export async function getSlangEntryBySlug(slug) {
   return isPublished(entry) ? entry : null;
 }
 
+/** Pop Quiz answer key (a/b/c). Not in the shared slang projection, so fetched here. */
+export async function getPollAnswerKey(slug) {
+  if (!layer.client || !slug) return null;
+  const key = await layer.client.fetch(
+    `*[_type == "slangEntry" && slug.current == $slug && !(_id in path("drafts.**"))][0].pollAnswerKey`,
+    { slug },
+    { next: { revalidate: 60 } },
+  );
+  return typeof key === "string" && key.trim() ? key.trim() : null;
+}
+
 export async function getSlangEntrySlugs() {
   const entries = await getSlangEntries();
   return entries.map((e) => ({ slug: e.slug }));

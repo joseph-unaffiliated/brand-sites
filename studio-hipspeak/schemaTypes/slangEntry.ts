@@ -128,6 +128,23 @@ export const slangEntryType = defineType({
       ],
     }),
     defineField({
+      name: 'pollAnswerKey',
+      title: 'Pop Quiz answer',
+      description:
+        'Key of the correct option (for "Which is NOT acceptable?", the one that is not acceptable). /pollresults shows it to readers.',
+      type: 'string',
+      options: {
+        list: [
+          {title: 'a', value: 'a'},
+          {title: 'b', value: 'b'},
+          {title: 'c', value: 'c'},
+          {title: 'd', value: 'd'},
+        ],
+        layout: 'radio',
+        direction: 'horizontal',
+      },
+    }),
+    defineField({
       name: 'furtherReading',
       title: '"What else?" links',
       type: 'array',
