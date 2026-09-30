@@ -27,9 +27,13 @@ const FIELD = {
   /** Targeting: only serve to verified jewish-interested readers. */
   jewishAudienceOnly: "Target for CE",
   weight: "Weight",
-  /** House Ads | Commerce Ads */
+  /** House Ads | Commerce Ads | SparkLoop Rec */
   adType: "Ad type",
 };
+
+/** Placeholder row: the browser fills it with a live SparkLoop Client API recommendation. */
+export const SPARKLOOP_REC_AD_TYPE = "SparkLoop Rec";
+export const SPARKLOOP_REC_KIND = "sparkloop_rec";
 
 /**
  * @typedef {{
@@ -42,7 +46,7 @@ const FIELD = {
  *   isJewishContent: boolean,
  *   jewishAudienceOnly: boolean,
  *   weight: number,
- *   adType: 'House Ads' | 'Commerce Ads' | '',
+ *   adType: 'House Ads' | 'Commerce Ads' | 'SparkLoop Rec' | '',
  *   destinationBrandKeys: string[],
  * }} HouseCreative
  */
@@ -223,6 +227,25 @@ export async function fetchActiveHouseCreatives() {
   for (const rec of data.records || []) {
     const f = rec.fields || {};
     const adTypeRaw = firstFieldString(f[FIELD.adType]);
+    if (adTypeRaw === SPARKLOOP_REC_AD_TYPE) {
+      const destinationBrandKeys = resolveDestinationBrandKeys(f, slugByRecordId);
+      // Only brands with a SparkLoop publication can render these; never default to all hosts.
+      if (!destinationBrandKeys.length) continue;
+      out.push({
+        id: rec.id,
+        name: firstFieldString(f[FIELD.name]),
+        brandKey: "sparkloop",
+        slot: "",
+        imageUrl: "",
+        clickUrl: "",
+        isJewishContent: false,
+        jewishAudienceOnly: false,
+        weight: Math.max(1, Number(f[FIELD.weight]) || 1),
+        adType: SPARKLOOP_REC_AD_TYPE,
+        destinationBrandKeys,
+      });
+      continue;
+    }
     const adType =
       adTypeRaw === "Commerce Ads"
         ? "Commerce Ads"
@@ -324,6 +347,7 @@ function isEligibleForHost(c, { hostBrand, blocked, pageBlockedUrls, jewishInter
  *   excludeBrands?: string[],
  *   pageExcludeUrls?: string[],
  *   jewishInterested?: boolean,
+ *   includeSparkloop?: boolean,
  * }} opts
  */
 export function selectHouseAd(
@@ -334,7 +358,49 @@ export function selectHouseAd(
     excludeBrands = [],
     pageExcludeUrls = [],
     jewishInterested = false,
+    includeSparkloop = false,
   }
+) {
+  const sparkloopRows = includeSparkloop
+    ? creatives.filter(
+        (c) => c.adType === SPARKLOOP_REC_AD_TYPE && matchesDestinationBrands(c, hostBrand)
+      )
+    : [];
+  const house = selectImageHouseAd(creatives, {
+    slot,
+    hostBrand,
+    excludeBrands,
+    pageExcludeUrls,
+    jewishInterested,
+  });
+  if (!sparkloopRows.length) return house?.ad ?? null;
+
+  const candidates = [
+    ...sparkloopRows.map((c) => ({ weight: c.weight, sparkloop: c })),
+    ...(house ? [{ weight: house.weight, ad: house.ad }] : []),
+  ];
+  const pick = weightedRandom(candidates);
+  if (!pick?.sparkloop) return pick?.ad ?? null;
+  return {
+    kind: SPARKLOOP_REC_KIND,
+    brandKey: "sparkloop",
+    clickUrl: "",
+    isJewishContent: false,
+    jewishAudienceOnly: false,
+    adType: SPARKLOOP_REC_AD_TYPE,
+    id: pick.sparkloop.id,
+    slot,
+  };
+}
+
+/**
+ * Weighted pick among image creatives. `weight` is the whole eligible pool's weight, so a
+ * SparkLoop row wins exactly as often as one more house ad of the same weight would.
+ * @returns {{ ad: object, weight: number } | null}
+ */
+function selectImageHouseAd(
+  creatives,
+  { slot, hostBrand, excludeBrands, pageExcludeUrls, jewishInterested }
 ) {
   const blocked = new Set(
     [hostBrand, ...excludeBrands].map((b) => String(b || "").trim()).filter(Boolean)
@@ -384,14 +450,17 @@ export function selectHouseAd(
     const pick = weightedRandom(pairs);
     if (!pick) return null;
     return {
-      kind: "sticky",
-      brandKey: pick.brandKey,
-      clickUrl: pick.clickUrl,
-      isJewishContent: pick.isJewishContent,
-      jewishAudienceOnly: pick.jewishAudienceOnly,
-      adType: pick.adType,
-      desktop: { imageUrl: pick.desktop.imageUrl, id: pick.desktop.id },
-      mobile: { imageUrl: pick.mobile.imageUrl, id: pick.mobile.id },
+      weight: totalWeight(pairs),
+      ad: {
+        kind: "sticky",
+        brandKey: pick.brandKey,
+        clickUrl: pick.clickUrl,
+        isJewishContent: pick.isJewishContent,
+        jewishAudienceOnly: pick.jewishAudienceOnly,
+        adType: pick.adType,
+        desktop: { imageUrl: pick.desktop.imageUrl, id: pick.desktop.id },
+        mobile: { imageUrl: pick.mobile.imageUrl, id: pick.mobile.id },
+      },
     };
   }
 
@@ -401,16 +470,23 @@ export function selectHouseAd(
   const pick = weightedRandom(pool);
   if (!pick) return null;
   return {
-    kind: "single",
-    brandKey: pick.brandKey,
-    clickUrl: pick.clickUrl,
-    isJewishContent: pick.isJewishContent,
-    jewishAudienceOnly: pick.jewishAudienceOnly,
-    adType: pick.adType,
-    imageUrl: pick.imageUrl,
-    id: pick.id,
-    slot: pick.slot,
+    weight: totalWeight(pool),
+    ad: {
+      kind: "single",
+      brandKey: pick.brandKey,
+      clickUrl: pick.clickUrl,
+      isJewishContent: pick.isJewishContent,
+      jewishAudienceOnly: pick.jewishAudienceOnly,
+      adType: pick.adType,
+      imageUrl: pick.imageUrl,
+      id: pick.id,
+      slot: pick.slot,
+    },
   };
+}
+
+function totalWeight(items) {
+  return items.reduce((s, i) => s + (i.weight || 1), 0);
 }
 
 /**
