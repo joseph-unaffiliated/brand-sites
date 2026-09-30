@@ -46,7 +46,7 @@ importers:
         version: 16.1.1(@babel/core@7.29.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       next-sanity:
         specifier: ^12.1.0
-        version: 12.1.6(@emotion/is-prop-valid@1.4.0)(@sanity/client@7.20.0)(@sanity/types@5.18.0(@types/react@19.2.14))(next@16.1.1(@babel/core@7.29.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react-is@19.2.4)(react@19.2.3)(sanity@5.18.0(@emotion/is-prop-valid@1.4.0)(@noble/hashes@2.0.1)(@oclif/core@4.10.3)(@sanity/cli-core@1.2.1(@noble/hashes@2.0.1)(@sanity/telemetry@0.9.0(react@19.2.3))(@types/node@25.5.0)(jiti@2.6.1)(yaml@2.8.3))(@types/node@25.5.0)(@types/react@19.2.14)(jiti@2.6.1)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(styled-components@6.3.12(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(ts-toolbelt@9.6.0)(typescript@5.9.3))(styled-components@6.3.12(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(typescript@5.9.3)
+        version: 12.1.6(@emotion/is-prop-valid@1.4.0)(@sanity/client@7.20.0)(@sanity/types@5.18.0(@types/react@19.2.14))(next@16.1.1(@babel/core@7.29.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react-is@19.2.4)(react@19.2.3)(sanity@5.18.0(@emotion/is-prop-valid@1.4.0)(@noble/hashes@2.0.1)(@oclif/core@4.10.3)(@sanity/cli-core@1.2.1(@noble/hashes@2.0.1)(@sanity/telemetry@0.8.1(react@19.2.4))(@types/node@25.5.0)(jiti@2.6.1)(yaml@2.8.3))(@types/node@25.5.0)(@types/react@19.2.14)(jiti@2.6.1)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(styled-components@6.3.12(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(ts-toolbelt@9.6.0)(typescript@5.9.3))(styled-components@6.3.12(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(typescript@5.9.3)
       next-turnstile:
         specifier: ^1.0.7
         version: 1.0.7(next@16.1.1(@babel/core@7.29.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
@@ -62,7 +62,7 @@ importers:
         version: 9.39.4(jiti@2.6.1)
       eslint-config-next:
         specifier: 16.1.1
-        version: 16.1.1(eslint@9.39.4(jiti@2.6.1))(typescript@5.9.3)
+        version: 16.1.1(@typescript-eslint/parser@8.57.2(eslint@9.39.4(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.4(jiti@2.6.1))(typescript@5.9.3)
 
   apps/heebnewsletters:
     dependencies:
@@ -243,6 +243,9 @@ importers:
       '@publication-websites/shared-ads':
         specifier: workspace:*
         version: link:../../packages/shared-ads
+      '@publication-websites/sparkloop-client':
+        specifier: workspace:*
+        version: link:../../packages/sparkloop-client
       '@publication-websites/web-shell':
         specifier: workspace:*
         version: link:../../packages/web-shell
@@ -407,7 +410,7 @@ importers:
         version: 16.1.1(@babel/core@7.29.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       next-sanity:
         specifier: ^12.1.0
-        version: 12.1.6(@emotion/is-prop-valid@1.4.0)(@sanity/client@7.20.0)(@sanity/types@5.18.0(@types/react@19.2.14))(next@16.1.1(@babel/core@7.29.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react-is@19.2.4)(react@19.2.3)(sanity@5.18.0(@emotion/is-prop-valid@1.4.0)(@noble/hashes@2.0.1)(@oclif/core@4.10.3)(@sanity/cli-core@1.2.1(@noble/hashes@2.0.1)(@sanity/telemetry@0.8.1(react@19.2.4))(@types/node@25.5.0)(jiti@2.6.1)(yaml@2.8.3))(@types/node@25.5.0)(@types/react@19.2.14)(jiti@2.6.1)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(styled-components@6.3.12(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(ts-toolbelt@9.6.0)(typescript@5.9.3))(styled-components@6.3.12(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(typescript@5.9.3)
+        version: 12.1.6(@emotion/is-prop-valid@1.4.0)(@sanity/client@7.20.0)(@sanity/types@5.18.0(@types/react@19.2.14))(next@16.1.1(@babel/core@7.29.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react-is@19.2.4)(react@19.2.3)(sanity@5.18.0(@emotion/is-prop-valid@1.4.0)(@noble/hashes@2.0.1)(@oclif/core@4.10.3)(@sanity/cli-core@1.2.1(@noble/hashes@2.0.1)(@sanity/telemetry@0.9.0(react@19.2.3))(@types/node@25.5.0)(jiti@2.6.1)(yaml@2.8.3))(@types/node@25.5.0)(@types/react@19.2.14)(jiti@2.6.1)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(styled-components@6.3.12(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(ts-toolbelt@9.6.0)(typescript@5.9.3))(styled-components@6.3.12(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(typescript@5.9.3)
       next-turnstile:
         specifier: ^1.0.7
         version: 1.0.7(next@16.1.1(@babel/core@7.29.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
@@ -423,7 +426,7 @@ importers:
         version: 9.39.4(jiti@2.6.1)
       eslint-config-next:
         specifier: 16.1.1
-        version: 16.1.1(@typescript-eslint/parser@8.57.2(eslint@9.39.4(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.4(jiti@2.6.1))(typescript@5.9.3)
+        version: 16.1.1(eslint@9.39.4(jiti@2.6.1))(typescript@5.9.3)
 
   packages/affiliate:
     dependencies:
@@ -483,6 +486,15 @@ importers:
         version: 12.1.6(@emotion/is-prop-valid@1.4.0)(@sanity/client@7.20.0)(@sanity/types@5.18.0(@types/react@19.2.14))(next@16.1.1(@babel/core@7.29.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-is@19.2.4)(react@19.2.4)(sanity@5.18.0(@emotion/is-prop-valid@1.4.0)(@noble/hashes@2.0.1)(@oclif/core@4.10.3)(@sanity/cli-core@1.2.1(@noble/hashes@2.0.1)(@sanity/telemetry@0.9.0(react@19.2.4))(@types/node@25.5.0)(jiti@2.6.1)(yaml@2.8.3))(@types/node@25.5.0)(@types/react@19.2.14)(jiti@2.6.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(styled-components@6.3.12(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(ts-toolbelt@9.6.0)(typescript@5.9.3))(styled-components@6.3.12(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(typescript@5.9.3)
 
   packages/shared-ads: {}
+
+  packages/sparkloop-client:
+    dependencies:
+      react:
+        specifier: '>=18'
+        version: 19.2.3
+      react-dom:
+        specifier: '>=18'
+        version: 19.2.3(react@19.2.3)
 
   packages/web-shell:
     dependencies:
@@ -3719,6 +3731,7 @@ packages:
   eslint@9.39.4:
     resolution: {integrity: sha512-XoMjdBOwe/esVgEvLmNsD3IRHkm7fbKIUGvrleloJXUZgDHig2IPWNniv+GwjyJXzuNqVjlr5+4yVUZjycJwfQ==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.
     hasBin: true
     peerDependencies:
       jiti: '*'

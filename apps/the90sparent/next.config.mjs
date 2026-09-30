@@ -7,6 +7,7 @@ const nextConfig = {
     "@publication-websites/sanity-content",
     "@publication-websites/magic-client",
     "@publication-websites/platform-redirects",
+    "@publication-websites/sparkloop-client",
   ],
   images: {
     remotePatterns: [
