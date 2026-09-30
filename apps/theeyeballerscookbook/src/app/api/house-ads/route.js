@@ -3,6 +3,7 @@ import {
   fetchActiveHouseCreatives,
   selectHouseAd,
   houseSlotFromFormat,
+  SPARKLOOP_REC_KIND,
 } from "@publication-websites/shared-ads/house-ads";
 import { siteConfig } from "@/config/site";
 
@@ -35,6 +36,12 @@ function resolveJewishInterested(searchParams) {
   return raw === "1" || raw === "true" || raw === "yes";
 }
 
+function resolveIncludeSparkloop(searchParams) {
+  if (!siteConfig.sparkloopPublicationId) return false;
+  const excluded = (searchParams.get("excludeKinds") || "").split(",").map((k) => k.trim());
+  return !excluded.includes(SPARKLOOP_REC_KIND);
+}
+
 function hasAirtableToken() {
   return !!(
     process.env.AIRTABLE_API_KEY?.trim() || process.env.AIRTABLE_ACCESS_TOKEN?.trim()
@@ -51,6 +58,7 @@ function hasAirtableToken() {
  * `pageExcludeUrl` — click URLs already shown on this page (repeatable param).
  * `jewishInterested` — verified reader qualifies for `Target for CE`
  *   creatives (House Ads + Commerce Ads). Unverified / false excludes those.
+ * `excludeKinds=sparkloop_rec` — another slot on this page already holds the SparkLoop rec.
  */
 export async function GET(request) {
   if (!hasAirtableToken()) {
@@ -72,6 +80,7 @@ export async function GET(request) {
       excludeBrands,
       pageExcludeUrls,
       jewishInterested,
+      includeSparkloop: resolveIncludeSparkloop(searchParams),
     });
     return NextResponse.json({ ad });
   } catch (err) {

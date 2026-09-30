@@ -5,10 +5,12 @@ import { getReaderToken } from "@publication-websites/magic-client";
 import {
   houseSlotFromFormat,
   normalizeAdClickUrl,
+  SPARKLOOP_REC_KIND,
 } from "@publication-websites/shared-ads/house-ads";
 import { fetchVerifiedSubscriptionsForSite } from "@/lib/reader-profile";
 import { useHouseAdClaims } from "@/context/HouseAdClaimContext";
 import HouseAdImage from "./HouseAdImage";
+import SparkloopRecAd from "./SparkloopRecAd";
 import "./HouseAdPool.css";
 
 /**
@@ -26,6 +28,9 @@ import "./HouseAdPool.css";
  * Verified readers with `jewishInterested` may receive creatives marked
  * `Target for CE` (House Ads and Commerce Ads). The separate `Flag for CE`
  * checkbox is analytics-only and does not gate who sees the ad.
+ *
+ * A "SparkLoop Rec" pick is claimed page-wide (one per page view), pinned through
+ * refresh cycles, and swapped for a house ad if SparkLoop has nothing to show.
  *
  * @param {string[]} [excludeBrands] Extra brand keys to exclude (e.g. the other rail ad).
  * @param {(ad: object | null) => void} [onHouseAd] Called when the house-ad result settles.
@@ -45,6 +50,7 @@ export default function HouseAdPool({
   const [ad, setAd] = useState(undefined);
   const [visible, setVisible] = useState(false);
   const [generation, setGeneration] = useState(0);
+  const [sparkloopFallbackKey, setSparkloopFallbackKey] = useState(0);
   const ownerId = useId();
   const claims = useHouseAdClaims();
   const reqIdRef = useRef(0);
@@ -53,6 +59,8 @@ export default function HouseAdPool({
   const currentBrandRef = useRef("");
   const currentClickUrlRef = useRef("");
   const contentIdRef = useRef("");
+  const currentKindRef = useRef("");
+  const forceFreshRef = useRef(false);
   const childrenRef = useRef(children);
   childrenRef.current = children;
   const onHouseAdRef = useRef(onHouseAd);
@@ -63,14 +71,28 @@ export default function HouseAdPool({
     ? excludeBrands.filter(Boolean).join(",")
     : "";
 
-  function notifyReadyIfNeeded(next) {
+  function notifyReady() {
     if (readyNotifiedRef.current) return;
-    if (!(next || childrenRef.current != null)) return;
     readyNotifiedRef.current = true;
     onReadyRef.current?.();
   }
 
+  function notifyReadyIfNeeded(next) {
+    // SparkLoop reports ready itself once a recommendation has loaded.
+    if (next?.kind === SPARKLOOP_REC_KIND) return;
+    if (!(next || childrenRef.current != null)) return;
+    notifyReady();
+  }
+
+  function handleSparkloopEmpty() {
+    claims?.markSparkloopEmpty?.(ownerId);
+    currentKindRef.current = "";
+    forceFreshRef.current = true;
+    setSparkloopFallbackKey((k) => k + 1);
+  }
+
   function contentIdFor(next) {
+    if (next?.kind === SPARKLOOP_REC_KIND) return `sparkloop:${next.id}`;
     if (next) {
       return `${next.brandKey || ""}:${next.imageUrl || next.desktop?.imageUrl || ""}`;
     }
@@ -85,9 +107,13 @@ export default function HouseAdPool({
 
   useEffect(() => {
     const reqId = ++reqIdRef.current;
-    const isRefresh = settledRef.current;
+    const isRefresh = settledRef.current && !forceFreshRef.current;
+    forceFreshRef.current = false;
 
     async function loadBody() {
+      if (isRefresh && currentKindRef.current === SPARKLOOP_REC_KIND) {
+        return { keep: true, pinned: true, next: null };
+      }
       const excluded = new Set(
         excludeKey
           .split(",")
@@ -126,6 +152,9 @@ export default function HouseAdPool({
         if (jewishInterested) {
           params.set("jewishInterested", "1");
         }
+        if (!claims?.canClaimSparkloop?.(ownerId)) {
+          params.set("excludeKinds", SPARKLOOP_REC_KIND);
+        }
         const res = await fetch(`/api/house-ads?${params}`, { cache: "no-store" });
         const data = await res.json().catch(() => ({}));
         next = data?.ad || null;
@@ -148,6 +177,7 @@ export default function HouseAdPool({
       const claimedUrl = normalizeAdClickUrl(next?.clickUrl || "");
       // Claim before releasing the queue so the next slot sees this destination.
       claims?.claim(ownerId, claimedUrl);
+      if (next?.kind === SPARKLOOP_REC_KIND) claims?.claimSparkloop(ownerId);
       return { keep: false, next, nextId, claimedUrl };
     }
 
@@ -158,6 +188,7 @@ export default function HouseAdPool({
 
       if (reqId !== reqIdRef.current || !result) return;
 
+      if (result.pinned) return;
       if (result.keep) {
         setVisible(true);
         notifyReadyIfNeeded(result.next);
@@ -172,6 +203,7 @@ export default function HouseAdPool({
 
       settledRef.current = true;
       contentIdRef.current = result.nextId;
+      currentKindRef.current = result.next?.kind || "";
       currentBrandRef.current = result.next?.brandKey ? String(result.next.brandKey) : "";
       currentClickUrlRef.current = result.claimedUrl || "";
       setAd(result.next);
@@ -181,7 +213,7 @@ export default function HouseAdPool({
     }
 
     load();
-  }, [format, excludeKey, refreshKey, claims, ownerId]);
+  }, [format, excludeKey, refreshKey, sparkloopFallbackKey, claims, ownerId]);
 
   useEffect(() => {
     if (generation === 0 && ad === undefined) return;
@@ -200,7 +232,14 @@ export default function HouseAdPool({
 
   if (ad === undefined) return null;
 
-  const content = ad ? (
+  const content = ad?.kind === SPARKLOOP_REC_KIND ? (
+    <SparkloopRecAd
+      placement={houseSlotFromFormat(format)}
+      className={className}
+      onReady={notifyReady}
+      onEmpty={handleSparkloopEmpty}
+    />
+  ) : ad ? (
     <HouseAdImage ad={ad} placement={houseSlotFromFormat(format)} className={className} />
   ) : (
     children ?? null

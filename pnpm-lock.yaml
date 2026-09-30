@@ -35,6 +35,9 @@ importers:
       '@publication-websites/shared-ads':
         specifier: workspace:*
         version: link:../../packages/shared-ads
+      '@publication-websites/sparkloop-client':
+        specifier: workspace:*
+        version: link:../../packages/sparkloop-client
       '@publication-websites/web-shell':
         specifier: workspace:*
         version: link:../../packages/web-shell
@@ -139,6 +142,9 @@ importers:
       '@publication-websites/shared-ads':
         specifier: workspace:*
         version: link:../../packages/shared-ads
+      '@publication-websites/sparkloop-client':
+        specifier: workspace:*
+        version: link:../../packages/sparkloop-client
       '@publication-websites/web-shell':
         specifier: workspace:*
         version: link:../../packages/web-shell
@@ -298,6 +304,9 @@ importers:
       '@publication-websites/shared-ads':
         specifier: workspace:*
         version: link:../../packages/shared-ads
+      '@publication-websites/sparkloop-client':
+        specifier: workspace:*
+        version: link:../../packages/sparkloop-client
       '@publication-websites/web-shell':
         specifier: workspace:*
         version: link:../../packages/web-shell
@@ -399,6 +408,9 @@ importers:
       '@publication-websites/shared-ads':
         specifier: workspace:*
         version: link:../../packages/shared-ads
+      '@publication-websites/sparkloop-client':
+        specifier: workspace:*
+        version: link:../../packages/sparkloop-client
       '@publication-websites/web-shell':
         specifier: workspace:*
         version: link:../../packages/web-shell

@@ -54,6 +54,8 @@ export const siteConfig = {
     process.env.NEXT_PUBLIC_MAGIC_SUBSCRIBE_BASE || defaultMagicSubscribeBase(),
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL || "https://hipspeak.com",
   typekitKitId: process.env.NEXT_PUBLIC_TYPEKIT_KIT_ID || "xon1hcs",
+  sparkloopPublicationId: process.env.NEXT_PUBLIC_SPARKLOOP_PUBLICATION_ID || "",
+  sparkloopTestMode: process.env.NEXT_PUBLIC_SPARKLOOP_TEST_MODE,
 };
 
 /** Amazon Associates tracking ID (public; used in product URLs). */
