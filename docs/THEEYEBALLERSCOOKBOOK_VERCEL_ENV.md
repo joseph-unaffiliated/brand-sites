@@ -116,15 +116,17 @@ NEXT_PUBLIC_ADS_MODE=cross_promo
 # --- House ads (Airtable pool, checked before crossPromoAds.js's static creative) ---
 AIRTABLE_HOUSE_ADS_BASE_ID=appXFQv3Hy0wUDDnb
 AIRTABLE_HOUSE_ADS_TABLE_ID=tblB3emRodWIzabTP
-# ⚠️ UPDATE — server-only secret, do NOT prefix NEXT_PUBLIC_. Value from Keys/AIRTABLE_ACCESS_TOKEN.txt (never commit it).
+# ⚠️ UPDATE — server-only secret, do NOT prefix NEXT_PUBLIC_. Value from Keys/AIRTABLE_HOUSEADS.txt (never commit it).
 AIRTABLE_API_KEY=
 
 # --- Subscribe bot protection (⏭️ OPTIONAL) ---
 NEXT_PUBLIC_TURNSTILE_SITE_KEY=
 
-# --- Reader profile / favorites sync (⏭️ OPTIONAL until reader-platform is live) ---
-# NEXT_PUBLIC_READER_EVENTS_ENABLED=true
-# NEXT_PUBLIC_READER_PROFILE_V2=true
+# --- Reader profile / favorites sync (✅ set on Production, Preview, Development) ---
+# Favorites saved while magic's CORS list omitted TEC (fixed 2026-09-28) only reached
+# localStorage; components/FavoritesResync.js pushes them to the profile once per browser.
+NEXT_PUBLIC_READER_EVENTS_ENABLED=true
+NEXT_PUBLIC_READER_PROFILE_V2=true
 ```
 
 ### Values you must update (checklist)

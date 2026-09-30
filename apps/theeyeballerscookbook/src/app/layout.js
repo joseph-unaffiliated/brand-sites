@@ -31,6 +31,7 @@ import Header from "@/components/Header";
 import { getRecipes, getRecipeBySlug } from "@/lib/recipes";
 import { NavLogoImageProvider } from "@/context/NavLogoImageContext";
 import SubscribePopup from "@/components/SubscribePopup";
+import FavoritesResync from "@/components/FavoritesResync";
 import { SubscriberProvider } from "@/context/SubscriberContext";
 import { HouseAdClaimProvider } from "@/context/HouseAdClaimContext";
 import { ReaderEventsInit } from "@publication-websites/reader-events";
@@ -157,6 +158,7 @@ export default async function RootLayout({ children }) {
             brand={siteConfig.brandId}
             apiOrigin={siteConfig.magicReaderApiOrigin}
           />
+          <FavoritesResync />
           <NavLogoImageProvider
             defaultFillImage={latestIssueImage}
             initialPageFillImage={initialPageFillImage}
