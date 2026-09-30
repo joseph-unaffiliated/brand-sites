@@ -5,6 +5,7 @@ import HomeMosaic from "@/components/HomeMosaic";
 import HideWhenSubscribed from "@/components/HideWhenSubscribed";
 import HomeAboutSection from "@/components/HomeAboutSection";
 import HomeHeroTagline from "@/components/HomeHeroTagline";
+import HomeShopStrip from "@/components/shop/HomeShopStrip";
 import JsonLd from "@/components/JsonLd";
 import {
   siteConfig,
@@ -130,6 +131,8 @@ export default async function Home({ searchParams: searchParamsProp }) {
         <HomeMosaic articles={mosaicArticles} initialEmail={initialEmail} />
 
         <HomeAboutSection totalCount={totalCount} />
+
+        <HomeShopStrip />
       </div>
     </>
   );

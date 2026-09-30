@@ -1,0 +1,59 @@
+.page {
+  padding: 56px 0 72px;
+}
+
+.header {
+  margin-bottom: 28px;
+  max-width: 680px;
+}
+
+.header h1 {
+  font-size: clamp(2.2rem, 3vw, 3rem);
+  margin: 0 0 12px;
+}
+
+.kicker {
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: var(--text-label);
+  color: var(--text-muted);
+  margin: 0 0 12px;
+}
+
+.intro {
+  color: var(--text-secondary);
+  line-height: 1.45;
+  font-size: var(--text-lead);
+  margin: 0;
+}
+
+.featured {
+  margin-bottom: 48px;
+}
+
+.empty {
+  margin: 48px 0;
+  color: var(--text-secondary);
+  line-height: 1.45;
+}
+
+.footnote {
+  margin: 48px 0 0;
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.footnote a {
+  color: inherit;
+}
+
+.productPage {
+  padding: 40px 0 72px;
+}
+
+.related {
+  margin-top: 64px;
+  padding-top: 40px;
+  border-top: 1px solid var(--border);
+}

@@ -1,4 +1,6 @@
 import { getArticles } from "@/lib/articles";
+import { getProductHandles } from "@/lib/shopify/catalog";
+import { getShopSettings } from "@/lib/shop-content";
 import { siteConfig } from "@/config/site";
 
 const SITE_URL = siteConfig.siteUrl.replace(/\/$/, "");
@@ -6,6 +8,7 @@ const SITE_URL = siteConfig.siteUrl.replace(/\/$/, "");
 const STATIC_ROUTES = [
   { path: "/", changeFrequency: "weekly", priority: 1.0 },
   { path: "/from-the-vault", changeFrequency: "weekly", priority: 0.9 },
+  { path: "/shop", changeFrequency: "weekly", priority: 0.8 },
   { path: "/about", changeFrequency: "monthly", priority: 0.6 },
   { path: "/contact", changeFrequency: "yearly", priority: 0.4 },
   { path: "/privacy", changeFrequency: "yearly", priority: 0.3 },
@@ -23,7 +26,21 @@ function toDate(value) {
 export default async function sitemap() {
   const now = new Date();
 
-  const articles = await getArticles().catch(() => []);
+  const [articles, productHandles, shopSettings] = await Promise.all([
+    getArticles().catch(() => []),
+    getProductHandles().catch(() => []),
+    getShopSettings().catch(() => ({ hidden: [] })),
+  ]);
+  const hidden = new Set(shopSettings?.hidden ?? []);
+
+  const productEntries = productHandles
+    .filter(({ handle }) => handle && !hidden.has(handle))
+    .map(({ handle, updatedAt }) => ({
+      url: `${SITE_URL}/shop/${handle}`,
+      lastModified: toDate(updatedAt) ?? now,
+      changeFrequency: "weekly",
+      priority: 0.6,
+    }));
 
   const articleEntries = articles
     .filter((article) => article?.slug && !article?.noIndex)
@@ -44,5 +61,5 @@ export default async function sitemap() {
     priority: route.priority,
   }));
 
-  return [...staticEntries, ...articleEntries];
+  return [...staticEntries, ...articleEntries, ...productEntries];
 }

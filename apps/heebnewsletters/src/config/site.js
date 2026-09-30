@@ -27,7 +27,7 @@ export const siteDisplayName =
 
 export const siteDefaultDescription =
   process.env.NEXT_PUBLIC_SITE_DESCRIPTION ||
-  "Heeb Magazine: too Jewish for the mainstream, too irreverent for the establishment. Read From the Vault, classic Heeb stories with fresh commentary every week, and shop back issues and merch.";
+  "Heeb Magazine: Irreverent Jewish Counter-culture. Read From the Vault, classic Heeb stories with fresh commentary every week, and shop back issues and merch.";
 
 export const siteFooterTagline =
   process.env.NEXT_PUBLIC_SITE_FOOTER_TAGLINE ||
@@ -35,7 +35,7 @@ export const siteFooterTagline =
 
 export const siteHeroTagline =
   process.env.NEXT_PUBLIC_SITE_HERO_TAGLINE ||
-  "Too Jewish for the mainstream. Back from the vault.";
+  "home of the subversive jewish counter-culture";
 
 export const siteKickerLower = siteDisplayName.toLowerCase();
 

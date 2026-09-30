@@ -28,6 +28,8 @@ import AdvertiseCopyLink from "@/components/AdvertiseCopyLink";
 import Header from "@/components/Header";
 import SubscribePopup from "@/components/SubscribePopup";
 import { SubscriberProvider } from "@/context/SubscriberContext";
+import { CartProvider } from "@/context/CartContext";
+import CartDrawer from "@/components/shop/CartDrawer";
 import { ReaderEventsInit } from "@publication-websites/reader-events";
 import EmailClickSession from "@publication-websites/magic-client/email-click-session";
 import SubscriberSessionBootstrap from "@publication-websites/magic-client/subscriber-session-bootstrap";
@@ -119,6 +121,7 @@ export default function RootLayout({ children }) {
         <GoogleTagManagerNoscript />
         <MarketingScripts adsenseClient={ADSENSE_CLIENT} metaPixelId={META_PIXEL_ID} />
         <SubscriberProvider>
+        <CartProvider>
           <ReaderEventsInit
             brandId={siteConfig.brandId}
             apiOrigin={siteConfig.magicReaderApiOrigin}
@@ -138,6 +141,7 @@ export default function RootLayout({ children }) {
             </Suspense>
             <main className="site-main">{children}</main>
             <ContactCopyToast />
+            <CartDrawer />
             <footer className="site-footer">
               <div className="container footer-grid">
                 <div className="footer-brand">
@@ -148,6 +152,7 @@ export default function RootLayout({ children }) {
                 <div>
                   <div className="footer-links">
                     <Link href="/from-the-vault">From the Vault</Link>
+                    <Link href="/shop">Shop</Link>
                     <Link href="/about">About</Link>
                     <Link href="/terms">Terms</Link>
                     <Link href="/privacy">Policy</Link>
@@ -165,6 +170,7 @@ export default function RootLayout({ children }) {
               </div>
             </footer>
           </div>
+        </CartProvider>
         </SubscriberProvider>
       </body>
     </html>

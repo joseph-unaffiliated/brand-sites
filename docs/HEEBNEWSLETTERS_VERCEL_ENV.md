@@ -2,7 +2,7 @@
 
 The site is **Heeb Magazine** (www.heebmagazine.com at launch). From the Vault is its editorial section and newsletter. Brand id `heebnewsletters`, `magic.heebnewsletters.com` and the sender `fromthevault@heebnewsletters.com` are unchanged.
 
-From the Vault is **its own brand**: marketing on staging at `heebnewsletters.vercel.app` until the production host is chosen (see [Host decision](#host-decision-open)), subscriptions and reader APIs on **`magic.heebnewsletters.com`**. It does **not** share magic hosts or env defaults with any other brand.
+From the Vault is **its own brand**: marketing on staging at `heebnewsletters.vercel.app` until the team approves the cutover to **`www.heebmagazine.com`** (see [Production host](#production-host-wwwheebmagazinecom)), subscriptions and reader APIs on **`magic.heebnewsletters.com`**. It does **not** share magic hosts or env defaults with any other brand. The site also hosts a headless **shop** at `/shop` backed by the Heeb Media Shopify store (see [Shop](#shop-shop)).
 
 Use this on the **marketing** Vercel project: **Root Directory** = `apps/heebnewsletters`.
 
@@ -22,23 +22,24 @@ After saving: **Redeploy** Production (and Preview if you added vars there).
 
 ## Plain checklist (two Vercel projects)
 
-### Marketing (`heebnewsletters.com`) — Root Directory `apps/heebnewsletters`
+### Marketing (`www.heebmagazine.com`) — Root Directory `apps/heebnewsletters`
 
 | Name | Value |
 |------|-------|
-| `NEXT_PUBLIC_SITE_URL` | `https://heebnewsletters.com` |
+| `NEXT_PUBLIC_SITE_URL` | `https://heebnewsletters.com` today (harmless while `NEXT_PUBLIC_NOINDEX` is on) → **`https://www.heebmagazine.com` at cutover** (canonical, sitemap, OG and JSON-LD URLs all derive from it) |
+| `NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN` | ⏭️ OPTIONAL — defaults to `303ed7-79.myshopify.com` in code. Only set if Heeb Media moves stores. |
 | `NEXT_PUBLIC_BRAND_ID` | `heebnewsletters` |
 | `NEXT_PUBLIC_MAGIC_EXECUTE_URL` | `https://magic.heebnewsletters.com/execute` |
 | `NEXT_PUBLIC_MAGIC_READER_API_ORIGIN` | `https://magic.heebnewsletters.com` |
 | `NEXT_PUBLIC_SANITY_PROJECT_ID` | `m4gmd2lf` |
 | `NEXT_PUBLIC_SANITY_DATASET` | `production` |
 | `NEXT_PUBLIC_SITE_DISPLAY_NAME` | `Heeb Magazine` |
-| `NEXT_PUBLIC_SITE_DESCRIPTION` | `Heeb Magazine: too Jewish for the mainstream, too irreverent for the establishment. Read From the Vault, classic Heeb stories with fresh commentary every week, and shop back issues and merch.` |
+| `NEXT_PUBLIC_SITE_DESCRIPTION` | `Heeb Magazine: Irreverent Jewish Counter-culture. Read From the Vault, classic Heeb stories with fresh commentary every week, and shop back issues and merch.` |
 | `NEXT_PUBLIC_SITE_OG_IMAGE` | `/heeb-og.png` (1200×630) |
 | `NEXT_PUBLIC_SITE_FAVICON` | `/heeb-favicon.ico` |
 | `NEXT_PUBLIC_SITE_FAVICON_PNG` | `/heeb-favicon.png` |
 | `NEXT_PUBLIC_SITE_FOOTER_TAGLINE` | `From the Vault, in your inbox every week.` |
-| `NEXT_PUBLIC_SITE_HERO_TAGLINE` | `Too Jewish for the mainstream. Back from the vault.` |
+| `NEXT_PUBLIC_SITE_HERO_TAGLINE` | `home of the subversive jewish counter-culture` |
 | `NEXT_PUBLIC_CONTACT_EMAIL` | `contact@heebnewsletters.com` |
 | `NEXT_PUBLIC_SUBSCRIBE_CARD_TITLE` | `Get From the Vault` |
 | `NEXT_PUBLIC_SUBSCRIBE_CARD_DEK` | Subscribe card blurb |
@@ -71,8 +72,8 @@ Every `magic.*` host is served by one Vercel project, so these values are networ
 | Name | Value |
 |------|-------|
 | `READER_TOKEN_SECRET` | Shared network secret (already set) |
-| `READERS_CORS_ORIGINS` | Shared network list; includes `https://heebnewsletters.vercel.app`, `https://heebnewsletters.com`, `https://www.heebnewsletters.com`, `https://fromthevault.heebnewsletters.com`, `http://localhost:3007` (verified 2026-09-28) |
-| `BRAND_SITE_ORIGIN_HEEBNEWSLETTERS` | Only if FTV launches on a host other than `https://heebnewsletters.com` (e.g. `https://fromthevault.heebnewsletters.com`). Magic uses it for unsubscribe/snooze and branded comps return URLs. Requires the post-Oct 6 magic push. |
+| `READERS_CORS_ORIGINS` | Shared network list; includes `https://heebmagazine.com`, `https://www.heebmagazine.com`, `https://heebnewsletters.vercel.app`, `https://heebnewsletters.com`, `https://www.heebnewsletters.com`, `https://fromthevault.heebnewsletters.com`, `http://localhost:3007` (heebmagazine origins added and redeployed 2026-09-29; all 13 network origins re-probed) |
+| `BRAND_SITE_ORIGIN_HEEBNEWSLETTERS` | **Set to `https://www.heebmagazine.com` at cutover** (magic uses it for unsubscribe/snooze and branded comps return URLs). Needs the post-Oct 6 magic push to be honored; until then magic returns readers to `https://heebnewsletters.com/…`, which Vercel 308s to `www.heebmagazine.com` with path and query intact, so nothing breaks in between. Do **not** set before DNS flips. |
 
 Brand entries live in the **subscription-functions** repo (`../subscription-functions`) — see `docs/ADDING_A_NEW_BRAND.md` there, brand id `heebnewsletters`.
 
@@ -80,11 +81,12 @@ See [MAGIC_READER_ENV.md](./MAGIC_READER_ENV.md) for reader token + CORS detail.
 
 ---
 
-## A) Marketing site (`heebnewsletters.com`)
+## A) Marketing site (`www.heebmagazine.com`)
 
 ```env
 # --- Core site & From the Vault magic only ---
-NEXT_PUBLIC_SITE_URL=https://heebnewsletters.com
+# Today: https://heebnewsletters.com (noindex on) — switch at cutover
+NEXT_PUBLIC_SITE_URL=https://www.heebmagazine.com
 NEXT_PUBLIC_BRAND_ID=heebnewsletters
 NEXT_PUBLIC_MAGIC_EXECUTE_URL=https://magic.heebnewsletters.com/execute
 NEXT_PUBLIC_MAGIC_READER_API_ORIGIN=https://magic.heebnewsletters.com
@@ -93,12 +95,12 @@ NEXT_PUBLIC_SANITY_PROJECT_ID=m4gmd2lf
 NEXT_PUBLIC_SANITY_DATASET=production
 
 NEXT_PUBLIC_SITE_DISPLAY_NAME=Heeb Magazine
-NEXT_PUBLIC_SITE_DESCRIPTION=Heeb Magazine: too Jewish for the mainstream, too irreverent for the establishment. Read From the Vault, classic Heeb stories with fresh commentary every week, and shop back issues and merch.
+NEXT_PUBLIC_SITE_DESCRIPTION=Heeb Magazine: Irreverent Jewish Counter-culture. Read From the Vault, classic Heeb stories with fresh commentary every week, and shop back issues and merch.
 NEXT_PUBLIC_SITE_OG_IMAGE=/heeb-og.png
 NEXT_PUBLIC_SITE_FAVICON=/heeb-favicon.ico
 NEXT_PUBLIC_SITE_FAVICON_PNG=/heeb-favicon.png
 NEXT_PUBLIC_SITE_FOOTER_TAGLINE=From the Vault, in your inbox every week.
-NEXT_PUBLIC_SITE_HERO_TAGLINE=Too Jewish for the mainstream. Back from the vault.
+NEXT_PUBLIC_SITE_HERO_TAGLINE=home of the subversive jewish counter-culture
 NEXT_PUBLIC_CONTACT_EMAIL=contact@heebnewsletters.com
 NEXT_PUBLIC_SUBSCRIBE_CARD_TITLE=Get From the Vault
 NEXT_PUBLIC_SUBSCRIBE_CARD_DEK=Join the newsletter for weekly subversive Jewish counter-culture nostalgia from the 2000s—delivered straight to your inbox.
@@ -119,6 +121,9 @@ NEXT_PUBLIC_READER_PROFILE_V2=true
 # Staging only — delete at go-live
 NEXT_PUBLIC_NOINDEX=true
 
+# Shop (optional; code default is the Heeb Media store 303ed7-79.myshopify.com)
+# NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN=303ed7-79.myshopify.com
+
 # House ads (server-only — do not prefix NEXT_PUBLIC_)
 AIRTABLE_HOUSE_ADS_BASE_ID=appXFQv3Hy0wUDDnb
 AIRTABLE_HOUSE_ADS_TABLE_ID=tblB3emRodWIzabTP
@@ -135,6 +140,12 @@ AIRTABLE_HOUSE_ADS_TABLE_ID=tblB3emRodWIzabTP
 - `/opted-out-comps` / `/opted-in-comps` — compilations preference confirmation
 - `/ai-policy` — AI policy
 - `/?poll=a` — stays on the homepage (FTV has no polls)
+- `/shop` — full catalog + collection tabs (`/shop?collection=back-issues`); featured strip at the top
+- `/shop/[handle]` — product page (options, live price/stock, add to cart, Product JSON-LD); unknown or hidden handle → 404
+- `/products/:handle` → 308 `/shop/:handle`; `/collections/:handle` → 308 `/shop?collection=:handle` (Shopify-shaped links from old emails)
+- `/article/[slug]` with an `originalIssueUrl` that is a heebmedia.com product link → "Shop this story" card for that back issue
+- `/beastieboys`, `/innerheebs` (any Webflow-era slug in `legacy-slug-map.json`) → 308 `/article/[sanity-slug]`; unmapped legacy slugs → `/from-the-vault`
+- `/sitemap.xml` — includes `/shop` and every visible product
 
 ---
 
@@ -151,42 +162,68 @@ FTV stays on **`https://heebnewsletters.vercel.app`** with noindex only (no Verc
 | `AIRTABLE_HOUSE_ADS_*` / `AIRTABLE_API_KEY` | ✅ base/table set; key Sensitive from `Keys/AIRTABLE_HOUSEADS.txt` |
 | `NEXT_PUBLIC_GA_MEASUREMENT_ID` | ✅ `G-YJ819KMEG3` (production + preview, 2026-09-29). Staging hits land in the same property until cutover. |
 | `NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT` | ✅ `01a0eff9-6147-7b24-954c-9cdd560623f4` (production + preview, 2026-09-29). The script is published for `heebmagazine.com` only and there's no `-test` version, so no banner shows on `*.vercel.app`; the banner is verified at cutover. |
-| Magic CORS | ✅ staging, apex, www, `fromthevault.` subdomain, `localhost:3007` |
+| Magic CORS | ✅ `heebmagazine.com`, `www.heebmagazine.com`, staging, heebnewsletters apex/www/`fromthevault.`, `localhost:3007` (2026-09-29) |
+| Sanity CORS (`m4gmd2lf`) | ✅ both heebmagazine origins + staging |
+| Vercel domains | ✅ `www.heebmagazine.com` (production), `heebmagazine.com`, `heebnewsletters.com`, `www.heebnewsletters.com`, `fromthevault.heebnewsletters.com` all attached and verified; the last four are configured as 308 → `www.heebmagazine.com`. No traffic until Cloudflare DNS points at Vercel. |
+| Legacy URLs | ✅ Webflow slugs 308 to `/article/…` (host-agnostic, from `legacy-slug-map.json`); `/archive`, `/products/*`, `/collections/*` mapped |
+| Shop | ✅ `/shop`, product pages, cart drawer, checkout handoff to heebmedia.com verified against the live store on staging (cart carries `source=heebmagazine.com`) |
+| Hosted studio: Shop | ✅ "Shop" singleton + "Shop this story" field on issues deployed to [fromthevault.sanity.studio](https://fromthevault.sanity.studio/) |
 | Magic comps / retention / cross-brand / configurable return host | ⚠️ local in `subscription-functions`; ships with the post-Oct 6 magic push |
 | Airtable Destination Brands | ✅ From the Vault added to every active House Ads creative except its own |
 | Hosted studio | ✅ [fromthevault.sanity.studio](https://fromthevault.sanity.studio/) (body images enabled) |
-| Content | ✅ Sanity has #1–35 (#28 and #32–35 imported 2026-09-29 from `issues/fromthevault/` with `scripts/import-vault-issues.py`). Import each new issue after it sends (#36 Oct 1, #37 Oct 8, #38 Oct 15): add its `sentAt` to `issues-catalog.json`, dry-run, then `--write --publish`. `publishedDate` is the Customer.io send time. Legacy Webflow slug → Sanity slug map: `issues/fromthevault/legacy-slug-map.json`. |
+| Content | ✅ Sanity has #1–35 (#28 and #32–35 imported 2026-09-29 from `issues/fromthevault/` with `scripts/import-vault-issues.py`). Import each new issue after it sends (#36 Oct 1, #37 Oct 8, #38 Oct 15): add its `sentAt` to `issues-catalog.json`, dry-run, then `--write --publish`. `publishedDate` is the Customer.io send time. Legacy Webflow slug → Sanity slug map: `apps/heebnewsletters/legacy-slug-map.json` (read by `next.config.mjs` for the 308s). |
 | Shared sign-in toast, `/sign-in`, `/redirect`, house-ad pool | ⏳ post Oct 6 (shared packages) |
 
-## Host decision (open)
+## Production host: `www.heebmagazine.com`
 
-The production host is undecided. Both options are prepared: Sanity CORS and magic CORS already allow both hosts, and magic's retention map and cross-brand regex accept the `fromthevault.` subdomain.
+Decided 2026-09-29: the site launches as **Heeb Magazine** on `www.heebmagazine.com` (apex 308s to www). `heebnewsletters.com` stays the **mail and magic** domain (sender `fromthevault@heebnewsletters.com`, `email.` click-tracking, `magic.` reader APIs, MX/SPF/DMARC) and its web hosts become permanent 308s to the new site. Everything below is built and verified on staging; **only the Cloudflare DNS changes, the env flips and the Airtable formula are left, and they wait for team approval.**
 
-Steps for **either** option:
+### Domain table (Vercel project `heebnewsletters`, all attached + verified)
 
-1. Post-Oct 6 magic push is live (comps, retention, return-host changes).
-2. ~~Set GA4 and OneTrust IDs; add `AIRTABLE_API_KEY` (Sensitive).~~ Done 2026-09-29.
-3. Crawl the current Webflow site's sitemap and add 308s in `apps/heebnewsletters/next.config.mjs` for any legacy URL shapes (e.g. `/{slug}` → `/article/{slug}`), like TPR's `legacy-article-redirects.mjs`.
-4. Set `NEXT_PUBLIC_SITE_URL` to the chosen origin and **delete `NEXT_PUBLIC_NOINDEX`**, then redeploy.
-5. Attach the domain(s) on the Vercel project `heebnewsletters` and wait for verification.
-6. Cloudflare (heebnewsletters.com zone): disable any worker routes on the chosen host, add DNS-only records pointing to Vercel, SSL Full (strict). Leave MX/SPF/verification TXT records and `magic.heebnewsletters.com` alone.
-7. Paste the Airtable Click URL change below, then spot-check FTV creatives.
-8. Search Console verification; smoke tests from [`LAUNCH_PLAYBOOK.md`](./LAUNCH_PLAYBOOK.md) section 7.
+| Host | Role | Today (before DNS flip) | After DNS flip |
+|------|------|-------------------------|----------------|
+| `www.heebmagazine.com` | **Production** | Cloudflare zone 301s to `heebmedia.com` | Serves the site |
+| `heebmagazine.com` | 308 → `www.heebmagazine.com` | Cloudflare zone 301s to `heebmedia.com` | Apex redirect (path + query preserved) |
+| `heebnewsletters.com` | 308 → `www.heebmagazine.com` | Cloudflare 301 → Webflow `fromthevault.` | Redirect; magic's current return URLs land here and follow through |
+| `www.heebnewsletters.com` | 308 → `www.heebmagazine.com` | Cloudflare 301 → Webflow | Redirect |
+| `fromthevault.heebnewsletters.com` | 308 → `www.heebmagazine.com` | Webflow FTV site | Redirect; every old email link keeps working (`/beastieboys` → 308 host → 308 slug → `/article/…`) |
+| `magic.heebnewsletters.com` | Reader APIs | Vercel `subscription-functions` | **Unchanged** |
+| `email.heebnewsletters.com` | Customer.io tracking | Customer.io | **Unchanged** |
 
-**Option A — apex/www (`heebnewsletters.com`):** DNS `A heebnewsletters.com → 76.76.21.21` and `CNAME www → cname.vercel-dns.com`. Magic's default return host is already `https://heebnewsletters.com`, so no `BRAND_SITE_ORIGIN_*` is needed. If www is canonical, the apex 308 preserves `subscribed`/`email` params. This replaces whatever Webflow serves at the apex today.
+Legacy paths are handled in `apps/heebnewsletters/next.config.mjs`, host-agnostic, so they also work if someone types them on the new host: Webflow slugs from `legacy-slug-map.json` → `/article/…` (unmapped → `/from-the-vault`), `/archive` → `/from-the-vault`, `/products/:handle` → `/shop/:handle`, `/collections/:handle` → `/shop?collection=:handle`.
 
-**Option B — subdomain (`fromthevault.heebnewsletters.com`):** DNS `CNAME fromthevault → cname.vercel-dns.com`. On the magic project set `BRAND_SITE_ORIGIN_HEEBNEWSLETTERS=https://fromthevault.heebnewsletters.com` and redeploy magic. The apex can keep serving the Heeb site.
+### Cutover checklist (team go → ~30 minutes)
+
+Do these in order. Nothing before step 3 sends traffic to the new site.
+
+1. **Team approval** on staging (`https://heebnewsletters.vercel.app`): home, `/from-the-vault`, an article with a "Shop this story" card, `/shop`, a product page, cart → "Checkout on heebmedia.com". Heeb Media should know carts arrive with the attribute `source=heebmagazine.com` and UTMs `utm_source=heebmagazine.com&utm_medium=referral&utm_campaign=shop`; ideally they place one real test order (or a 100% discount code) end to end.
+2. **Marketing env (Vercel `heebnewsletters`, Production):** `NEXT_PUBLIC_SITE_URL=https://www.heebmagazine.com`; **delete `NEXT_PUBLIC_NOINDEX`**; add `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` if Search Console is ready. Redeploy Production. (Staging still answers on `heebnewsletters.vercel.app`; it just now canonicals to www.)
+3. **Cloudflare — `heebmagazine.com` zone:** delete/disable the redirect rule (or Bulk Redirect / Page Rule) that 301s to `heebmedia.com`. Add `A heebmagazine.com → 76.76.21.21` and `CNAME www → cname.vercel-dns.com`, both **DNS only (grey cloud)**. SSL/TLS **Full (strict)**. Do **not** touch MX, SPF or any DreamHost mail records in this zone.
+4. **Cloudflare — `heebnewsletters.com` zone:** remove the 301 rule that sends the apex/www to Webflow. Point `heebnewsletters.com` (`A → 76.76.21.21`), `www` and `fromthevault` (`CNAME → cname.vercel-dns.com`) at Vercel, **DNS only**. Leave `magic`, `email`, MX, SPF, DKIM, DMARC and verification TXT records alone.
+5. **Verify TLS + redirects** (Vercel issues certs within a few minutes): `curl -sI https://heebmagazine.com/ | head -3` → 308 to www; `curl -sI https://fromthevault.heebnewsletters.com/beastieboys` → 308 to `https://www.heebmagazine.com/beastieboys` → 308 to `/article/…` → 200.
+6. **Webflow:** unpublish or leave the old FTV site; it no longer receives traffic. Cancel hosting when comfortable.
+7. **Airtable Click URL** — paste the FTV change below and spot-check two FTV creatives.
+8. **Magic (after the post-Oct 6 push):** set `BRAND_SITE_ORIGIN_HEEBNEWSLETTERS=https://www.heebmagazine.com` on `subscription-functions`, and register the `heebmagazine.com` → `heebnewsletters` brand mapping in `packages/shared-ads/brand-paths.js`. Until then the `heebnewsletters.com` 308 covers return URLs.
+9. **Customer.io:** update the site links in templates for issues #36–44 (and the footer/header template) from `fromthevault.heebnewsletters.com` / `heebnewsletters.com` to `www.heebmagazine.com`. Old links keep working via 308, so this is cosmetic but should happen in the first week.
+10. **Search Console / Bing:** add `www.heebmagazine.com` (domain property), submit `https://www.heebmagazine.com/sitemap.xml`. If the Webflow site was verified, add a Change of Address from it.
+11. **OneTrust:** the banner is published for `heebmagazine.com`; confirm it renders on www and that GA/Meta load only after consent.
+12. **Smoke list** (from `LAUNCH_PLAYBOOK.md` §7 plus the shop): `/`, `/from-the-vault`, `/article/catherine-ohara` (back-issue card), `/shop`, `/shop?collection=back-issues`, `/shop/heeb-12`, add to cart → drawer → checkout lands on `heebmedia.com/cart/c/…`, `/profile` sign-in via magic, `/opted-out-comps`, `/sitemap.xml`, `/robots.txt` (no `Disallow: /`), OG image on a shared link.
+
+### Rollback
+
+- **Within minutes:** on Cloudflare, re-enable the two redirect rules (heebmagazine → heebmedia; heebnewsletters → Webflow) and delete the DNS records added in steps 3–4. Set `NEXT_PUBLIC_NOINDEX=true` and `NEXT_PUBLIC_SITE_URL` back to staging on Vercel, redeploy. Nothing on `magic.` or mail changed, so subscriptions and sends are unaffected.
+- **After Airtable formula paste:** re-add the `IF({Code} = "FTV", …)` special case.
 
 ### Airtable Click URL (FTV part, cutover day only)
 
-Today the formula sends FTV creatives to the Webflow shape `https://heebnewsletters.com/{slug}`. On cutover day, drop the `{Code} = "FTV"` special case so FTV uses `/article/{slug}`. Starting from the Hipspeak formula in [`HIPSPEAK_VERCEL_ENV.md`](./HIPSPEAK_VERCEL_ENV.md):
+Today the formula sends FTV creatives to the Webflow shape `https://fromthevault.heebnewsletters.com/{slug}`. On cutover day, point FTV at `www.heebmagazine.com/article/{slug}`. Starting from the Hipspeak formula in [`HIPSPEAK_VERCEL_ENV.md`](./HIPSPEAK_VERCEL_ENV.md):
 
 ```text
 IF(
   {Ad type} = "House Ads",
   "https://" &
-    IF({Code} = "HIP", "www.", IF({Code} = "FTV", "fromthevault.", "")) &
-    {Brand} & ".com/" &
+    IF({Code} = "FTV", "www.heebmagazine.com/",
+      IF({Code} = "HIP", "www.", "") & {Brand} & ".com/") &
     IF(
       {Slug},
       IF({Code} = "TEC", "recipe/",
@@ -195,4 +232,50 @@ IF(
 )
 ```
 
-For Option A, remove `IF({Code} = "FTV", "fromthevault.", "")` (use `""`), or use `"www."` if www is canonical.
+The `{Slug}` for FTV creatives must be the **Sanity** slug (`/article/{slug}`), not the Webflow slug; both still resolve (Webflow slugs 308), but the direct form avoids two hops.
+
+---
+
+## Shop (`/shop`)
+
+Heeb Magazine sells Heeb Media's Shopify catalog (back issues, shirts, stickers, tchotchkes) on-site; **checkout, payment, fulfilment and support stay on `heebmedia.com`**. Nothing is sold by Unaffiliated.
+
+### How it works
+
+- **Storefront reads** use Shopify's **tokenless Storefront API** (no access token, no Shopify admin work): `https://303ed7-79.myshopify.com/api/2026-07/graphql.json`. Code: `apps/heebnewsletters/src/lib/shopify/` (`client.js`, `queries.js`, `mappers.js`, `catalog.js`, `cart-client.js`). Catalog reads are cached 300 s (`next.revalidate`); variant price/availability on the product page is fetched live per request.
+- **Tokenless limits:** products, collections, search and carts work; `totalInventory` / `quantityAvailable`, tags and metafields are **denied**. So we show "Sold out" from `availableForSale`, never a stock count. `products(query:"handle:x")` is a prefix match — exact lookups use aliased `product(handle:)`.
+- **Cart** is created in the reader's browser via the Cart API and stored in `localStorage` (`heebmagazine.cartId`); the drawer re-reads it on open and recreates it if Shopify expires it. Every cart carries `attributes: [{ key: "source", value: "heebmagazine.com" }]` so Heeb Media can filter orders. "Checkout on heebmedia.com" navigates same-tab to Shopify's `checkoutUrl` with `utm_source=heebmagazine.com&utm_medium=referral&utm_campaign=shop`.
+- **Analytics** (consent-gated by OneTrust; guarded `typeof gtag/fbq`): GA4 `view_item_list`, `view_item`, `add_to_cart`, `remove_from_cart`, `view_cart`, `begin_checkout`; Meta `ViewContent`, `AddToCart`, `InitiateCheckout`. `purchase` happens on Shopify — read it in Shopify Analytics filtered by the `source` attribute / UTM.
+- **Pages:** `/shop` (tabs per collection, featured strip, ItemList JSON-LD, canonical `/shop` for all tabs), `/shop/[handle]` (`force-dynamic`, Product + AggregateOffer + Breadcrumb JSON-LD), homepage strip, About paragraph, header Shop link + cart icon (mobile: next to the hamburger), footer link, sitemap entries. Shopify-shaped `/products/*` and `/collections/*` 308 to the new URLs.
+- **Articles:** when a vault issue's `originalIssueUrl` is a heebmedia.com product link, the article shows a "Shop this story" card for that back issue (badge "Back issue", note "The issue this story ran in") instead of the plain outbound link. Editors can add up to 6 more products per issue.
+
+### Editorial controls (hosted studio → **Shop**)
+
+`shopSettings` singleton (id `shopSettings`; the site uses code defaults until it exists):
+
+| Field | Effect |
+|-------|--------|
+| `title`, `intro`, `featuredTitle` | Copy on `/shop` and the homepage strip |
+| `featuredProducts[]` | Picks (with optional note) for the featured strip; falls back to the first back issues |
+| `collectionTabs[]` | Explicit tab order/labels; default = every non-empty collection, Back Issues first (empty ones like a sold-out "Events" are dropped automatically) |
+| `hiddenProducts[]` | Handles never shown (grid, sitemap, related); their `/shop/[handle]` 404s |
+| `hideSoldOut` | Drop unavailable products from grids (default on) |
+
+`vaultIssue.shopThisStory[]` (fieldset **Shop**) — up to 6 product picks per issue, chosen with the in-studio Shopify search (tokenless, no token to manage).
+
+### Env
+
+| Name | Value |
+|------|-------|
+| `NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN` | ⏭️ OPTIONAL — `303ed7-79.myshopify.com` is the code default |
+
+No secret is required. If Heeb Media ever restricts tokenless access, add a public Storefront token (`NEXT_PUBLIC_*` is fine for Storefront tokens) and pass it as `X-Shopify-Storefront-Access-Token` in `client.js`.
+
+### Smoke list
+
+- `/shop` 200 with tabs and ≥ 40 cards; `/shop?collection=back-issues` 200; `/shop?collection=nope` 404
+- `/shop/heeb-12` 200 with "Add to cart"; `/shop/chai-times` shows Color/Size chips; `/shop/not-a-product` 404
+- Add a single-variant item from the grid → drawer opens with the line, count badge in the header
+- "Checkout on heebmedia.com" → `https://heebmedia.com/cart/c/…?…utm_source=heebmagazine.com…` with the items present
+- `/article/catherine-ohara` shows the HEEB #12 card; `/products/heeb-12` → 308 `/shop/heeb-12`
+- `/sitemap.xml` lists `/shop` and product URLs; product page has `application/ld+json` `"@type":"Product"`

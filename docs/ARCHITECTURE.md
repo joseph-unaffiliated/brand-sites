@@ -56,6 +56,6 @@ If no token (legacy flow), profile shows **this site’s** subscription from loc
 
 ## Publications in this repo
 
-Marketing apps under `apps/` include Hookup Lists, The Pickle Report, The Kiss and Tell, The ’90s Parent, Eyeballer’s Cookbook, Hipspeak, From the Vault (Heeb), and **Hard Resets** (`apps/hardresets`, Sanity `0vm5rx64`, magic `magic.hardresets.com`). Env checklist: [`HARDRESETS_VERCEL_ENV.md`](./HARDRESETS_VERCEL_ENV.md). Hipspeak env: [`HIPSPEAK_VERCEL_ENV.md`](./HIPSPEAK_VERCEL_ENV.md).
+Marketing apps under `apps/` include Hookup Lists, The Pickle Report, The Kiss and Tell, The ’90s Parent, Eyeballer’s Cookbook, Hipspeak, **Heeb Magazine** (`apps/heebnewsletters`; From the Vault is its editorial section, production host `www.heebmagazine.com`, magic stays on `magic.heebnewsletters.com`; it also has a headless `/shop` that reads Heeb Media's Shopify store via the tokenless Storefront API and hands checkout to `heebmedia.com` — env doc [`HEEBNEWSLETTERS_VERCEL_ENV.md`](./HEEBNEWSLETTERS_VERCEL_ENV.md)), and **Hard Resets** (`apps/hardresets`, Sanity `0vm5rx64`, magic `magic.hardresets.com`). Env checklist: [`HARDRESETS_VERCEL_ENV.md`](./HARDRESETS_VERCEL_ENV.md). Hipspeak env: [`HIPSPEAK_VERCEL_ENV.md`](./HIPSPEAK_VERCEL_ENV.md).
 
 **New brand launch:** follow [`LAUNCH_PLAYBOOK.md`](./LAUNCH_PLAYBOOK.md) (and update it when adding reusable network features).

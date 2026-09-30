@@ -200,23 +200,36 @@ Status as of 2026-09-28. The step-by-step cutover checklist, rollback and Airtab
 
 ---
 
-## From the Vault go-live
+## Heeb Magazine (From the Vault) go-live
 
-Use alongside [`HEEBNEWSLETTERS_VERCEL_ENV.md`](./HEEBNEWSLETTERS_VERCEL_ENV.md) (staging status, host options, Airtable formula). FTV runs on `heebnewsletters.vercel.app` with `NEXT_PUBLIC_NOINDEX=true` until the host is chosen.
+Use alongside [`HEEBNEWSLETTERS_VERCEL_ENV.md`](./HEEBNEWSLETTERS_VERCEL_ENV.md) (staging status, cutover checklist, rollback, shop, Airtable formula). The site is **Heeb Magazine** on `www.heebmagazine.com`; From the Vault is its editorial section. It runs on `heebnewsletters.vercel.app` with `NEXT_PUBLIC_NOINDEX=true` until the team approves the DNS flip.
 
 ### Done (staging-ready)
 
 - [x] OneTrust with no borrowed fallback; subscribe-gated sticky; `/ai-policy`; comps pages; archive search; `isJewishContent`; no submissions; no polls (`poll: null`)
-- [x] Vercel: GTM, Meta, reader flags, Airtable base/table, noindex; `SANITY_API_TOKEN` removed
-- [x] Magic CORS covers staging, apex, www and `fromthevault.` subdomain
+- [x] Vercel: GTM, Meta, GA4, OneTrust, reader flags, Airtable base/table + key, noindex; `SANITY_API_TOKEN` removed
+- [x] Rebrand to Heeb Magazine (identity env, logo/favicon/OG, `/from-the-vault` section, `/archive` 308)
+- [x] Host decided: `www.heebmagazine.com`; all five domains attached to the Vercel project, redirect hosts configured as 308 → www
+- [x] Magic CORS + Sanity CORS cover `heebmagazine.com`, `www.heebmagazine.com`, staging and every heebnewsletters host
+- [x] Legacy Webflow slugs → `/article/…` 308s (`legacy-slug-map.json`), `/products/*` and `/collections/*` → shop
+- [x] Shop: tokenless Shopify Storefront + Cart API, `/shop`, product pages, cart drawer, checkout handoff to heebmedia.com with `source` attribute + UTMs, GA4/Meta ecommerce events, Sanity curation (Shop singleton, "Shop this story" per issue), hosted studio deployed
 - [x] Airtable: From the Vault in Destination Brands
-- [x] Hosted studio with body images; Customer.io → Sanity import tooling
+- [x] Hosted studio with body images; Customer.io → Sanity import tooling; issues #1–35 in Sanity
 
-### Before production
+### Before production (needs a human)
 
-- [ ] Choose the host (apex/www or `fromthevault.heebnewsletters.com`)
-- [x] FTV OneTrust domain script; `AIRTABLE_API_KEY` (Sensitive)
-- [ ] GA4 measurement ID
-- [ ] Post-Oct 6: shared house-ad pool, sign-in toast, `/sign-in`, `/redirect`; magic push (comps, retention, return host)
-- [ ] Import newer sent issues and missing #28 from supplied HTML (`publishedDate` = Customer.io send time; older issues corrected 2026-09-28)
-- [ ] Legacy Webflow URL 308s; cutover steps in `HEEBNEWSLETTERS_VERCEL_ENV.md`; delete `NEXT_PUBLIC_NOINDEX`
+- [ ] Team review of staging + Heeb Media heads-up (carts tagged `source=heebmagazine.com`; one test order)
+- [ ] Cutover steps 2–12 in `HEEBNEWSLETTERS_VERCEL_ENV.md` (env flip, Cloudflare DNS on both zones, Airtable formula, Search Console, Customer.io template links, OneTrust check, smoke)
+- [ ] Import #36 (Oct 1), #37 (Oct 8), #38 (Oct 15) after each sends
+- [ ] Post-Oct 6: shared house-ad pool, sign-in toast, `/sign-in`, `/redirect`; magic push (comps, retention, return host) then `BRAND_SITE_ORIGIN_HEEBNEWSLETTERS`; `brand-paths.js` entry for `heebmagazine.com`
+
+### Pattern: headless shop on a publication (new brands)
+
+A brand can sell an existing Shopify store's catalog without any admin access to that store. Copy `apps/heebnewsletters/src/lib/shopify/`, `src/lib/shop-content.js`, `src/context/CartContext.js`, `src/lib/shop-analytics.js`, `src/components/shop/` and `src/app/shop/`:
+
+- **Tokenless Storefront API** reads (products, collections, search, carts) — no secret; `totalInventory`, tags and metafields are denied, so show availability, not counts. Exact handle lookups use aliased `product(handle:)`; `query:"handle:x"` is a prefix match.
+- **Cart in the browser**, id in `localStorage`, `attributes: [{ key: "source", value: "<brand domain>" }]`, same-tab handoff to `checkoutUrl` + UTMs. Purchases are read on the merchant's side.
+- **Consent-gated** GA4 + Meta ecommerce events (`typeof gtag/fbq` guards; OneTrust gates the loaders).
+- **Sanity curation:** a `shopSettings` singleton (featured picks, tabs, hidden handles, hide sold-out) plus a per-article product-pick array with the `ShopifyProductPicker` input (tokenless search).
+- **Redirect Shopify-shaped paths** (`/products/:handle`, `/collections/:handle`) in `next.config.mjs`; add `cdn.shopify.com` to `images.remotePatterns`.
+- Add the shop to the sitemap, header/footer, About page, and the env doc's smoke list.

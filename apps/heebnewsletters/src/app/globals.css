@@ -192,11 +192,20 @@ a {
   justify-self: center;
 }
 
-/* Hamburger: hidden on desktop */
-.header-hamburger {
+/* Mobile-only cluster (hamburger + cart) in header column 1. Keeping the
+   cart on the left balances the Subscribe pill on the right so the wordmark
+   stays centered on narrow screens. */
+.header-mobile-left {
   display: none;
   grid-column: 1;
   justify-self: start;
+  align-items: center;
+  gap: 2px;
+}
+
+/* Hamburger: hidden on desktop */
+.header-hamburger {
+  display: none;
   align-self: center;
   width: 36px;
   height: 36px;
@@ -226,6 +235,18 @@ a {
 
 .site-header .header-subscribe-mobile {
   display: none;
+}
+
+/* Mobile-only Subscribe pill in header column 3. */
+.header-mobile-actions {
+  display: none;
+}
+
+/* Cart icon: desktop sits in the right nav; sizes match the 13px nav. */
+.site-header .header-cart {
+  width: 34px;
+  height: 34px;
+  color: var(--text-primary);
 }
 
 .site-header .header-profile-link {
@@ -1098,11 +1119,12 @@ a {
 /* Mobile: Atlantic-style row = [hamburger | logo | subscribe], wordmark below */
 @media (max-width: 768px) {
   .header-row-1 {
-    grid-template-columns: 1fr auto 1fr;
-    padding: 20px 24px;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    padding: 20px 20px;
     min-height: 56px;
   }
 
+  .header-mobile-left,
   .header-hamburger {
     display: flex;
   }
@@ -1111,11 +1133,16 @@ a {
     display: none;
   }
 
-  .site-header .header-subscribe-mobile {
-    display: inline-flex;
+  .header-mobile-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
     grid-column: 3;
     justify-self: end;
-    padding-top: 8px;
+  }
+
+  .site-header .header-subscribe-mobile {
+    display: inline-flex;
     font-size: 12px;
     letter-spacing: 0.02em;
     padding: 6px 12px;

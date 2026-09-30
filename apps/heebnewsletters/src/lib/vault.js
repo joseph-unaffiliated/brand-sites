@@ -15,6 +15,9 @@ const layer = createSanityLayer({
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET ?? "production",
 });
 
+/** Raw Sanity client for app-local queries (shop curation); null without a project id. */
+export const sanityClient = layer.client;
+
 const queries = createVaultIssueQueries({
   ...layer,
   fallbackImage: process.env.NEXT_PUBLIC_SITE_OG_IMAGE || "/heeb-og.png",

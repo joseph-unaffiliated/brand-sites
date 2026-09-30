@@ -66,7 +66,7 @@ https://hookuplists.com,https://www.hookuplists.com,https://thepicklereport.com,
 | Hard Resets | `https://hardresets.com`, `https://www.hardresets.com`, `http://localhost:3004` — see [`HARDRESETS_VERCEL_ENV.md`](./HARDRESETS_VERCEL_ENV.md) |
 | The Eyeballer's Cookbook | `https://theeyeballerscookbook.com`, `https://www.theeyeballerscookbook.com` |
 | Hipspeak | `https://hipspeak.com`, `https://www.hipspeak.com`, `https://hipspeak.vercel.app`, `http://localhost:3006` |
-| From the Vault, by Heeb | `https://heebnewsletters.vercel.app`, `https://heebnewsletters.com`, `https://www.heebnewsletters.com`, `https://fromthevault.heebnewsletters.com`, `http://localhost:3007` |
+| Heeb Magazine (From the Vault) | `https://heebmagazine.com`, `https://www.heebmagazine.com`, `https://heebnewsletters.vercel.app`, `https://heebnewsletters.com`, `https://www.heebnewsletters.com`, `https://fromthevault.heebnewsletters.com`, `http://localhost:3007` (heebmagazine origins added 2026-09-29) |
 
 Other live brands (TNP, TKT) follow the same apex + www pattern. Verify each origin after any change with a preflight probe; the response must echo the same origin:
 

@@ -91,6 +91,20 @@ export default async function AboutPage() {
                 stay a click away in your mail when you need them.
               </p>
 
+              <h2>The shop</h2>
+              <p>
+                The <Link href="/shop">Heeb shop</Link> is where the print run
+                lives on: back issues of the magazine, shirts, stickers, and
+                other objects from the archive. When a From the Vault story
+                comes from an issue we still have copies of, you can buy that
+                issue right under the article. Orders ship from and are
+                supported by Heeb Media at{" "}
+                <a href="https://heebmedia.com" target="_blank" rel="noopener noreferrer">
+                  heebmedia.com
+                </a>
+                , where checkout happens.
+              </p>
+
               <h2>Who it&apos;s for</h2>
               <p>
                 Heeb readers who never got over it, Jews who want their

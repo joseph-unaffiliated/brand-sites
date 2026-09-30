@@ -8,6 +8,7 @@ import { useSubscriber } from "@/context/SubscriberContext";
 import BrandWordmark from "@/components/BrandWordmark";
 import { ContactCopyLink } from "@publication-websites/web-shell/contact-copy";
 import AdvertiseCopyLink from "@/components/AdvertiseCopyLink";
+import CartButton from "@/components/shop/CartButton";
 import { contactEmail, siteDisplayName } from "@/config/site";
 
 /**
@@ -158,6 +159,9 @@ export default function Header() {
           <Link href="/from-the-vault" onClick={closeMenu}>
             From the Vault
           </Link>
+          <Link href="/shop" onClick={closeMenu}>
+            Shop
+          </Link>
           <Link href="/about" onClick={closeMenu}>
             About
           </Link>
@@ -204,18 +208,22 @@ export default function Header() {
         }}
       >
         <div className="header-row-1 container">
-          <button
-            type="button"
-            className="header-hamburger"
-            aria-expanded={menuOpen}
-            aria-controls="header-drawer"
-            aria-label="Toggle menu"
-            onClick={toggleMenu}
-          >
-            <span className="header-hamburger-line" aria-hidden />
-          </button>
+          <div className="header-mobile-left">
+            <button
+              type="button"
+              className="header-hamburger"
+              aria-expanded={menuOpen}
+              aria-controls="header-drawer"
+              aria-label="Toggle menu"
+              onClick={toggleMenu}
+            >
+              <span className="header-hamburger-line" aria-hidden />
+            </button>
+            <CartButton className="header-cart header-cart-mobile" />
+          </div>
           <nav className="site-nav site-nav-left header-nav-desktop" aria-label="Main">
             <Link href="/from-the-vault">From the Vault</Link>
+            <Link href="/shop">Shop</Link>
             {!isSubscribed && <Link href="/about">About</Link>}
           </nav>
           <div className="brand">
@@ -237,8 +245,11 @@ export default function Header() {
                 {subscribeDesktop}
               </>
             )}
+            <CartButton className="header-cart" />
           </nav>
-          {!isSubscribed ? subscribeMobile : null}
+          <div className="header-mobile-actions">
+            {!isSubscribed ? subscribeMobile : null}
+          </div>
         </div>
       </header>
       {drawerMounted ? createPortal(mobileDrawer, document.body) : null}

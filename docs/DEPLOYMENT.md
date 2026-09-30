@@ -27,10 +27,11 @@
 ## Smoke checks (per marketing deploy)
 
 - `/` with `?subscribed=true` → `/subscribed` (middleware).
-- Article listing and `/article/[slug]` load from Sanity (for theeyeballerscookbook: `/recipes` and `/recipe/[slug]`; for hipspeak: `/archive` and `/word/[slug]`; for heebnewsletters: `/archive` and `/article/[slug]` sourced from the `vaultIssue` document type).
+- Article listing and `/article/[slug]` load from Sanity (for theeyeballerscookbook: `/recipes` and `/recipe/[slug]`; for hipspeak: `/archive` and `/word/[slug]`; for heebnewsletters: `/from-the-vault` and `/article/[slug]` sourced from the `vaultIssue` document type).
+- **heebnewsletters (Heeb Magazine) also depends on Shopify at build and request time:** `/shop` and `/shop/[handle]` read the Heeb Media store through the tokenless Storefront API (`303ed7-79.myshopify.com`, no env secret). Catalog reads are cached 300 s; the product page is `force-dynamic` for live price/availability. If Shopify is unreachable the shop renders empty rather than failing the build; the sitemap simply omits products.
 - Poll / subscribed flows POST to correct `NEXT_PUBLIC_MAGIC_EXECUTE_URL`.
 - Profile: with token from subscribe flow, network list loads from magic; without token, at least current brand from local state.
 
 ## Staging-only sites
 
-A brand can run on its `*.vercel.app` host before its production domain is chosen (From the Vault today). Set `NEXT_PUBLIC_NOINDEX=true` on the Vercel project: `robots.txt` disallows everything and pages emit `noindex, nofollow`. Delete the variable at go-live. No Vercel Deployment Protection is used, so magic, reader APIs and smoke tests work unchanged.
+A brand can run on its `*.vercel.app` host before its production domain goes live (Heeb Magazine today: `www.heebmagazine.com` and the four redirect hosts are already attached to the Vercel project, but DNS still points elsewhere until the team approves cutover). Set `NEXT_PUBLIC_NOINDEX=true` on the Vercel project: `robots.txt` disallows everything and pages emit `noindex, nofollow`. Delete the variable at go-live. No Vercel Deployment Protection is used, so magic, reader APIs and smoke tests work unchanged.

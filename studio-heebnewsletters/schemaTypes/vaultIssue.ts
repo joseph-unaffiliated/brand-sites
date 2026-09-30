@@ -21,6 +21,13 @@ export const vaultIssueType = defineType({
       options: {collapsible: true, collapsed: false},
     },
     {
+      name: 'shop',
+      title: 'Shop this story',
+      description:
+        'Products from the Heeb shop shown under the article. The back issue linked in "Buy original issue URL" is added automatically when it is a heebmedia.com product link; add anything else here.',
+      options: {collapsible: true, collapsed: true},
+    },
+    {
       name: 'seo',
       title: 'SEO',
       description:
@@ -238,6 +245,14 @@ export const vaultIssueType = defineType({
           preview: {select: {title: 'title', subtitle: 'sourceLabel'}},
         }),
       ],
+    }),
+    defineField({
+      name: 'shopThisStory',
+      title: 'Products',
+      type: 'array',
+      of: [defineArrayMember({type: 'shopProductPick'})],
+      fieldset: 'shop',
+      validation: (rule) => rule.max(6),
     }),
     defineField({name: 'seoTitle', title: 'SEO title', type: 'string', fieldset: 'seo'}),
     defineField({

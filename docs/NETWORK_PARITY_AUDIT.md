@@ -9,7 +9,7 @@ Snapshot of what each live or launching Next.js publication has, taken 2026-09-2
 | HR | `apps/hardresets` | Live, `www.hardresets.com` |
 | TEC | `apps/theeyeballerscookbook` | Live, `www.theeyeballerscookbook.com` |
 | HIP | `apps/hipspeak` | Ready on `hipspeak.vercel.app`; DNS cutover pending (`www.hipspeak.com` canonical) |
-| FTV | `apps/heebnewsletters` | Staging on `heebnewsletters.vercel.app` (noindex); production host undecided |
+| FTV | `apps/heebnewsletters` | Heeb Magazine; staging on `heebnewsletters.vercel.app` (noindex); `www.heebmagazine.com` attached, DNS cutover pending team approval |
 
 Legend: ✅ in place · ⏳ planned (see note) · — intentionally absent (see accepted differences)
 
@@ -36,9 +36,10 @@ Legend: ✅ in place · ⏳ planned (see note) · — intentionally absent (see 
 | Giveaways | ✅ | — | — | — | — | — |
 | Submissions | ✅ | ✅ | ✅ | ✅ | — | — |
 | Rabbit Hole + podcast promo | — | — | — | — | — | ✅ |
+| Headless shop (tokenless Shopify, `/shop`, cart → merchant checkout) | — | — | — | — | — | ✅ |
 | Own OneTrust domain script | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | GTM + Meta pixel | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Own GA4 property | ✅ | ✅ | ✅ | ✅ | ⏳ ID needed | ⏳ ID needed |
+| Own GA4 property | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ `G-YJ819KMEG3` |
 | `isJewishContent` on article view tracking | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | Magic `READERS_CORS_ORIGINS` | ✅ | ✅ | ✅ | ✅ (fixed 2026-09-28) | ✅ | ✅ |
 | Hosted Sanity studio | | | | | ✅ `hipspeak.sanity.studio` | ✅ `fromthevault.sanity.studio` |
@@ -59,13 +60,14 @@ These are deliberate. Don't count them as gaps.
 - **TEC and FTV have no polls.** FTV passes `createHomeQueryMiddleware({ poll: null })`, so `/?poll=` stays on the homepage instead of 404ing.
 - **Giveaways are TPR-only.**
 - **FTV's Rabbit Hole and podcast promo** are FTV-only.
+- **FTV's shop** is FTV-only: Heeb Media owns the Shopify store; the site reads it tokenlessly and hands checkout to `heebmedia.com`. The pattern is documented in `LAUNCH_PLAYBOOK.md` for any brand that later gets a merchant partner.
 - **`/dev/mark-subscribed`** exists on every app. It is noindexed and disallowed in `robots.txt`, and is a QA helper, not a gap.
 
 ## Open items before each launch
 
 **Hipspeak (DNS cutover):** GA4 measurement ID; you run the Cloudflare checklist and paste the Airtable Click URL formula from [`HIPSPEAK_VERCEL_ENV.md`](./HIPSPEAK_VERCEL_ENV.md); the post-Oct 6 shared-package and magic pushes; smoke tests.
 
-**From the Vault (production):** choose the host; GA4 measurement ID; post-Oct 6 shared-package and magic pushes; import newer sent issues (and missing #28) from supplied HTML; then the cutover steps in [`HEEBNEWSLETTERS_VERCEL_ENV.md`](./HEEBNEWSLETTERS_VERCEL_ENV.md).
+**Heeb Magazine / From the Vault (production):** team approval of staging, then the cutover checklist in [`HEEBNEWSLETTERS_VERCEL_ENV.md`](./HEEBNEWSLETTERS_VERCEL_ENV.md) (env flip, Cloudflare DNS for `heebmagazine.com` + `heebnewsletters.com`, Airtable formula); post-Oct 6 shared-package and magic pushes; import #36–38 as they send.
 
 ## Follow-ups (post-launch)
 

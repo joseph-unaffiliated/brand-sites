@@ -14,6 +14,8 @@ import VaultPodcastPromo from "@/components/VaultPodcastPromo";
 import AdSlot from "@/components/AdSlot";
 import ArticleStickyBottom from "@/components/ArticleStickyBottom";
 import JsonLd from "@/components/JsonLd";
+import ShopThisStory from "@/components/shop/ShopThisStory";
+import { getShopThisStory } from "@/lib/shop-content";
 import { ogImageFromMappedContent } from "@publication-websites/sanity-content";
 import { crossPromoForSlot } from "@/config/crossPromoAds";
 import { amazonAssociatesTag, isNoindex, siteConfig, siteDisplayName } from "@/config/site";
@@ -145,6 +147,13 @@ export default async function VaultIssuePage({ params }) {
   ]);
   if (!issue) notFound();
 
+  // Back issue (from originalIssueUrl) + editor picks, with live price/stock.
+  const { products: shopProducts, backIssueHandle } = await getShopThisStory(slug, issue);
+  const hasShopCards = shopProducts.length > 0;
+  // When the original issue is sold on heebmedia.com, keep readers on-site.
+  const originalIssueHref = backIssueHandle ? `/shop/${backIssueHandle}` : issue.originalIssueUrl;
+  const originalIssueIsExternal = !backIssueHandle;
+
   const readMore = pickRandomArticles(allIssues, {
     count: READ_MORE_COUNT,
     excludeSlug: slug,
@@ -157,7 +166,7 @@ export default async function VaultIssuePage({ params }) {
     issue.originalPublication,
     issue.originalYear,
   );
-  const showBuyCta = Boolean(issue.buyCtaLabel && issue.originalIssueUrl);
+  const showBuyCta = Boolean(issue.buyCtaLabel && issue.originalIssueUrl) && !hasShopCards;
   const rabbitHole = Array.isArray(issue.rabbitHole) ? issue.rabbitHole : [];
 
   const articleJsonLd = {
@@ -250,12 +259,13 @@ export default async function VaultIssuePage({ params }) {
                 </div>
               ) : null}
 
-              {issue.originalIssueUrl ? (
+              {originalIssueHref ? (
                 <Link
-                  href={issue.originalIssueUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`Read the original issue: ${issue.title}`}
+                  href={originalIssueHref}
+                  {...(originalIssueIsExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                  aria-label={
+                    backIssueHandle ? `Buy the issue this story ran in: ${issue.title}` : `Read the original issue: ${issue.title}`
+                  }
                 >
                   {HeroImageBlock}
                 </Link>
@@ -287,11 +297,10 @@ export default async function VaultIssuePage({ params }) {
 
               {originalPubAttribution ? (
                 <p className={styles.originalPubLine}>
-                  {issue.originalIssueUrl ? (
+                  {originalIssueHref ? (
                     <Link
-                      href={issue.originalIssueUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      href={originalIssueHref}
+                      {...(originalIssueIsExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                     >
                       {originalPubAttribution}
                     </Link>
@@ -319,6 +328,10 @@ export default async function VaultIssuePage({ params }) {
                         {issue.buyCtaLabel}
                       </Link>
                     </div>
+                  ) : null}
+
+                  {hasShopCards ? (
+                    <ShopThisStory products={shopProducts} issueTitle={issue.title} />
                   ) : null}
 
                   {rabbitHole.length > 0 ? (
