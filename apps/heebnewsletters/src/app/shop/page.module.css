@@ -21,7 +21,13 @@
 }
 
 .productPage {
-  padding: 40px 0 72px;
+  padding: 72px 0 72px;
+}
+
+@media (max-width: 640px) {
+  .productPage {
+    padding-top: 40px;
+  }
 }
 
 .related {
