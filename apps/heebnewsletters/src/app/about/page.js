@@ -87,7 +87,7 @@ export default async function AboutPage() {
               <p>
                 Subscribe once, and a new issue arrives in your inbox each
                 week — one focused read you can actually finish. Browsing past
-                issues in <Link href="/from-the-vault">From the Vault</Link> is free anytime. Snooze and unsubscribe
+                issues in <Link href="/from-the-vault">The Vault</Link> is free anytime. Snooze and unsubscribe
                 stay a click away in your mail when you need them.
               </p>
 
@@ -125,7 +125,7 @@ export default async function AboutPage() {
 
       {readMore.length > 0 ? (
         <div className={articleStyles.readMoreOuter}>
-          <section className={articleStyles.readMore} aria-label="From the Vault">
+          <section className={articleStyles.readMore} aria-label="More from The Vault">
             <div className={articleStyles.readMoreGrid}>
               {readMore.map((rec) => (
                 <Link
@@ -137,8 +137,8 @@ export default async function AboutPage() {
                     <Image
                       src={rec.mainImage}
                       alt={rec.title}
-                      width={280}
-                      height={187}
+                      width={rec.mainImageWidth || 280}
+                      height={rec.mainImageHeight || 187}
                       sizes="(max-width: 640px) 100vw, 280px"
                     />
                   </div>

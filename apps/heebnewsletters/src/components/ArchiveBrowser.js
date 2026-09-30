@@ -4,23 +4,9 @@ import { useCallback, useEffect, useMemo, useState, useTransition } from "react"
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import HideWhenSubscribed from "@/components/HideWhenSubscribed";
+import { compareOriginalDateDesc, originalDateLabel } from "@/lib/vault-dates";
 import styles from "@/app/from-the-vault/page.module.css";
-
-function publishedTime(issue) {
-  if (!issue?.publishedDate) return null;
-  const t = new Date(issue.publishedDate).getTime();
-  return Number.isNaN(t) ? null : t;
-}
-
-/** Newest first; undated / invalid dates last, stable for ties. */
-function sortByPublishedDateDesc(a, b) {
-  const ta = publishedTime(a);
-  const tb = publishedTime(b);
-  if (ta != null && tb != null && ta !== tb) return tb - ta;
-  if (ta != null && tb == null) return -1;
-  if (ta == null && tb != null) return 1;
-  return String(a?.slug || "").localeCompare(String(b?.slug || ""));
-}
 
 function queryTokens(query) {
   return query
@@ -62,32 +48,68 @@ function compareSearchResults(a, b, tokens) {
   if (titleA !== titleB) return titleB - titleA;
   if (dekA !== dekB) return dekB - dekA;
   if (occA !== occB) return occB - occA;
-  return sortByPublishedDateDesc(a.issue, b.issue);
+  return compareOriginalDateDesc(a.issue, b.issue);
 }
 
-function IssueCard({ issue }) {
+const DESKTOP_COLUMNS = 3;
+/** Card body height as a fraction of card width, for balancing columns. */
+const CARD_BODY_ESTIMATE = 0.95;
+
+/**
+ * Deal cards into columns shortest-first so order reads across rows. Each
+ * entry keeps its list index as the CSS `order` used when columns collapse.
+ */
+function packColumns(entries) {
+  const columns = Array.from({ length: DESKTOP_COLUMNS }, () => ({ height: 0, entries: [] }));
+  entries.forEach((entry, order) => {
+    const target = columns.reduce((min, col) => (col.height < min.height ? col : min), columns[0]);
+    target.entries.push({ ...entry, order });
+    target.height += entry.aspect + CARD_BODY_ESTIMATE;
+  });
+  return columns.map((col) => col.entries);
+}
+
+function imageAspect(issue) {
+  const w = Number(issue.mainImageWidth) || 3;
+  const h = Number(issue.mainImageHeight) || 2;
+  return h / w;
+}
+
+function SubscribeCard({ order }) {
   return (
-    <article className={styles.issueCard}>
+    <HideWhenSubscribed>
+      <article className={styles.issueCard} style={{ order }}>
+        <div className={styles.issueCardPlaceholder}>
+          <div className={styles.issueCardBody}>
+            <h3>More issues coming soon</h3>
+            <p className={styles.issueDek}>
+              New issues drop weekly. Subscribe to get them in your inbox.
+            </p>
+            <a className={styles.issueCta} href="/#subscribe">
+              Subscribe
+            </a>
+          </div>
+        </div>
+      </article>
+    </HideWhenSubscribed>
+  );
+}
+
+function IssueCard({ issue, order }) {
+  return (
+    <article className={styles.issueCard} style={{ order }}>
       <Link href={`/article/${issue.slug}`} className={styles.issueCardLink}>
         <div className={styles.issueCardImage}>
           <Image
             src={issue.mainImage}
             alt=""
-            width={400}
-            height={267}
+            width={issue.mainImageWidth || 400}
+            height={issue.mainImageHeight || 267}
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           />
         </div>
         <div className={styles.issueCardBody}>
-          <p className={styles.issueDate}>
-            {issue.publishedDate
-              ? new Date(issue.publishedDate).toLocaleDateString("en-US", {
-                  month: "short",
-                  day: "numeric",
-                  year: "numeric",
-                })
-              : "—"}
-          </p>
+          <p className={styles.issueDate}>{originalDateLabel(issue) || "—"}</p>
           <h3>{issue.title}</h3>
           {issue.summary ? <p className={styles.issueDek}>{issue.summary}</p> : null}
           <span className={styles.issueCta}>Read issue</span>
@@ -99,7 +121,7 @@ function IssueCard({ issue }) {
 
 /**
  * Client-side archive search. State lives in `?q=` so searches are shareable.
- * @param {{ issues: Array<{ _id?: string; slug: string; title: string; summary?: string | null; mainImage: string; publishedDate?: string | null; searchText: string }> }} props
+ * @param {{ issues: Array<{ _id?: string; slug: string; title: string; summary?: string | null; mainImage: string; mainImageWidth?: number; mainImageHeight?: number; originalYear?: number | null; originalPublication?: string | null; searchText: string }> }} props
  */
 export default function ArchiveBrowser({ issues }) {
   const router = useRouter();
@@ -149,7 +171,7 @@ export default function ArchiveBrowser({ issues }) {
 
   const visible = useMemo(() => {
     if (!queryNormalized) {
-      return searchable.map(({ issue }) => issue).sort(sortByPublishedDateDesc);
+      return searchable.map(({ issue }) => issue).sort(compareOriginalDateDesc);
     }
     const tokens = queryTokens(queryNormalized);
     return searchable
@@ -157,6 +179,12 @@ export default function ArchiveBrowser({ issues }) {
       .sort((a, b) => compareSearchResults(a, b, tokens))
       .map(({ issue }) => issue);
   }, [searchable, queryNormalized]);
+
+  const columns = useMemo(() => {
+    const entries = visible.map((issue) => ({ issue, aspect: imageAspect(issue) }));
+    if (!queryNormalized) entries.push({ issue: null, aspect: 0.4 });
+    return packColumns(entries);
+  }, [visible, queryNormalized]);
 
   return (
     <div className={isPending ? styles.browserPending : undefined}>
@@ -180,8 +208,20 @@ export default function ArchiveBrowser({ issues }) {
         </p>
       ) : (
         <div className={styles.issueMosaic}>
-          {visible.map((issue) => (
-            <IssueCard key={issue._id ?? issue.slug} issue={issue} />
+          {columns.map((entries, index) => (
+            <div key={index} className={styles.issueColumn}>
+              {entries.map((entry) =>
+                entry.issue ? (
+                  <IssueCard
+                    key={entry.issue._id ?? entry.issue.slug}
+                    issue={entry.issue}
+                    order={entry.order}
+                  />
+                ) : (
+                  <SubscribeCard key="subscribe" order={entry.order} />
+                ),
+              )}
+            </div>
           ))}
         </div>
       )}

@@ -16,7 +16,7 @@ export default function ShopThisStory({ products, title = "Shop this story", iss
       <div className={styles.sectionHead}>
         <h2 className={styles.sectionTitle}>{title}</h2>
         <Link href="/shop" className={styles.sectionMore}>
-          Visit the shop →
+          Visit the shop
         </Link>
       </div>
       <div className={styles.storyGrid}>

@@ -46,7 +46,6 @@
 }
 
 .cardImage {
-  aspect-ratio: 1 / 1;
   background: var(--surface-muted);
   overflow: hidden;
   line-height: 0;
@@ -54,8 +53,7 @@
 
 .cardImage img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
   display: block;
   transition: transform 0.35s ease;
 }
@@ -70,14 +68,6 @@
   flex-direction: column;
   gap: 4px;
   flex: 1;
-}
-
-.cardType {
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--text-muted);
-  margin: 0;
 }
 
 .cardTitle {
@@ -163,9 +153,22 @@
 }
 
 .sectionMore {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
   font-size: 13px;
   font-weight: 600;
   white-space: nowrap;
+}
+
+.sectionMore::after {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-top: 1.5px solid currentColor;
+  border-right: 1.5px solid currentColor;
+  transform: rotate(45deg);
+  flex-shrink: 0;
 }
 
 /* ---------- Tabs (collection filters) ---------- */
@@ -480,8 +483,8 @@
 }
 
 .cartButton svg {
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
 }
 
 .cartCount {
@@ -687,6 +690,7 @@
   color: var(--text-muted);
   text-align: center;
   line-height: 1.4;
+  text-wrap: balance;
 }
 
 /* ---------- Shop this story (article) ---------- */

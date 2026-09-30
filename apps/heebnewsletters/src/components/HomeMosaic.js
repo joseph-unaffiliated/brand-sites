@@ -17,8 +17,8 @@ function MosaicCard({ article }) {
           <Image
             src={article.mainImage}
             alt=""
-            width={400}
-            height={267}
+            width={article.mainImageWidth || 400}
+            height={article.mainImageHeight || 267}
             sizes="(max-width: 900px) 100vw, 320px"
           />
         </div>
@@ -50,7 +50,6 @@ function FeaturedCard({ article, index }) {
         />
       </div>
       <div className={styles.featuredBody}>
-        {index === 0 ? <p className={styles.featuredKicker}>Latest issue</p> : null}
         <h2 className={styles.featuredHeadline}>{article.title}</h2>
         {article.eraLabel ? (
           <p className={styles.featuredDek}>{article.eraLabel}</p>

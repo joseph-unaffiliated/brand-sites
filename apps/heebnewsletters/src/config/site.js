@@ -43,7 +43,7 @@ export const contactEmail =
   process.env.NEXT_PUBLIC_CONTACT_EMAIL || "contact@heebnewsletters.com";
 
 export const subscribeCardTitle =
-  process.env.NEXT_PUBLIC_SUBSCRIBE_CARD_TITLE || "Get From the Vault";
+  process.env.NEXT_PUBLIC_SUBSCRIBE_CARD_TITLE || 'Subscribe to our weekly newsletter "From the Vault"';
 
 export const subscribeCardDek =
   process.env.NEXT_PUBLIC_SUBSCRIBE_CARD_DEK ||

@@ -278,9 +278,10 @@ a {
   color: var(--text-primary);
 }
 
-/* Subscribe button: match Contact (13px, 0.02em) */
+/* Subscribe button: match Contact (13px, 300, 0.02em) */
 .site-header .header-nav-desktop .button {
   font-size: 13px;
+  font-weight: 300;
   letter-spacing: 0.02em;
 }
 
@@ -723,6 +724,14 @@ a {
   gap: 8px;
   color: var(--footer-accent);
   font-size: 12px;
+}
+
+.footer-links-split {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: repeat(4, auto);
+  column-gap: 32px;
+  row-gap: 8px;
 }
 
 .footer-links a:hover {

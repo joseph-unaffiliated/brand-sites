@@ -41,7 +41,7 @@ After saving: **Redeploy** Production (and Preview if you added vars there).
 | `NEXT_PUBLIC_SITE_FOOTER_TAGLINE` | `From the Vault, in your inbox every week.` |
 | `NEXT_PUBLIC_SITE_HERO_TAGLINE` | `home of the subversive jewish counter-culture` |
 | `NEXT_PUBLIC_CONTACT_EMAIL` | `contact@heebnewsletters.com` |
-| `NEXT_PUBLIC_SUBSCRIBE_CARD_TITLE` | `Get From the Vault` |
+| `NEXT_PUBLIC_SUBSCRIBE_CARD_TITLE` | `Subscribe to our weekly newsletter "From the Vault"` |
 | `NEXT_PUBLIC_SUBSCRIBE_CARD_DEK` | Subscribe card blurb |
 | `NEXT_PUBLIC_TYPEKIT_KIT_ID` | `xon1hcs` |
 | `NEXT_PUBLIC_ADS_MODE` | `cross_promo` (slot → brand map is in `apps/heebnewsletters/src/config/crossPromoAds.js` — the '90s Parent + Pickle only; never From the Vault) |
@@ -102,7 +102,7 @@ NEXT_PUBLIC_SITE_FAVICON_PNG=/heeb-favicon.png
 NEXT_PUBLIC_SITE_FOOTER_TAGLINE=From the Vault, in your inbox every week.
 NEXT_PUBLIC_SITE_HERO_TAGLINE=home of the subversive jewish counter-culture
 NEXT_PUBLIC_CONTACT_EMAIL=contact@heebnewsletters.com
-NEXT_PUBLIC_SUBSCRIBE_CARD_TITLE=Get From the Vault
+NEXT_PUBLIC_SUBSCRIBE_CARD_TITLE='Subscribe to our weekly newsletter "From the Vault"'
 NEXT_PUBLIC_SUBSCRIBE_CARD_DEK=Join the newsletter for weekly subversive Jewish counter-culture nostalgia from the 2000s—delivered straight to your inbox.
 NEXT_PUBLIC_TYPEKIT_KIT_ID=xon1hcs
 
@@ -196,7 +196,7 @@ Legacy paths are handled in `apps/heebnewsletters/next.config.mjs`, host-agnosti
 
 Do these in order. Nothing before step 3 sends traffic to the new site.
 
-1. **Team approval** on staging (`https://heebnewsletters.vercel.app`): home, `/from-the-vault`, an article with a "Shop this story" card, `/shop`, a product page, cart → "Checkout on heebmedia.com". Heeb Media should know carts arrive with the attribute `source=heebmagazine.com` and UTMs `utm_source=heebmagazine.com&utm_medium=referral&utm_campaign=shop`; ideally they place one real test order (or a 100% discount code) end to end.
+1. **Team approval** on staging (`https://heebnewsletters.vercel.app`): home, `/from-the-vault`, an article with a "Shop this story" card, `/shop`, a product page, cart → "Checkout" (lands on heebmedia.com). Heeb Media should know carts arrive with the attribute `source=heebmagazine.com` and UTMs `utm_source=heebmagazine.com&utm_medium=referral&utm_campaign=shop`; ideally they place one real test order (or a 100% discount code) end to end.
 2. **Marketing env (Vercel `heebnewsletters`, Production):** `NEXT_PUBLIC_SITE_URL=https://www.heebmagazine.com`; **delete `NEXT_PUBLIC_NOINDEX`**; add `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` if Search Console is ready. Redeploy Production. (Staging still answers on `heebnewsletters.vercel.app`; it just now canonicals to www.)
 3. **Cloudflare — `heebmagazine.com` zone:** delete/disable the redirect rule (or Bulk Redirect / Page Rule) that 301s to `heebmedia.com`. Add `A heebmagazine.com → 76.76.21.21` and `CNAME www → cname.vercel-dns.com`, both **DNS only (grey cloud)**. SSL/TLS **Full (strict)**. Do **not** touch MX, SPF or any DreamHost mail records in this zone.
 4. **Cloudflare — `heebnewsletters.com` zone:** remove the 301 rule that sends the apex/www to Webflow. Point `heebnewsletters.com` (`A → 76.76.21.21`), `www` and `fromthevault` (`CNAME → cname.vercel-dns.com`) at Vercel, **DNS only**. Leave `magic`, `email`, MX, SPF, DKIM, DMARC and verification TXT records alone.
@@ -244,7 +244,7 @@ Heeb Magazine sells Heeb Media's Shopify catalog (back issues, shirts, stickers,
 
 - **Storefront reads** use Shopify's **tokenless Storefront API** (no access token, no Shopify admin work): `https://303ed7-79.myshopify.com/api/2026-07/graphql.json`. Code: `apps/heebnewsletters/src/lib/shopify/` (`client.js`, `queries.js`, `mappers.js`, `catalog.js`, `cart-client.js`). Catalog reads are cached 300 s (`next.revalidate`); variant price/availability on the product page is fetched live per request.
 - **Tokenless limits:** products, collections, search and carts work; `totalInventory` / `quantityAvailable`, tags and metafields are **denied**. So we show "Sold out" from `availableForSale`, never a stock count. `products(query:"handle:x")` is a prefix match — exact lookups use aliased `product(handle:)`.
-- **Cart** is created in the reader's browser via the Cart API and stored in `localStorage` (`heebmagazine.cartId`); the drawer re-reads it on open and recreates it if Shopify expires it. Every cart carries `attributes: [{ key: "source", value: "heebmagazine.com" }]` so Heeb Media can filter orders. "Checkout on heebmedia.com" navigates same-tab to Shopify's `checkoutUrl` with `utm_source=heebmagazine.com&utm_medium=referral&utm_campaign=shop`.
+- **Cart** is created in the reader's browser via the Cart API and stored in `localStorage` (`heebmagazine.cartId`); the drawer re-reads it on open and recreates it if Shopify expires it. Every cart carries `attributes: [{ key: "source", value: "heebmagazine.com" }]` so Heeb Media can filter orders. "Checkout" navigates same-tab to Shopify's `checkoutUrl` with `utm_source=heebmagazine.com&utm_medium=referral&utm_campaign=shop`.
 - **Analytics** (consent-gated by OneTrust; guarded `typeof gtag/fbq`): GA4 `view_item_list`, `view_item`, `add_to_cart`, `remove_from_cart`, `view_cart`, `begin_checkout`; Meta `ViewContent`, `AddToCart`, `InitiateCheckout`. `purchase` happens on Shopify — read it in Shopify Analytics filtered by the `source` attribute / UTM.
 - **Pages:** `/shop` (tabs per collection, featured strip, ItemList JSON-LD, canonical `/shop` for all tabs), `/shop/[handle]` (`force-dynamic`, Product + AggregateOffer + Breadcrumb JSON-LD), homepage strip, About paragraph, header Shop link + cart icon (mobile: next to the hamburger), footer link, sitemap entries. Shopify-shaped `/products/*` and `/collections/*` 308 to the new URLs.
 - **Articles:** when a vault issue's `originalIssueUrl` is a heebmedia.com product link, the article shows a "Shop this story" card for that back issue (badge "Back issue", note "The issue this story ran in") instead of the plain outbound link. Editors can add up to 6 more products per issue.
@@ -276,6 +276,6 @@ No secret is required. If Heeb Media ever restricts tokenless access, add a publ
 - `/shop` 200 with tabs and ≥ 40 cards; `/shop?collection=back-issues` 200; `/shop?collection=nope` 404
 - `/shop/heeb-12` 200 with "Add to cart"; `/shop/chai-times` shows Color/Size chips; `/shop/not-a-product` 404
 - Add a single-variant item from the grid → drawer opens with the line, count badge in the header
-- "Checkout on heebmedia.com" → `https://heebmedia.com/cart/c/…?…utm_source=heebmagazine.com…` with the items present
+- "Checkout" → `https://heebmedia.com/cart/c/…?…utm_source=heebmagazine.com…` with the items present
 - `/article/catherine-ohara` shows the HEEB #12 card; `/products/heeb-12` → 308 `/shop/heeb-12`
 - `/sitemap.xml` lists `/shop` and product URLs; product page has `application/ld+json` `"@type":"Product"`

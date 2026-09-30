@@ -26,8 +26,8 @@ export default function SubscriptionSuccessArticleRecs({ articles }) {
                 <Image
                   src={rec.mainImage}
                   alt=""
-                  width={280}
-                  height={187}
+                  width={rec.mainImageWidth || 280}
+                  height={rec.mainImageHeight || 187}
                   sizes="(max-width: 640px) 100vw, 280px"
                 />
               </div>

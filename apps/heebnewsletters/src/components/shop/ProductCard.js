@@ -39,7 +39,6 @@ export default function ProductCard({ product, quickAdd = false, sizes = "(max-w
           ) : null}
         </div>
         <div className={styles.cardBody}>
-          {product.productType ? <p className={styles.cardType}>{product.productType}</p> : null}
           <h3 className={styles.cardTitle}>{product.title}</h3>
           <p className={styles.cardPrice}>
             <span>{formatPriceRange(product)}</span>

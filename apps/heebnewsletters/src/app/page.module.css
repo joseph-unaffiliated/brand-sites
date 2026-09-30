@@ -138,7 +138,6 @@
 }
 
 .mosaicCardImage {
-  aspect-ratio: 3/2;
   overflow: hidden;
   background: var(--surface-muted);
   border-radius: 8px 8px 0 0;
@@ -146,8 +145,7 @@
 
 .mosaicCardImage img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
   display: block;
   border-radius: 8px 8px 0 0;
 }
@@ -233,7 +231,6 @@
 
 .featuredImage {
   position: relative;
-  aspect-ratio: 3/2;
   overflow: hidden;
   height: fit-content;
   border-radius: 8px 8px 0 0;
@@ -241,8 +238,7 @@
 
 .featuredImage img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
   display: block;
   border-radius: 8px 8px 0 0;
 }
@@ -451,15 +447,13 @@
 }
 
 .gridCardImage {
-  aspect-ratio: 3/2;
   overflow: hidden;
   background: var(--surface-muted);
 }
 
 .gridCardImage img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
   display: block;
 }
 
@@ -523,7 +517,7 @@
 
 /* Below mosaic — neon band with black type */
 .subscribeSection {
-  padding: 48px 0 104px;
+  padding: 64px 0;
   background: var(--neon);
   color: var(--text-primary);
 }

@@ -31,7 +31,7 @@ const ISSUE_SHOP_PICKS_QUERY = `*[_type == "vaultIssue" && slug.current == $slug
 export const DEFAULT_SHOP_SETTINGS = {
   title: "Shop",
   intro:
-    "Back issues, shirts, stickers and other Heeb objects. Everything ships from the Heeb Media store; checkout happens there.",
+    "Back issues, shirts, stickers and other Heeb objects from the archive.",
   featuredTitle: "From the Heeb shop",
   hideSoldOut: true,
   featured: [],

@@ -146,12 +146,12 @@ export default function CartDrawer() {
               onClick={checkout}
               disabled={pending || !cart?.checkoutUrl || hasUnavailable}
             >
-              Checkout on heebmedia.com
+              Checkout
             </button>
             <p className={styles.checkoutNote}>
               {hasUnavailable
                 ? "Remove unavailable items to continue."
-                : "Shipping and taxes are calculated at checkout. You'll finish your order on Heeb's store."}
+                : "Shipping and taxes are calculated at checkout."}
             </p>
           </div>
         ) : null}

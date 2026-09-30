@@ -1,13 +1,12 @@
 import { Suspense } from "react";
 import { getArticles, ensureDescriptionOnly, searchTextFromArticle } from "@/lib/articles";
 import ArchiveBrowser from "@/components/ArchiveBrowser";
-import HideWhenSubscribed from "@/components/HideWhenSubscribed";
 import { siteDisplayName } from "@/config/site";
 import styles from "./page.module.css";
 
-const title = `From the Vault | ${siteDisplayName}`;
+const title = `The Vault | ${siteDisplayName}`;
 const description =
-  "Every From the Vault issue: classic Heeb stories dug out of the archive, with fresh commentary. Browse and search, newest first.";
+  "Every From the Vault issue: classic Heeb stories dug out of the archive, with fresh commentary. Browse and search by original publication date.";
 
 export const metadata = {
   title,
@@ -34,7 +33,10 @@ export default async function FromTheVaultPage() {
     title: article.title,
     summary: ensureDescriptionOnly(article.summary) || null,
     mainImage: article.mainImage,
-    publishedDate: article.publishedDate,
+    mainImageWidth: article.mainImageWidth,
+    mainImageHeight: article.mainImageHeight,
+    originalYear: article.originalYear,
+    originalPublication: article.originalPublication,
     searchText: searchTextFromArticle(article),
   }));
 
@@ -42,22 +44,12 @@ export default async function FromTheVaultPage() {
     <div className={styles.page}>
       <div className="container">
         <header className={styles.header}>
-          <div>
-            <p className={styles.kicker}>From the Vault</p>
-            <h1>Past issues</h1>
-          </div>
+          <h1>The Vault</h1>
         </header>
 
         <Suspense fallback={null}>
           <ArchiveBrowser issues={issues} />
         </Suspense>
-
-        <HideWhenSubscribed>
-          <p className={styles.emptyState}>
-            New issues drop weekly.{" "}
-            <a href="/#subscribe">Subscribe to get them in your inbox.</a>
-          </p>
-        </HideWhenSubscribed>
       </div>
     </div>
   );

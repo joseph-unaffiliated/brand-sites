@@ -150,8 +150,8 @@ export default function RootLayout({ children }) {
                   </Link>
                 </div>
                 <div>
-                  <div className="footer-links">
-                    <Link href="/from-the-vault">From the Vault</Link>
+                  <div className="footer-links footer-links-split">
+                    <Link href="/from-the-vault">The Vault</Link>
                     <Link href="/shop">Shop</Link>
                     <Link href="/about">About</Link>
                     <Link href="/terms">Terms</Link>

@@ -84,7 +84,6 @@ export default async function ShopPage({ searchParams }) {
       <JsonLd data={itemListJsonLd} />
       <div className="container">
         <header className={styles.header}>
-          <p className={styles.kicker}>Heeb shop</p>
           <h1>{activeTab ? activeTab.title : settings.title}</h1>
           <p className={styles.intro}>{activeTab?.description || settings.intro}</p>
         </header>
@@ -111,8 +110,8 @@ export default async function ShopPage({ searchParams }) {
         ) : null}
 
         {!activeTab && featured.length > 0 ? (
-          <section className={styles.featured} aria-label={settings.featuredTitle}>
-            <h2 className={shop.sectionTitle}>{settings.featuredTitle}</h2>
+          <section className={styles.featured} aria-label="Featured">
+            <h2 className={shop.sectionTitle}>Featured</h2>
             <div className={shop.grid}>
               {featured.map((p, i) => (
                 <ProductCard key={p.handle} product={p} quickAdd priority={i < 2} />
@@ -142,7 +141,7 @@ export default async function ShopPage({ searchParams }) {
           <a href="https://heebmedia.com" target="_blank" rel="noopener noreferrer">
             heebmedia.com
           </a>
-          ; checkout happens there.
+          .
         </p>
       </div>
     </div>

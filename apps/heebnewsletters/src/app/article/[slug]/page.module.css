@@ -519,15 +519,13 @@
 }
 
 .readMoreThumb {
-  aspect-ratio: 3/2;
   overflow: hidden;
   background: var(--surface-muted);
 }
 
 .readMoreThumb img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
   display: block;
 }
 

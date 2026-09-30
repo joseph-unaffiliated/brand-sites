@@ -390,8 +390,8 @@ export default async function VaultIssuePage({ params }) {
 
         {readMore.length > 0 && (
           <div className={styles.readMoreOuter}>
-            <section className={styles.readMore} aria-label="From the Vault">
-              <h2 className={styles.readMoreTitle}>More from the Vault</h2>
+            <section className={styles.readMore} aria-label="More from The Vault">
+              <h2 className={styles.readMoreTitle}>More from The Vault</h2>
               <div className={styles.readMoreGrid}>
                 {readMore.map((rec) => (
                   <Link
@@ -403,8 +403,8 @@ export default async function VaultIssuePage({ params }) {
                       <Image
                         src={rec.mainImage}
                         alt=""
-                        width={280}
-                        height={187}
+                        width={rec.mainImageWidth || 280}
+                        height={rec.mainImageHeight || 187}
                         sizes="(max-width: 640px) 100vw, 280px"
                       />
                     </div>

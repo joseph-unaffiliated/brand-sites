@@ -157,7 +157,7 @@ export default function Header() {
       <div className="header-drawer-panel">
         <nav className="header-drawer-nav" aria-label="Mobile menu">
           <Link href="/from-the-vault" onClick={closeMenu}>
-            From the Vault
+            The Vault
           </Link>
           <Link href="/shop" onClick={closeMenu}>
             Shop
@@ -222,7 +222,7 @@ export default function Header() {
             <CartButton className="header-cart header-cart-mobile" />
           </div>
           <nav className="site-nav site-nav-left header-nav-desktop" aria-label="Main">
-            <Link href="/from-the-vault">From the Vault</Link>
+            <Link href="/from-the-vault">The Vault</Link>
             <Link href="/shop">Shop</Link>
             {!isSubscribed && <Link href="/about">About</Link>}
           </nav>

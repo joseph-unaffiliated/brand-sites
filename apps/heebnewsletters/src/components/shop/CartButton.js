@@ -13,9 +13,9 @@ export default function CartButton({ className = "" }) {
       onClick={openCart}
       aria-label={count > 0 ? `Open cart, ${count} item${count === 1 ? "" : "s"}` : "Open cart"}
     >
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-        <path d="M6 7h12l-1 13H7L6 7z" />
-        <path d="M9 7V5a3 3 0 0 1 6 0v2" />
+      {/* Font Awesome Pro 7 "cart-shopping" sharp regular (commercial license). */}
+      <svg viewBox="0 0 640 640" fill="currentColor" aria-hidden>
+        <path d="M0 48L116 48C118.1 59.7 121 75.7 124.7 96L576 96C575 101.3 559 186.7 528 352L171.3 352L180 400L496 400L496 448L140 448L136.4 428.3L76 96L0 96L0 48zM162.6 304L488.2 304L518.2 144L133.5 144L162.6 304zM208 480C234.5 480 256 501.5 256 528C256 554.5 234.5 576 208 576C181.5 576 160 554.5 160 528C160 501.5 181.5 480 208 480zM432 480C458.5 480 480 501.5 480 528C480 554.5 458.5 576 432 576C405.5 576 384 554.5 384 528C384 501.5 405.5 480 432 480z" />
       </svg>
       {hydrated && count > 0 ? <span className={styles.cartCount}>{count > 99 ? "99+" : count}</span> : null}
     </button>

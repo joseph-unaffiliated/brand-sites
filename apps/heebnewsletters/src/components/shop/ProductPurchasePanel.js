@@ -123,7 +123,7 @@ export default function ProductPurchasePanel({ product, live = [], onVariantChan
       </div>
 
       <p className={styles.helper}>
-        Checkout happens on heebmedia.com, Heeb&apos;s store. Shipping, taxes and discount codes are applied there.
+        Shipping, taxes and discount codes are applied at checkout.
       </p>
     </div>
   );

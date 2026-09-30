@@ -16,7 +16,7 @@ export default async function HomeShopStrip() {
         <div className={styles.sectionHead}>
           <h2 className={styles.sectionTitle}>{settings.featuredTitle}</h2>
           <Link href="/shop" className={styles.sectionMore}>
-            Shop everything →
+            Shop everything
           </Link>
         </div>
         <div className={styles.grid}>

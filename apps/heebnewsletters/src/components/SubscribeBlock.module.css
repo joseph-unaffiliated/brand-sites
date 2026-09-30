@@ -30,7 +30,7 @@
 }
 
 .rootBanner .title {
-  white-space: nowrap;
+  text-wrap: balance;
 }
 
 .rootBanner .dek {
@@ -124,6 +124,7 @@
   font-weight: 300;
   line-height: 32px;
   margin: 0 0 .5rem 0;
+  text-wrap: balance;
 }
 
 .dek {
@@ -156,6 +157,18 @@
 
 .form input::placeholder {
   color: rgba(255, 255, 255, 0.55);
+}
+
+.form :global(.button-primary) {
+  background: var(--neon);
+  color: #0a0a0a;
+  border-color: var(--neon);
+}
+
+.form :global(.button-primary:hover) {
+  background: transparent;
+  color: var(--neon);
+  border-color: var(--neon);
 }
 
 .note {
