@@ -135,6 +135,10 @@
   text-wrap: balance;
 }
 
+.nowrap {
+  white-space: nowrap;
+}
+
 .form {
   display: flex;
   flex-direction: column;
