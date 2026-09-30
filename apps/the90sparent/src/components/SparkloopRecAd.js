@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   resolveSparkloopTestMode,
   useSparkloopRecommendation,
@@ -12,6 +12,38 @@ import styles from "./SparkloopRecAd.module.css";
 
 const TEST_MODE = resolveSparkloopTestMode(siteConfig.sparkloopTestMode);
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const TAGLINE_SEPARATOR = /\s+[-–—|]\s+|:\s+/;
+const useIsomorphicLayoutEffect = typeof window === "undefined" ? useEffect : useLayoutEffect;
+
+/**
+ * Partners often write "Name - tagline" or "Name: tagline" in the name field; split so the
+ * name can lead. Names without a separator come back whole.
+ */
+function splitName(name) {
+  const full = String(name || "").trim();
+  const match = TAGLINE_SEPARATOR.exec(full);
+  if (!match) return { title: full, tagline: "" };
+  const title = full.slice(0, match.index).trim();
+  const tagline = full.slice(match.index + match[0].length).trim();
+  if (title.length < 2 || tagline.length < 3) return { title: full, tagline: "" };
+  return { title, tagline };
+}
+
+/** Horizontal cards size the square logo to the text column's height. */
+function useFillHeightSize(ref, enabled) {
+  const [size, setSize] = useState(0);
+  useIsomorphicLayoutEffect(() => {
+    const el = ref.current;
+    if (!enabled || !el) return undefined;
+    const measure = () => setSize(Math.round(el.getBoundingClientRect().height));
+    measure();
+    if (typeof ResizeObserver === "undefined") return undefined;
+    const observer = new ResizeObserver(measure);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [ref, enabled]);
+  return size;
+}
 
 /** Generate a little before the slot scrolls into view so the card is ready when seen. */
 function useNearViewport(ref, eager) {
@@ -52,6 +84,7 @@ function useNearViewport(ref, eager) {
 export default function SparkloopRecAd({ placement, className, onReady, onEmpty }) {
   const wrapperRef = useRef(null);
   const cardRef = useRef(null);
+  const mainRef = useRef(null);
   // The sticky bar stays hidden until ready, so it can't wait for visibility.
   const near = useNearViewport(wrapperRef, placement === "sticky");
   const { status, rec, subscribe } = useSparkloopRecommendation({
@@ -84,6 +117,9 @@ export default function SparkloopRecAd({ placement, className, onReady, onEmpty 
   };
   useAdImpression(cardRef, { ...trackProps, enabled: status === "ready" });
 
+  const isRail = placement === "rail";
+  const logoSize = useFillHeightSize(mainRef, status === "ready" && !!rec?.logo && !isRail);
+
   async function handleSubscribe(e) {
     e.preventDefault();
     const target = (knownEmail || email).trim();
@@ -108,64 +144,69 @@ export default function SparkloopRecAd({ placement, className, onReady, onEmpty 
 
   const busy = submit.status === "submitting";
   const done = submit.status === "done";
+  const { title, tagline } = splitName(rec.name);
+  const logo = rec.logo ? (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img src={rec.logo} alt="" className={styles.logo} />
+  ) : null;
 
   return (
     <div
       ref={cardRef}
       className={`${styles.card} ${styles[placement] || styles.inArticle} ${className || ""}`}
+      style={logoSize ? { "--logo-size": `${logoSize}px` } : undefined}
       data-recommendation-uuid={rec.uuid}
     >
-      <p className={styles.label}>Recommended newsletter</p>
-      <div className={styles.body}>
-        {rec.logo ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={rec.logo} alt="" className={styles.logo} />
-        ) : null}
+      {isRail ? null : logo}
+      <div ref={mainRef} className={styles.main}>
+        <p className={styles.label}>Recommended newsletter</p>
+        {isRail ? logo : null}
         <div className={styles.text}>
-          <p className={styles.name}>{rec.name}</p>
+          <p className={styles.name}>{title}</p>
+          {tagline ? <p className={styles.tagline}>{tagline}</p> : null}
           {rec.description ? <p className={styles.description}>{rec.description}</p> : null}
         </div>
+
+        {done ? (
+          <p className={styles.status} role="status">
+            Subscribed. Check your inbox to confirm.
+          </p>
+        ) : (
+          <form className={styles.form} onSubmit={handleSubscribe} noValidate>
+            {!knownEmail ? (
+              <input
+                type="email"
+                inputMode="email"
+                autoComplete="email"
+                placeholder="you@email.com"
+                aria-label={`Email to subscribe to ${rec.name}`}
+                className={styles.input}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={busy}
+                required
+              />
+            ) : null}
+            <button type="submit" className={styles.button} disabled={busy}>
+              {busy ? "Subscribing…" : "Subscribe"}
+            </button>
+          </form>
+        )}
+
+        {!done && knownEmail ? (
+          <p className={styles.note}>Subscribes {knownEmail}</p>
+        ) : null}
+        {submit.status === "invalid" ? (
+          <p className={styles.error} role="alert">
+            Enter a valid email.
+          </p>
+        ) : null}
+        {submit.status === "error" ? (
+          <p className={styles.error} role="alert">
+            Couldn&apos;t subscribe. Try again.
+          </p>
+        ) : null}
       </div>
-
-      {done ? (
-        <p className={styles.status} role="status">
-          Subscribed. Check your inbox to confirm.
-        </p>
-      ) : (
-        <form className={styles.form} onSubmit={handleSubscribe} noValidate>
-          {!knownEmail ? (
-            <input
-              type="email"
-              inputMode="email"
-              autoComplete="email"
-              placeholder="you@email.com"
-              aria-label={`Email to subscribe to ${rec.name}`}
-              className={styles.input}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              disabled={busy}
-              required
-            />
-          ) : null}
-          <button type="submit" className={styles.button} disabled={busy}>
-            {busy ? "Subscribing…" : "Subscribe"}
-          </button>
-        </form>
-      )}
-
-      {!done && knownEmail ? (
-        <p className={styles.note}>Subscribes {knownEmail}</p>
-      ) : null}
-      {submit.status === "invalid" ? (
-        <p className={styles.error} role="alert">
-          Enter a valid email.
-        </p>
-      ) : null}
-      {submit.status === "error" ? (
-        <p className={styles.error} role="alert">
-          Couldn&apos;t subscribe. Try again.
-        </p>
-      ) : null}
     </div>
   );
 }

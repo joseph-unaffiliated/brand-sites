@@ -12,28 +12,26 @@
   text-align: left;
 }
 
+/* Same treatment as article caption credits. */
 .label {
-  margin: 0 0 0.625rem;
-  font-size: 11px;
-  font-weight: 400;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  margin: 0 0 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 300;
+  line-height: 1.35;
   color: var(--text-muted);
 }
 
-.body {
-  display: flex;
-  gap: 0.875rem;
-  align-items: flex-start;
-}
-
 .logo {
+  display: block;
   flex: 0 0 auto;
-  width: 56px;
-  height: 56px;
+  box-sizing: border-box;
   border-radius: 10px;
   object-fit: cover;
   background: var(--surface-muted);
+}
+
+.main {
+  min-width: 0;
 }
 
 .text {
@@ -42,13 +40,28 @@
 
 .name {
   margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.2;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.tagline {
+  margin: 0.25rem 0 0;
   font-size: 17px;
   font-weight: 600;
   line-height: 1.25;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
 }
 
 .description {
-  margin: 0.25rem 0 0;
+  margin: 0.375rem 0 0;
   font-size: var(--text-body);
   font-weight: 300;
   line-height: 1.45;
@@ -131,6 +144,28 @@
   color: hsl(0, 60%, 42%);
 }
 
+/*
+ * Horizontal formats: square logo on the left, as tall as the text column
+ * (--logo-size is measured in SparkloopRecAd). flex-start keeps the column at its
+ * own height so the measurement can't feed back into itself.
+ */
+.inArticle,
+.sticky {
+  display: flex;
+  align-items: flex-start;
+}
+
+.inArticle .logo,
+.sticky .logo {
+  width: var(--logo-size, 96px);
+  height: var(--logo-size, 96px);
+}
+
+.inArticle .main,
+.sticky .main {
+  flex: 1 1 auto;
+}
+
 /* In-article: full article column, like image house ads. */
 .inArticle {
   max-width: 640px;
@@ -138,32 +173,36 @@
   margin-left: auto;
   margin-right: auto;
   padding: 1.25rem;
+  gap: 1.25rem;
 }
 
-/* Rail: 160px skyscraper, stacked. */
+/* Rail: 160px skyscraper, stacked, logo a full-width square. */
 .rail {
   max-width: 160px;
   width: 100%;
   padding: 0.875rem;
 }
 
-.rail .body {
-  flex-direction: column;
-  gap: 0.625rem;
-}
-
 .rail .logo {
-  width: 48px;
-  height: 48px;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  margin-bottom: 0.75rem;
 }
 
 .rail .name {
+  font-size: 20px;
+  -webkit-line-clamp: 3;
+}
+
+.rail .tagline {
   font-size: 15px;
+  -webkit-line-clamp: 3;
 }
 
 .rail .description {
   font-size: 13px;
-  -webkit-line-clamp: 5;
+  -webkit-line-clamp: 4;
 }
 
 .rail .form {
@@ -183,42 +222,51 @@
 
 /* Sticky: one row, 728px desktop / 320px mobile like the sticky image creatives. */
 .sticky {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  grid-template-areas:
-    "body form"
-    "body note";
-  align-items: center;
-  column-gap: 1rem;
   width: 728px;
   max-width: 100%;
   margin: 0 auto;
   padding: 0.75rem 1rem;
+  gap: 0.875rem;
   box-shadow: 0 6px 28px rgba(2, 30, 21, 0.22), 0 1px 3px rgba(2, 30, 21, 0.12);
+}
+
+.sticky .main {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "text form"
+    "text note";
+  align-items: center;
+  column-gap: 1rem;
 }
 
 .sticky .label {
   display: none;
 }
 
-.sticky .body {
-  grid-area: body;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.sticky .logo {
-  width: 44px;
-  height: 44px;
+.sticky .text {
+  grid-area: text;
 }
 
 .sticky .name {
-  font-size: 15px;
+  font-size: 17px;
+  -webkit-line-clamp: 1;
+}
+
+.sticky .tagline {
+  margin-top: 0.125rem;
+  font-size: 14px;
+  -webkit-line-clamp: 1;
 }
 
 .sticky .description {
+  margin-top: 0.125rem;
   font-size: 13px;
   -webkit-line-clamp: 2;
+}
+
+.sticky .tagline + .description {
+  -webkit-line-clamp: 1;
 }
 
 .sticky .form {
@@ -246,21 +294,28 @@
 @media (max-width: 768px) {
   .sticky {
     width: 320px;
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-areas:
-      "body"
-      "form"
-      "note";
-    row-gap: 0.5rem;
     padding: 0.625rem 0.75rem;
+    gap: 0.625rem;
   }
 
   .sticky .logo {
-    width: 32px;
-    height: 32px;
     border-radius: 8px;
   }
 
+  .sticky .main {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "text"
+      "form"
+      "note";
+    row-gap: 0.5rem;
+  }
+
+  .sticky .name {
+    font-size: 15px;
+  }
+
+  .sticky .tagline,
   .sticky .description {
     display: none;
   }

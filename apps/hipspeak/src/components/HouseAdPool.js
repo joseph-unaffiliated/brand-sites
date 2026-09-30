@@ -7,11 +7,22 @@ import {
   normalizeAdClickUrl,
   SPARKLOOP_REC_KIND,
 } from "@publication-websites/shared-ads/house-ads";
+import { siteConfig } from "@/config/site";
 import { fetchVerifiedSubscriptionsForSite } from "@/lib/reader-profile";
 import { useHouseAdClaims } from "@/context/HouseAdClaimContext";
 import HouseAdImage from "./HouseAdImage";
 import SparkloopRecAd from "./SparkloopRecAd";
 import "./HouseAdPool.css";
+
+/** The 160px rail is too narrow for an email field, so it only shows SparkLoop to known readers. */
+function canShowSparkloopIn(format) {
+  if (houseSlotFromFormat(format) !== "rail") return true;
+  try {
+    return !!localStorage.getItem(`email_${siteConfig.brandId}`);
+  } catch {
+    return false;
+  }
+}
 
 /**
  * Resolves an Airtable house ad for this slot, falling back to `children` only
@@ -30,7 +41,8 @@ import "./HouseAdPool.css";
  * checkbox is analytics-only and does not gate who sees the ad.
  *
  * A "SparkLoop Rec" pick is claimed page-wide (one per page view), pinned through
- * refresh cycles, and swapped for a house ad if SparkLoop has nothing to show.
+ * refresh cycles, and swapped for a house ad if SparkLoop has nothing to show. Rail
+ * slots only take it for readers whose email we already have.
  *
  * @param {string[]} [excludeBrands] Extra brand keys to exclude (e.g. the other rail ad).
  * @param {(ad: object | null) => void} [onHouseAd] Called when the house-ad result settles.
@@ -152,7 +164,7 @@ export default function HouseAdPool({
         if (jewishInterested) {
           params.set("jewishInterested", "1");
         }
-        if (!claims?.canClaimSparkloop?.(ownerId)) {
+        if (!claims?.canClaimSparkloop?.(ownerId) || !canShowSparkloopIn(format)) {
           params.set("excludeKinds", SPARKLOOP_REC_KIND);
         }
         const res = await fetch(`/api/house-ads?${params}`, { cache: "no-store" });
