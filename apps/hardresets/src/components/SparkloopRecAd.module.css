@@ -111,6 +111,11 @@
   transition: background 0.2s ease, border-color 0.2s ease;
 }
 
+/* Known readers get no email field, so the button takes the whole row. */
+.button:only-child {
+  flex: 1 1 auto;
+}
+
 .button:hover:not(:disabled) {
   background: var(--accent-strong);
   border-color: var(--accent-strong);

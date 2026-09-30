@@ -24,6 +24,20 @@ function canShowSparkloopIn(format) {
   }
 }
 
+const PROFILE_TTL_MS = 5 * 60_000;
+/** @type {Map<string, { at: number, promise: Promise<any> }>} */
+const profileCache = new Map();
+
+/** The lookup takes seconds, so slots on a page share one request instead of queueing their own. */
+function verifiedProfileFor(readerToken) {
+  const hit = profileCache.get(readerToken);
+  if (hit && Date.now() - hit.at < PROFILE_TTL_MS) return hit.promise;
+  const promise = fetchVerifiedSubscriptionsForSite(readerToken);
+  profileCache.set(readerToken, { at: Date.now(), promise });
+  promise.catch(() => profileCache.delete(readerToken));
+  return promise;
+}
+
 /**
  * Resolves an Airtable house ad for this slot, falling back to `children` only
  * after the *initial* request settles (never while loading). Fades the result in
@@ -143,7 +157,7 @@ export default function HouseAdPool({
       const readerToken = getReaderToken();
       if (readerToken) {
         try {
-          const profile = await fetchVerifiedSubscriptionsForSite(readerToken);
+          const profile = await verifiedProfileFor(readerToken);
           const subscribedBrands = profile?.subscribedBrands || [];
           subscribedBrands.forEach((brand) => excluded.add(brand));
           jewishInterested = !!profile?.jewishInterested;
