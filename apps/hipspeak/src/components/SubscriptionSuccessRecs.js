@@ -15,6 +15,9 @@ const byId = Object.fromEntries(networkBrands.map((b) => [b.id, b]));
 const recRows = subscriptionSuccessRecs.filter((row) => row.id !== siteConfig.brandId);
 
 const SPARKLOOP_LIMIT = 3;
+const PICKER_SIZE = 6;
+/** The no-email list is a single non-wrapping row. */
+const NETWORK_LINKS_LIMIT = 3;
 
 /**
  * @param {{ email: string | null }} props
@@ -30,7 +33,7 @@ function NetworkLinks() {
     <section className={actions.recs} aria-label="You might also enjoy">
       <p className={actions.recsTitle}>You might also enjoy&hellip;</p>
       <ul className={actions.recsList}>
-        {recRows.map((row) => {
+        {recRows.slice(0, NETWORK_LINKS_LIMIT).map((row) => {
           const brand = byId[row.id];
           if (!brand) return null;
           return (
@@ -83,6 +86,7 @@ function NewsletterPicker({ email }) {
       email,
       sourceBrand: siteConfig.brandId,
       networkItems,
+      total: PICKER_SIZE,
       sparkloop: {
         publicationId: siteConfig.sparkloopPublicationId,
         testMode: resolveSparkloopTestMode(siteConfig.sparkloopTestMode),

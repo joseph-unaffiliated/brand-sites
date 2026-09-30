@@ -49,15 +49,17 @@ function toSparkloopItem(rec) {
  * Client API recommendations. Nothing is pre-selected; readers must opt in to each pick.
  *
  * SparkLoop is only generated once per mount, only for as many cards as we show, and never cached.
+ * With `total`, network items (in order) fill whatever SparkLoop leaves empty, so the grid stays full.
  *
  * @param {{
  *   email: string | null,
  *   sourceBrand: string,
  *   networkItems: PickerItem[],
+ *   total?: number,
  *   sparkloop?: { publicationId?: string, testMode?: boolean, limit?: number },
  * }} opts
  */
-export function useNewsletterPicker({ email, sourceBrand, networkItems, sparkloop = {} }) {
+export function useNewsletterPicker({ email, sourceBrand, networkItems, total, sparkloop = {} }) {
   const { publicationId, testMode = true, limit = 3 } = sparkloop;
   const sparkloopEnabled = Boolean(email && publicationId && limit > 0);
 
@@ -121,10 +123,11 @@ export function useNewsletterPicker({ email, sourceBrand, networkItems, sparkloo
     observerRef.current.observe(el);
   }, []);
 
-  const items = useMemo(
-    () => blendPickerItems(networkItems, sparkloopItems),
-    [networkItems, sparkloopItems]
-  );
+  const items = useMemo(() => {
+    const network =
+      total == null ? networkItems : networkItems.slice(0, Math.max(0, total - sparkloopItems.length));
+    return blendPickerItems(network, sparkloopItems);
+  }, [networkItems, sparkloopItems, total]);
 
   const toggle = useCallback((key) => {
     setSelected((prev) => {
