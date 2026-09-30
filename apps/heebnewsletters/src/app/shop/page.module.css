@@ -2,16 +2,6 @@
   padding: 56px 0 72px;
 }
 
-.header {
-  margin-bottom: 28px;
-  max-width: 680px;
-}
-
-.header h1 {
-  font-size: clamp(2.2rem, 3vw, 3rem);
-  margin: 0 0 12px;
-}
-
 .intro {
   color: var(--text-secondary);
   line-height: 1.45;

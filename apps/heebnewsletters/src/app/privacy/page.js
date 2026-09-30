@@ -12,8 +12,10 @@ export default function PrivacyPage() {
   return (
     <div className={styles.page}>
       <div className="container">
-        <h1>Privacy Policy</h1>
-        <p className={styles.meta}>Last updated: October 23, 2025</p>
+        <header className="page-header">
+          <h1>Privacy Policy</h1>
+          <p className={styles.meta}>Last updated: October 23, 2025</p>
+        </header>
         <p>
           This Privacy Policy describes how Unaffiliated Inc. collects, uses,
           discloses, and protects your personal information in connection with

@@ -41,7 +41,9 @@ export default async function AboutPage() {
         <div className={aboutStyles.aboutOuter}>
           <div className={aboutStyles.aboutLayout}>
             <div className={aboutStyles.aboutMain}>
-              <h1 className={aboutStyles.aboutTitle}>About {siteDisplayName}</h1>
+              <header className="page-header">
+                <h1>About {siteDisplayName}</h1>
+              </header>
               <p>
                 Heeb Magazine spent the 2000s pissing off the right people:
                 too Jewish for the mainstream, too irreverent for the

@@ -18,7 +18,7 @@ export default function AffiliateDisclosurePage() {
   return (
     <div className={`${styles.page} ${styles.pageLegal}`}>
       <div className="container">
-        <header className={styles.legalHeader}>
+        <header className="page-header">
           <h1>Affiliate Disclosure</h1>
           <p className={styles.legalMeta}>
             How {siteDisplayName} uses affiliate links

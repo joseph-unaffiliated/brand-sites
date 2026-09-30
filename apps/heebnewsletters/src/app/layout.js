@@ -155,8 +155,7 @@ export default function RootLayout({ children }) {
                     <Link href="/shop">Shop</Link>
                     <Link href="/about">About</Link>
                     <Link href="/terms">Terms</Link>
-                    <Link href="/privacy">Policy</Link>
-                    <Link href="/affiliate-disclosure">Affiliate</Link>
+                    <Link href="/privacy">Privacy</Link>
                     <Link href="/ai-policy">AI Policy</Link>
                   </div>
                 </div>

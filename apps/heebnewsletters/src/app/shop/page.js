@@ -83,7 +83,7 @@ export default async function ShopPage({ searchParams }) {
     <div className={styles.page}>
       <JsonLd data={itemListJsonLd} />
       <div className="container">
-        <header className={styles.header}>
+        <header className="page-header">
           <h1>{activeTab ? activeTab.title : settings.title}</h1>
           <p className={styles.intro}>{activeTab?.description || settings.intro}</p>
         </header>

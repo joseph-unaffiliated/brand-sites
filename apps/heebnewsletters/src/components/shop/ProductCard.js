@@ -59,7 +59,7 @@ export default function ProductCard({ product, quickAdd = false, sizes = "(max-w
               label="Add to cart"
             />
           ) : (
-            <Link href={product.url} className="button button-secondary" style={{ width: "100%" }}>
+            <Link href={product.url} className="button button-primary">
               {soldOut ? "View" : "Choose options"}
             </Link>
           )}

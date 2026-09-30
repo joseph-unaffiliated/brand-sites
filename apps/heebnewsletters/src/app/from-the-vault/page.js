@@ -43,7 +43,7 @@ export default async function FromTheVaultPage() {
   return (
     <div className={styles.page}>
       <div className="container">
-        <header className={styles.header}>
+        <header className="page-header">
           <h1>The Vault</h1>
         </header>
 

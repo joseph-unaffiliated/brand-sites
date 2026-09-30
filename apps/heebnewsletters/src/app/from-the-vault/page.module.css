@@ -2,24 +2,6 @@
   padding: 72px 0;
 }
 
-.header {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  margin-bottom: 40px;
-}
-
-.header h1 {
-  font-size: clamp(2.2rem, 3vw, 3rem);
-  margin-bottom: 12px;
-}
-
-.header p {
-  color: var(--text-secondary);
-  line-height: 1.35;
-  max-width: 620px;
-}
-
 /* Desktop: three packed columns. Narrower: columns dissolve and cards fall back to list order. */
 .issueMosaic {
   display: flex;
@@ -139,6 +121,7 @@
 
 .filterBar {
   display: flex;
+  justify-content: center;
   max-width: 100%;
   margin: 0 0 32px;
 }

@@ -41,10 +41,6 @@
   color: var(--text-primary);
 }
 
-.aboutTitle {
-  margin-bottom: 28px !important;
-}
-
 .outreach {
   margin-top: 16px;
   max-width: none;

@@ -33,7 +33,7 @@ export default function AiPolicyPage() {
   return (
     <div className={`${styles.page} ${styles.pageLegal}`}>
       <div className="container">
-        <header className={styles.legalHeader}>
+        <header className="page-header">
           <h1>AI Usage Policy</h1>
           <p className={styles.legalMeta}>
             How AI systems and answer engines may use {siteDisplayName} content

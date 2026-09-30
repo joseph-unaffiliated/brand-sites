@@ -11,12 +11,14 @@ export default function TermsPage() {
   return (
     <div className={styles.page}>
       <div className="container">
-        <h1>Terms of Use</h1>
-        <p className={styles.meta}>
-          Last update posted: October 23, 2025
-          <br />
-          Effective: October 23, 2025
-        </p>
+        <header className="page-header">
+          <h1>Terms of Use</h1>
+          <p className={styles.meta}>
+            Last update posted: October 23, 2025
+            <br />
+            Effective: October 23, 2025
+          </p>
+        </header>
         <p className={styles.notice}>
           THIS AGREEMENT INCLUDES MANDATORY ARBITRATION, CLASS ACTION WAIVER,
           AND JURY WAIVER PROVISIONS. BY USING THE SERVICES OR ACCEPTING THESE
