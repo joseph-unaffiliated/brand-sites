@@ -25,8 +25,10 @@
   display: block;
   flex: 0 0 auto;
   box-sizing: border-box;
+  /* Logos often run to their own edges; the inset keeps them off the frame. */
+  padding: 8px;
   border-radius: 10px;
-  object-fit: cover;
+  object-fit: contain;
   background: var(--surface-muted);
 }
 
@@ -192,6 +194,7 @@
   width: 100%;
   height: auto;
   aspect-ratio: 1 / 1;
+  padding: 14px;
   margin-bottom: 0.75rem;
 }
 
