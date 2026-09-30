@@ -1,6 +1,8 @@
 "use client";
 
-import { createContext, useCallback, useContext, useMemo, useRef } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef } from "react";
+import { usePathname } from "next/navigation";
+import { warmHouseAdData } from "@/lib/house-ad-data";
 
 const HouseAdClaimContext = createContext(null);
 
@@ -59,6 +61,11 @@ export function HouseAdClaimProvider({ children }) {
     );
     return run;
   }, []);
+
+  const pathname = usePathname();
+  useEffect(() => {
+    warmHouseAdData();
+  }, [pathname]);
 
   const value = useMemo(
     () => ({

@@ -1,14 +1,14 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
-import { getReaderToken } from "@publication-websites/magic-client";
 import {
   houseSlotFromFormat,
   normalizeAdClickUrl,
+  selectHouseAd,
   SPARKLOOP_REC_KIND,
 } from "@publication-websites/shared-ads/house-ads";
 import { siteConfig } from "@/config/site";
-import { fetchVerifiedSubscriptionsForSite } from "@/lib/reader-profile";
+import { loadHouseCreatives, readReaderAdProfile } from "@/lib/house-ad-data";
 import { useHouseAdClaims } from "@/context/HouseAdClaimContext";
 import HouseAdImage from "./HouseAdImage";
 import SparkloopRecAd from "./SparkloopRecAd";
@@ -22,20 +22,6 @@ function canShowSparkloopIn(format) {
   } catch {
     return false;
   }
-}
-
-const PROFILE_TTL_MS = 5 * 60_000;
-/** @type {Map<string, { at: number, promise: Promise<any> }>} */
-const profileCache = new Map();
-
-/** The lookup takes seconds, so slots on a page share one request instead of queueing their own. */
-function verifiedProfileFor(readerToken) {
-  const hit = profileCache.get(readerToken);
-  if (hit && Date.now() - hit.at < PROFILE_TTL_MS) return hit.promise;
-  const promise = fetchVerifiedSubscriptionsForSite(readerToken);
-  profileCache.set(readerToken, { at: Date.now(), promise });
-  promise.catch(() => profileCache.delete(readerToken));
-  return promise;
 }
 
 /**
@@ -153,40 +139,20 @@ export default function HouseAdPool({
       if (isRefresh && currentClickUrlRef.current) {
         pageExcluded.add(currentClickUrlRef.current);
       }
-      let jewishInterested = false;
-      const readerToken = getReaderToken();
-      if (readerToken) {
-        try {
-          const profile = await verifiedProfileFor(readerToken);
-          const subscribedBrands = profile?.subscribedBrands || [];
-          subscribedBrands.forEach((brand) => excluded.add(brand));
-          jewishInterested = !!profile?.jewishInterested;
-        } catch {
-          /* best-effort — an unverified reader just sees the normal pool */
-        }
-      }
+      // Last verified profile; refreshed in the background so the next page is up to date.
+      const profile = readReaderAdProfile();
+      profile?.subscribedBrands.forEach((brand) => excluded.add(brand));
 
-      let next = null;
-      try {
-        const params = new URLSearchParams({ slot: houseSlotFromFormat(format) });
-        if (excluded.size) {
-          params.set("exclude", Array.from(excluded).join(","));
-        }
-        for (const url of pageExcluded) {
-          params.append("pageExcludeUrl", url);
-        }
-        if (jewishInterested) {
-          params.set("jewishInterested", "1");
-        }
-        if (!claims?.canClaimSparkloop?.(ownerId) || !canShowSparkloopIn(format)) {
-          params.set("excludeKinds", SPARKLOOP_REC_KIND);
-        }
-        const res = await fetch(`/api/house-ads?${params}`, { cache: "no-store" });
-        const data = await res.json().catch(() => ({}));
-        next = data?.ad || null;
-      } catch {
-        next = null;
-      }
+      const creatives = await loadHouseCreatives();
+      const next = selectHouseAd(creatives, {
+        slot: houseSlotFromFormat(format),
+        hostBrand: siteConfig.brandId,
+        excludeBrands: Array.from(excluded),
+        pageExcludeUrls: Array.from(pageExcluded),
+        jewishInterested: !!profile?.jewishInterested,
+        includeSparkloop:
+          !!claims?.canClaimSparkloop?.(ownerId) && canShowSparkloopIn(format),
+      });
 
       if (reqId !== reqIdRef.current) return null;
 

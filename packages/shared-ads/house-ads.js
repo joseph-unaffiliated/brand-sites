@@ -283,6 +283,20 @@ export async function fetchActiveHouseCreatives() {
 }
 
 /**
+ * Creatives a host may ever show, trimmed to what `selectHouseAd` needs, so the browser can
+ * pick every slot locally from one cached response.
+ * @param {HouseCreative[]} creatives
+ * @param {string} hostBrand
+ * @param {{ includeSparkloop?: boolean }} [opts]
+ */
+export function creativesForHost(creatives, hostBrand, { includeSparkloop = false } = {}) {
+  return creatives
+    .filter((c) => matchesDestinationBrands(c, hostBrand))
+    .filter((c) => includeSparkloop || c.adType !== SPARKLOOP_REC_AD_TYPE)
+    .map(({ name: _name, ...rest }) => rest);
+}
+
+/**
  * Weighted random pick from list.
  * @template T
  * @param {Array<T & { weight?: number }>} items
