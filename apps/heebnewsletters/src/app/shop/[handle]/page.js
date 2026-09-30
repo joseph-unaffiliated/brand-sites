@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import JsonLd from "@/components/JsonLd";
-import ProductCard from "@/components/shop/ProductCard";
+import ProductGrid from "@/components/shop/ProductGrid";
 import ProductDetail from "@/components/shop/ProductDetail";
 import { getCollectionProducts, getLiveVariants, getProductByHandle } from "@/lib/shopify/catalog";
 import { applyShopFilters, getShopSettings } from "@/lib/shop-content";
@@ -121,11 +121,7 @@ export default async function ProductPage({ params }) {
         {related.length > 0 ? (
           <section className={styles.related} aria-label={`More ${primaryCollection.title}`}>
             <h2 className={shop.sectionTitle}>More {primaryCollection.title.toLowerCase()}</h2>
-            <div className={shop.grid}>
-              {related.map((p) => (
-                <ProductCard key={p.handle} product={p} quickAdd />
-              ))}
-            </div>
+            <ProductGrid products={related} />
           </section>
         ) : null}
       </div>

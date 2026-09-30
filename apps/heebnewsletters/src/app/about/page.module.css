@@ -25,20 +25,8 @@
   max-width: 640px;
 }
 
-.aboutEraPull {
-  margin: 32px 0;
-  padding: 20px 24px;
-  border-left: 3px solid var(--accent);
-  background: var(--surface-muted);
-  border-radius: 0 12px 12px 0;
-}
-
-.aboutEraPullText {
-  margin: 0;
-  font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
-  font-size: 1.25rem;
-  font-style: italic;
-  color: var(--text-primary);
+.aboutMain .aboutHeader {
+  margin-bottom: 64px;
 }
 
 .outreach {

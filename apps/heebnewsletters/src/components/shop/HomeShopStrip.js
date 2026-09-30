@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getFeaturedProducts, getShopSettings } from "@/lib/shop-content";
-import ProductCard from "./ProductCard";
+import ProductGrid from "./ProductGrid";
 import ViewItemListTracker from "./ViewItemListTracker";
 import styles from "./shop.module.css";
 
@@ -19,11 +19,7 @@ export default async function HomeShopStrip() {
             Shop everything
           </Link>
         </div>
-        <div className={styles.grid}>
-          {products.map((p) => (
-            <ProductCard key={p.handle} product={p} quickAdd />
-          ))}
-        </div>
+        <ProductGrid products={products} />
         <ViewItemListTracker products={products} listName="Homepage: featured" />
       </div>
     </section>

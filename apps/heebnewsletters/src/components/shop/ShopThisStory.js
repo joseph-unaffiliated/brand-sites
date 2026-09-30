@@ -1,5 +1,5 @@
 import Link from "next/link";
-import ProductCard from "./ProductCard";
+import ProductGrid from "./ProductGrid";
 import ViewItemListTracker from "./ViewItemListTracker";
 import styles from "./shop.module.css";
 
@@ -20,9 +20,7 @@ export default function ShopThisStory({ products, title = "Shop this story", iss
         </Link>
       </div>
       <div className={styles.storyGrid}>
-        {products.map((p) => (
-          <ProductCard key={p.handle} product={p} quickAdd sizes="(max-width: 720px) 50vw, 240px" />
-        ))}
+        <ProductGrid products={products} columns={3} sizes="(max-width: 640px) 50vw, 240px" />
       </div>
       <ViewItemListTracker products={products} listName={listName} />
     </section>

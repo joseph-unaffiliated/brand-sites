@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import JsonLd from "@/components/JsonLd";
-import ProductCard from "@/components/shop/ProductCard";
+import ProductGrid from "@/components/shop/ProductGrid";
 import ViewItemListTracker from "@/components/shop/ViewItemListTracker";
 import { getAllProducts, getCollectionProducts, getCollections } from "@/lib/shopify/catalog";
 import {
@@ -112,22 +112,14 @@ export default async function ShopPage({ searchParams }) {
         {!activeTab && featured.length > 0 ? (
           <section className={styles.featured} aria-label="Featured">
             <h2 className={shop.sectionTitle}>Featured</h2>
-            <div className={shop.grid}>
-              {featured.map((p, i) => (
-                <ProductCard key={p.handle} product={p} quickAdd priority={i < 2} />
-              ))}
-            </div>
+            <ProductGrid products={featured} priorityCount={2} />
           </section>
         ) : null}
 
         {products.length > 0 ? (
           <section aria-label={listName}>
             {!activeTab && featured.length > 0 ? <h2 className={shop.sectionTitle}>Everything</h2> : null}
-            <div className={shop.grid}>
-              {products.map((p) => (
-                <ProductCard key={p.handle} product={p} quickAdd />
-              ))}
-            </div>
+            <ProductGrid products={products} />
             <ViewItemListTracker products={products} listName={listName} />
           </section>
         ) : (

@@ -1,21 +1,43 @@
 /* ---------- Product cards / grid ---------- */
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+.mosaic {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.mosaicColumn {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
   gap: 20px;
 }
 
+.mosaicItem {
+  min-width: 0;
+}
+
 @media (max-width: 1024px) {
-  .grid {
+  .mosaic:not([data-cols]) {
+    display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: start;
+  }
+
+  .mosaic:not([data-cols]) .mosaicColumn {
+    display: contents;
   }
 }
 
 @media (max-width: 640px) {
-  .grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .mosaic,
+  .mosaicColumn {
     gap: 12px;
+  }
+
+  .mosaic:not([data-cols]) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -178,7 +200,7 @@
   flex-wrap: wrap;
   justify-content: center;
   gap: 8px;
-  margin: 0 0 28px;
+  margin: 0 0 48px;
   padding: 0;
   list-style: none;
 }
@@ -700,18 +722,6 @@
   margin: 2.5rem 0;
   padding-top: 2rem;
   border-top: 1px solid var(--border);
-}
-
-.storyGrid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
-}
-
-@media (max-width: 720px) {
-  .storyGrid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
 }
 
 .storyGrid .cardTitle {

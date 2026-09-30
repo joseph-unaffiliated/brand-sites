@@ -41,7 +41,7 @@ export default async function AboutPage() {
         <div className={aboutStyles.aboutOuter}>
           <div className={aboutStyles.aboutLayout}>
             <div className={aboutStyles.aboutMain}>
-              <header className="page-header">
+              <header className={`page-header ${aboutStyles.aboutHeader}`}>
                 <h1>About {siteDisplayName}</h1>
               </header>
               <p>
@@ -55,12 +55,6 @@ export default async function AboutPage() {
                 shoot, or column from the 2000s and hand it back to you with
                 the context, commentary, and side-eye it deserves.
               </p>
-
-              <blockquote className={aboutStyles.aboutEraPull}>
-                <p className={aboutStyles.aboutEraPullText}>
-                  &ldquo;Not your bubbe&apos;s Judaism.&rdquo;
-                </p>
-              </blockquote>
 
               <p>
                 For our small team, this isn&apos;t nostalgia for nostalgia&apos;s

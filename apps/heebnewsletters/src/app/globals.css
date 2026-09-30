@@ -272,6 +272,7 @@ a {
 .page-header h1 {
   font-size: clamp(2.75rem, 5vw, 4rem);
   line-height: 1.05;
+  letter-spacing: -0.02em;
   margin: 0 0 14px;
 }
 
