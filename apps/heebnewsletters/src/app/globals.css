@@ -96,6 +96,12 @@ a {
   text-decoration: none;
 }
 
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+}
+
 .site {
   min-height: 100vh;
   display: flex;

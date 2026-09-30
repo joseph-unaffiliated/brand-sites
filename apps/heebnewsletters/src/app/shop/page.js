@@ -127,14 +127,6 @@ export default async function ShopPage({ searchParams }) {
             Nothing here right now. <Link href="/shop">See everything in the shop.</Link>
           </p>
         )}
-
-        <p className={styles.footnote}>
-          The Heeb shop is run by Heeb Media. Orders ship from and are supported by{" "}
-          <a href="https://heebmedia.com" target="_blank" rel="noopener noreferrer">
-            heebmedia.com
-          </a>
-          .
-        </p>
       </div>
     </div>
   );
