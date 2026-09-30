@@ -231,7 +231,10 @@ def extract_body_and_rabbithole(soup, start_el):
     counter = 0
     for el in (start_el.find_all_next(["p", "img", "h2"]) if start_el is not None else []):
         if el.name == "h2":
-            if "Rabbit Hole" in clean(el.get_text()):
+            heading = clean(el.get_text())
+            # Cross-promo block ("In partnership with …", sometimes typo'd "wtih") sits between
+            # the article and the Rabbit Hole in issues from #32 on.
+            if "Rabbit Hole" in heading or re.match(r"in partnership", heading, re.I):
                 break
             continue
         if el.name == "img":
@@ -308,6 +311,8 @@ def parse_issue(html, fallback_slug):
         original_year = int(year_m.group(1))
 
     body, rabbit_hole = extract_body_and_rabbithole(soup, pub_p if pub_p is not None else byline_p)
+    main_image_url = get_main_image(soup)
+    body = [b for b in body if not (b["_type"] == "image_ref" and b["url"] == main_image_url)]
 
     issue_num_m = re.search(r"#(\d+)", orig_pub or "")
     if issue_num_m:
@@ -323,7 +328,7 @@ def parse_issue(html, fallback_slug):
         "editorIntro": editor_intro,
         "editorName": editor_name,
         "editorTitle": editor_title,
-        "mainImageUrl": get_main_image(soup),
+        "mainImageUrl": main_image_url,
         "eraLabel": era_label,
         "originalYear": original_year,
         "originalPublication": orig_pub,

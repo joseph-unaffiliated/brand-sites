@@ -45,8 +45,8 @@ After saving: **Redeploy** Production (and Preview if you added vars there).
 | `NEXT_PUBLIC_ADSENSE_CLIENT` | ⏭️ OPTIONAL — only if switching to `adsense` mode |
 | `NEXT_PUBLIC_META_PIXEL_ID` | `809409995127436` ✅ |
 | `NEXT_PUBLIC_GTM_ID` | `GTM-TVHD6JMG` ✅ (same container as other Unaffiliated sites) |
-| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | ⚠️ UPDATE — create a new GA4 property for this brand |
-| `NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT` | `019bc871-7fd9-72d4-b5b2-73c9d4d51d4b` ✅ (OneTrust domain `fromthevault.heebnewsletters.com`; also baked into `ComplianceScripts.js`) |
+| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | `G-YJ819KMEG3` ✅ (Heeb Magazine GA4 stream, set 2026-09-29) |
+| `NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT` | `01a0eff9-6147-7b24-954c-9cdd560623f4` ✅ (OneTrust domain `heebmagazine.com`, set 2026-09-29). The code default in `ComplianceScripts.js` is still the old `fromthevault.heebnewsletters.com` script `019bc871-7fd9-72d4-b5b2-73c9d4d51d4b` until the Heeb Magazine rebrand commit. |
 | `NEXT_PUBLIC_RETENTION_SITE_ID` | `X2JHJ4WE` (network default) |
 | `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` | Optional — Search Console token when ready |
 | `NEXT_PUBLIC_BING_SITE_VERIFICATION` | Optional — Bing token when ready |
@@ -107,8 +107,8 @@ NEXT_PUBLIC_ADS_MODE=cross_promo
 
 NEXT_PUBLIC_META_PIXEL_ID=809409995127436
 NEXT_PUBLIC_GTM_ID=GTM-TVHD6JMG
-NEXT_PUBLIC_GA_MEASUREMENT_ID=
-NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT=019bc871-7fd9-72d4-b5b2-73c9d4d51d4b
+NEXT_PUBLIC_GA_MEASUREMENT_ID=G-YJ819KMEG3
+NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT=01a0eff9-6147-7b24-954c-9cdd560623f4
 NEXT_PUBLIC_RETENTION_SITE_ID=X2JHJ4WE
 
 NEXT_PUBLIC_READER_EVENTS_ENABLED=true
@@ -147,13 +147,13 @@ FTV stays on **`https://heebnewsletters.vercel.app`** with noindex only (no Verc
 | Reader flags | ✅ |
 | `SANITY_API_TOKEN` | ✅ removed from the marketing project |
 | `AIRTABLE_HOUSE_ADS_*` / `AIRTABLE_API_KEY` | ✅ base/table set; key Sensitive from `Keys/AIRTABLE_HOUSEADS.txt` |
-| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | ⚠️ waiting on a new FTV GA4 property |
-| `NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT` | ✅ `019bc871-7fd9-72d4-b5b2-73c9d4d51d4b` (also the default in `ComplianceScripts.js`). It's configured in OneTrust for `fromthevault.heebnewsletters.com`, so the banner may not appear on `*.vercel.app`. |
+| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | ✅ `G-YJ819KMEG3` (production + preview, 2026-09-29). Staging hits land in the same property until cutover. |
+| `NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT` | ✅ `01a0eff9-6147-7b24-954c-9cdd560623f4` (production + preview, 2026-09-29). The script is published for `heebmagazine.com` only and there's no `-test` version, so no banner shows on `*.vercel.app`; the banner is verified at cutover. |
 | Magic CORS | ✅ staging, apex, www, `fromthevault.` subdomain, `localhost:3007` |
 | Magic comps / retention / cross-brand / configurable return host | ⚠️ local in `subscription-functions`; ships with the post-Oct 6 magic push |
 | Airtable Destination Brands | ✅ From the Vault added to every active House Ads creative except its own |
 | Hosted studio | ✅ [fromthevault.sanity.studio](https://fromthevault.sanity.studio/) (body images enabled) |
-| Content | ⚠️ Sanity has #1–31 except **#28 (Reverend Billy)**. Newer sent issues come from HTML you supply. `publishedDate` on all 30 issues corrected to the Customer.io send time (2026-09-28). |
+| Content | ✅ Sanity has #1–35 (#28 and #32–35 imported 2026-09-29 from `issues/fromthevault/` with `scripts/import-vault-issues.py`). Import each new issue after it sends (#36 Oct 1, #37 Oct 8, #38 Oct 15): add its `sentAt` to `issues-catalog.json`, dry-run, then `--write --publish`. `publishedDate` is the Customer.io send time. Legacy Webflow slug → Sanity slug map: `issues/fromthevault/legacy-slug-map.json`. |
 | Shared sign-in toast, `/sign-in`, `/redirect`, house-ad pool | ⏳ post Oct 6 (shared packages) |
 
 ## Host decision (open)
@@ -163,7 +163,7 @@ The production host is undecided. Both options are prepared: Sanity CORS and mag
 Steps for **either** option:
 
 1. Post-Oct 6 magic push is live (comps, retention, return-host changes).
-2. Set GA4 and OneTrust IDs; add `AIRTABLE_API_KEY` (Sensitive).
+2. ~~Set GA4 and OneTrust IDs; add `AIRTABLE_API_KEY` (Sensitive).~~ Done 2026-09-29.
 3. Crawl the current Webflow site's sitemap and add 308s in `apps/heebnewsletters/next.config.mjs` for any legacy URL shapes (e.g. `/{slug}` → `/article/{slug}`), like TPR's `legacy-article-redirects.mjs`.
 4. Set `NEXT_PUBLIC_SITE_URL` to the chosen origin and **delete `NEXT_PUBLIC_NOINDEX`**, then redeploy.
 5. Attach the domain(s) on the Vercel project `heebnewsletters` and wait for verification.
