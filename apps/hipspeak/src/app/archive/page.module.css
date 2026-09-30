@@ -59,6 +59,9 @@
 }
 
 .issueCardLink {
+  /* Contains the absolutely positioned visually hidden title; without it, WebKit
+     places it outside the column layout and stretches the page. */
+  position: relative;
   display: block;
   text-decoration: none;
   color: inherit;
