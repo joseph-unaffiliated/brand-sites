@@ -621,6 +621,8 @@
 
 .nostalgiaCard {
   max-width: 640px;
+  width: 100%;
+  box-sizing: border-box;
   margin-left: auto;
   margin-right: auto;
   border-radius: 10px;
