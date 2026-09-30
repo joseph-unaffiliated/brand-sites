@@ -25,7 +25,7 @@ export default async function NotFound() {
               <Link className="button button-secondary" href="/">
                 Go home
               </Link>
-              <Link className="button button-secondary" href="/archive">
+              <Link className="button button-secondary" href="/from-the-vault">
                 Browse archive
               </Link>
             </div>

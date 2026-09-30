@@ -17,7 +17,7 @@ const layer = createSanityLayer({
 
 const queries = createVaultIssueQueries({
   ...layer,
-  fallbackImage: process.env.NEXT_PUBLIC_SITE_OG_IMAGE || "/ftv-logo-black.png",
+  fallbackImage: process.env.NEXT_PUBLIC_SITE_OG_IMAGE || "/heeb-og.png",
 });
 
 export async function getVaultIssues() {

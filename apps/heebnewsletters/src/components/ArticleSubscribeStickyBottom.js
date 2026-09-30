@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useState } from "react";
 import ArticleSubscribeForm from "./ArticleSubscribeForm";
-import { siteDisplayName } from "@/config/site";
 
 export default function ArticleSubscribeStickyBottom() {
   const [mounted, setMounted] = useState(false);
@@ -21,8 +20,7 @@ export default function ArticleSubscribeStickyBottom() {
             <section className="newslettercta-section">
               <div className="newslettercta-block">
                 <div className="newslettercta-prompt">
-                  <span>Subscribe for more from </span>
-                  <span>{siteDisplayName}</span>
+                  <span>Get From the Vault</span>
                   <span className="italic">, weekly in your inbox</span>
                 </div>
                 <ArticleSubscribeForm />

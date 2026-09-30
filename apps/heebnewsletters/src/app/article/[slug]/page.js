@@ -8,7 +8,6 @@ import {
 import { pickRandomArticles } from "@/lib/pickRandomArticles";
 import HideWhenSubscribed from "@/components/HideWhenSubscribed";
 import SubscribedArticleView from "@/components/SubscribedArticleView";
-import NavLogoImageSync from "@/components/NavLogoImageSync";
 import ArticleSubscribeForm from "@/components/ArticleSubscribeForm";
 import VaultIssueBody from "@/components/VaultIssueBody";
 import VaultPodcastPromo from "@/components/VaultPodcastPromo";
@@ -216,7 +215,6 @@ export default async function VaultIssuePage({ params }) {
       <JsonLd data={articleJsonLd} />
       <JsonLd data={breadcrumbJsonLd} />
       <SubscribedArticleView slug={slug} />
-      <NavLogoImageSync image={issue.mainImage} />
       <section className="articlebody-section">
         <div className={`${styles.articleHeroBlock} ${styles.articleHeroBlockInline}`}>
           <div className={styles.articleHeroContent}>

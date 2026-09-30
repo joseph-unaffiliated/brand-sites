@@ -5,7 +5,7 @@ import {schemaTypes} from './schemaTypes'
 
 export default defineConfig({
   name: 'default',
-  title: 'Heeb Newsletters',
+  title: 'Heeb Magazine',
   projectId: 'm4gmd2lf',
   dataset: 'production',
   plugins: [structureTool(), visionTool()],

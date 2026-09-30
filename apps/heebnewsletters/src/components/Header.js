@@ -6,7 +6,6 @@ import { createPortal } from "react-dom";
 import { usePathname } from "next/navigation";
 import { useSubscriber } from "@/context/SubscriberContext";
 import BrandWordmark from "@/components/BrandWordmark";
-import { useNavLogoFillImage } from "@/context/NavLogoImageContext";
 import { ContactCopyLink } from "@publication-websites/web-shell/contact-copy";
 import AdvertiseCopyLink from "@/components/AdvertiseCopyLink";
 import { contactEmail, siteDisplayName } from "@/config/site";
@@ -20,7 +19,6 @@ import { contactEmail, siteDisplayName } from "@/config/site";
  */
 export default function Header() {
   const pathname = usePathname() || "";
-  const logomarkFillImage = useNavLogoFillImage(pathname);
   const [menuOpen, setMenuOpen] = useState(false);
   const [drawerMounted, setDrawerMounted] = useState(false);
   const [slotHeight, setSlotHeight] = useState(0);
@@ -157,8 +155,8 @@ export default function Header() {
       <div className="header-drawer-backdrop" onClick={closeMenu} aria-hidden />
       <div className="header-drawer-panel">
         <nav className="header-drawer-nav" aria-label="Mobile menu">
-          <Link href="/archive" onClick={closeMenu}>
-            Archive
+          <Link href="/from-the-vault" onClick={closeMenu}>
+            From the Vault
           </Link>
           <Link href="/about" onClick={closeMenu}>
             About
@@ -217,7 +215,7 @@ export default function Header() {
             <span className="header-hamburger-line" aria-hidden />
           </button>
           <nav className="site-nav site-nav-left header-nav-desktop" aria-label="Main">
-            <Link href="/archive">Archive</Link>
+            <Link href="/from-the-vault">From the Vault</Link>
             {!isSubscribed && <Link href="/about">About</Link>}
           </nav>
           <div className="brand">
@@ -227,10 +225,7 @@ export default function Header() {
               onClick={closeMenu}
               aria-label={siteDisplayName}
             >
-              <BrandWordmark
-                className="brand-logo-img brand-logo-wordmark"
-                fillImageUrl={logomarkFillImage}
-              />
+              <BrandWordmark className="brand-logo-img brand-logo-wordmark" />
             </Link>
           </div>
           <nav className="site-nav site-nav-right header-nav-desktop" aria-label="Main">

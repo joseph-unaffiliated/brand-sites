@@ -13,6 +13,9 @@ const nextConfig = {
       { protocol: "https", hostname: "cdn.sanity.io", pathname: "/images/**" },
     ],
   },
+  async redirects() {
+    return [{ source: "/archive", destination: "/from-the-vault", permanent: true }];
+  },
 };
 
 export default nextConfig;

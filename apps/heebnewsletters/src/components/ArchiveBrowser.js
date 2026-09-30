@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState, useTransition } from "react"
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import styles from "@/app/archive/page.module.css";
+import styles from "@/app/from-the-vault/page.module.css";
 
 function publishedTime(issue) {
   if (!issue?.publishedDate) return null;

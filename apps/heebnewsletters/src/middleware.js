@@ -1,34 +1,17 @@
 /**
  * Edge redirects: email links hit "/" with query params; we send readers to the right page.
- * Article routes: pass slug to the root layout for SSR nav logo fill.
  * @see @publication-websites/platform-redirects
  */
 
-import { NextResponse } from "next/server";
 import { createHomeQueryMiddleware } from "@publication-websites/platform-redirects";
 
-/** From the Vault has no polls: a null route leaves `/?poll=` on the homepage instead of 404ing. */
+/** Heeb Magazine has no polls: a null route leaves `/?poll=` on the homepage instead of 404ing. */
 const homeQueryMiddleware = createHomeQueryMiddleware({ poll: null });
 
 export default function middleware(request) {
-  const { pathname } = request.nextUrl;
-
-  if (pathname === "/") {
-    return homeQueryMiddleware(request);
-  }
-
-  if (pathname.startsWith("/article/")) {
-    const slug = pathname.split("/").filter(Boolean)[1];
-    if (slug) {
-      const requestHeaders = new Headers(request.headers);
-      requestHeaders.set("x-article-slug", slug);
-      return NextResponse.next({ request: { headers: requestHeaders } });
-    }
-  }
-
-  return NextResponse.next();
+  return homeQueryMiddleware(request);
 }
 
 export const config = {
-  matcher: ["/", "/article/:path*"],
+  matcher: ["/"],
 };

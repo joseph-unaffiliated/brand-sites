@@ -16,7 +16,7 @@ import styles from "./page.module.css";
 const SITE_DESCRIPTION =
   process.env.NEXT_PUBLIC_SITE_DESCRIPTION || siteDefaultDescription;
 const SITE_OG_IMAGE_PATH =
-  process.env.NEXT_PUBLIC_SITE_OG_IMAGE || "/ftv-wordmark-black.png";
+  process.env.NEXT_PUBLIC_SITE_OG_IMAGE || "/heeb-og.png";
 
 function absoluteSiteUrl(path) {
   const base = siteConfig.siteUrl.replace(/\/$/, "");

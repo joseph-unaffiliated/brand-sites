@@ -5,24 +5,28 @@ import HideWhenSubscribed from "@/components/HideWhenSubscribed";
 import { siteDisplayName } from "@/config/site";
 import styles from "./page.module.css";
 
+const title = `From the Vault | ${siteDisplayName}`;
+const description =
+  "Every From the Vault issue: classic Heeb stories dug out of the archive, with fresh commentary. Browse and search, newest first.";
+
 export const metadata = {
-  title: `Archive | ${siteDisplayName}`,
-  description: `Browse and search the full library of issues from ${siteDisplayName}. Newest first.`,
-  alternates: { canonical: "/archive" },
+  title,
+  description,
+  alternates: { canonical: "/from-the-vault" },
   openGraph: {
-    title: `Archive | ${siteDisplayName}`,
-    description: `Browse and search the full library of issues from ${siteDisplayName}. Newest first.`,
-    url: "/archive",
+    title,
+    description,
+    url: "/from-the-vault",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: `Archive | ${siteDisplayName}`,
-    description: `Browse and search the full library of issues from ${siteDisplayName}. Newest first.`,
+    title,
+    description,
   },
 };
 
-export default async function ArchivePage() {
+export default async function FromTheVaultPage() {
   const articles = await getArticles();
   const issues = articles.map((article) => ({
     _id: article._id,
@@ -39,7 +43,7 @@ export default async function ArchivePage() {
       <div className="container">
         <header className={styles.header}>
           <div>
-            <p className={styles.kicker}>Archive</p>
+            <p className={styles.kicker}>From the Vault</p>
             <h1>Past issues</h1>
           </div>
         </header>

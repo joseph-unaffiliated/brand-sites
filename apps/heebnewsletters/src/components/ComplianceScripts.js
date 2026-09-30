@@ -7,11 +7,11 @@ const PLACEHOLDER_RETENTION = "YOUR_RETENTION_ID_HERE";
 const DEFAULT_RETENTION_SITE_ID = "X2JHJ4WE";
 
 /**
- * From the Vault OneTrust domain script (fromthevault.heebnewsletters.com). Override with
+ * Heeb Magazine OneTrust domain script (heebmagazine.com). Override with
  * NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT. Never fall back to another brand's script: each is
  * scoped to that brand's domain.
  */
-const DEFAULT_ONETRUST_DOMAIN_SCRIPT = "019bc871-7fd9-72d4-b5b2-73c9d4d51d4b";
+const DEFAULT_ONETRUST_DOMAIN_SCRIPT = "01a0eff9-6147-7b24-954c-9cdd560623f4";
 
 function resolveOnetrustDomainScript() {
   const v = process.env.NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT?.trim();

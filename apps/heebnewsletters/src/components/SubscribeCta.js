@@ -8,14 +8,14 @@ export default function SubscribeCta() {
   if (isSubscribed) {
     return (
       <p>
-        You can read past issues in our <Link href="/archive">archive</Link>. New
+        You can read past issues in our <Link href="/from-the-vault">archive</Link>. New
         issues arrive in your inbox.
       </p>
     );
   }
   return (
     <p>
-      You can read past issues in our <Link href="/archive">archive</Link>.
+      You can read past issues in our <Link href="/from-the-vault">archive</Link>.
       To get new ones in your inbox, <Link href="/#subscribe">subscribe
       here</Link>. No spam, just the list. You can unsubscribe anytime.
     </p>

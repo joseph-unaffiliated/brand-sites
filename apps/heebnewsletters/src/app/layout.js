@@ -1,7 +1,7 @@
 /**
  * Site chrome: fonts, global ad/pixel loaders (via web-shell), header/footer.
  *
- * OneTrust + Retention: `ComplianceScripts.js` (OneTrust needs FTV's own
+ * OneTrust + Retention: `ComplianceScripts.js` (OneTrust needs the heebmagazine.com
  * NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT; Retention defaults to the network site id).
  *
  * Google Tag Manager: set `NEXT_PUBLIC_GTM_ID` on Vercel; see `GoogleTagManager.js`.
@@ -10,7 +10,7 @@
 
 import Link from "next/link";
 import { Suspense } from "react";
-import BrandLogoMark from "@/components/BrandLogoMark";
+import BrandWordmark from "@/components/BrandWordmark";
 import { Geist, Geist_Mono } from "next/font/google";
 import { FontAwesomeStylesheet, MarketingScripts, TypekitStylesheet } from "@publication-websites/web-shell";
 import { ContactCopyLink, ContactCopyToast } from "@publication-websites/web-shell/contact-copy";
@@ -26,14 +26,11 @@ import { GoogleAnalyticsScript } from "@/components/GoogleAnalytics";
 import { GoogleTagManagerNoscript, GoogleTagManagerScript } from "@/components/GoogleTagManager";
 import AdvertiseCopyLink from "@/components/AdvertiseCopyLink";
 import Header from "@/components/Header";
-import { getVaultIssues, getVaultIssueBySlug } from "@/lib/vault";
-import { NavLogoImageProvider } from "@/context/NavLogoImageContext";
 import SubscribePopup from "@/components/SubscribePopup";
 import { SubscriberProvider } from "@/context/SubscriberContext";
 import { ReaderEventsInit } from "@publication-websites/reader-events";
 import EmailClickSession from "@publication-websites/magic-client/email-click-session";
 import SubscriberSessionBootstrap from "@publication-websites/magic-client/subscriber-session-bootstrap";
-import { headers } from "next/headers";
 import "./globals.css";
 
 const ADSENSE_CLIENT = process.env.NEXT_PUBLIC_ADSENSE_CLIENT;
@@ -53,9 +50,9 @@ const siteUrl = siteConfig.siteUrl;
 
 const siteDescription =
   process.env.NEXT_PUBLIC_SITE_DESCRIPTION || siteDefaultDescription;
-const ogImagePath = process.env.NEXT_PUBLIC_SITE_OG_IMAGE || "/ftv-wordmark-black.png";
-const faviconIco = process.env.NEXT_PUBLIC_SITE_FAVICON || "/ftv-favicon.ico";
-const faviconPng = process.env.NEXT_PUBLIC_SITE_FAVICON_PNG || "/ftv-favicon.png";
+const ogImagePath = process.env.NEXT_PUBLIC_SITE_OG_IMAGE || "/heeb-og.png";
+const faviconIco = process.env.NEXT_PUBLIC_SITE_FAVICON || "/heeb-favicon.ico";
+const faviconPng = process.env.NEXT_PUBLIC_SITE_FAVICON_PNG || "/heeb-favicon.png";
 const appleIconPath = process.env.NEXT_PUBLIC_SITE_APPLE_ICON || "/apple-icon.png";
 
 function safeUrl(value) {
@@ -89,7 +86,7 @@ export const metadata = {
     url: siteUrl,
     siteName: siteDisplayName,
     images: ogImagePath
-      ? [{ url: `${siteUrl}${ogImagePath}`, width: 900, height: 600, alt: siteDisplayName }]
+      ? [{ url: `${siteUrl}${ogImagePath}`, width: 1200, height: 630, alt: siteDisplayName }]
       : undefined,
     locale: "en_US",
     type: "website",
@@ -107,27 +104,7 @@ export const metadata = {
   },
 };
 
-export default async function RootLayout({ children }) {
-  let latestIssueImage = null;
-  let initialPageFillImage = null;
-  try {
-    const issues = await getVaultIssues();
-    latestIssueImage = issues[0]?.mainImage ?? null;
-  } catch {
-    /* Sanity optional in dev */
-  }
-
-  try {
-    const requestHeaders = await headers();
-    const articleSlug = requestHeaders.get("x-article-slug");
-    if (articleSlug) {
-      const issue = await getVaultIssueBySlug(articleSlug);
-      initialPageFillImage = issue?.mainImage ?? null;
-    }
-  } catch {
-    /* Article nav fill optional in dev */
-  }
-
+export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
@@ -154,10 +131,6 @@ export default async function RootLayout({ children }) {
             brand={siteConfig.brandId}
             apiOrigin={siteConfig.magicReaderApiOrigin}
           />
-          <NavLogoImageProvider
-            defaultFillImage={latestIssueImage}
-            initialPageFillImage={initialPageFillImage}
-          >
           <div className="site">
             <Header />
             <Suspense fallback={null}>
@@ -169,12 +142,12 @@ export default async function RootLayout({ children }) {
               <div className="container footer-grid">
                 <div className="footer-brand">
                   <Link href="/" className="footer-logo" aria-label={siteDisplayName}>
-                    <BrandLogoMark className="footer-logo-img footer-logo-mark" />
+                    <BrandWordmark className="footer-logo-img footer-logo-wordmark" />
                   </Link>
                 </div>
                 <div>
                   <div className="footer-links">
-                    <Link href="/archive">Archive</Link>
+                    <Link href="/from-the-vault">From the Vault</Link>
                     <Link href="/about">About</Link>
                     <Link href="/terms">Terms</Link>
                     <Link href="/privacy">Policy</Link>
@@ -192,7 +165,6 @@ export default async function RootLayout({ children }) {
               </div>
             </footer>
           </div>
-          </NavLogoImageProvider>
         </SubscriberProvider>
       </body>
     </html>

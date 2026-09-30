@@ -1,4 +1,6 @@
-# From the Vault, by Heeb — Vercel environment variables (copy/paste)
+# Heeb Magazine (From the Vault) — Vercel environment variables (copy/paste)
+
+The site is **Heeb Magazine** (www.heebmagazine.com at launch). From the Vault is its editorial section and newsletter. Brand id `heebnewsletters`, `magic.heebnewsletters.com` and the sender `fromthevault@heebnewsletters.com` are unchanged.
 
 From the Vault is **its own brand**: marketing on staging at `heebnewsletters.vercel.app` until the production host is chosen (see [Host decision](#host-decision-open)), subscriptions and reader APIs on **`magic.heebnewsletters.com`**. It does **not** share magic hosts or env defaults with any other brand.
 
@@ -30,13 +32,13 @@ After saving: **Redeploy** Production (and Preview if you added vars there).
 | `NEXT_PUBLIC_MAGIC_READER_API_ORIGIN` | `https://magic.heebnewsletters.com` |
 | `NEXT_PUBLIC_SANITY_PROJECT_ID` | `m4gmd2lf` |
 | `NEXT_PUBLIC_SANITY_DATASET` | `production` |
-| `NEXT_PUBLIC_SITE_DISPLAY_NAME` | `From the Vault, by Heeb` |
-| `NEXT_PUBLIC_SITE_DESCRIPTION` | `The 2000s in your inbox — a weekly dive into subversive Jewish counter-culture nostalgia from Heeb.` |
-| `NEXT_PUBLIC_SITE_OG_IMAGE` | `/ftv-wordmark-black.png` |
-| `NEXT_PUBLIC_SITE_FAVICON` | `/ftv-favicon.ico` |
-| `NEXT_PUBLIC_SITE_FAVICON_PNG` | `/ftv-favicon.png` |
-| `NEXT_PUBLIC_SITE_FOOTER_TAGLINE` | `The 2000s in your inbox. Delivered weekly.` |
-| `NEXT_PUBLIC_SITE_HERO_TAGLINE` | `The 2000s in your inbox` |
+| `NEXT_PUBLIC_SITE_DISPLAY_NAME` | `Heeb Magazine` |
+| `NEXT_PUBLIC_SITE_DESCRIPTION` | `Heeb Magazine: too Jewish for the mainstream, too irreverent for the establishment. Read From the Vault, classic Heeb stories with fresh commentary every week, and shop back issues and merch.` |
+| `NEXT_PUBLIC_SITE_OG_IMAGE` | `/heeb-og.png` (1200×630) |
+| `NEXT_PUBLIC_SITE_FAVICON` | `/heeb-favicon.ico` |
+| `NEXT_PUBLIC_SITE_FAVICON_PNG` | `/heeb-favicon.png` |
+| `NEXT_PUBLIC_SITE_FOOTER_TAGLINE` | `From the Vault, in your inbox every week.` |
+| `NEXT_PUBLIC_SITE_HERO_TAGLINE` | `Too Jewish for the mainstream. Back from the vault.` |
 | `NEXT_PUBLIC_CONTACT_EMAIL` | `contact@heebnewsletters.com` |
 | `NEXT_PUBLIC_SUBSCRIBE_CARD_TITLE` | `Get From the Vault` |
 | `NEXT_PUBLIC_SUBSCRIBE_CARD_DEK` | Subscribe card blurb |
@@ -90,13 +92,13 @@ NEXT_PUBLIC_MAGIC_READER_API_ORIGIN=https://magic.heebnewsletters.com
 NEXT_PUBLIC_SANITY_PROJECT_ID=m4gmd2lf
 NEXT_PUBLIC_SANITY_DATASET=production
 
-NEXT_PUBLIC_SITE_DISPLAY_NAME=From the Vault, by Heeb
-NEXT_PUBLIC_SITE_DESCRIPTION=The 2000s in your inbox — a weekly dive into subversive Jewish counter-culture nostalgia from Heeb.
-NEXT_PUBLIC_SITE_OG_IMAGE=/ftv-wordmark-black.png
-NEXT_PUBLIC_SITE_FAVICON=/ftv-favicon.ico
-NEXT_PUBLIC_SITE_FAVICON_PNG=/ftv-favicon.png
-NEXT_PUBLIC_SITE_FOOTER_TAGLINE=The 2000s in your inbox. Delivered weekly.
-NEXT_PUBLIC_SITE_HERO_TAGLINE=The 2000s in your inbox
+NEXT_PUBLIC_SITE_DISPLAY_NAME=Heeb Magazine
+NEXT_PUBLIC_SITE_DESCRIPTION=Heeb Magazine: too Jewish for the mainstream, too irreverent for the establishment. Read From the Vault, classic Heeb stories with fresh commentary every week, and shop back issues and merch.
+NEXT_PUBLIC_SITE_OG_IMAGE=/heeb-og.png
+NEXT_PUBLIC_SITE_FAVICON=/heeb-favicon.ico
+NEXT_PUBLIC_SITE_FAVICON_PNG=/heeb-favicon.png
+NEXT_PUBLIC_SITE_FOOTER_TAGLINE=From the Vault, in your inbox every week.
+NEXT_PUBLIC_SITE_HERO_TAGLINE=Too Jewish for the mainstream. Back from the vault.
 NEXT_PUBLIC_CONTACT_EMAIL=contact@heebnewsletters.com
 NEXT_PUBLIC_SUBSCRIBE_CARD_TITLE=Get From the Vault
 NEXT_PUBLIC_SUBSCRIBE_CARD_DEK=Join the newsletter for weekly subversive Jewish counter-culture nostalgia from the 2000s—delivered straight to your inbox.
@@ -127,7 +129,7 @@ AIRTABLE_HOUSE_ADS_TABLE_ID=tblB3emRodWIzabTP
 
 - `/` — latest vault issue + recent archive
 - `/article/[slug]` — vault issue detail (editor intro, hero, body, rabbit hole)
-- `/archive` — chronological issue list with title/dek search
+- `/from-the-vault` — chronological issue list with title/dek search (`/archive` 308s here)
 - `/about` — brand story
 - `/profile` — reader profile / subscriptions (requires magic reader token)
 - `/opted-out-comps` / `/opted-in-comps` — compilations preference confirmation

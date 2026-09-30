@@ -1,20 +1,13 @@
-import BrandLogoImageFill from "@/components/BrandLogoImageFill";
-
-/** Wordmark via CSS mask (public/ftv-wordmark-black.png); colored with currentColor. */
-export default function BrandWordmark({ className, fillImageUrl }) {
-  if (fillImageUrl) {
-    return (
-      <BrandLogoImageFill
-        className={className}
-        fillClassName="brand-logo-wordmark-fill"
-        fillImageUrl={fillImageUrl}
-      />
-    );
-  }
-
+/** Heeb Magazine color wordmark (public/heeb-wordmark.svg, 328×98). */
+export default function BrandWordmark({ className }) {
   return (
-    <span
-      className={`brand-mask brand-mask-wordmark ${className ?? ""}`.trim()}
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src="/heeb-wordmark.svg"
+      alt=""
+      width={328}
+      height={98}
+      className={`brand-wordmark-img ${className ?? ""}`.trim()}
       aria-hidden
     />
   );

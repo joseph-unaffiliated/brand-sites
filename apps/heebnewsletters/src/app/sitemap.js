@@ -5,7 +5,7 @@ const SITE_URL = siteConfig.siteUrl.replace(/\/$/, "");
 
 const STATIC_ROUTES = [
   { path: "/", changeFrequency: "weekly", priority: 1.0 },
-  { path: "/archive", changeFrequency: "weekly", priority: 0.9 },
+  { path: "/from-the-vault", changeFrequency: "weekly", priority: 0.9 },
   { path: "/about", changeFrequency: "monthly", priority: 0.6 },
   { path: "/contact", changeFrequency: "yearly", priority: 0.4 },
   { path: "/privacy", changeFrequency: "yearly", priority: 0.3 },

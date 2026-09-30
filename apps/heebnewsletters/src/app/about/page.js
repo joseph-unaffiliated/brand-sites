@@ -9,20 +9,23 @@ import { siteDisplayName } from "@/config/site";
 import { getArticles } from "@/lib/articles";
 import { pickRandomArticles } from "@/lib/pickRandomArticles";
 
+const description =
+  "Heeb Magazine is the irreverent Jewish magazine, back from the vault: classic Heeb stories with fresh commentary in From the Vault, plus back issues and merch.";
+
 export const metadata = {
   title: `About | ${siteDisplayName}`,
-  description: `About ${siteDisplayName} — the 2000s in your inbox, one dug-up piece of Jewish counter-culture nostalgia at a time.`,
+  description,
   alternates: { canonical: "/about" },
   openGraph: {
     title: `About | ${siteDisplayName}`,
-    description: `About ${siteDisplayName} — the 2000s in your inbox, one dug-up piece of Jewish counter-culture nostalgia at a time.`,
+    description,
     url: "/about",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: `About | ${siteDisplayName}`,
-    description: `About ${siteDisplayName} — the 2000s in your inbox, one dug-up piece of Jewish counter-culture nostalgia at a time.`,
+    description,
   },
 };
 
@@ -40,17 +43,15 @@ export default async function AboutPage() {
             <div className={aboutStyles.aboutMain}>
               <h1 className={aboutStyles.aboutTitle}>About {siteDisplayName}</h1>
               <p>
-                Welcome to {siteDisplayName} — the 2000s in your inbox. Every
-                week we dig up a piece of subversive Jewish counter-culture
-                media from the 2000s and hand it back to you with the
-                context, commentary, and side-eye it deserves.
-              </p>
-              <p>
                 Heeb Magazine spent the 2000s pissing off the right people:
                 too Jewish for the mainstream, too irreverent for the
-                establishment, too funny to ignore. From the Vault reopens
-                that archive — pages, columns, photo shoots, and ephemera
-                that never should have been forgotten.
+                establishment, too funny to ignore. This is its home again.
+              </p>
+              <p>
+                <Link href="/from-the-vault">From the Vault</Link> is where we
+                reopen the archive. Every week we dig up a Heeb story, photo
+                shoot, or column from the 2000s and hand it back to you with
+                the context, commentary, and side-eye it deserves.
               </p>
 
               <blockquote className={aboutStyles.aboutEraPull}>
@@ -86,7 +87,7 @@ export default async function AboutPage() {
               <p>
                 Subscribe once, and a new issue arrives in your inbox each
                 week — one focused read you can actually finish. Browsing past
-                issues in the archive is free anytime. Snooze and unsubscribe
+                issues in <Link href="/from-the-vault">From the Vault</Link> is free anytime. Snooze and unsubscribe
                 stay a click away in your mail when you need them.
               </p>
 

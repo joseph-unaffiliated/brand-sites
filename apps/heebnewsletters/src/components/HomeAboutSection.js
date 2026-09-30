@@ -16,7 +16,7 @@ export default function HomeAboutSection({ totalCount = 0 }) {
               More about From the Vault
             </h2>
             <p className={styles.lede}>
-              <em>From the Vault, by Heeb</em> digs up the 2000s&apos; weirdest,
+              <em>From the Vault</em> digs up the 2000s&apos; weirdest,
               most subversive Jewish counter-culture media — old Heeb pages,
               lost zines, and internet ephemera — and delivers it back to your
               inbox with the context and commentary it deserves.
@@ -33,7 +33,7 @@ export default function HomeAboutSection({ totalCount = 0 }) {
             </p>
           </div>
           <div className={styles.secondaryLinks}>
-            <Link href="/archive">
+            <Link href="/from-the-vault">
               Read past issues{totalCount > 0 ? ` (${totalCount})` : ""}
             </Link>
             <span>·</span>

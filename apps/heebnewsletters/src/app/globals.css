@@ -404,9 +404,9 @@ a {
     padding-top: 16px;
     padding-bottom: 16px;
     min-height: 0;
-    /* Half of prior 600px wordmark; aspect matches ftv-wordmark-black.png (618×234). */
-    --header-wordmark-w: min(300px, 24vw);
-    --header-wordmark-h: calc(var(--header-wordmark-w) * 234 / 618);
+    /* Aspect matches heeb-wordmark.svg (328×98). */
+    --header-wordmark-w: min(240px, 22vw);
+    --header-wordmark-h: calc(var(--header-wordmark-w) * 98 / 328);
     --header-wordmark-offset-y: 2px;
     --logo-mark-center-y: calc(
       16px + var(--header-wordmark-offset-y) + var(--header-wordmark-h) / 2
@@ -472,8 +472,7 @@ a {
   object-fit: contain;
 }
 
-.site-header--article .brand-logo-wordmark,
-.site-header--article .brand-logo-wordmark-fill {
+.site-header--article .brand-logo-wordmark {
   height: var(--header-wordmark-h);
 }
 
@@ -493,8 +492,7 @@ a {
 
 @media (min-width: 769px) {
   /* Marketing: large PR photo logomark only. */
-  .site-header--marketing .brand-logo-wordmark,
-  .site-header--marketing .brand-logo-wordmark-fill {
+  .site-header--marketing .brand-logo-wordmark {
     display: none;
   }
 
@@ -514,8 +512,7 @@ a {
     display: none !important;
   }
 
-  .site-header--article .brand-logo-wordmark,
-  .site-header--article .brand-logo-wordmark-fill {
+  .site-header--article .brand-logo-wordmark {
     display: block;
     box-sizing: border-box;
     width: var(--header-wordmark-w, min(300px, 24vw));
@@ -526,79 +523,11 @@ a {
   }
 }
 
-/* Viewport-sized photo through wordmark mask (all pages use the article-style header). */
-.site-header--article .brand-logo-wordmark-fill {
-  position: relative;
-  display: block;
-  flex-shrink: 0;
-  width: var(--header-wordmark-w, min(300px, 24vw));
-  max-width: min(300px, 24vw);
-  height: var(--header-wordmark-h, calc(var(--header-wordmark-w, 300px) * 234 / 618));
-  -webkit-mask-image: url(/ftv-wordmark-black.png);
-  mask-image: url(/ftv-wordmark-black.png);
-  -webkit-mask-size: contain;
-  mask-size: contain;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-  mask-position: center;
-}
-
-.site-header--article .brand-logo-wordmark-fill::before {
-  content: "";
-  position: fixed;
-  top: -32px;
-  left: -32px;
-  width: calc(100vw + 64px);
-  height: calc(100vh + 64px);
-  background-color: var(--header-bg);
-  background-image:
-    linear-gradient(
-      rgba(0, 0, 0, var(--header-mark-overlay, 0)),
-      rgba(0, 0, 0, var(--header-mark-overlay, 0))
-    ),
-    var(--header-mark-bg-image);
-  background-size: cover;
-  /* Align image center with logomark (not viewport center). */
-  background-position: 50% calc(50% + (var(--logo-mark-center-y, 50vh) - 50vh));
-  background-repeat: no-repeat;
-  filter: blur(5px);
-  pointer-events: none;
-}
-
 .brand-tag {
   font-size: 11px;
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.22em;
-}
-
-/* From the Vault PNG marks as CSS masks (currentColor fill) — used when there's no
-   photo to bleed through (footer mark, nav wordmark on pages without a hero image). */
-.brand-mask {
-  display: inline-block;
-  background-color: currentColor;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-  mask-position: center;
-  -webkit-mask-size: contain;
-  mask-size: contain;
-  vertical-align: middle;
-}
-.brand-mask-logo {
-  aspect-ratio: 112 / 140;
-  width: 1.75rem;
-  height: auto;
-  -webkit-mask-image: url("/ftv-logo-black.png");
-  mask-image: url("/ftv-logo-black.png");
-}
-.brand-mask-wordmark {
-  aspect-ratio: 618 / 234;
-  width: 100%;
-  height: auto;
-  -webkit-mask-image: url("/ftv-wordmark-black.png");
-  mask-image: url("/ftv-wordmark-black.png");
 }
 
 /* Mobile drawer (portaled to body so it is not clipped by sticky/transform header) */
@@ -747,23 +676,16 @@ a {
 .footer-logo {
   display: block;
   width: auto;
-  max-width: 48px;
+  max-width: 120px;
   line-height: 0;
   color: var(--footer-text);
 }
 
 .footer-logo-wordmark {
-  display: none;
-}
-
-.footer-logo-mark {
   display: block;
-  box-sizing: border-box;
-  width: 48px;
+  width: 120px;
   max-width: 100%;
   height: auto;
-  aspect-ratio: 112 / 140;
-  color: var(--footer-text);
 }
 
 .footer-logo-img {
@@ -1293,8 +1215,8 @@ a {
   }
 
   .site-header--article .header-row-1 {
-    --header-wordmark-w: min(270px, 44vw);
-    --header-wordmark-h: calc(var(--header-wordmark-w) * 234 / 618);
+    --header-wordmark-w: min(200px, 44vw);
+    --header-wordmark-h: calc(var(--header-wordmark-w) * 98 / 328);
     --header-wordmark-offset-y: 4px;
     --logo-mark-center-y: calc(
       20px + var(--header-wordmark-offset-y) + var(--header-wordmark-h) / 2
@@ -1306,8 +1228,7 @@ a {
     display: none !important;
   }
 
-  .site-header--article .brand-logo-wordmark,
-  .site-header--article .brand-logo-wordmark-fill {
+  .site-header--article .brand-logo-wordmark {
     display: block !important;
     box-sizing: border-box;
     width: var(--header-wordmark-w);
