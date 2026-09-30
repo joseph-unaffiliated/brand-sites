@@ -193,7 +193,7 @@ export default function SparkloopRecAd({ placement, className, onReady, onEmpty 
           </form>
         )}
 
-        {!done && knownEmail ? (
+        {!done && knownEmail && !isRail ? (
           <p className={styles.note}>Subscribes {knownEmail}</p>
         ) : null}
         {submit.status === "invalid" ? (

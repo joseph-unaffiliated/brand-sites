@@ -199,6 +199,7 @@
 }
 
 .rail .name {
+  margin-bottom: 0.625rem;
   font-size: 20px;
   -webkit-line-clamp: 3;
 }
@@ -222,10 +223,6 @@
   width: 100%;
   font-size: 13px;
   padding: 0.5rem 0.75rem;
-}
-
-.rail .note {
-  overflow-wrap: anywhere;
 }
 
 /* Sticky: one row, 728px desktop / 320px mobile like the sticky image creatives. */
