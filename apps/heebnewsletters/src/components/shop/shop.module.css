@@ -1,5 +1,33 @@
 /* ---------- Product cards / grid ---------- */
 
+.uniformGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.uniformGrid .cardImage {
+  aspect-ratio: 4/5;
+}
+
+.uniformGrid .cardImage img {
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (max-width: 1024px) {
+  .uniformGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .uniformGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+}
+
 .mosaic {
   display: flex;
   gap: 20px;

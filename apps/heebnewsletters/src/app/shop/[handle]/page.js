@@ -121,7 +121,7 @@ export default async function ProductPage({ params }) {
         {related.length > 0 ? (
           <section className={styles.related} aria-label={`More ${primaryCollection.title}`}>
             <h2 className={shop.sectionTitle}>More {primaryCollection.title.toLowerCase()}</h2>
-            <ProductGrid products={related} />
+            <ProductGrid products={related} uniform />
           </section>
         ) : null}
       </div>
