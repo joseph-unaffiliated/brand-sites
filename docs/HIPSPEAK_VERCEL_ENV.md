@@ -41,8 +41,8 @@ After saving: **Redeploy** Production (and Preview if you added vars there).
 | `NEXT_PUBLIC_TYPEKIT_KIT_ID` | `xon1hcs` |
 | `NEXT_PUBLIC_ADS_MODE` | `cross_promo` (static fallback in `crossPromoAds.js`; Airtable house ads take priority when configured) |
 | `NEXT_PUBLIC_ADSENSE_CLIENT` | ⏭️ OPTIONAL — only if switching to `adsense` mode |
-| `NEXT_PUBLIC_META_PIXEL_ID` | ⚠️ UPDATE — set on Vercel (network or brand pixel) |
-| `NEXT_PUBLIC_GTM_ID` | ⚠️ UPDATE — same GTM container as other Unaffiliated sites when ready |
+| `NEXT_PUBLIC_META_PIXEL_ID` | ✅ `809409995127436` |
+| `NEXT_PUBLIC_GTM_ID` | ✅ `GTM-TVHD6JMG` |
 | `NEXT_PUBLIC_GA_MEASUREMENT_ID` | ✅ `G-V8T90TBR3Z` (production + preview) |
 | `NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT` | `019a7167-e6eb-7fa2-ae9f-60338480c772` ✅ (also baked into `ComplianceScripts.js`) |
 | `NEXT_PUBLIC_RETENTION_SITE_ID` | `X2JHJ4WE` (network default) |
@@ -96,17 +96,18 @@ NEXT_PUBLIC_TYPEKIT_KIT_ID=xon1hcs
 
 NEXT_PUBLIC_ADS_MODE=cross_promo
 
-# Set on Vercel when ready (Meta / GTM / GA4)
-NEXT_PUBLIC_META_PIXEL_ID=
-NEXT_PUBLIC_GTM_ID=
+NEXT_PUBLIC_META_PIXEL_ID=809409995127436
+NEXT_PUBLIC_GTM_ID=GTM-TVHD6JMG
 NEXT_PUBLIC_GA_MEASUREMENT_ID=G-V8T90TBR3Z
 NEXT_PUBLIC_ONETRUST_DOMAIN_SCRIPT=019a7167-e6eb-7fa2-ae9f-60338480c772
 NEXT_PUBLIC_RETENTION_SITE_ID=X2JHJ4WE
+NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION=kr8Lng5KcVPHt8VuzQrT9kyMAxJOBzzUtx3WeUXPC04
 
 # House ads (server-only — do not prefix NEXT_PUBLIC_)
-# AIRTABLE_HOUSE_ADS_BASE_ID=appXFQv3Hy0wUDDnb
-# AIRTABLE_HOUSE_ADS_TABLE_ID=tblB3emRodWIzabTP
-# AIRTABLE_API_KEY=
+AIRTABLE_HOUSE_ADS_BASE_ID=appXFQv3Hy0wUDDnb
+AIRTABLE_HOUSE_ADS_TABLE_ID=tblB3emRodWIzabTP
+# Sensitive; value from Keys/AIRTABLE_HOUSEADS.txt (never commit it)
+AIRTABLE_API_KEY=
 ```
 
 ## Routes smoke-check
@@ -136,7 +137,8 @@ Canonical host is **`https://www.hipspeak.com`**; the apex 308s to `www` (Vercel
 | Airtable Destination Brands | ✅ Hipspeak added to every active House Ads creative except its own (2026-09-28) |
 | Domains on Vercel project `hipspeak` | ✅ `www.hipspeak.com` (production) and `hipspeak.com` (308 → www), both verified |
 | Cloudflare cutover | ✅ 2026-09-29: webflow-proxy routes disabled, apex/www CNAME → `143f5568a99746ca.vercel-dns-016.com` (DNS only); post-cutover curl smoke passed |
-| Airtable Click URL formula | ⚠️ not yet pasted; Hipspeak creatives still resolve to `https://hipspeak.com/` (works via the 308) |
+| Airtable Click URL formula | ✅ pasted 2026-09-29; Hipspeak creatives resolve to `https://www.hipspeak.com/` |
+| Pop quiz answers | ✅ `slangEntry.pollAnswerKey` (Studio: "Pop Quiz answer") drives the correct-answer view on `/pollresults/{slug}`; set on all 16 entries 2026-09-29. Set it on every new word. |
 | Magic CORS (`READERS_CORS_ORIGINS`) | ✅ apex, www, `hipspeak.vercel.app`, `http://localhost:3006` |
 | Magic `BRANDED_COMPS_CONFIRMATION` includes `hipspeak` | ⚠️ local only; ships with the post-Oct 6 magic push |
 | Hosted studio | ✅ [hipspeak.sanity.studio](https://hipspeak.sanity.studio/) |
@@ -144,7 +146,7 @@ Canonical host is **`https://www.hipspeak.com`**; the apex 308s to `www` (Vercel
 
 ## Airtable Click URL formula (Creatives → `Click URL`)
 
-Paste on cutover day (not before: `www.hipspeak.com/word/…` 404s until DNS moves).
+Pasted 2026-09-29. Kept for reference; From the Vault's branch changes again at its cutover (see `HEEBNEWSLETTERS_VERCEL_ENV.md`).
 
 Before:
 
@@ -181,13 +183,15 @@ IF(
 
 Hipspeak is already in Destination Brands on every active House Ads creative except its own.
 
-## Cloudflare cutover checklist (hipspeak.com zone)
+## Cloudflare cutover checklist (hipspeak.com zone) — done 2026-09-29
+
+Kept as the record of what was done and as a template for the next Webflow-to-Vercel cutover.
 
 Pre-flight (all must be true):
 
-- [ ] Latest `apps/hipspeak` production deploy is green on `https://hipspeak.vercel.app`
-- [ ] `curl -s https://magic.hipspeak.com/api/reader-health` returns 200
-- [ ] Note the current DNS records and worker routes (screenshot) for rollback
+- [x] Latest `apps/hipspeak` production deploy is green on `https://hipspeak.vercel.app`
+- [x] `curl -s https://magic.hipspeak.com/api/reader-health` returns 200
+- [x] Note the current DNS records and worker routes (screenshot) for rollback
 
 Cutover:
 
@@ -196,23 +200,23 @@ Cutover:
    - `CNAME` `@` → `143f5568a99746ca.vercel-dns-016.com` (Cloudflare flattens this at the apex)
    - `CNAME` `www` → `143f5568a99746ca.vercel-dns-016.com`
    - The legacy `A 76.76.21.21` / `CNAME cname.vercel-dns.com` records still work but are no longer Vercel's recommendation.
-3. **SSL/TLS** → Full (strict).
+3. **SSL/TLS** → Full (strict). (Moot while the records are DNS only; Vercel terminates TLS.)
 4. Do **not** touch MX (Google Workspace), SPF, or the `google-site-verification` / `yahoo-verification-key` TXT records.
 5. Vercel → Project `hipspeak` → Domains: wait for both to show "Valid Configuration" and certificates issued.
 6. Paste the Airtable formula above.
 
-7. After smoke passes: retire the **Webflow Poll Results** staff tool in `unaffiliated-analytics` (remove the `/tools/webflow-poll` entry from `src/lib/tools-catalog.ts`, then delete `src/app/(dashboard)/tools/webflow-poll/`, `src/app/api/tools/webflow-poll/` and `src/lib/webflow/`). Hipspeak polls now come from `slangEntry.pollOptions`, which the **Email → Sanity** tool already fills. Do this after the Oct 6 draw, since that app hosts the giveaway entrants page.
+7. ⚠️ **Open (after Oct 6):** retire the **Webflow Poll Results** staff tool in `unaffiliated-analytics` (remove the `/tools/webflow-poll` entry from `src/lib/tools-catalog.ts`, then delete `src/app/(dashboard)/tools/webflow-poll/`, `src/app/api/tools/webflow-poll/` and `src/lib/webflow/`). Hipspeak polls now come from `slangEntry.pollOptions`, which the **Email → Sanity** tool already fills. Do this after the Oct 6 draw, since that app hosts the giveaway entrants page.
 
 Rollback (if smoke fails): re-enable the `webflow-proxy` routes, set the two records back to proxied (orange cloud) as in the pre-flight screenshot, and revert the Airtable formula. Vercel domains can stay attached.
 
-Post-cutover smoke:
+Post-cutover smoke (automated checks run 2026-09-29; the three unticked items need a real subscriber in a browser):
 
-- [ ] `curl -sI https://hipspeak.com/word/coded?poll=a` → 308 to `https://www.hipspeak.com/word/coded?poll=a`
-- [ ] `https://hipspeak.com/?subscribed=true&email=test%40example.com` lands on `/subscribed` on www with params intact
-- [ ] `/`, `/word/{slug}`, `/archive`, `/my-words`, `/quiz`, `/pollresults/npc?poll=a`, `/privacy`, `/terms`
+- [x] `curl -sI https://hipspeak.com/word/coded?poll=a` → 308 to `https://www.hipspeak.com/word/coded?poll=a`
+- [x] `https://hipspeak.com/?subscribed=true&email=test%40example.com` lands on `/subscribed` on www with params intact
+- [x] `/`, `/word/{slug}`, `/archive`, `/my-words`, `/quiz`, `/pollresults/npc?poll=a`, `/privacy`, `/terms`
 - [ ] Subscribe → magic → back with reader token; `/profile` loads subscriptions
 - [ ] Heart a word as a subscriber; it appears on another device via `/my-words`
 - [ ] Quiz: gate → subscribe → score; returning subscriber skips the gate
-- [ ] House ad renders and click URL is correct; `/opted-out-comps` and `/opted-in-comps`
-- [ ] OneTrust banner, GTM, Meta pixel fire on `www.hipspeak.com`
-- [ ] `https://www.hipspeak.com/sitemap.xml` and `robots.txt` use the www host
+- [x] House ad renders and click URL is correct; `/opted-out-comps` and `/opted-in-comps`
+- [x] OneTrust, GTM, Meta pixel and GA4 present on `www.hipspeak.com`
+- [x] `https://www.hipspeak.com/sitemap.xml` and `robots.txt` use the www host
