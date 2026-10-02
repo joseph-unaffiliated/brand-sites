@@ -205,7 +205,9 @@ export default function GiveawayEntered({ giveaway }) {
           const detail =
             err?.data?.action === "subscribe_required"
               ? "Subscribe to The Pickle Report first, then enter the draw."
-              : "Something went wrong entering you in the draw. Please try again.";
+              : err?.data?.action === "invalid_email"
+                ? "We couldn’t verify that email address. Please check it and enter again."
+                : "Something went wrong entering you in the draw. Please try again.";
           setMessage(detail);
         }
       }
