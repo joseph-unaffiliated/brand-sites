@@ -1,0 +1,8 @@
+.house-ad-pool {
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+
+.house-ad-pool--visible {
+  opacity: 1;
+}

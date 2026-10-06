@@ -24,9 +24,9 @@ Legend: ✅ in place · ⏳ planned (see note) · — intentionally absent (see 
 | `/redirect` (magic external links) | ⏳ | ✅ local | ✅ local | ⏳ | ⏳ | ⏳ |
 | Profile via Bearer token (magic) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | Reader events / profile v2 flags | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Airtable house-ad pool (`/api/house-ads`) | ✅ | ✅ | ✅ | ✅ | ✅ | ⏳ static cross-promo only |
+| Airtable house-ad pool (`/api/house-ads`) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ half network, half Heeb `Brand Promo` |
 | Subscribe-gated sticky (CTA vs ad) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Sticky ad refresh cycle (45s, then 30s) | ✅ | ✅ | ✅ | ✅ | ⏳ | ⏳ |
+| Sticky ad refresh cycle (45s, then 30s) | ✅ | ✅ | ✅ | ✅ | ⏳ | ✅ alternates brand / network |
 | Comps pages (`/opted-out-comps`, `/opted-in-comps`) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | Magic branded comps confirmation | ✅ | ✅ | ✅ | ✅ | ⏳ magic push | ⏳ magic push |
 | `/ai-policy` + footer link | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
@@ -47,7 +47,7 @@ Legend: ✅ in place · ⏳ planned (see note) · — intentionally absent (see 
 
 Notes on the ⏳ rows:
 
-- **Sign-in toast, `/sign-in`, `/redirect`, house-ad stack, sticky refresh:** these move into `packages/magic-client` and `packages/shared-ads` after the TPR giveaway draw on 2026-10-06. Any `packages/*` change redeploys TPR through `turbo-ignore`, so nothing shared ships before then. FTV adopts the shared house-ad pool at the same time.
+- **Sign-in toast, `/sign-in`, `/redirect`, house-ad stack, sticky refresh:** these move into `packages/magic-client` and `packages/shared-ads` after the TPR giveaway draw on 2026-10-06. Any `packages/*` change redeploys TPR through `turbo-ignore`, so nothing shared ships before then. FTV adopted the Airtable house-ad pool on 2026-10-06 (its own copy of the stack, without SparkLoop, plus the Brand Promo split); moving the stack itself into `packages/shared-ads` is still pending.
 - **Branded comps confirmation:** `hipspeak` and `heebnewsletters` are in `BRANDED_COMPS_CONFIRMATION` locally in `subscription-functions`. They ship with the post-Oct 6 magic push.
 
 ## Accepted differences

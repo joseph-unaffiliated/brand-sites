@@ -49,7 +49,10 @@ Airtable is empty/unconfigured or has no eligible creative for that slot + reade
 | `Image` | Attachment | Upload the creative image here; the first attachment's URL is used. |
 | `Click URL` | Formula | Auto-built for **House Ads** only. Must be **brand-aware** (keep in sync with `@publication-websites/shared-ads/brand-paths`): most brands `https://{brand}.com/article/{slug}`; TEC `…/recipe/{slug}`; Hipspeak `…/word/{slug}`. Blank for Commerce Ads. |
 | `Commerce URL` | URL | Amazon/affiliate destination for **Commerce Ads**. Preferred over Click URL when Ad type is Commerce Ads. |
-| `Ad type` | Single select | `House Ads` (cross-promo network) or `Commerce Ads` (Amazon/affiliate commerce). Existing rows defaulted to `House Ads`. Tracked as `house_ad` / `commerce_ad` in ad events. |
+| `Ad type` | Single select | `House Ads` (cross-promo network), `Commerce Ads` (Amazon/affiliate commerce), `SparkLoop Rec` (live SparkLoop recommendation placeholder), or `Brand Promo` (a brand's own promo on its own site — see below). Existing rows defaulted to `House Ads`. Tracked as `house_ad` / `commerce_ad` / `sparkloop_rec` / `brand_promo` in ad events. |
+| `Promo URL` | URL | **Brand Promo** destination. `Click URL` copies it. Full URLs open in a new tab; site paths such as `/shop/<handle>` stay in the same tab. |
+| `Promo kind` | Single select | **Brand Promo** reporting label: Shop, YouTube, Podcast, Live event, Other. |
+| `Start date` / `End date` | Date | Optional serving window (inclusive, Eastern time) for any ad type. Empty = no limit. |
 | `Active` | Checkbox | Only checked rows are eligible. |
 | `Flag for CE` | Checkbox | **Signal only.** Show to everyone; impressions/clicks carry `isJewishContent` for analytics. Does not restrict audience. |
 | `Target for CE` | Checkbox | **Targeting.** Creative is only eligible for verified Jewish-interested readers (`interest_ce`). House Ads and Commerce Ads. |
@@ -67,6 +70,23 @@ Airtable is empty/unconfigured or has no eligible creative for that slot + reade
    Optionally set `Weight` to bias selection.
 4. No redeploy needed — the `/api/house-ads` route revalidates every 10 minutes
    (`revalidate: 600`), so new/edited rows appear within ~10 minutes.
+
+### Brand Promo (brand-owned share of ad spots)
+
+Some brands keep a share of their own ad spots for their own promos (Heeb: half — shop,
+YouTube shows, podcasts, live events). Those rows use `Ad type = Brand Promo`, `Brand` =
+the owning brand, `Destination Brands` = the same brand, plus `Slot`, `Image`, and
+`Promo URL`.
+
+- `selectHouseAd` never returns Brand Promo rows, so they never appear in the network half
+  or on other brands' sites.
+- `selectBrandPromo(creatives, { slot, hostBrand, pageExcludeUrls })` picks one for the
+  host brand (weighted). Sticky pairs match a `stickyDesktop` and `stickyMobile` row with
+  the same `Promo URL`.
+- The host app decides which spots belong to the brand. Heeb's article page gives the brand
+  one of rail/bottom at random per page view and alternates the sticky bar
+  (`apps/heebnewsletters/src/context/AdOwnerContext.js`). When either side has nothing
+  for a slot, the other side fills it.
 
 ### Env vars
 

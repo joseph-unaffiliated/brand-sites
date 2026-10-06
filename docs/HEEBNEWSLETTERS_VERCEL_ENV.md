@@ -44,7 +44,7 @@ After saving: **Redeploy** Production (and Preview if you added vars there).
 | `NEXT_PUBLIC_SUBSCRIBE_CARD_TITLE` | `Subscribe to our weekly newsletter "From the Vault"` |
 | `NEXT_PUBLIC_SUBSCRIBE_CARD_DEK` | Subscribe card blurb |
 | `NEXT_PUBLIC_TYPEKIT_KIT_ID` | `xon1hcs` |
-| `NEXT_PUBLIC_ADS_MODE` | `cross_promo` (slot → brand map is in `apps/heebnewsletters/src/config/crossPromoAds.js` — the '90s Parent + Pickle only; never From the Vault) |
+| `NEXT_PUBLIC_ADS_MODE` | `cross_promo`: Airtable house-ad pool, split 50/50 between network ads and Heeb's own `Brand Promo` creatives (see "Ads: 50/50 split" below). `apps/heebnewsletters/src/config/crossPromoAds.js` is only the static fallback (the '90s Parent + Pickle). |
 | `NEXT_PUBLIC_ADSENSE_CLIENT` | ⏭️ OPTIONAL — only if switching to `adsense` mode |
 | `NEXT_PUBLIC_META_PIXEL_ID` | `809409995127436` ✅ |
 | `NEXT_PUBLIC_GTM_ID` | `GTM-TVHD6JMG` ✅ (same container as other Unaffiliated sites) |
@@ -59,11 +59,21 @@ After saving: **Redeploy** Production (and Preview if you added vars there).
 | `NEXT_PUBLIC_READER_EVENTS_ENABLED` / `NEXT_PUBLIC_READER_PROFILE_V2` | `true` |
 | `AIRTABLE_HOUSE_ADS_BASE_ID` | `appXFQv3Hy0wUDDnb` |
 | `AIRTABLE_HOUSE_ADS_TABLE_ID` | `tblB3emRodWIzabTP` |
-| `AIRTABLE_API_KEY` | ✅ **Server-only, Sensitive.** `Keys/AIRTABLE_HOUSEADS.txt`. Used once FTV adopts the shared house-ad pool (post Oct 6). |
+| `AIRTABLE_API_KEY` | ✅ **Server-only, Sensitive.** `Keys/AIRTABLE_HOUSEADS.txt`. Read by `/api/house-ads/pool` (in use since 2026-10-06). |
 
 **Do not add to marketing:** `SANITY_API_TOKEN` (published content is public; removed 2026-09-28), `GCP_*`, `READER_TOKEN_SECRET`, `RETENTION_API_KEY`, `RETENTION_API_ID`.
 
-**Do not set** `NEXT_PUBLIC_SHARED_ADS_BRAND=heebnewsletters`. Until FTV adopts the shared house-ad pool, static creatives rotate other brands via `crossPromoAds.js`; after that, Airtable Destination Brands (which already include From the Vault) drive it.
+**Do not set** `NEXT_PUBLIC_SHARED_ADS_BRAND=heebnewsletters`. Airtable Destination Brands (which already include From the Vault) drive the network half; `crossPromoAds.js` is the static fallback.
+
+### Ads: 50/50 split
+
+Half of Heeb's ad impressions are ours (network house ads, commerce), half are Heeb's own (shop, YouTube shows, podcasts, live events).
+
+- **Heeb's creatives** live in the same Airtable Creatives table: `Ad type = Brand Promo`, `Brand` = From the Vault (`heebnewsletters`), `Destination Brands` = From the Vault, `Slot`, `Image`, `Promo URL`, optional `Promo kind` and `Start date` / `End date` (Eastern). Sizes match the network slots: in-article rectangle, rail, and a `stickyDesktop` + `stickyMobile` pair with the same `Promo URL`. `Promo URL` can be a site path like `/shop/<handle>` (same tab, keeps the cart) or any full URL (new tab).
+- **Split** (`src/context/AdOwnerContext.js`, `BRAND_AD_SHARE = 0.5`): each article view gives one of rail/bottom to Heeb and the other to the network, at random. On phones (rail hidden) the bottom spot is a coin flip. The subscriber sticky bar starts on a random side and alternates every rotation (45s, then every 30s).
+- **Fallback:** if the owning side has nothing for a slot, the other side fills it; the static cross-promo shows only if both are empty. Until Heeb Media supplies creatives, every spot shows network ads.
+- **Reporting:** `ad_impression` / `ad_click` carry `adType: "brand_promo"`, `creativeBrand: "heebnewsletters"` and `promoKind` for Heeb's half.
+- **Check:** `curl -s "https://www.heebmagazine.com/api/house-ads?slot=rail&owner=brand"` returns a Brand Promo once one is active.
 
 ### Magic (`magic.heebnewsletters.com`) — shared `subscription-functions` Vercel project
 
@@ -107,7 +117,7 @@ NEXT_PUBLIC_SUBSCRIBE_CARD_DEK=Join the newsletter for weekly subversive Jewish 
 NEXT_PUBLIC_TYPEKIT_KIT_ID=xon1hcs
 
 NEXT_PUBLIC_ADS_MODE=cross_promo
-# No NEXT_PUBLIC_SHARED_ADS_BRAND — see apps/heebnewsletters/src/config/crossPromoAds.js
+# No NEXT_PUBLIC_SHARED_ADS_BRAND — Airtable pool (50/50 with Heeb Brand Promo); crossPromoAds.js is the fallback
 
 NEXT_PUBLIC_META_PIXEL_ID=809409995127436
 NEXT_PUBLIC_GTM_ID=GTM-TVHD6JMG
@@ -172,7 +182,8 @@ FTV stays on **`https://heebnewsletters.vercel.app`** with noindex only (no Verc
 | Airtable Destination Brands | ✅ From the Vault added to every active House Ads creative except its own |
 | Hosted studio | ✅ [fromthevault.sanity.studio](https://fromthevault.sanity.studio/) (body images enabled) |
 | Content | ✅ Sanity has #1–35 (#28 and #32–35 imported 2026-09-29 from `issues/fromthevault/` with `scripts/import-vault-issues.py`). Import each new issue after it sends (#36 Oct 1, #37 Oct 8, #38 Oct 15): add its `sentAt` to `issues-catalog.json`, dry-run, then `--write --publish`. `publishedDate` is the Customer.io send time. Legacy Webflow slug → Sanity slug map: `apps/heebnewsletters/legacy-slug-map.json` (read by `next.config.mjs` for the 308s). |
-| Shared sign-in toast, `/sign-in`, `/redirect`, house-ad pool | ⏳ post Oct 6 (shared packages) |
+| House-ad pool + 50/50 Brand Promo split | ✅ 2026-10-06 (Heeb creatives still to come from Heeb Media) |
+| Shared sign-in toast, `/sign-in`, `/redirect` | ⏳ post Oct 6 (shared packages) |
 
 ## Production host: `www.heebmagazine.com`
 

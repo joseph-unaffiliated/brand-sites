@@ -1024,6 +1024,10 @@ select:focus {
   pointer-events: none;
 }
 
+.article-ad-sticky-bottom[hidden] {
+  display: none;
+}
+
 .article-ad-sticky-bottom-inner {
   display: flex;
   justify-content: center;

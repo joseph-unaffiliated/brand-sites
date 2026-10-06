@@ -27,13 +27,45 @@ const FIELD = {
   /** Targeting: only serve to verified jewish-interested readers. */
   jewishAudienceOnly: "Target for CE",
   weight: "Weight",
-  /** House Ads | Commerce Ads | SparkLoop Rec */
+  /** House Ads | Commerce Ads | SparkLoop Rec | Brand Promo */
   adType: "Ad type",
+  /** Brand Promo destination (Click URL formula copies it; read directly as a fallback). */
+  promoUrl: "Promo URL",
+  /** Brand Promo reporting label: Shop | YouTube | Podcast | Live event | Other */
+  promoKind: "Promo kind",
+  /** Optional serving window, inclusive, as YYYY-MM-DD in Eastern time. */
+  startDate: "Start date",
+  endDate: "End date",
 };
 
 /** Placeholder row: the browser fills it with a live SparkLoop Client API recommendation. */
 export const SPARKLOOP_REC_AD_TYPE = "SparkLoop Rec";
 export const SPARKLOOP_REC_KIND = "sparkloop_rec";
+
+/**
+ * A brand's own promo (shop, shows, events). Only served on that brand's site via
+ * `selectBrandPromo`; `selectHouseAd` never returns it.
+ */
+export const BRAND_PROMO_AD_TYPE = "Brand Promo";
+
+const SCHEDULE_TIME_ZONE = "America/New_York";
+
+function todayInScheduleZone() {
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: SCHEDULE_TIME_ZONE,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date());
+}
+
+function isWithinSchedule(fields, today) {
+  const start = firstFieldString(fields[FIELD.startDate]).slice(0, 10);
+  const end = firstFieldString(fields[FIELD.endDate]).slice(0, 10);
+  if (start && today < start) return false;
+  if (end && today > end) return false;
+  return true;
+}
 
 /**
  * @typedef {{
@@ -46,8 +78,9 @@ export const SPARKLOOP_REC_KIND = "sparkloop_rec";
  *   isJewishContent: boolean,
  *   jewishAudienceOnly: boolean,
  *   weight: number,
- *   adType: 'House Ads' | 'Commerce Ads' | 'SparkLoop Rec' | '',
+ *   adType: 'House Ads' | 'Commerce Ads' | 'SparkLoop Rec' | 'Brand Promo' | '',
  *   destinationBrandKeys: string[],
+ *   promoKind?: string,
  * }} HouseCreative
  */
 
@@ -224,8 +257,10 @@ export async function fetchActiveHouseCreatives() {
   }
   const data = await res.json();
   const out = [];
+  const today = todayInScheduleZone();
   for (const rec of data.records || []) {
     const f = rec.fields || {};
+    if (!isWithinSchedule(f, today)) continue;
     const adTypeRaw = firstFieldString(f[FIELD.adType]);
     if (adTypeRaw === SPARKLOOP_REC_AD_TYPE) {
       const destinationBrandKeys = resolveDestinationBrandKeys(f, slugByRecordId);
@@ -247,12 +282,13 @@ export async function fetchActiveHouseCreatives() {
       continue;
     }
     const adType =
-      adTypeRaw === "Commerce Ads"
-        ? "Commerce Ads"
-        : adTypeRaw === "House Ads"
-          ? "House Ads"
-          : "";
+      adTypeRaw === "Commerce Ads" ||
+      adTypeRaw === "House Ads" ||
+      adTypeRaw === BRAND_PROMO_AD_TYPE
+        ? adTypeRaw
+        : "";
     const isCommerce = adType === "Commerce Ads";
+    const isBrandPromo = adType === BRAND_PROMO_AD_TYPE;
     const brandKey =
       firstFieldString(f[FIELD.brandKey]) ||
       firstFieldString(f[FIELD.brandKeyLegacy]) ||
@@ -261,9 +297,11 @@ export async function fetchActiveHouseCreatives() {
     const imageUrl = imageUrlFromAttachment(f[FIELD.image]);
     const commerceUrl = firstFieldString(f[FIELD.commerceUrl]);
     const houseClickUrl = firstFieldString(f[FIELD.clickUrl]);
-    const clickUrl = isCommerce
-      ? commerceUrl || houseClickUrl
-      : houseClickUrl || commerceUrl;
+    const clickUrl = isBrandPromo
+      ? houseClickUrl || firstFieldString(f[FIELD.promoUrl])
+      : isCommerce
+        ? commerceUrl || houseClickUrl
+        : houseClickUrl || commerceUrl;
     if (!brandKey || !slot || !imageUrl || !clickUrl) continue;
     out.push({
       id: rec.id,
@@ -277,6 +315,7 @@ export async function fetchActiveHouseCreatives() {
       weight: Math.max(1, Number(f[FIELD.weight]) || 1),
       adType,
       destinationBrandKeys: resolveDestinationBrandKeys(f, slugByRecordId),
+      ...(isBrandPromo ? { promoKind: firstFieldString(f[FIELD.promoKind]) } : {}),
     });
   }
   return out;
@@ -340,6 +379,7 @@ export function normalizeAdClickUrl(url) {
  * @param {{ hostBrand: string, blocked: Set<string>, pageBlockedUrls?: Set<string> }} ctx
  */
 function isEligibleForHost(c, { hostBrand, blocked, pageBlockedUrls, jewishInterested }) {
+  if (c.adType === BRAND_PROMO_AD_TYPE) return false;
   if (!matchesDestinationBrands(c, hostBrand)) return false;
   // "Target for CE" creatives (house + commerce) for verified jewish-interested readers.
   if (c.jewishAudienceOnly && !jewishInterested) return false;
@@ -419,27 +459,74 @@ function selectImageHouseAd(
   const blocked = new Set(
     [hostBrand, ...excludeBrands].map((b) => String(b || "").trim()).filter(Boolean)
   );
-  const pageBlockedUrls = new Set(
-    pageExcludeUrls.map((u) => normalizeAdClickUrl(u)).filter(Boolean)
-  );
+  const pageBlockedUrls = pageUrlSet(pageExcludeUrls);
   const hostCtx = {
     hostBrand,
     blocked,
     pageBlockedUrls,
     jewishInterested: !!jewishInterested,
   };
+  return pickImageCreative(creatives, {
+    slot,
+    pageBlockedUrls,
+    isEligible: (c) => isEligibleForHost(c, hostCtx),
+  });
+}
 
+function pageUrlSet(urls = []) {
+  return new Set(urls.map((u) => normalizeAdClickUrl(u)).filter(Boolean));
+}
+
+/**
+ * Pick the host brand's own "Brand Promo" creative for a slot (weighted). Network
+ * exclusions (self-promo, subscribed brands) do not apply; page URL dedupe does.
+ * @param {HouseCreative[]} creatives
+ * @param {{ slot: 'inArticle' | 'rail' | 'sticky', hostBrand: string, pageExcludeUrls?: string[] }} opts
+ */
+export function selectBrandPromo(creatives, { slot, hostBrand, pageExcludeUrls = [] }) {
+  const host = String(hostBrand || "").trim();
+  if (!host) return null;
+  const pageBlockedUrls = pageUrlSet(pageExcludeUrls);
+  const pick = pickImageCreative(creatives, {
+    slot,
+    pageBlockedUrls,
+    isEligible: (c) => {
+      if (c.adType !== BRAND_PROMO_AD_TYPE || c.brandKey !== host) return false;
+      if (!matchesDestinationBrands(c, host)) return false;
+      const normalized = normalizeAdClickUrl(c.clickUrl);
+      return !(normalized && pageBlockedUrls.has(normalized));
+    },
+  });
+  return pick?.ad ?? null;
+}
+
+/**
+ * Brand promos all share one brand key, so their sticky halves pair by destination;
+ * network creatives pair by advertiser brand.
+ */
+function stickyPairKey(c) {
+  return c.adType === BRAND_PROMO_AD_TYPE
+    ? `${c.brandKey}|${normalizeAdClickUrl(c.clickUrl)}`
+    : c.brandKey;
+}
+
+/**
+ * @returns {{ ad: object, weight: number } | null}
+ */
+function pickImageCreative(creatives, { slot, pageBlockedUrls, isEligible }) {
   if (slot === "sticky") {
     const byBrand = new Map();
     for (const c of creatives) {
-      if (!isEligibleForHost(c, hostCtx)) continue;
+      if (!isEligible(c)) continue;
       if (c.slot !== "stickyDesktop" && c.slot !== "stickyMobile") continue;
-      if (!byBrand.has(c.brandKey)) byBrand.set(c.brandKey, {});
-      byBrand.get(c.brandKey)[c.slot] = c;
+      const key = stickyPairKey(c);
+      if (!byBrand.has(key)) byBrand.set(key, {});
+      byBrand.get(key)[c.slot] = c;
     }
     const pairs = [];
-    for (const [brandKey, parts] of byBrand) {
+    for (const parts of byBrand.values()) {
       if (!parts.stickyDesktop || !parts.stickyMobile) continue;
+      const brandKey = parts.stickyDesktop.brandKey;
       const clickUrl = parts.stickyDesktop.clickUrl || parts.stickyMobile.clickUrl;
       const normalizedClick = normalizeAdClickUrl(clickUrl);
       if (normalizedClick && pageBlockedUrls.has(normalizedClick)) continue;
@@ -459,6 +546,7 @@ function selectImageHouseAd(
           parts.stickyDesktop.destinationBrandKeys ||
           parts.stickyMobile.destinationBrandKeys ||
           [],
+        promoKind: parts.stickyDesktop.promoKind || parts.stickyMobile.promoKind || "",
       });
     }
     const pick = weightedRandom(pairs);
@@ -472,15 +560,14 @@ function selectImageHouseAd(
         isJewishContent: pick.isJewishContent,
         jewishAudienceOnly: pick.jewishAudienceOnly,
         adType: pick.adType,
+        ...(pick.promoKind ? { promoKind: pick.promoKind } : {}),
         desktop: { imageUrl: pick.desktop.imageUrl, id: pick.desktop.id },
         mobile: { imageUrl: pick.mobile.imageUrl, id: pick.mobile.id },
       },
     };
   }
 
-  const pool = creatives.filter(
-    (c) => c.slot === slot && isEligibleForHost(c, hostCtx)
-  );
+  const pool = creatives.filter((c) => c.slot === slot && isEligible(c));
   const pick = weightedRandom(pool);
   if (!pick) return null;
   return {
@@ -492,6 +579,7 @@ function selectImageHouseAd(
       isJewishContent: pick.isJewishContent,
       jewishAudienceOnly: pick.jewishAudienceOnly,
       adType: pick.adType,
+      ...(pick.promoKind ? { promoKind: pick.promoKind } : {}),
       imageUrl: pick.imageUrl,
       id: pick.id,
       slot: pick.slot,

@@ -15,7 +15,7 @@ import JsonLd from "@/components/JsonLd";
 import ShopThisStory from "@/components/shop/ShopThisStory";
 import { getShopThisStory } from "@/lib/shop-content";
 import { ogImageFromMappedContent } from "@publication-websites/sanity-content";
-import { crossPromoForSlot } from "@/config/crossPromoAds";
+import { AdOwnerProvider } from "@/context/AdOwnerContext";
 import { amazonAssociatesTag, isNoindex, siteConfig, siteDisplayName } from "@/config/site";
 import { affiliateAnchorProps } from "@publication-websites/affiliate";
 import styles from "./page.module.css";
@@ -218,6 +218,7 @@ export default async function VaultIssuePage({ params }) {
   ) : null;
 
   return (
+    <AdOwnerProvider hasRail={SHOW_RAIL}>
     <div className={styles.page}>
       <JsonLd data={articleJsonLd} />
       <JsonLd data={breadcrumbJsonLd} />
@@ -359,7 +360,7 @@ export default async function VaultIssuePage({ params }) {
 
               {SHOW_BOTTOM && (
                 <div className={styles.adBottom}>
-                  <AdSlot slotId={SLOT_BOTTOM} format="rectangle" {...crossPromoForSlot("bottom")} />
+                  <AdSlot slotId={SLOT_BOTTOM} spot="bottom" format="rectangle" />
                 </div>
               )}
             </div>
@@ -367,7 +368,7 @@ export default async function VaultIssuePage({ params }) {
           {SHOW_RAIL && (
             <div className={styles.articleRail}>
               <div className={styles.articleRailSticky}>
-                <AdSlot slotId={SLOT_RAIL} format="vertical" {...crossPromoForSlot("rail")} />
+                <AdSlot slotId={SLOT_RAIL} spot="rail" format="vertical" />
               </div>
             </div>
           )}
@@ -404,5 +405,6 @@ export default async function VaultIssuePage({ params }) {
       </section>
       <ArticleStickyBottom />
     </div>
+    </AdOwnerProvider>
   );
 }

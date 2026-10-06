@@ -29,6 +29,7 @@ import Header from "@/components/Header";
 import SubscribePopup from "@/components/SubscribePopup";
 import { SubscriberProvider } from "@/context/SubscriberContext";
 import { CartProvider } from "@/context/CartContext";
+import { HouseAdClaimProvider } from "@/context/HouseAdClaimContext";
 import CartDrawer from "@/components/shop/CartDrawer";
 import { ReaderEventsInit } from "@publication-websites/reader-events";
 import EmailClickSession from "@publication-websites/magic-client/email-click-session";
@@ -122,6 +123,7 @@ export default function RootLayout({ children }) {
         <MarketingScripts adsenseClient={ADSENSE_CLIENT} metaPixelId={META_PIXEL_ID} />
         <SubscriberProvider>
         <CartProvider>
+        <HouseAdClaimProvider>
           <ReaderEventsInit
             brandId={siteConfig.brandId}
             apiOrigin={siteConfig.magicReaderApiOrigin}
@@ -169,6 +171,7 @@ export default function RootLayout({ children }) {
               </div>
             </footer>
           </div>
+        </HouseAdClaimProvider>
         </CartProvider>
         </SubscriberProvider>
       </body>

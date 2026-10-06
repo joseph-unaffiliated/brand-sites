@@ -103,6 +103,7 @@ All `magic.*` hosts run on **one shared Vercel project**, so every env var is ne
 - [ ] Spot-check creatives targeting the new host after formula change
 - [ ] Marketing env: `AIRTABLE_HOUSE_ADS_BASE_ID`, `AIRTABLE_HOUSE_ADS_TABLE_ID`, `AIRTABLE_API_KEY` (Sensitive; `Keys/AIRTABLE_HOUSEADS.txt`)
 - [ ] Verify: `curl -s "https://<host>/api/house-ads?slot=inArticle"` returns an `ad`. `{"ad":null}` means no eligible creatives or a bad token — check runtime logs for `[house-ads] Airtable fetch failed 403`.
+- [ ] Optional: **brand-owned share of ad spots** (Heeb keeps half for its shop, shows, podcasts and events). The brand's own creatives are Creatives rows with `Ad type = Brand Promo`, `Brand` and `Destination Brands` both set to the brand, `Promo URL`, and optional `Promo kind` / `Start date` / `End date`. Copy Heeb's `src/context/AdOwnerContext.js` (page-level split: one of rail/bottom per view, sticky alternates), the `owner` handling in `HouseAdPool` (`selectBrandPromo` vs `selectHouseAd`, each falling back to the other) and `HouseAdImage` (`adType: "brand_promo"`, site paths open in the same tab). Check with `curl -s "https://<host>/api/house-ads?slot=rail&owner=brand"`. See `packages/shared-ads/README.md`.
 
 ---
 
@@ -221,7 +222,8 @@ Use alongside [`HEEBNEWSLETTERS_VERCEL_ENV.md`](./HEEBNEWSLETTERS_VERCEL_ENV.md)
 - [ ] Team review of staging + Heeb Media heads-up (carts tagged `source=heebmagazine.com`; one test order)
 - [ ] Cutover steps 2–12 in `HEEBNEWSLETTERS_VERCEL_ENV.md` (env flip, Cloudflare DNS on both zones, Airtable formula, Search Console, Customer.io template links, OneTrust check, smoke)
 - [ ] Import #36 (Oct 1), #37 (Oct 8), #38 (Oct 15) after each sends
-- [ ] Post-Oct 6: shared house-ad pool, sign-in toast, `/sign-in`, `/redirect`; magic push (comps, retention, return host) then `BRAND_SITE_ORIGIN_HEEBNEWSLETTERS`; `brand-paths.js` entry for `heebmagazine.com`
+- [x] Shared house-ad pool with a 50/50 split: half of ad spots are Heeb's own `Brand Promo` creatives (2026-10-06). Heeb Media still needs to supply creatives; until then their half falls back to network ads.
+- [ ] Post-Oct 6: sign-in toast, `/sign-in`, `/redirect`; magic push (comps, retention, return host) then `BRAND_SITE_ORIGIN_HEEBNEWSLETTERS`; `brand-paths.js` entry for `heebmagazine.com`
 
 ### Pattern: headless shop on a publication (new brands)
 
