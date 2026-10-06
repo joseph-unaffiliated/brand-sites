@@ -36,6 +36,9 @@ apps/*/out/
 # Local reference dumps (not part of the product)
 /reference/
 
+# Eyeballer's Cookbook AI image drafts and raw recipe notes (~150 MB)
+/apps/theeyeballerscookbook/docs/
+
 # debug
 npm-debug.log*
 yarn-debug.log*

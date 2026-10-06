@@ -7,9 +7,9 @@ Content studio for [theeyeballerscookbook.com](https://theeyeballerscookbook.com
 1. Create a new Sanity project at [sanity.io/manage](https://www.sanity.io/manage) (org: same as the other publications). Name it **The Eyeballer's Cookbook**, dataset `production`.
 2. Replace `YOUR_SANITY_PROJECT_ID` in `sanity.config.ts` and `sanity.cli.ts` with the new project id.
 3. `npm install`, then `npm run dev` to run locally.
-4. `npx sanity deploy` — choose host `theeyeballerscookbook` (studio at theeyeballerscookbook.sanity.studio). Add the printed `appId` to `sanity.cli.ts` under `deployment`.
-5. Set `NEXT_PUBLIC_SANITY_PROJECT_ID` on the Vercel project for `apps/theeyeballerscookbook`.
-6. In sanity.io/manage → API → CORS origins, add `http://localhost:3005` and `https://theeyeballerscookbook.com`.
+4. Studio is hosted at [theeyeballerscookbook.sanity.studio](https://theeyeballerscookbook.sanity.studio). Redeploy with `npm run deploy` (appId is in `sanity.cli.ts`).
+5. Set `NEXT_PUBLIC_SANITY_PROJECT_ID=89sdxpbh` on the Vercel project for `apps/theeyeballerscookbook`.
+6. In sanity.io/manage → API → CORS origins, keep `http://localhost:3005`, `https://theeyeballerscookbook.com`, `https://www.theeyeballerscookbook.com`, and `https://theeyeballerscookbook.sanity.studio`.
 
 ## Content model
 

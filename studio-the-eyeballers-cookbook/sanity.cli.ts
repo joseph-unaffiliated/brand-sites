@@ -5,9 +5,8 @@ export default defineCliConfig({
     projectId: '89sdxpbh',
     dataset: 'production',
   },
-  /**
-   * After the first `npx sanity deploy` (choose host theeyeballerscookbook),
-   * add the generated appId here for auto-updates:
-   * deployment: { appId: '...', autoUpdates: true },
-   */
+  deployment: {
+    appId: 'o1w1u2okikprk9a6gw794a2d',
+    autoUpdates: true,
+  },
 })

@@ -121,7 +121,7 @@ export const recipeType = defineType({
       type: 'text',
       rows: 2,
       initialValue:
-        'Nadav is a trained chef and has worked at several establishments around Toronto, including Libretto and other popular dining destinations.',
+        'Nadav is a trained chef and has worked at several establishments around Toronto, including Giulietta, NL Ginzburg, and other popular dining destinations.',
     }),
     defineField({
       name: 'funFact',
