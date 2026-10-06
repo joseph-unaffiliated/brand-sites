@@ -122,7 +122,7 @@ export default function CheckoutEmailModal({ onClose }) {
           ) : null}
           {error ? <p className={styles.errorText}>{error}</p> : null}
           <button type="submit" className="button button-primary" disabled={busy || !verified}>
-            {busy ? "One moment…" : isSubscribed ? "Continue to checkout" : "Checkout and Subscribe"}
+            {busy ? "One moment…" : isSubscribed ? "Continue to checkout" : 'Checkout and Subscribe to "From the Vault"'}
           </button>
           {!isSubscribed ? (
             <button type="button" className={styles.checkoutModalSkip} onClick={() => go(false)} disabled={busy}>
