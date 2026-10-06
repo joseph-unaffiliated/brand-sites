@@ -128,49 +128,73 @@
 
 .filterBar {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
   gap: 10px;
   max-width: 100%;
   margin: 0 0 48px;
 }
 
-.searchControl,
+.filterRow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  max-width: 100%;
+}
+
+.searchControl {
+  display: block;
+  width: 360px;
+  max-width: 100%;
+}
+
 .filterControl {
+  position: relative;
   display: block;
   min-width: 0;
   max-width: 100%;
 }
 
 .searchInput,
-.filterSelect {
-  width: 100%;
-  max-width: 100%;
+.filterSelect,
+.filterSizer {
   font: inherit;
   font-size: 0.95rem;
+  line-height: 1.25;
   padding: 10px 14px;
   border: 1px solid var(--border);
   border-radius: var(--radius);
+}
+
+.searchInput,
+.filterSelect {
+  width: 100%;
+  max-width: 100%;
   background: var(--surface);
   color: var(--text-primary);
   appearance: none;
   -webkit-appearance: none;
 }
 
-.searchControl {
-  flex: 1 1 220px;
-  max-width: 280px;
+.filterSelect,
+.filterSizer {
+  padding-right: 2rem;
 }
 
-.filterControl {
-  flex: 0 1 auto;
+.filterSizer {
+  display: block;
+  visibility: hidden;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .filterSelect {
-  width: auto;
-  min-width: 9.5rem;
-  padding-right: 2rem;
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  text-overflow: ellipsis;
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path fill='%23666' d='M1 1l5 5 5-5'/></svg>");
   background-repeat: no-repeat;
   background-position: right 12px center;
@@ -185,21 +209,6 @@
 .filterSelect:focus {
   outline: 2px solid var(--accent);
   outline-offset: 1px;
-}
-
-@media (max-width: 640px) {
-  .searchControl {
-    flex: 1 1 100%;
-    max-width: 100%;
-  }
-
-  .filterControl {
-    flex: 1 1 calc(50% - 10px);
-  }
-
-  .filterSelect {
-    width: 100%;
-  }
 }
 
 .emptyState {

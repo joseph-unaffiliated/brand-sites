@@ -1,6 +1,14 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState, useTransition } from "react";
+import {
+  Children,
+  isValidElement,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  useTransition,
+} from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -85,10 +93,24 @@ function authorKey(name) {
   return String(name || "").trim();
 }
 
+function optionText(children) {
+  return Children.toArray(children).join("");
+}
+
+function selectedOptionText(children, value) {
+  const selected = Children.toArray(children).find(
+    (child) => isValidElement(child) && String(child.props.value) === String(value),
+  );
+  return selected ? optionText(selected.props.children) : "";
+}
+
 function FilterSelect({ label, value, onChange, children }) {
   return (
     <label className={styles.filterControl}>
       <span className={styles.visuallyHidden}>{label}</span>
+      <span className={styles.filterSizer} aria-hidden="true">
+        {selectedOptionText(children, value)}
+      </span>
       <select
         className={styles.filterSelect}
         value={value}
@@ -296,66 +318,68 @@ export default function ArchiveBrowser({ issues }) {
             autoComplete="off"
           />
         </label>
-        <FilterSelect
-          label="Filter by magazine issue"
-          value={issueFilter}
-          onChange={(value) => replaceParams({ issue: value })}
-        >
-          <option value="">All issues</option>
-          {issueFilter && !issueNumbers.includes(Number(issueFilter)) ? (
-            <option value={issueFilter}>Issue {issueFilter}</option>
-          ) : null}
-          {issueNumbers.map((n) => (
-            <option key={n} value={String(n)}>
-              Issue {n}
-            </option>
-          ))}
-        </FilterSelect>
-        <FilterSelect
-          label="Filter by year"
-          value={yearFilter}
-          onChange={(value) => replaceParams({ year: value })}
-        >
-          <option value="">All years</option>
-          {yearFilter && !years.includes(Number(yearFilter)) ? (
-            <option value={yearFilter}>{yearFilter}</option>
-          ) : null}
-          {years.map((y) => (
-            <option key={y} value={String(y)}>
-              {y}
-            </option>
-          ))}
-        </FilterSelect>
-        <FilterSelect
-          label="Filter by author"
-          value={
-            authorOptions.find((name) => name.toLowerCase() === authorFilter.toLowerCase()) ||
-            authorFilter
-          }
-          onChange={(value) => replaceParams({ author: value })}
-        >
-          <option value="">All authors</option>
-          {authorFilter &&
-          !authorOptions.some((name) => name.toLowerCase() === authorFilter.toLowerCase()) ? (
-            <option value={authorFilter}>{authorFilter}</option>
-          ) : null}
-          {authorOptions.map((name) => (
-            <option key={name} value={name}>
-              {name}
-            </option>
-          ))}
-        </FilterSelect>
-        <FilterSelect
-          label="Sort articles"
-          value={sort}
-          onChange={(value) => replaceParams({ sort: value })}
-        >
-          <option value="newest">Newest print first</option>
-          <option value="oldest">Oldest print first</option>
-          <option value="issue-desc">Issue # high to low</option>
-          <option value="issue-asc">Issue # low to high</option>
-          <option value="author">Author A–Z</option>
-        </FilterSelect>
+        <div className={styles.filterRow}>
+          <FilterSelect
+            label="Filter by magazine issue"
+            value={issueFilter}
+            onChange={(value) => replaceParams({ issue: value })}
+          >
+            <option value="">All issues</option>
+            {issueFilter && !issueNumbers.includes(Number(issueFilter)) ? (
+              <option value={issueFilter}>Issue {issueFilter}</option>
+            ) : null}
+            {issueNumbers.map((n) => (
+              <option key={n} value={String(n)}>
+                Issue {n}
+              </option>
+            ))}
+          </FilterSelect>
+          <FilterSelect
+            label="Filter by year"
+            value={yearFilter}
+            onChange={(value) => replaceParams({ year: value })}
+          >
+            <option value="">All years</option>
+            {yearFilter && !years.includes(Number(yearFilter)) ? (
+              <option value={yearFilter}>{yearFilter}</option>
+            ) : null}
+            {years.map((y) => (
+              <option key={y} value={String(y)}>
+                {y}
+              </option>
+            ))}
+          </FilterSelect>
+          <FilterSelect
+            label="Filter by author"
+            value={
+              authorOptions.find((name) => name.toLowerCase() === authorFilter.toLowerCase()) ||
+              authorFilter
+            }
+            onChange={(value) => replaceParams({ author: value })}
+          >
+            <option value="">All authors</option>
+            {authorFilter &&
+            !authorOptions.some((name) => name.toLowerCase() === authorFilter.toLowerCase()) ? (
+              <option value={authorFilter}>{authorFilter}</option>
+            ) : null}
+            {authorOptions.map((name) => (
+              <option key={name} value={name}>
+                {name}
+              </option>
+            ))}
+          </FilterSelect>
+          <FilterSelect
+            label="Sort articles"
+            value={sort}
+            onChange={(value) => replaceParams({ sort: value })}
+          >
+            <option value="newest">Newest print first</option>
+            <option value="oldest">Oldest print first</option>
+            <option value="issue-desc">Issue # high to low</option>
+            <option value="issue-asc">Issue # low to high</option>
+            <option value="author">Author A–Z</option>
+          </FilterSelect>
+        </div>
       </div>
 
       {visible.length === 0 ? (
