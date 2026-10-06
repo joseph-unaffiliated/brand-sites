@@ -250,7 +250,7 @@ export default function ProfilePage() {
       </section>
 
       <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>Issues you&apos;ve read</h2>
+        <h2 className={styles.sectionTitle}>Articles you&apos;ve read</h2>
         {readingItems.length === 0 ? (
           <p className={styles.empty}>No reading history yet.</p>
         ) : (

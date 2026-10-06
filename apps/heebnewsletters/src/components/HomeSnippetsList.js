@@ -16,7 +16,7 @@ export default function HomeSnippetsList({ stackItems }) {
 
   return (
     <div className={styles.snippetsList}>
-      <p className={styles.snippetsListTitle}>More issues</p>
+      <p className={styles.snippetsListTitle}>More articles</p>
       {items.map((article) => {
         const { demographic, description } = getDemographicAndDescription(article);
         return (

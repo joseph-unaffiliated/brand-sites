@@ -97,6 +97,13 @@
   margin: 0;
 }
 
+.issueAuthor {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 0 0 8px;
+  line-height: 1.3;
+}
+
 .issueCta {
   font-size: 13px;
   font-weight: 600;
@@ -121,36 +128,85 @@
 
 .filterBar {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
   max-width: 100%;
   margin: 0 0 48px;
 }
 
-.searchControl {
-  display: block;
-  width: fit-content;
+.filterRow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
   max-width: 100%;
 }
 
-.searchInput {
+.searchControl {
+  display: block;
   width: 360px;
   max-width: 100%;
+}
+
+.filterControl {
+  position: relative;
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.searchInput,
+.filterSelect,
+.filterSizer {
   font: inherit;
   font-size: 0.95rem;
+  line-height: 1.25;
   padding: 10px 14px;
   border: 1px solid var(--border);
   border-radius: var(--radius);
+}
+
+.searchInput,
+.filterSelect {
+  width: 100%;
+  max-width: 100%;
   background: var(--surface);
   color: var(--text-primary);
   appearance: none;
   -webkit-appearance: none;
 }
 
+.filterSelect,
+.filterSizer {
+  padding-right: 2rem;
+}
+
+.filterSizer {
+  display: block;
+  visibility: hidden;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.filterSelect {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  text-overflow: ellipsis;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path fill='%23666' d='M1 1l5 5 5-5'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  cursor: pointer;
+}
+
 .searchInput::placeholder {
   color: var(--text-muted);
 }
 
-.searchInput:focus {
+.searchInput:focus,
+.filterSelect:focus {
   outline: 2px solid var(--accent);
   outline-offset: 1px;
 }

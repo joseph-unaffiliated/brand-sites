@@ -34,7 +34,7 @@ export default async function NotFound() {
 
         {suggested.length > 0 && (
           <div className={articleStyles.readMoreOuter}>
-            <section className={articleStyles.readMore} aria-label="Suggested issues">
+            <section className={articleStyles.readMore} aria-label="Suggested articles">
               <div className={articleStyles.readMoreGrid}>
                 {suggested.map((rec) => (
                   <Link

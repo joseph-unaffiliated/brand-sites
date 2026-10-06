@@ -17,7 +17,7 @@ export default defineConfig({
         S.list()
           .title('Heeb Magazine')
           .items([
-            S.documentTypeListItem('vaultIssue').title('From the Vault issues'),
+            S.documentTypeListItem('vaultIssue').title('From the Vault articles'),
             S.divider(),
             S.listItem()
               .title('Shop')

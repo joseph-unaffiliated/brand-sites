@@ -60,12 +60,12 @@ export default async function AboutPage() {
                 For our small team, this isn&apos;t nostalgia for nostalgia&apos;s
                 sake — it&apos;s a reminder that Jewish culture has always been
                 loud, funny, a little offensive, and unmistakably itself.
-                Every issue is a time capsule with a point of view.
+                Every article is a time capsule with a point of view.
               </p>
 
               <h2>What we publish</h2>
               <p>
-                Each issue is <strong>one dug-up piece of the vault</strong>—an
+                Each article is <strong>one dug-up piece of the vault</strong>—an
                 editor&apos;s intro framing the piece, the original page or
                 article reproduced in full, era context, and a Rabbit Hole of
                 curated links for when you inevitably fall down the internet
@@ -81,9 +81,9 @@ export default async function AboutPage() {
 
               <h2>How it works</h2>
               <p>
-                Subscribe once, and a new issue arrives in your inbox each
+                Subscribe once, and a new article arrives in your inbox each
                 week — one focused read you can actually finish. Browsing past
-                issues in <Link href="/from-the-vault">The Vault</Link> is free anytime. Snooze and unsubscribe
+                articles in <Link href="/from-the-vault">The Vault</Link> is free anytime. Snooze and unsubscribe
                 stay a click away in your mail when you need them.
               </p>
 

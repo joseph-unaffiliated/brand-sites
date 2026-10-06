@@ -23,18 +23,18 @@ export default function HomeAboutSection({ totalCount = 0 }) {
               {totalCount > 0 && (
                 <>
                   {" "}
-                  We&apos;ve published <strong>{totalCount} issues</strong> so
+                  We&apos;ve published <strong>{totalCount} articles</strong> so
                   far
                   {isSubscribed
-                    ? " — with a new one in your inbox every week."
-                    : " — with a new one in your inbox every week when you subscribe."}
+                    ? " — with a new article in your inbox every week."
+                    : " — with a new article in your inbox every week when you subscribe."}
                 </>
               )}
             </p>
           </div>
           <div className={styles.secondaryLinks}>
             <Link href="/from-the-vault">
-              Read past issues{totalCount > 0 ? ` (${totalCount})` : ""}
+              Read past articles{totalCount > 0 ? ` (${totalCount})` : ""}
             </Link>
             <span>·</span>
             <Link href="/about">About</Link>

@@ -7,7 +7,7 @@ import {defineArrayMember, defineField, defineType} from 'sanity'
  */
 export const vaultIssueType = defineType({
   name: 'vaultIssue',
-  title: 'Vault issue',
+  title: 'Vault article',
   type: 'document',
   fieldsets: [
     {
@@ -74,7 +74,7 @@ export const vaultIssueType = defineType({
     defineField({
       name: 'publishedDate',
       title: 'Published date',
-      description: 'Email send / web publish date (drives homepage featured issue).',
+      description: 'Email send / web publish date (drives homepage featured article).',
       type: 'datetime',
       initialValue: () => new Date().toISOString(),
     }),
@@ -303,7 +303,7 @@ export const vaultIssueType = defineType({
     prepare({title, subtitle, media, publishedDate}) {
       const date = publishedDate ? new Date(publishedDate).toLocaleDateString() : 'No date'
       return {
-        title: title || 'Untitled issue',
+        title: title || 'Untitled article',
         subtitle: [subtitle, date].filter(Boolean).join(' — '),
         media,
       }
