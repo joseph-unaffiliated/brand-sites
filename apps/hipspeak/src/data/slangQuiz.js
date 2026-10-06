@@ -26,7 +26,7 @@ export const slangQuiz = {
     {
       id: "q2",
       term: "It’s giving",
-      wordSlug: "its-giving",
+      wordSlug: "giving",
       prompt: "“It’s giving…” usually introduces…",
       options: [
         { id: "a", label: "A gift recommendation" },
@@ -78,7 +78,7 @@ export const slangQuiz = {
     {
       id: "q6",
       term: "No cap",
-      wordSlug: "no-cap",
+      wordSlug: "cap",
       prompt: "“No cap” means…",
       options: [
         { id: "a", label: "I’m not wearing a hat" },
@@ -130,7 +130,7 @@ export const slangQuiz = {
     {
       id: "q10",
       term: "Touch grass",
-      wordSlug: "touch-grass",
+      wordSlug: "touchgrass",
       prompt: "“Touch grass” is advice to…",
       options: [
         { id: "a", label: "Mow the lawn" },
