@@ -5,7 +5,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import HideWhenSubscribed from "@/components/HideWhenSubscribed";
-import { compareOriginalDateDesc, originalDateLabel } from "@/lib/vault-dates";
+import {
+  compareVaultSort,
+  originalCardLabel,
+  originalIssueNumber,
+  originalYearValue,
+} from "@/lib/vault-dates";
 import styles from "@/app/from-the-vault/page.module.css";
 
 function queryTokens(query) {
@@ -27,8 +32,8 @@ function countOccurrences(haystack, token) {
   return count;
 }
 
-/** Search rank: title token hits → summary token hits → full-text occurrences → publish date. */
-function compareSearchResults(a, b, tokens) {
+/** Search rank: title token hits → summary token hits → full-text occurrences → selected sort. */
+function compareSearchResults(a, b, tokens, sort) {
   let titleA = 0;
   let titleB = 0;
   let dekA = 0;
@@ -48,12 +53,13 @@ function compareSearchResults(a, b, tokens) {
   if (titleA !== titleB) return titleB - titleA;
   if (dekA !== dekB) return dekB - dekA;
   if (occA !== occB) return occB - occA;
-  return compareOriginalDateDesc(a.issue, b.issue);
+  return compareVaultSort(a.issue, b.issue, sort);
 }
 
 const DESKTOP_COLUMNS = 3;
 /** Card body height as a fraction of card width, for balancing columns. */
 const CARD_BODY_ESTIMATE = 0.95;
+const DEFAULT_SORT = "newest";
 
 /**
  * Deal cards into columns shortest-first so order reads across rows. Each
@@ -75,15 +81,35 @@ function imageAspect(issue) {
   return h / w;
 }
 
+function authorKey(name) {
+  return String(name || "").trim();
+}
+
+function FilterSelect({ label, value, onChange, children }) {
+  return (
+    <label className={styles.filterControl}>
+      <span className={styles.visuallyHidden}>{label}</span>
+      <select
+        className={styles.filterSelect}
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        aria-label={label}
+      >
+        {children}
+      </select>
+    </label>
+  );
+}
+
 function SubscribeCard({ order }) {
   return (
     <HideWhenSubscribed>
       <article className={styles.issueCard} style={{ order }}>
         <div className={styles.issueCardPlaceholder}>
           <div className={styles.issueCardBody}>
-            <h3>More issues coming soon</h3>
+            <h3>More articles coming soon</h3>
             <p className={styles.issueDek}>
-              New issues drop weekly. Subscribe to get them in your inbox.
+              New articles drop weekly. Subscribe to get them in your inbox.
             </p>
             <a className={styles.issueCta} href="/#subscribe">
               Subscribe
@@ -109,10 +135,11 @@ function IssueCard({ issue, order }) {
           />
         </div>
         <div className={styles.issueCardBody}>
-          <p className={styles.issueDate}>{originalDateLabel(issue) || "—"}</p>
+          <p className={styles.issueDate}>{originalCardLabel(issue) || "—"}</p>
           <h3>{issue.title}</h3>
+          {issue.authorName ? <p className={styles.issueAuthor}>{issue.authorName}</p> : null}
           {issue.summary ? <p className={styles.issueDek}>{issue.summary}</p> : null}
-          <span className={styles.issueCta}>Read issue</span>
+          <span className={styles.issueCta}>Read article</span>
         </div>
       </Link>
     </article>
@@ -120,8 +147,8 @@ function IssueCard({ issue, order }) {
 }
 
 /**
- * Client-side archive search. State lives in `?q=` so searches are shareable.
- * @param {{ issues: Array<{ _id?: string; slug: string; title: string; summary?: string | null; mainImage: string; mainImageWidth?: number; mainImageHeight?: number; originalYear?: number | null; originalPublication?: string | null; searchText: string }> }} props
+ * Client-side archive search, filters, and sort. State lives in the URL
+ * (`q`, `issue`, `year`, `author`, `sort`) so views are shareable.
  */
 export default function ArchiveBrowser({ issues }) {
   const router = useRouter();
@@ -131,13 +158,30 @@ export default function ArchiveBrowser({ issues }) {
 
   const query = (searchParams.get("q") || "").trim();
   const queryNormalized = query.toLowerCase();
+  const issueFilterParam = (searchParams.get("issue") || "").trim();
+  const yearFilterParam = (searchParams.get("year") || "").trim();
+  const issueFilterNum = Number(issueFilterParam);
+  const yearFilterNum = Number(yearFilterParam);
+  const issueFilter =
+    issueFilterParam && Number.isFinite(issueFilterNum) ? String(issueFilterNum) : issueFilterParam;
+  const yearFilter =
+    yearFilterParam && Number.isFinite(yearFilterNum) ? String(yearFilterNum) : yearFilterParam;
+  const authorFilter = (searchParams.get("author") || "").trim();
+  const SORTS = new Set(["newest", "oldest", "issue-desc", "issue-asc", "author"]);
+  const sortRaw = (searchParams.get("sort") || DEFAULT_SORT).trim() || DEFAULT_SORT;
+  const sort = SORTS.has(sortRaw) ? sortRaw : DEFAULT_SORT;
   const [searchDraft, setSearchDraft] = useState(query);
 
-  const replaceQuery = useCallback(
-    (nextQuery) => {
+  const replaceParams = useCallback(
+    (updates) => {
       const params = new URLSearchParams(searchParams.toString());
-      if (nextQuery) params.set("q", nextQuery);
-      else params.delete("q");
+      for (const [key, value] of Object.entries(updates)) {
+        if (value == null || value === "" || (key === "sort" && value === DEFAULT_SORT)) {
+          params.delete(key);
+        } else {
+          params.set(key, String(value));
+        }
+      }
       const qs = params.toString();
       startTransition(() => {
         router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
@@ -154,10 +198,39 @@ export default function ArchiveBrowser({ issues }) {
     const handle = window.setTimeout(() => {
       const trimmed = searchDraft.trim();
       if (trimmed === query) return;
-      replaceQuery(trimmed);
+      replaceParams({ q: trimmed });
     }, 250);
     return () => window.clearTimeout(handle);
-  }, [searchDraft, query, replaceQuery]);
+  }, [searchDraft, query, replaceParams]);
+
+  const issueNumbers = useMemo(() => {
+    const set = new Set();
+    for (const issue of issues) {
+      const n = originalIssueNumber(issue);
+      if (n != null) set.add(n);
+    }
+    return [...set].sort((a, b) => a - b);
+  }, [issues]);
+
+  const years = useMemo(() => {
+    const set = new Set();
+    for (const issue of issues) {
+      const y = originalYearValue(issue);
+      if (y != null) set.add(y);
+    }
+    return [...set].sort((a, b) => b - a);
+  }, [issues]);
+
+  const authorOptions = useMemo(() => {
+    const byKey = new Map();
+    for (const issue of issues) {
+      const name = authorKey(issue.authorName);
+      if (!name) continue;
+      const key = name.toLowerCase();
+      if (!byKey.has(key)) byKey.set(key, name);
+    }
+    return [...byKey.values()].sort((a, b) => a.localeCompare(b, undefined, { sensitivity: "base" }));
+  }, [issues]);
 
   const searchable = useMemo(
     () =>
@@ -169,43 +242,124 @@ export default function ArchiveBrowser({ issues }) {
     [issues],
   );
 
+  const hasActiveFilters = Boolean(queryNormalized || issueFilter || yearFilter || authorFilter);
+
   const visible = useMemo(() => {
-    if (!queryNormalized) {
-      return searchable.map(({ issue }) => issue).sort(compareOriginalDateDesc);
+    const tokens = queryNormalized ? queryTokens(queryNormalized) : [];
+    const issueNum = issueFilter ? Number(issueFilter) : null;
+    const yearNum = yearFilter ? Number(yearFilter) : null;
+    const authorNorm = authorFilter.toLowerCase();
+
+    const matched = searchable.filter(({ issue }) => {
+      if (tokens.length && !tokens.every((token) => issue.searchText.includes(token))) {
+        return false;
+      }
+      if (issueNum != null && Number.isFinite(issueNum) && originalIssueNumber(issue) !== issueNum) {
+        return false;
+      }
+      if (yearNum != null && Number.isFinite(yearNum) && originalYearValue(issue) !== yearNum) {
+        return false;
+      }
+      if (authorNorm && authorKey(issue.authorName).toLowerCase() !== authorNorm) {
+        return false;
+      }
+      return true;
+    });
+
+    if (tokens.length) {
+      return matched.sort((a, b) => compareSearchResults(a, b, tokens, sort)).map(({ issue }) => issue);
     }
-    const tokens = queryTokens(queryNormalized);
-    return searchable
-      .filter(({ issue }) => tokens.every((token) => issue.searchText.includes(token)))
-      .sort((a, b) => compareSearchResults(a, b, tokens))
-      .map(({ issue }) => issue);
-  }, [searchable, queryNormalized]);
+    return matched.map(({ issue }) => issue).sort((a, b) => compareVaultSort(a, b, sort));
+  }, [searchable, queryNormalized, issueFilter, yearFilter, authorFilter, sort]);
 
   const columns = useMemo(() => {
     const entries = visible.map((issue) => ({ issue, aspect: imageAspect(issue) }));
-    if (!queryNormalized) entries.push({ issue: null, aspect: 0.4 });
+    if (!hasActiveFilters) entries.push({ issue: null, aspect: 0.4 });
     return packColumns(entries);
-  }, [visible, queryNormalized]);
+  }, [visible, hasActiveFilters]);
+
+  const emptyMessage = query
+    ? `No articles match “${query}”. Try a different search or filter.`
+    : "No articles match these filters. Try a different combination.";
 
   return (
     <div className={isPending ? styles.browserPending : undefined}>
       <div className={styles.filterBar}>
         <label className={styles.searchControl}>
-          <span className={styles.visuallyHidden}>Search issues</span>
+          <span className={styles.visuallyHidden}>Search articles</span>
           <input
             type="search"
             className={styles.searchInput}
-            placeholder="Search issues…"
+            placeholder="Search articles…"
             value={searchDraft}
             onChange={(event) => setSearchDraft(event.target.value)}
             autoComplete="off"
           />
         </label>
+        <FilterSelect
+          label="Filter by magazine issue"
+          value={issueFilter}
+          onChange={(value) => replaceParams({ issue: value })}
+        >
+          <option value="">All issues</option>
+          {issueFilter && !issueNumbers.includes(Number(issueFilter)) ? (
+            <option value={issueFilter}>Issue {issueFilter}</option>
+          ) : null}
+          {issueNumbers.map((n) => (
+            <option key={n} value={String(n)}>
+              Issue {n}
+            </option>
+          ))}
+        </FilterSelect>
+        <FilterSelect
+          label="Filter by year"
+          value={yearFilter}
+          onChange={(value) => replaceParams({ year: value })}
+        >
+          <option value="">All years</option>
+          {yearFilter && !years.includes(Number(yearFilter)) ? (
+            <option value={yearFilter}>{yearFilter}</option>
+          ) : null}
+          {years.map((y) => (
+            <option key={y} value={String(y)}>
+              {y}
+            </option>
+          ))}
+        </FilterSelect>
+        <FilterSelect
+          label="Filter by author"
+          value={
+            authorOptions.find((name) => name.toLowerCase() === authorFilter.toLowerCase()) ||
+            authorFilter
+          }
+          onChange={(value) => replaceParams({ author: value })}
+        >
+          <option value="">All authors</option>
+          {authorFilter &&
+          !authorOptions.some((name) => name.toLowerCase() === authorFilter.toLowerCase()) ? (
+            <option value={authorFilter}>{authorFilter}</option>
+          ) : null}
+          {authorOptions.map((name) => (
+            <option key={name} value={name}>
+              {name}
+            </option>
+          ))}
+        </FilterSelect>
+        <FilterSelect
+          label="Sort articles"
+          value={sort}
+          onChange={(value) => replaceParams({ sort: value })}
+        >
+          <option value="newest">Newest print first</option>
+          <option value="oldest">Oldest print first</option>
+          <option value="issue-desc">Issue # high to low</option>
+          <option value="issue-asc">Issue # low to high</option>
+          <option value="author">Author A–Z</option>
+        </FilterSelect>
       </div>
 
       {visible.length === 0 ? (
-        <p className={styles.emptyState}>
-          No issues match “{query}”. Try a different search term.
-        </p>
+        <p className={styles.emptyState}>{emptyMessage}</p>
       ) : (
         <div className={styles.issueMosaic}>
           {columns.map((entries, index) => (

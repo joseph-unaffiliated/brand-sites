@@ -13,12 +13,12 @@ function wordCount(text) {
 
 function estimateCard(article) {
   const dekWords = wordCount(article.cardDek || article.summary);
-  return 210 + 96 + Math.ceil(dekWords / 11) * 21 + GAP;
+  return 300 + 96 + Math.ceil(dekWords / 11) * 21 + GAP;
 }
 
 function estimateFeatured(article, isLatest) {
   const previewWords = wordCount(article.featuredPreview || article.summary);
-  const image = isLatest ? 300 : 260;
+  const image = isLatest ? 420 : 380;
   const chrome = isLatest ? 130 : 110;
   return image + chrome + Math.ceil(previewWords / 9) * 22 + GAP;
 }

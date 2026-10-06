@@ -69,7 +69,7 @@ function SnippetsList({ items }) {
   if (!items?.length) return null;
   return (
     <div className={styles.snippetsList}>
-      <p className={styles.snippetsListTitle}>More issues</p>
+      <p className={styles.snippetsListTitle}>More articles</p>
       {items.map((article) => (
         <Link
           key={article._id ?? article.slug}

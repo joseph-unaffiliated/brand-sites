@@ -116,7 +116,7 @@ export default async function Home({ searchParams: searchParamsProp }) {
           <section className={styles.hero}>
             <div className="container">
               <p className={styles.heroMeta}>
-                {totalCount} issue{totalCount !== 1 ? "s" : ""} in the archive
+                {totalCount} article{totalCount !== 1 ? "s" : ""} in the archive
                 <HideWhenSubscribed>
                   <>
                     {" • "}

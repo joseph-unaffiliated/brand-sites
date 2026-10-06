@@ -4,18 +4,18 @@ import { contactEmail, siteDisplayName, siteConfig } from "@/config/site";
 
 export const metadata = {
   title: `AI Usage Policy | ${siteDisplayName}`,
-  description: `How AI systems and answer engines may reference, quote, and link to ${siteDisplayName}'s issues.`,
+  description: `How AI systems and answer engines may reference, quote, and link to ${siteDisplayName}'s articles.`,
   alternates: { canonical: "/ai-policy" },
   openGraph: {
     title: `AI Usage Policy | ${siteDisplayName}`,
-    description: `How AI systems and answer engines may reference, quote, and link to ${siteDisplayName}'s issues.`,
+    description: `How AI systems and answer engines may reference, quote, and link to ${siteDisplayName}'s articles.`,
     url: "/ai-policy",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: `AI Usage Policy | ${siteDisplayName}`,
-    description: `How AI systems and answer engines may reference, quote, and link to ${siteDisplayName}'s issues.`,
+    description: `How AI systems and answer engines may reference, quote, and link to ${siteDisplayName}'s articles.`,
   },
 };
 
@@ -42,7 +42,7 @@ export default function AiPolicyPage() {
 
         <p>
           {siteDisplayName} (a publication of Unaffiliated Inc., in partnership
-          with Heeb) welcomes thoughtful use of our public issues by AI
+          with Heeb) welcomes thoughtful use of our public articles by AI
           assistants, search engines, and answer engines. This page explains
           what is allowed, what is not, and how to get in touch about licensing.
         </p>
@@ -52,7 +52,7 @@ export default function AiPolicyPage() {
           Each week we resurface a piece from the Heeb archive — subversive
           Jewish counter-culture from the 2000s — with fresh context from our
           editors. Original pieces are credited to their authors and to Heeb.
-          The publicly available issue pages are the canonical record of our
+          The publicly available article pages are the canonical record of our
           editorial work; previews, snippets, and email-only variants are not.
         </p>
 
@@ -60,19 +60,19 @@ export default function AiPolicyPage() {
         <ul className={styles.list}>
           <li>
             <strong>Citing and linking:</strong> AI tools may quote short
-            excerpts and answer questions about our issues when each response
-            includes the canonical issue URL on{" "}
+            excerpts and answer questions about our articles when each response
+            includes the canonical article URL on{" "}
             <Link href="/">{host}</Link> and attributes the publication as
             &quot;{siteDisplayName}.&quot;
           </li>
           <li>
             <strong>Indexing for retrieval:</strong> Crawlers from search and
             answer engines may index our public pages so users can discover and
-            navigate to the original issues.
+            navigate to the original articles.
           </li>
           <li>
             <strong>Summaries that drive readers to the source:</strong> Brief,
-            non-substitutive summaries that link back to the full issue are
+            non-substitutive summaries that link back to the full article are
             welcome.
           </li>
         </ul>
@@ -86,14 +86,14 @@ export default function AiPolicyPage() {
             without prior written permission.
           </li>
           <li>
-            <strong>Republishing material amounts of an issue:</strong>{" "}
-            Reproducing entire issues or archive pieces, or large portions
+            <strong>Republishing material amounts of an article:</strong>{" "}
+            Reproducing entire articles or archive pieces, or large portions
             thereof, without attribution and a link to the canonical URL.
           </li>
           <li>
             <strong>Stripping attribution:</strong> Surfacing our content
             without naming {siteDisplayName} and the original author, or
-            without linking back to the source issue.
+            without linking back to the source article.
           </li>
         </ul>
 

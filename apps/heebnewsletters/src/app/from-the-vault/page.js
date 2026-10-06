@@ -6,7 +6,7 @@ import styles from "./page.module.css";
 
 const title = `The Vault | ${siteDisplayName}`;
 const description =
-  "Every From the Vault issue: classic Heeb stories dug out of the archive, with fresh commentary. Browse and search by original publication date.";
+  "Every From the Vault article: classic Heeb stories dug out of the archive, with fresh commentary. Browse and search by original publication date.";
 
 export const metadata = {
   title,
@@ -37,6 +37,7 @@ export default async function FromTheVaultPage() {
     mainImageHeight: article.mainImageHeight,
     originalYear: article.originalYear,
     originalPublication: article.originalPublication,
+    authorName: article.authorName || null,
     searchText: searchTextFromArticle(article),
   }));
 

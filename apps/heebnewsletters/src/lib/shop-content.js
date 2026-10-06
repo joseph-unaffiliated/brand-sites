@@ -10,6 +10,8 @@
 import { sanityClient } from "./vault";
 import { getCollectionProducts, getProductsByHandles } from "./shopify/catalog";
 import { productHandleFromUrl } from "./shopify/mappers";
+import { backIssueHandleForNumber } from "./back-issue-handles";
+import { originalIssueNumber } from "./vault-dates";
 
 const REVALIDATE = { next: { revalidate: 300 } };
 
@@ -25,6 +27,8 @@ const SHOP_SETTINGS_QUERY = `*[_type == "shopSettings" && _id == "shopSettings"]
 
 const ISSUE_SHOP_PICKS_QUERY = `*[_type == "vaultIssue" && slug.current == $slug && !(_id in path("drafts.**"))][0]{
   originalIssueUrl,
+  originalPublication,
+  originalYear,
   "picks": shopThisStory[defined(handle)]{ handle, note }
 }`;
 
@@ -134,25 +138,43 @@ export async function getFeaturedProducts(settings, { limit = 4 } = {}) {
 }
 
 /**
+ * Prefer a product URL the editor stored; otherwise map the magazine issue
+ * number from `originalPublication` (HEEB #10 …) onto the live Shopify handle.
+ */
+export function resolveBackIssueHandle(issue, originalIssueUrl) {
+  return (
+    productHandleFromUrl(originalIssueUrl) ||
+    backIssueHandleForNumber(originalIssueNumber(issue))
+  );
+}
+
+/**
  * Products to show under an article: the back issue from `originalIssueUrl`
- * (when it's a heebmedia.com product link) plus the editor's "Shop this
- * story" picks. Returns [] when nothing resolves, so callers can fall back to
- * the plain text link.
+ * (when it's a heebmedia.com product link) or from the magazine-number map,
+ * plus the editor's "Shop this story" picks. Returns [] when nothing
+ * resolves, so callers can fall back to the plain text link.
  */
 export async function getShopThisStory(slug, issue) {
   let picks = [];
   let originalIssueUrl = issue?.originalIssueUrl ?? null;
+  let originalPublication = issue?.originalPublication ?? null;
+  let originalYear = issue?.originalYear ?? null;
   if (sanityClient && slug) {
     try {
       const raw = await sanityClient.fetch(ISSUE_SHOP_PICKS_QUERY, { slug }, REVALIDATE);
       picks = Array.isArray(raw?.picks) ? raw.picks : [];
       if (raw?.originalIssueUrl) originalIssueUrl = raw.originalIssueUrl;
+      if (raw?.originalPublication) originalPublication = raw.originalPublication;
+      if (raw?.originalYear) originalYear = raw.originalYear;
     } catch (err) {
       console.warn(`[shop-content] getShopThisStory(${slug}): ${err?.message || err}`);
     }
   }
 
-  const backIssueHandle = productHandleFromUrl(originalIssueUrl);
+  const backIssueHandle = resolveBackIssueHandle(
+    { originalPublication, originalYear },
+    originalIssueUrl,
+  );
   const ordered = [];
   const notes = new Map();
   if (backIssueHandle) {
