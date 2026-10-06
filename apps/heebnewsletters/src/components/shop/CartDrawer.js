@@ -6,14 +6,15 @@ import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useCart } from "@/context/CartContext";
 import { formatMoney } from "@/lib/shopify/mappers";
+import CheckoutEmailModal from "./CheckoutEmailModal";
 import styles from "./shop.module.css";
 
 /**
- * Slide-in cart. Quantity and remove call Shopify directly; "Checkout" hands
- * off to heebmedia.com in the same tab.
+ * Slide-in cart. Quantity and remove call Shopify directly; "Checkout" asks for an
+ * email, then hands off to heebmedia.com in the same tab.
  */
 export default function CartDrawer() {
-  const { cart, lines, count, subtotal, isOpen, closeCart, updateItem, removeItem, checkout, pending, error, clearError, refresh } =
+  const { cart, lines, count, subtotal, isOpen, closeCart, updateItem, removeItem, pending, error, clearError, refresh } =
     useCart();
   const panelRef = useRef(null);
   // Portal only after mount so server and first client render match.
@@ -21,6 +22,17 @@ export default function CartDrawer() {
   useEffect(() => {
     setMounted(true);
   }, []);
+  const [emailStep, setEmailStep] = useState(false);
+  const emailStepRef = useRef(false);
+  useEffect(() => {
+    emailStepRef.current = emailStep;
+  }, [emailStep]);
+  // Reopening the cart starts from the cart, not the email step.
+  const [wasOpen, setWasOpen] = useState(isOpen);
+  if (wasOpen !== isOpen) {
+    setWasOpen(isOpen);
+    if (!isOpen) setEmailStep(false);
+  }
 
   // Lock scroll, close on Escape, refresh prices when opened.
   useEffect(() => {
@@ -28,7 +40,9 @@ export default function CartDrawer() {
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     const onKey = (e) => {
-      if (e.key === "Escape") closeCart();
+      if (e.key !== "Escape") return;
+      if (emailStepRef.current) setEmailStep(false);
+      else closeCart();
     };
     window.addEventListener("keydown", onKey);
     refresh();
@@ -143,7 +157,7 @@ export default function CartDrawer() {
             <button
               type="button"
               className="button button-primary"
-              onClick={checkout}
+              onClick={() => setEmailStep(true)}
               disabled={pending || !cart?.checkoutUrl || hasUnavailable}
             >
               Checkout
@@ -156,6 +170,7 @@ export default function CartDrawer() {
           </div>
         ) : null}
       </aside>
+      {isOpen && emailStep ? <CheckoutEmailModal onClose={() => setEmailStep(false)} /> : null}
     </>,
     document.body,
   );

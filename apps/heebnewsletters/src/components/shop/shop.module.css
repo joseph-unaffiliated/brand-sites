@@ -744,6 +744,109 @@
   text-wrap: balance;
 }
 
+/* ---------- Checkout email step ---------- */
+
+.checkoutModalBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 10, 10, 0.45);
+  z-index: 1300;
+}
+
+.checkoutModal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(420px, calc(100vw - 32px));
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+  box-sizing: border-box;
+  padding: 32px 28px 22px;
+  background: var(--surface);
+  color: var(--text-primary);
+  border-radius: 14px;
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.25);
+  z-index: 1301;
+}
+
+.checkoutModalClose {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  border: 0;
+  background: transparent;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 6px;
+  color: inherit;
+}
+
+.checkoutModalTitle {
+  font-family: "ivyora-display", "IvyOra Display", Georgia, serif;
+  font-weight: 300;
+  font-size: 28px;
+  line-height: 1.15;
+  margin: 0 0 18px;
+}
+
+.checkoutModalForm {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.checkoutModalForm input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: inherit;
+  font-size: 16px;
+  font-family: inherit;
+}
+
+.checkoutModalForm .button {
+  width: 100%;
+  padding: 13px 22px;
+  font-size: 15px;
+}
+
+.checkoutModalSkip {
+  align-self: center;
+  border: 0;
+  background: transparent;
+  padding: 2px 0;
+  font-size: 13px;
+  text-decoration: underline;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.checkoutModalSkip:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.checkoutModalNote {
+  margin: 18px 0 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.checkoutModalNote a {
+  color: inherit;
+  text-decoration: underline;
+}
+
 /* ---------- Shop this story (article) ---------- */
 
 .storyShop {

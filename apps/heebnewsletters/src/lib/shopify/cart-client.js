@@ -8,6 +8,7 @@ import { CART_SOURCE_ATTRIBUTE, SHOPIFY_STOREFRONT_ENDPOINT, ShopifyError } from
 import { toCart } from "./mappers";
 import {
   CART_ATTRIBUTES_UPDATE_MUTATION,
+  CART_BUYER_IDENTITY_UPDATE_MUTATION,
   CART_CREATE_MUTATION,
   CART_LINES_ADD_MUTATION,
   CART_LINES_REMOVE_MUTATION,
@@ -83,6 +84,11 @@ export async function updateLines(cartId, lines) {
 export async function removeLines(cartId, lineIds) {
   const data = await gql(CART_LINES_REMOVE_MUTATION, { cartId, lineIds });
   return unwrap(data?.cartLinesRemove);
+}
+
+export async function setBuyerEmail(cartId, email) {
+  const data = await gql(CART_BUYER_IDENTITY_UPDATE_MUTATION, { cartId, buyerIdentity: { email } });
+  return unwrap(data?.cartBuyerIdentityUpdate);
 }
 
 /** Older carts (or ones Shopify recreated) may lack the source attribute. */

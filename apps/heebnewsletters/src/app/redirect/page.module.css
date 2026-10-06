@@ -1,0 +1,9 @@
+.fallbackLink {
+  color: var(--accent);
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.fallbackLink:hover {
+  color: var(--accent-strong, var(--accent));
+}

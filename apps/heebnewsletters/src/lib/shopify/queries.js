@@ -177,6 +177,7 @@ export const CART_FRAGMENT = `
     checkoutUrl
     totalQuantity
     attributes { key value }
+    buyerIdentity { email }
     cost {
       subtotalAmount { ...MoneyFields }
       totalAmount { ...MoneyFields }
@@ -243,6 +244,17 @@ export const CART_LINES_REMOVE_MUTATION = `
   ${CART_FRAGMENT}
   mutation CartLinesRemove($cartId: ID!, $lineIds: [ID!]!) {
     cartLinesRemove(cartId: $cartId, lineIds: $lineIds) {
+      cart { ...CartFields }
+      userErrors { field message }
+    }
+  }
+`;
+
+/** Checkout pre-fills Contact with `buyerIdentity.email`. */
+export const CART_BUYER_IDENTITY_UPDATE_MUTATION = `
+  ${CART_FRAGMENT}
+  mutation CartBuyerIdentityUpdate($cartId: ID!, $buyerIdentity: CartBuyerIdentityInput!) {
+    cartBuyerIdentityUpdate(cartId: $cartId, buyerIdentity: $buyerIdentity) {
       cart { ...CartFields }
       userErrors { field message }
     }

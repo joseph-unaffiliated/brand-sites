@@ -186,6 +186,7 @@ export function toCart(node) {
     subtotal: toMoney(node.cost?.subtotalAmount),
     total: toMoney(node.cost?.totalAmount),
     attributes: node.attributes ?? [],
+    buyerEmail: node.buyerIdentity?.email ?? null,
     lines,
   };
 }

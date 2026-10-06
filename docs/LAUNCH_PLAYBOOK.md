@@ -231,6 +231,7 @@ A brand can sell an existing Shopify store's catalog without any admin access to
 
 - **Tokenless Storefront API** reads (products, collections, search, carts) — no secret; `totalInventory`, tags and metafields are denied, so show availability, not counts. Exact handle lookups use aliased `product(handle:)`; `query:"handle:x"` is a prefix match.
 - **Cart in the browser**, id in `localStorage`, `attributes: [{ key: "source", value: "<brand domain>" }]`, same-tab handoff to `checkoutUrl` + UTMs. Purchases are read on the merchant's side.
+- **Optional checkout email step** (`CheckoutEmailModal.js` + `src/app/redirect/`): require an email before checkout, set it with `cartBuyerIdentityUpdate` so the merchant's Contact field is prefilled, and offer "Checkout and Subscribe" (magic `redirect&url=<base64url>` round trip back to `/redirect`, then checkout) or "Checkout without Subscribing".
 - **Consent-gated** GA4 + Meta ecommerce events (`typeof gtag/fbq` guards; OneTrust gates the loaders).
 - **Sanity curation:** a `shopSettings` singleton (featured picks, tabs, hidden handles, hide sold-out) plus a per-article product-pick array with the `ShopifyProductPicker` input (tokenless search).
 - **Redirect Shopify-shaped paths** (`/products/:handle`, `/collections/:handle`) in `next.config.mjs`; add `cdn.shopify.com` to `images.remotePatterns`.

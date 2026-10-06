@@ -4,8 +4,8 @@
  * Shop cart state for the whole site: one Shopify cart per browser, id kept
  * in localStorage, mutations made straight from the browser.
  *
- * `checkout()` sends the shopper to Shopify's hosted checkout on heebmedia.com
- * in the same tab (Shopify only serves checkout on the store's primary domain).
+ * `prepareCheckout(email)` returns Shopify's hosted checkout URL on heebmedia.com
+ * (Shopify only serves checkout on the store's primary domain).
  */
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
@@ -17,6 +17,7 @@ import {
   fetchCart,
   readStoredCartId,
   removeLines,
+  setBuyerEmail,
   storeCartId,
   updateLines,
 } from "@/lib/shopify/cart-client";
@@ -164,14 +165,25 @@ export function CartProvider({ children }) {
   }, []);
   const closeCart = useCallback(() => setIsOpen(false), []);
 
-  const checkout = useCallback(() => {
-    const current = cartRef.current;
-    const url = checkoutUrlWithUtm(current?.checkoutUrl);
-    if (!url) return;
-    trackBeginCheckout(current);
-    // Same tab: Shopify's hosted checkout on heebmedia.com.
-    window.location.assign(url);
-  }, []);
+  /**
+   * Attach the shopper's email to the cart (Shopify pre-fills checkout Contact with it)
+   * and return the heebmedia.com checkout URL. The caller navigates, directly or via
+   * the subscribe redirect.
+   */
+  const prepareCheckout = useCallback(
+    async (email) => {
+      const current = cartRef.current;
+      if (!current?.id) return null;
+      let next = current;
+      if (email && current.buyerEmail !== email) {
+        next = commit(await run(() => setBuyerEmail(current.id, email)));
+      }
+      const url = checkoutUrlWithUtm(next?.checkoutUrl);
+      if (url) trackBeginCheckout(next);
+      return url;
+    },
+    [commit, run],
+  );
 
   const value = useMemo(
     () => ({
@@ -190,10 +202,10 @@ export function CartProvider({ children }) {
       refresh,
       openCart,
       closeCart,
-      checkout,
+      prepareCheckout,
       clearError: () => setError(null),
     }),
-    [cart, hydrated, isOpen, pending, error, lastAdded, addItem, updateItem, removeItem, refresh, openCart, closeCart, checkout],
+    [cart, hydrated, isOpen, pending, error, lastAdded, addItem, updateItem, removeItem, refresh, openCart, closeCart, prepareCheckout],
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
