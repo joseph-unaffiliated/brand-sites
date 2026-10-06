@@ -85,3 +85,4 @@ You do **not** need a separate landing page per partner. One giveaway URL + uniq
 - Optional: `ALTER TABLE …users ADD COLUMN IF NOT EXISTS isPartner BOOL;` then flag partners via Analytics tool or manually.
 - Secrets stay on magic (`READER_TOKEN_SECRET`, `CIO_*`, `GCP_*`, `INTERNAL_ANALYTICS_SECRET`); marketing apps never query BQ by email.
 - Magic routes: `POST /api/giveaway` (reader) and `POST /api/internal/giveaway-admin` (Analytics staff).
+- Location: magic stamps `giveaway_entries.country` / `region` at entry and keeps `users.country` / `region` current from Vercel edge geo headers (country + state only, no IP). Use `users.country = 'US'` for US-only eligibility checks; entries before Oct 2026 rely on the GA4 backfill (`users.geoSource = 'ga4'`) and may be NULL.
