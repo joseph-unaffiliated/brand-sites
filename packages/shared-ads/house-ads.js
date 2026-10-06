@@ -107,6 +107,19 @@ function brandsTableId() {
   );
 }
 
+/**
+ * Brand teams type promo links by hand (`youtube.com/...`, `/shop/x`). Site paths and URLs with
+ * a scheme pass through; bare domains get `https://` so they don't resolve relative to the page.
+ * @param {string} url
+ */
+function promoHref(url) {
+  const raw = String(url || "").trim();
+  if (!raw) return "";
+  if (raw.startsWith("//")) return `https:${raw}`;
+  if (raw.startsWith("/") || /^[a-z][a-z0-9+.-]*:/i.test(raw)) return raw;
+  return `https://${raw}`;
+}
+
 function imageUrlFromAttachment(attachments) {
   if (!Array.isArray(attachments) || !attachments.length) return "";
   const first = attachments[0];
@@ -298,7 +311,7 @@ export async function fetchActiveHouseCreatives() {
     const commerceUrl = firstFieldString(f[FIELD.commerceUrl]);
     const houseClickUrl = firstFieldString(f[FIELD.clickUrl]);
     const clickUrl = isBrandPromo
-      ? houseClickUrl || firstFieldString(f[FIELD.promoUrl])
+      ? promoHref(houseClickUrl || firstFieldString(f[FIELD.promoUrl]))
       : isCommerce
         ? commerceUrl || houseClickUrl
         : houseClickUrl || commerceUrl;
