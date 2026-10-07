@@ -231,6 +231,9 @@ Today the formula sends FTV creatives to the Webflow shape `https://fromthevault
 
 ```text
 IF(
+  {Ad type} = "Brand Promo",
+  {Promo URL},
+IF(
   {Ad type} = "House Ads",
   "https://" &
     IF({Code} = "FTV", "www.heebmagazine.com/",
@@ -240,10 +243,10 @@ IF(
       IF({Code} = "TEC", "recipe/",
         IF({Code} = "HIP", "word/", "article/")) & {Slug}
     )
-)
+))
 ```
 
-The `{Slug}` for FTV creatives must be the **Sanity** slug (`/article/{slug}`), not the Webflow slug; both still resolve (Webflow slugs 308), but the direct form avoids two hops.
+The `{Slug}` for FTV creatives must be the **Sanity** slug: Webflow slugs only redirect at the root (`/beastieboys`), so `/article/beastieboys` 404s. Change existing FTV creatives' Slug in the same edit (e.g. `beastieboys` → `the-beastie-within-ad-rock-mca-and-mike-d-embrace-their-inner-heebs`).
 
 ---
 
