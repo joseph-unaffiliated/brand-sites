@@ -5,17 +5,43 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useCart } from "@/context/CartContext";
+import { useSubscriber } from "@/context/SubscriberContext";
 import { formatMoney } from "@/lib/shopify/mappers";
-import CheckoutEmailModal from "./CheckoutEmailModal";
+import CheckoutEmailModal, { EMAIL_PATTERN } from "./CheckoutEmailModal";
 import styles from "./shop.module.css";
 
 /**
  * Slide-in cart. Quantity and remove call Shopify directly; "Checkout" asks for an
- * email, then hands off to heebmedia.com in the same tab.
+ * email, then hands off to heebmedia.com in the same tab. Signed-in subscribers skip
+ * the email step: their stored email goes on the cart and checkout opens directly.
  */
 export default function CartDrawer() {
-  const { cart, lines, count, subtotal, isOpen, closeCart, updateItem, removeItem, pending, error, clearError, refresh } =
-    useCart();
+  const {
+    cart,
+    lines,
+    count,
+    subtotal,
+    isOpen,
+    closeCart,
+    updateItem,
+    removeItem,
+    pending,
+    error,
+    clearError,
+    refresh,
+    prepareCheckout,
+  } = useCart();
+  const { isSubscribed, email: subscriberEmail } = useSubscriber();
+  const knownEmail = isSubscribed && EMAIL_PATTERN.test(subscriberEmail?.trim() || "") ? subscriberEmail.trim() : null;
+  const [leaving, setLeaving] = useState(false);
+  // Back from checkout can restore this page from bfcache with the button still busy.
+  useEffect(() => {
+    const onShow = (e) => {
+      if (e.persisted) setLeaving(false);
+    };
+    window.addEventListener("pageshow", onShow);
+    return () => window.removeEventListener("pageshow", onShow);
+  }, []);
   const panelRef = useRef(null);
   // Portal only after mount so server and first client render match.
   const [mounted, setMounted] = useState(false);
@@ -53,6 +79,22 @@ export default function CartDrawer() {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
+
+  async function startCheckout() {
+    if (!knownEmail) {
+      setEmailStep(true);
+      return;
+    }
+    setLeaving(true);
+    try {
+      const checkoutUrl = await prepareCheckout(knownEmail);
+      if (!checkoutUrl) throw new Error("Checkout is unavailable right now.");
+      window.location.assign(checkoutUrl);
+    } catch {
+      setLeaving(false);
+      setEmailStep(true);
+    }
+  }
 
   if (!mounted) return null;
 
@@ -157,10 +199,10 @@ export default function CartDrawer() {
             <button
               type="button"
               className="button button-primary"
-              onClick={() => setEmailStep(true)}
-              disabled={pending || !cart?.checkoutUrl || hasUnavailable}
+              onClick={startCheckout}
+              disabled={pending || leaving || !cart?.checkoutUrl || hasUnavailable}
             >
-              Checkout
+              {leaving ? "One moment…" : "Checkout"}
             </button>
             <p className={styles.checkoutNote}>
               {hasUnavailable

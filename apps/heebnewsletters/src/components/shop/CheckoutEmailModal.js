@@ -10,7 +10,7 @@ import { siteConfig } from "@/config/site";
 import styles from "./shop.module.css";
 
 const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+export const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function isLocalhost() {
   return window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
