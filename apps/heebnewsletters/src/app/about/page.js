@@ -31,6 +31,14 @@ export const metadata = {
 
 const READ_MORE_COUNT = 3;
 
+function ExternalLink({ href, children }) {
+  return (
+    <a href={href} target="_blank" rel="noopener noreferrer">
+      {children}
+    </a>
+  );
+}
+
 export default async function AboutPage() {
   const allArticles = await getArticles();
   const readMore = pickRandomArticles(allArticles, { count: READ_MORE_COUNT });
@@ -45,27 +53,61 @@ export default async function AboutPage() {
                 <h1>About {siteDisplayName}</h1>
               </header>
               <p>
-                Heeb Magazine spent the 2000s pissing off the right people:
-                too Jewish for the mainstream, too irreverent for the
-                establishment, too funny to ignore. This is its home again.
+                Just like Moses received the Ten Commandments on Mount Sinai,
+                in 2002 the world received the very first issue of Heeb
+                Magazine. Heeb&rsquo;s first Editor described the fledgling
+                publication as &ldquo;a little mirror held up to the new Jewish
+                world, with all its dirt and glitter.&rdquo; That mirror took
+                many forms across the 22 print issues of Heeb Magazine, from
+                articles to artwork, reviews to interviews, fiction to photo
+                shoots.
               </p>
               <p>
-                <Link href="/from-the-vault">From the Vault</Link> is where we
-                reopen the archive. Every week we dig up a Heeb story, photo
-                shoot, or column from the 2000s and hand it back to you with
-                the context, commentary, and side-eye it deserves.
+                <Link href="/from-the-vault">From the Vault</Link> is our
+                newsletter where we pull the dusty curtain off the mirror and
+                break open the archive. Every week we dig up a Heeb feature from
+                the 2000s and hand it back to you with the context, commentary,
+                and side-eye it deserves.
+              </p>
+              <p>
+                Heeb was a project in redefining what it meant to be Jewish in a
+                rapidly changing world. That change has only picked up speed
+                over the last two decades, but From the Vault reminds us that
+                Jewish culture has always been loud, funny, a little offensive,
+                and unmistakably itself. Every article is a time capsule with a
+                point of view.
+              </p>
+              <p>
+                Heeb Magazine spent the 2000s pissing off the right people: too
+                Jewish for the mainstream, too irreverent for the establishment,
+                too funny to ignore. This is its home again&hellip; courtesy of{" "}
+                <ExternalLink href="https://heebmedia.com">Heeb Media</ExternalLink>.
               </p>
 
+              <h2>Heeb is back!</h2>
               <p>
-                For our small team, this isn&apos;t nostalgia for nostalgia&apos;s
-                sake — it&apos;s a reminder that Jewish culture has always been
-                loud, funny, a little offensive, and unmistakably itself.
-                Every article is a time capsule with a point of view.
+                In 2025, Heeb returned as Heeb Media, an independent digital
+                media nonprofit that combines the spirit of the old magazine
+                with the creativity and technology of a new generation.
+              </p>
+              <p>
+                Today, in addition to this archive, Heeb Media runs a{" "}
+                <ExternalLink href="https://heebmedia.com/pages/listen-1">podcast network</ExternalLink>, a{" "}
+                <ExternalLink href="https://www.youtube.com/@HeebMedia">YouTube channel</ExternalLink> with
+                original series, and social first programs on{" "}
+                <ExternalLink href="https://www.instagram.com/heebmedia/">Instagram</ExternalLink> and{" "}
+                <ExternalLink href="https://www.tiktok.com/@heebmedia">TikTok</ExternalLink>. In select
+                cities, Heeb is{" "}
+                <ExternalLink href="https://docs.google.com/forms/d/e/1FAIpQLSeNvD2RYtYScDoLlW_PcRczK8zwy3tkbcUaA-79zBXoIrHWvg/viewform?usp=header">
+                  bringing people together
+                </ExternalLink>{" "}
+                for film screenings, comedy shows, fashion pop-ups, and shabbat
+                dinners.
               </p>
 
               <h2>What we publish</h2>
               <p>
-                Each article is <strong>one dug-up piece of the vault</strong>—an
+                Each article on this site is one dug-up piece of the vault: an
                 editor&apos;s intro framing the piece, the original page or
                 article reproduced in full, era context, and a Rabbit Hole of
                 curated links for when you inevitably fall down the internet
@@ -95,10 +137,8 @@ export default async function AboutPage() {
                 comes from an issue we still have copies of, you can buy that
                 issue right under the article. Orders ship from and are
                 supported by Heeb Media at{" "}
-                <a href="https://heebmedia.com" target="_blank" rel="noopener noreferrer">
-                  heebmedia.com
-                </a>
-                , where checkout happens.
+                <ExternalLink href="https://heebmedia.com">heebmedia.com</ExternalLink>, where
+                checkout happens.
               </p>
 
               <h2>Who it&apos;s for</h2>
