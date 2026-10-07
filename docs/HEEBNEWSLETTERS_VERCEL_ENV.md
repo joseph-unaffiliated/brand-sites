@@ -246,7 +246,7 @@ IF(
 ))
 ```
 
-The `{Slug}` for FTV creatives must be the **Sanity** slug: Webflow slugs only redirect at the root (`/beastieboys`), so `/article/beastieboys` 404s. Change existing FTV creatives' Slug in the same edit (e.g. `beastieboys` → `the-beastie-within-ad-rock-mca-and-mike-d-embrace-their-inner-heebs`).
+The `{Slug}` for FTV creatives is the **tracker** slug from the Issues tracker (`trackerSlug` in `apps/heebnewsletters/legacy-slug-map.json`, e.g. `innerheebs`). Both `/{trackerSlug}` and `/article/{trackerSlug}` 308 to the Sanity article (`next.config.mjs`), so new tracker rows only need an entry in the map.
 
 ---
 
