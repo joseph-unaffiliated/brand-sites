@@ -34,4 +34,4 @@
 
 ## Staging-only sites
 
-A brand can run on its `*.vercel.app` host before its production domain goes live (Heeb Magazine today: `www.heebmagazine.com` and the four redirect hosts are already attached to the Vercel project, but DNS still points elsewhere until the team approves cutover). Set `NEXT_PUBLIC_NOINDEX=true` on the Vercel project: `robots.txt` disallows everything and pages emit `noindex, nofollow`. Delete the variable at go-live. No Vercel Deployment Protection is used, so magic, reader APIs and smoke tests work unchanged.
+A brand can run on its `*.vercel.app` host before its production domain goes live (Heeb Magazine did this until its 2026-10-07 cutover to `www.heebmagazine.com`). Set `NEXT_PUBLIC_NOINDEX=true` on the Vercel project: `robots.txt` disallows everything and pages emit `noindex, nofollow`. Delete the variable at go-live. No Vercel Deployment Protection is used, so magic, reader APIs and smoke tests work unchanged.

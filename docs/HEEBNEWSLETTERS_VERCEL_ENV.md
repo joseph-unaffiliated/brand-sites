@@ -159,13 +159,13 @@ AIRTABLE_HOUSE_ADS_TABLE_ID=tblB3emRodWIzabTP
 
 ---
 
-## Staging status (2026-09-28)
+## Launch status (2026-10-07)
 
-FTV stays on **`https://heebnewsletters.vercel.app`** with noindex only (no Vercel Deployment Protection). All absolute URLs come from `NEXT_PUBLIC_SITE_URL`, so the code is host-agnostic.
+Team approved 2026-10-07. Vercel env flipped the same day: `NEXT_PUBLIC_SITE_URL=https://www.heebmagazine.com` (all targets) and `NEXT_PUBLIC_NOINDEX` deleted. Cloudflare DNS (steps 3–4) and the Airtable Click URL (step 7) are done by Joseph. All absolute URLs come from `NEXT_PUBLIC_SITE_URL`, so the code is host-agnostic.
 
 | Item | Status |
 |------|--------|
-| `NEXT_PUBLIC_NOINDEX=true` | ✅ robots `Disallow: /`, `noindex, nofollow` meta |
+| `NEXT_PUBLIC_SITE_URL` / `NEXT_PUBLIC_NOINDEX` | ✅ www.heebmagazine.com / deleted (2026-10-07) |
 | `NEXT_PUBLIC_GTM_ID` / `NEXT_PUBLIC_META_PIXEL_ID` | ✅ `GTM-TVHD6JMG` / `809409995127436` |
 | Reader flags | ✅ |
 | `SANITY_API_TOKEN` | ✅ removed from the marketing project |
@@ -181,7 +181,7 @@ FTV stays on **`https://heebnewsletters.vercel.app`** with noindex only (no Verc
 | Magic comps / retention / cross-brand / configurable return host | ⚠️ local in `subscription-functions`; ships with the post-Oct 6 magic push |
 | Airtable Destination Brands | ✅ From the Vault added to every active House Ads creative except its own |
 | Hosted studio | ✅ [fromthevault.sanity.studio](https://fromthevault.sanity.studio/) (body images enabled) |
-| Content | ✅ Sanity has #1–35 (#28 and #32–35 imported 2026-09-29 from `issues/fromthevault/` with `scripts/import-vault-issues.py`). Import each new issue after it sends (#36 Oct 1, #37 Oct 8, #38 Oct 15): add its `sentAt` to `issues-catalog.json`, dry-run, then `--write --publish`. `publishedDate` is the Customer.io send time. Legacy Webflow slug → Sanity slug map: `apps/heebnewsletters/legacy-slug-map.json` (read by `next.config.mjs` for the 308s). |
+| Content | ✅ Sanity has #1–37 (#28 and #32–35 imported 2026-09-29, #36–37 on 2026-10-07, from `issues/fromthevault/` with `scripts/import-vault-issues.py`). #37 was published ahead of its send with `publishedDate` 2026-10-08T13:30Z; the site hides future-dated issues, so it appears at that time (fix the date in Studio if the send moves). Import each new issue after it sends (#38 Oct 15 onward): add its `sentAt` to `issues-catalog.json`, dry-run, then `--write --publish`. `publishedDate` is the Customer.io send time. Legacy Webflow slug → Sanity slug map: `apps/heebnewsletters/legacy-slug-map.json` (read by `next.config.mjs` for the 308s). |
 | House-ad pool + 50/50 Brand Promo split | ✅ 2026-10-06 (Heeb creatives still to come from Heeb Media) |
 | Shared sign-in toast, `/sign-in`, `/redirect` | ⏳ post Oct 6 (shared packages) |
 

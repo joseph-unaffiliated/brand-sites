@@ -298,7 +298,7 @@ def parse_issue(html, fallback_slug):
     for p in soup.find_all("p"):
         strong = p.find("strong")
         if strong and "Moore" in strong.get_text():
-            editor_name = clean(strong.get_text())
+            editor_name = clean(strong.get_text()).rstrip(", ")
             editor_title = clean(p.get_text(" ", strip=True)).replace(editor_name, "").lstrip(", ").strip()
             break
 

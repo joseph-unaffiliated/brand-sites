@@ -2,7 +2,7 @@
 
 Next.js publication in the **`brand-sites`** monorepo: a weekly resurfaced piece from the Heeb archive. Brand id `heebnewsletters`; magic on `magic.heebnewsletters.com` (see `src/config/site.js`). Sanity project `m4gmd2lf` (studio: `studio-heebnewsletters/`).
 
-Still on staging (`heebnewsletters.vercel.app`). The production host is undecided, so every absolute URL comes from `NEXT_PUBLIC_SITE_URL`; nothing hardcodes a host. Keep `NEXT_PUBLIC_NOINDEX=true` until launch (robots.txt disallows everything and pages send `noindex`).
+Production host: `www.heebmagazine.com` (cutover 2026-10-07; `heebnewsletters.vercel.app` still answers and canonicals to www). Every absolute URL comes from `NEXT_PUBLIC_SITE_URL`; nothing hardcodes a host.
 
 ## Routes
 
