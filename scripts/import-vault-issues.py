@@ -11,8 +11,11 @@ Step 2 (this script) parses those files and reports what it would create:
     SANITY_API_TOKEN=… python3 scripts/import-vault-issues.py --write            # upload images, write drafts
     SANITY_API_TOKEN=… python3 scripts/import-vault-issues.py --write --publish  # write published docs
 
-Documents use a stable id (`vaultIssue-<slug>`). Issues whose slug already exists in Sanity are
-skipped unless you pass --replace, so editor changes made in Studio are never overwritten by accident.
+The slug is the issue's tracker slug (`trackerSlug` in apps/heebnewsletters/legacy-slug-map.json,
+e.g. `innerheebs`), falling back to the slugified headline. New documents get the id
+`vaultIssue-<slug>`. Issues whose slug already exists in Sanity are skipped unless you pass
+--replace (which keeps the existing document id), so editor changes made in Studio are never
+overwritten by accident. A published write fills in `sanitySlug` in the slug map.
 `publishedDate` is the Customer.io send time from issues-catalog.json.
 
 The parser keys on the inline styles of the Customer.io FTV template (Georgia 40-48px headline,
@@ -37,6 +40,7 @@ from bs4 import BeautifulSoup, NavigableString, Tag
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_DIR = REPO_ROOT / "issues" / "fromthevault"
+SLUG_MAP_PATH = REPO_ROOT / "apps" / "heebnewsletters" / "legacy-slug-map.json"
 PROJECT_ID = "m4gmd2lf"
 DATASET = "production"
 API_VERSION = "v2024-01-01"
@@ -357,10 +361,26 @@ def sanity_request(path, *, token=None, data=None, content_type="application/jso
 
 
 def existing_slugs(token):
-    query = urllib.parse.quote('*[_type == "vaultIssue"].slug.current')
+    """slug → base document id (without `drafts.`)."""
+    query = urllib.parse.quote('*[_type == "vaultIssue"]{_id, "slug": slug.current}')
     host = "api" if token else "apicdn"
     result = sanity_request(f"data/query/{DATASET}?query={query}", token=token, host=host)
-    return {s for s in result.get("result", []) if s}
+    return {d["slug"]: d["_id"].removeprefix("drafts.") for d in result.get("result", []) if d.get("slug")}
+
+
+def tracker_slugs():
+    """issue number → tracker slug. Alias rows (e.g. /beastieboys) are skipped."""
+    rows = json.loads(SLUG_MAP_PATH.read_text())
+    return {r["issue"]: r["trackerSlug"] for r in rows if r.get("trackerSlug") and not r.get("alias")}
+
+
+def record_sanity_slugs(written):
+    """Fill in `sanitySlug` for issues just published, so /{trackerSlug} redirects to the article."""
+    rows = json.loads(SLUG_MAP_PATH.read_text())
+    for r in rows:
+        if r["issue"] in written and not r.get("alias"):
+            r["sanitySlug"] = written[r["issue"]]
+    SLUG_MAP_PATH.write_text(json.dumps(rows, indent=2, ensure_ascii=False) + "\n")
 
 
 def upload_image(url, token, cache, cache_path):
@@ -375,7 +395,7 @@ def upload_image(url, token, cache, cache_path):
     return doc["_id"]
 
 
-def build_document(parsed, published_date, asset_for, publish):
+def build_document(parsed, published_date, asset_for, publish, doc_id):
     body = []
     for b in parsed["body"]:
         if b["_type"] == "block":
@@ -388,7 +408,7 @@ def build_document(parsed, published_date, asset_for, publish):
     main_asset = asset_for(parsed["mainImageUrl"]) if parsed["mainImageUrl"] else None
     slug = parsed["slug"]
     doc = {
-        "_id": f"{'' if publish else 'drafts.'}vaultIssue-{slug}",
+        "_id": f"{'' if publish else 'drafts.'}{doc_id}",
         "_type": "vaultIssue",
         "newsletter": "from-the-vault",
         "title": parsed["title"],
@@ -443,6 +463,7 @@ def main():
         sys.exit("--write needs SANITY_API_TOKEN (an Editor token for project m4gmd2lf).")
 
     have = existing_slugs(token)
+    trackers = tracker_slugs()
     print(f"Sanity has {len(have)} vaultIssue slug(s). Catalog has {len(rows)} issue(s).\n")
 
     cache_path = issues_dir / "image-asset-map.json"
@@ -458,6 +479,7 @@ def main():
             print(f"#{row['issue']:>3} {row['messageName']}: no send date, skipping")
             continue
         parsed = parse_issue(html_path.read_text(errors="replace"), f"issue-{row['issue']}")
+        parsed["slug"] = trackers.get(row["issue"]) or parsed["slug"]
         if args.inspect:
             print(json.dumps(parsed, indent=2, ensure_ascii=False))
             continue
@@ -490,7 +512,8 @@ def main():
                 print(f"  image failed ({url[:80]}…): {err}")
                 return None
 
-        doc = build_document(parsed, row["sentAt"], asset_for, args.publish)
+        doc_id = have.get(parsed["slug"]) or f"vaultIssue-{parsed['slug']}"
+        doc = build_document(parsed, row["sentAt"], asset_for, args.publish, doc_id)
         mutations.append({"createOrReplace": doc})
 
     if mutations:
@@ -498,6 +521,9 @@ def main():
             f"data/mutate/{DATASET}", token=token, data=json.dumps({"mutations": mutations}).encode()
         )
         print(f"\nWrote {len(result.get('results', []))} document(s) ({'published' if args.publish else 'drafts'}).")
+        if args.publish:
+            record_sanity_slugs({row["issue"]: parsed["slug"] for row, parsed in planned})
+            print(f"Updated sanitySlug in {SLUG_MAP_PATH.relative_to(REPO_ROOT)}; rebuild the site so /<slug> redirects.")
 
 
 if __name__ == "__main__":

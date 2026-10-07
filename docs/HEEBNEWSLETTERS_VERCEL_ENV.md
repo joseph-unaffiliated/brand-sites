@@ -154,7 +154,7 @@ AIRTABLE_HOUSE_ADS_TABLE_ID=tblB3emRodWIzabTP
 - `/shop/[handle]` — product page (options, live price/stock, add to cart, Product JSON-LD); unknown or hidden handle → 404
 - `/products/:handle` → 308 `/shop/:handle`; `/collections/:handle` → 308 `/shop?collection=:handle` (Shopify-shaped links from old emails)
 - `/article/[slug]` with an `originalIssueUrl` that is a heebmedia.com product link → "Shop this story" card for that back issue
-- `/beastieboys`, `/innerheebs` (any Webflow-era slug in `legacy-slug-map.json`) → 308 `/article/[sanity-slug]`; unmapped legacy slugs → `/from-the-vault`
+- `/innerheebs`, `/beastieboys` (any tracker or Webflow-era slug in `legacy-slug-map.json`) → 308 `/article/innerheebs`; the pre-2026-10-07 headline slugs (`/article/the-beastie-within-…`) → 308 to the short slug; issues not yet imported → `/from-the-vault`
 - `/sitemap.xml` — includes `/shop` and every visible product
 
 ---
@@ -181,7 +181,7 @@ Team approved 2026-10-07. Vercel env flipped the same day: `NEXT_PUBLIC_SITE_URL
 | Magic comps / retention / cross-brand / configurable return host | ⚠️ local in `subscription-functions`; ships with the post-Oct 6 magic push |
 | Airtable Destination Brands | ✅ From the Vault added to every active House Ads creative except its own |
 | Hosted studio | ✅ [fromthevault.sanity.studio](https://fromthevault.sanity.studio/) (body images enabled) |
-| Content | ✅ Sanity has #1–37 (#28 and #32–35 imported 2026-09-29, #36–37 on 2026-10-07, from `issues/fromthevault/` with `scripts/import-vault-issues.py`). #37 was published ahead of its send with `publishedDate` 2026-10-08T13:30Z; the site hides future-dated issues, so it appears at that time (fix the date in Studio if the send moves). Import each new issue after it sends (#38 Oct 15 onward): add its `sentAt` to `issues-catalog.json`, dry-run, then `--write --publish`. `publishedDate` is the Customer.io send time. Legacy Webflow slug → Sanity slug map: `apps/heebnewsletters/legacy-slug-map.json` (read by `next.config.mjs` for the 308s). |
+| Content | ✅ Sanity has #1–37 (#28 and #32–35 imported 2026-09-29, #36–37 on 2026-10-07, from `issues/fromthevault/` with `scripts/import-vault-issues.py`). #37 was published ahead of its send with `publishedDate` 2026-10-08T13:30Z; the site hides future-dated issues, so it appears at that time (fix the date in Studio if the send moves). Import each new issue after it sends (#38 Oct 15 onward): add its `sentAt` to `issues-catalog.json`, dry-run, then `--write --publish`. `publishedDate` is the Customer.io send time. Sanity slugs are the tracker slugs from the Issues tracker (e.g. `innerheebs`, switched from headline slugs on 2026-10-07). The importer takes them from `apps/heebnewsletters/legacy-slug-map.json` and fills in `sanitySlug` there after a published write; commit the map so `next.config.mjs` adds the 308s. New tracker issues need a row in the map before import. |
 | House-ad pool + 50/50 Brand Promo split | ✅ 2026-10-06 (Heeb creatives still to come from Heeb Media) |
 | Shared sign-in toast, `/sign-in`, `/redirect` | ⏳ post Oct 6 (shared packages) |
 
@@ -218,7 +218,7 @@ Do these in order. Nothing before step 3 sends traffic to the new site.
 9. **Customer.io:** update the site links in templates for issues #36–44 (and the footer/header template) from `fromthevault.heebnewsletters.com` / `heebnewsletters.com` to `www.heebmagazine.com`. Old links keep working via 308, so this is cosmetic but should happen in the first week.
 10. **Search Console / Bing:** add `www.heebmagazine.com` (domain property), submit `https://www.heebmagazine.com/sitemap.xml`. If the Webflow site was verified, add a Change of Address from it.
 11. **OneTrust:** the banner is published for `heebmagazine.com`; confirm it renders on www and that GA/Meta load only after consent.
-12. **Smoke list** (from `LAUNCH_PLAYBOOK.md` §7 plus the shop): `/`, `/from-the-vault`, `/article/catherine-ohara` (back-issue card), `/shop`, `/shop?collection=back-issues`, `/shop/heeb-12`, add to cart → drawer → checkout lands on `heebmedia.com/cart/c/…`, `/profile` sign-in via magic, `/opted-out-comps`, `/sitemap.xml`, `/robots.txt` (no `Disallow: /`), OG image on a shared link.
+12. **Smoke list** (from `LAUNCH_PLAYBOOK.md` §7 plus the shop): `/`, `/from-the-vault`, `/article/catherineohara` (back-issue card), `/shop`, `/shop?collection=back-issues`, `/shop/heeb-12`, add to cart → drawer → checkout lands on `heebmedia.com/cart/c/…`, `/profile` sign-in via magic, `/opted-out-comps`, `/sitemap.xml`, `/robots.txt` (no `Disallow: /`), OG image on a shared link.
 
 ### Rollback
 
@@ -246,7 +246,7 @@ IF(
 ))
 ```
 
-The `{Slug}` for FTV creatives is the **tracker** slug from the Issues tracker (`trackerSlug` in `apps/heebnewsletters/legacy-slug-map.json`, e.g. `innerheebs`). Both `/{trackerSlug}` and `/article/{trackerSlug}` 308 to the Sanity article (`next.config.mjs`), so new tracker rows only need an entry in the map.
+The `{Slug}` for FTV creatives is the **tracker** slug from the Issues tracker (e.g. `innerheebs`), which is also the Sanity slug, so `/article/{Slug}` is the article itself.
 
 ---
 
@@ -292,5 +292,5 @@ No secret is required. If Heeb Media ever restricts tokenless access, add a publ
 - `/shop/heeb-12` 200 with "Add to cart"; `/shop/chai-times` shows Color/Size chips; `/shop/not-a-product` 404
 - Add a single-variant item from the grid → drawer opens with the line, count badge in the header
 - "Checkout" → email pop-up; empty email is rejected by both buttons; a test address + "Checkout without Subscribing" → `https://heebmedia.com/cart/c/…?…utm_source=heebmagazine.com…` with the items present and Contact prefilled (never test "Checkout and Subscribe" with a real address)
-- `/article/catherine-ohara` shows the HEEB #12 card; `/products/heeb-12` → 308 `/shop/heeb-12`
+- `/article/catherineohara` shows the HEEB #12 card; `/products/heeb-12` → 308 `/shop/heeb-12`
 - `/sitemap.xml` lists `/shop` and product URLs; product page has `application/ld+json` `"@type":"Product"`

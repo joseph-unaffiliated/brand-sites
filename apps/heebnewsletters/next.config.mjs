@@ -3,25 +3,29 @@ import { fileURLToPath } from "node:url";
 
 /**
  * Legacy Webflow slugs (fromthevault.heebnewsletters.com/{slug}) → Sanity slugs.
- * Source of truth: ./legacy-slug-map.json (one row per tracker issue, plus
- * /beastieboys). Issues not yet imported (sanitySlug null) land on the section
- * page until their slug is filled in. `/article/{trackerSlug}` redirects too,
- * because Airtable house-ad Click URLs use tracker slugs.
+ * Source of truth: ./legacy-slug-map.json (one row per tracker issue, plus the
+ * /beastieboys alias). Sanity slugs are the tracker slugs; issues not yet
+ * imported (sanitySlug null) land on the section page until it is filled in.
+ * Alias rows also redirect `/article/{trackerSlug}`, and `previousSanitySlug`
+ * (the long headline slugs used before 2026-10-07) redirects to the current one.
  */
 function legacySlugRedirects() {
   const file = fileURLToPath(new URL("./legacy-slug-map.json", import.meta.url));
   const rows = JSON.parse(readFileSync(file, "utf8"));
   const seen = new Set();
   const out = [];
+  const add = (source, destination) => {
+    if (seen.has(source) || source === destination) return;
+    seen.add(source);
+    out.push({ source, destination, permanent: true });
+  };
   for (const row of rows) {
     const slug = String(row.trackerSlug || "").trim();
-    if (!slug || seen.has(slug)) continue;
-    seen.add(slug);
+    if (!slug) continue;
     const destination = row.sanitySlug ? `/article/${row.sanitySlug}` : "/from-the-vault";
-    out.push({ source: `/${slug}`, destination, permanent: true });
-    if (slug !== row.sanitySlug) {
-      out.push({ source: `/article/${slug}`, destination, permanent: true });
-    }
+    add(`/${slug}`, destination);
+    if (row.sanitySlug) add(`/article/${slug}`, destination);
+    if (row.previousSanitySlug) add(`/article/${row.previousSanitySlug}`, destination);
   }
   return out;
 }

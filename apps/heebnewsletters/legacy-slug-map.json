@@ -3,57 +3,66 @@
     "issue": 1,
     "releaseDate": "2026-01-29",
     "trackerSlug": "natashalyonne",
-    "sanitySlug": "natasha-lyonnes-sweet-comeback",
+    "sanitySlug": "natashalyonne",
+    "previousSanitySlug": "natasha-lyonnes-sweet-comeback",
     "liveOnWebflow": true
   },
   {
     "issue": 2,
     "releaseDate": "2026-02-05",
     "trackerSlug": "alinekominskycrumb",
-    "sanitySlug": "an-interview-with-aline-kominsky-the-cartoonist-behind-drawn-together",
+    "sanitySlug": "alinekominskycrumb",
+    "previousSanitySlug": "an-interview-with-aline-kominsky-the-cartoonist-behind-drawn-together",
     "liveOnWebflow": false
   },
   {
     "issue": 3,
     "releaseDate": "2026-02-12",
     "trackerSlug": "kinkyfriedman",
-    "sanitySlug": "inside-kinky-friedmans-campaign-for-governor",
+    "sanitySlug": "kinkyfriedman",
+    "previousSanitySlug": "inside-kinky-friedmans-campaign-for-governor",
     "liveOnWebflow": true
   },
   {
     "issue": 4,
     "releaseDate": "2026-02-19",
     "trackerSlug": "beastieboys",
-    "sanitySlug": "the-beastie-within-ad-rock-mca-and-mike-d-embrace-their-inner-heebs",
+    "sanitySlug": "innerheebs",
+    "previousSanitySlug": "the-beastie-within-ad-rock-mca-and-mike-d-embrace-their-inner-heebs",
     "liveOnWebflow": true,
-    "note": "Webflow page used by the Airtable FTV creative; the tracker calls #4 innerheebs"
+    "note": "Webflow page used by the Airtable FTV creative; the tracker calls #4 innerheebs",
+    "alias": true
   },
   {
     "issue": 4,
     "releaseDate": "2026-02-19",
     "trackerSlug": "innerheebs",
-    "sanitySlug": "the-beastie-within-ad-rock-mca-and-mike-d-embrace-their-inner-heebs",
+    "sanitySlug": "innerheebs",
+    "previousSanitySlug": "the-beastie-within-ad-rock-mca-and-mike-d-embrace-their-inner-heebs",
     "liveOnWebflow": false
   },
   {
     "issue": 5,
     "releaseDate": "2026-02-26",
     "trackerSlug": "jewesses",
-    "sanitySlug": "jewess",
+    "sanitySlug": "jewesses",
+    "previousSanitySlug": "jewess",
     "liveOnWebflow": false
   },
   {
     "issue": 6,
     "releaseDate": "2026-03-05",
     "trackerSlug": "polyamorousjews",
-    "sanitySlug": "the-world-of-polyamorous-jews",
+    "sanitySlug": "polyamorousjews",
+    "previousSanitySlug": "the-world-of-polyamorous-jews",
     "liveOnWebflow": false
   },
   {
     "issue": 7,
     "releaseDate": "2026-03-12",
     "trackerSlug": "peaches",
-    "sanitySlug": "gimme-my-pink-hot-pants",
+    "sanitySlug": "peaches",
+    "previousSanitySlug": "gimme-my-pink-hot-pants",
     "liveOnWebflow": false
   },
   {
@@ -67,208 +76,232 @@
     "issue": 9,
     "releaseDate": "2026-03-26",
     "trackerSlug": "sweatshopchic",
-    "sanitySlug": "jewish-fashion-on-the-sweatshop-floor",
+    "sanitySlug": "sweatshopchic",
+    "previousSanitySlug": "jewish-fashion-on-the-sweatshop-floor",
     "liveOnWebflow": false
   },
   {
     "issue": 10,
     "releaseDate": "2026-04-02",
     "trackerSlug": "lonelyisland",
-    "sanitySlug": "keel-over-beethoven-the-lonely-island-takes-center-stage",
+    "sanitySlug": "lonelyisland",
+    "previousSanitySlug": "keel-over-beethoven-the-lonely-island-takes-center-stage",
     "liveOnWebflow": false
   },
   {
     "issue": 11,
     "releaseDate": "2026-04-09",
     "trackerSlug": "sandidubowski",
-    "sanitySlug": "blessing-the-hidden",
+    "sanitySlug": "sandidubowski",
+    "previousSanitySlug": "blessing-the-hidden",
     "liveOnWebflow": false
   },
   {
     "issue": 12,
     "releaseDate": "2026-04-16",
     "trackerSlug": "shtickysituation",
-    "sanitySlug": "shticky-situation",
+    "sanitySlug": "shtickysituation",
+    "previousSanitySlug": "shticky-situation",
     "liveOnWebflow": false
   },
   {
     "issue": 13,
     "releaseDate": "2026-04-23",
     "trackerSlug": "jerryheller",
-    "sanitySlug": "words-of-wisdom-from-iconic-music-manager-jerry-heller",
+    "sanitySlug": "jerryheller",
+    "previousSanitySlug": "words-of-wisdom-from-iconic-music-manager-jerry-heller",
     "liveOnWebflow": false
   },
   {
     "issue": 14,
     "releaseDate": "2026-04-30",
     "trackerSlug": "tonykushner",
-    "sanitySlug": "staging-change-the-revolutionary-rigor-of-tony-kushner",
+    "sanitySlug": "tonykushner",
+    "previousSanitySlug": "staging-change-the-revolutionary-rigor-of-tony-kushner",
     "liveOnWebflow": false
   },
   {
     "issue": 15,
     "releaseDate": "2026-05-07",
     "trackerSlug": "bubbelicious",
-    "sanitySlug": "bubbe-licious",
+    "sanitySlug": "bubbelicious",
+    "previousSanitySlug": "bubbe-licious",
     "liveOnWebflow": false
   },
   {
     "issue": 16,
     "releaseDate": "2026-05-14",
     "trackerSlug": "catherineohara",
-    "sanitySlug": "catherine-ohara",
+    "sanitySlug": "catherineohara",
+    "previousSanitySlug": "catherine-ohara",
     "liveOnWebflow": true
   },
   {
     "issue": 17,
     "releaseDate": "2026-05-21",
     "trackerSlug": "bestfemmesforever",
-    "sanitySlug": "best-femmes-forever-photoshoot",
+    "sanitySlug": "bestfemmesforever",
+    "previousSanitySlug": "best-femmes-forever-photoshoot",
     "liveOnWebflow": false
   },
   {
     "issue": 18,
     "releaseDate": "2026-05-28",
     "trackerSlug": "courtneylove",
-    "sanitySlug": "courtney-love",
+    "sanitySlug": "courtneylove",
+    "previousSanitySlug": "courtney-love",
     "liveOnWebflow": false
   },
   {
     "issue": 19,
     "releaseDate": "2026-06-04",
     "trackerSlug": "normanstiles",
-    "sanitySlug": "father-of-the-count-tv-writer-norman-stiles",
+    "sanitySlug": "normanstiles",
+    "previousSanitySlug": "father-of-the-count-tv-writer-norman-stiles",
     "liveOnWebflow": false
   },
   {
     "issue": 20,
     "releaseDate": "2026-06-11",
     "trackerSlug": "petersinger",
-    "sanitySlug": "feast-or-famine-peter-singer-on-the-ethics-of-eating",
+    "sanitySlug": "petersinger",
+    "previousSanitySlug": "feast-or-famine-peter-singer-on-the-ethics-of-eating",
     "liveOnWebflow": false
   },
   {
     "issue": 21,
     "releaseDate": "2026-06-18",
     "trackerSlug": "judyblume",
-    "sanitySlug": "are-you-there-judy",
+    "sanitySlug": "judyblume",
+    "previousSanitySlug": "are-you-there-judy",
     "liveOnWebflow": false
   },
   {
     "issue": 22,
     "releaseDate": "2026-06-25",
     "trackerSlug": "falloutboy",
-    "sanitySlug": "boys-2-men-fall-out-boys-joe-trohman",
+    "sanitySlug": "falloutboy",
+    "previousSanitySlug": "boys-2-men-fall-out-boys-joe-trohman",
     "liveOnWebflow": false
   },
   {
     "issue": 23,
     "releaseDate": "2026-07-02",
     "trackerSlug": "kristenschaal",
-    "sanitySlug": "funny-girl-comedian-kristen-schaal",
+    "sanitySlug": "kristenschaal",
+    "previousSanitySlug": "funny-girl-comedian-kristen-schaal",
     "liveOnWebflow": false
   },
   {
     "issue": 24,
     "releaseDate": "2026-07-09",
     "trackerSlug": "vampireweekend",
-    "sanitySlug": "weekend-warriors-vampire-weekends-powerful-debut",
+    "sanitySlug": "vampireweekend",
+    "previousSanitySlug": "weekend-warriors-vampire-weekends-powerful-debut",
     "liveOnWebflow": true
   },
   {
     "issue": 25,
     "releaseDate": "2026-07-16",
     "trackerSlug": "jewsforjesus",
-    "sanitySlug": "the-missionary-position",
+    "sanitySlug": "jewsforjesus",
+    "previousSanitySlug": "the-missionary-position",
     "liveOnWebflow": false
   },
   {
     "issue": 26,
     "releaseDate": "2026-07-23",
     "trackerSlug": "amygoodman",
-    "sanitySlug": "we-want-the-airwaves-democracy-now-s-amy-goodman-on-who-really-owns-the-media",
+    "sanitySlug": "amygoodman",
+    "previousSanitySlug": "we-want-the-airwaves-democracy-now-s-amy-goodman-on-who-really-owns-the-media",
     "liveOnWebflow": false
   },
   {
     "issue": 27,
     "releaseDate": "2026-07-30",
     "trackerSlug": "comix",
-    "sanitySlug": "fanya-esther-in-stinky-pickles",
+    "sanitySlug": "comix",
+    "previousSanitySlug": "fanya-esther-in-stinky-pickles",
     "liveOnWebflow": false
   },
   {
     "issue": 28,
     "releaseDate": "2026-08-06",
     "trackerSlug": "reverendbilly",
-    "sanitySlug": "baptism-by-ire-reverend-billy-welcomes-the-shopocalypse",
-    "liveOnWebflow": false,
-    "note": "pending import (slug from approved dry run)"
+    "sanitySlug": "reverendbilly",
+    "previousSanitySlug": "baptism-by-ire-reverend-billy-welcomes-the-shopocalypse",
+    "liveOnWebflow": false
   },
   {
     "issue": 29,
     "releaseDate": "2026-08-13",
     "trackerSlug": "crimesofpassion",
-    "sanitySlug": "crimes-of-passion",
+    "sanitySlug": "crimesofpassion",
+    "previousSanitySlug": "crimes-of-passion",
     "liveOnWebflow": false
   },
   {
     "issue": 30,
     "releaseDate": "2026-08-20",
     "trackerSlug": "mollycrabapple",
-    "sanitySlug": "fun-n-dames-dr-sketchys-official-rainy-day-coloring-book",
+    "sanitySlug": "mollycrabapple",
+    "previousSanitySlug": "fun-n-dames-dr-sketchys-official-rainy-day-coloring-book",
     "liveOnWebflow": false
   },
   {
     "issue": 31,
     "releaseDate": "2026-08-27",
     "trackerSlug": "joanrivers",
-    "sanitySlug": "joan-of-snark",
+    "sanitySlug": "joanrivers",
+    "previousSanitySlug": "joan-of-snark",
     "liveOnWebflow": true
   },
   {
     "issue": 32,
     "releaseDate": "2026-09-03",
     "trackerSlug": "jeffgoldblum",
-    "sanitySlug": "6-degrees-of-jeff-goldblum",
-    "liveOnWebflow": false,
-    "note": "pending import (slug from approved dry run)"
+    "sanitySlug": "jeffgoldblum",
+    "previousSanitySlug": "6-degrees-of-jeff-goldblum",
+    "liveOnWebflow": false
   },
   {
     "issue": 33,
     "releaseDate": "2026-09-10",
     "trackerSlug": "jesseeisenberg",
-    "sanitySlug": "spin-doctor-the-twisted-web-of-jesse-eisenberg",
-    "liveOnWebflow": false,
-    "note": "pending import (slug from approved dry run)"
+    "sanitySlug": "jesseeisenberg",
+    "previousSanitySlug": "spin-doctor-the-twisted-web-of-jesse-eisenberg",
+    "liveOnWebflow": false
   },
   {
     "issue": 34,
     "releaseDate": "2026-09-17",
     "trackerSlug": "andyborowitz",
-    "sanitySlug": "primetime-playa",
-    "liveOnWebflow": false,
-    "note": "pending import (slug from approved dry run)"
+    "sanitySlug": "andyborowitz",
+    "previousSanitySlug": "primetime-playa",
+    "liveOnWebflow": false
   },
   {
     "issue": 35,
     "releaseDate": "2026-09-24",
     "trackerSlug": "baseball",
-    "sanitySlug": "where-have-you-gone-sandy-koufax",
-    "liveOnWebflow": false,
-    "note": "pending import (slug from approved dry run)"
+    "sanitySlug": "baseball",
+    "previousSanitySlug": "where-have-you-gone-sandy-koufax",
+    "liveOnWebflow": false
   },
   {
     "issue": 36,
     "releaseDate": "2026-10-01",
     "trackerSlug": "nomylamm",
-    "sanitySlug": "on-the-lamm-punk-prophetess-nomy-lamm-sounds-off",
+    "sanitySlug": "nomylamm",
+    "previousSanitySlug": "on-the-lamm-punk-prophetess-nomy-lamm-sounds-off",
     "liveOnWebflow": false
   },
   {
     "issue": 37,
     "releaseDate": "2026-10-08",
     "trackerSlug": "larrykramer",
-    "sanitySlug": "kvetching-and-screaming-the-polemics-public-spats-and-private-denunciations-of-larry-kramer",
+    "sanitySlug": "larrykramer",
+    "previousSanitySlug": "kvetching-and-screaming-the-polemics-public-spats-and-private-denunciations-of-larry-kramer",
     "liveOnWebflow": false
   },
   {
