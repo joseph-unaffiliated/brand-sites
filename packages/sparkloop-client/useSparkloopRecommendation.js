@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { loadSparkloopClient } from "./loader.js";
 
-const BATCH_SIZE = 5;
+const BATCH_SIZE = 3;
 const BATCH_TTL_MS = 30 * 60_000;
 
 const batchKey = (publicationId) => `sparkloop_rec_batch_${publicationId}`;
