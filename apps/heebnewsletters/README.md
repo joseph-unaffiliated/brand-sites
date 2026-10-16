@@ -10,6 +10,7 @@ Production host: `www.heebmagazine.com` (cutover 2026-10-07; `heebnewsletters.ve
 - `/archive` — all issues with search (`?q=`)
 - `/profile`, `/subscribed`, `/unsubscribed`, `/snoozed`, `/request`
 - `/opted-in-comps`, `/opted-out-comps` — compilations preference confirmation
+- `/opted-in-marketing`, `/opted-out-marketing` — marketing-email preference confirmation
 - `/about`, `/ai-policy`, `/affiliate-disclosure`, `/privacy`, `/terms`, `/contact`
 
 No polls, favorites, quiz, or submissions on this brand. `/?poll=` stays on the homepage.

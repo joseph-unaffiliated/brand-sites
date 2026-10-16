@@ -21,6 +21,8 @@ export default function robots() {
           "/snoozed",
           "/opted-in-comps",
           "/opted-out-comps",
+          "/opted-in-marketing",
+          "/opted-out-marketing",
           "/profile",
           "/request",
           "/sign-in",

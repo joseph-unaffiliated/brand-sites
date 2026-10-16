@@ -7,7 +7,7 @@ Next.js publication in the **`brand-sites`** monorepo — *The Dictionary of Sla
 - `/` — word of the week + mosaic; `/word/[slug]` — slang entry (Pop Quiz poll, My words heart); `/article/[slug]` 308s to `/word/[slug]`
 - `/archive` — all words with search; `/my-words` — saved words (subscription required; syncs to reader profile; `?add={slug}` email deep link)
 - `/quiz` — Hipspeak-only slang quiz (subscribe gate → score)
-- `/pollresults/[slug]` — Pop Quiz results; `/opted-in-comps`, `/opted-out-comps`, `/ai-policy`, `/profile`
+- `/pollresults/[slug]` — Pop Quiz results; `/opted-in-comps`, `/opted-out-comps`, `/opted-in-marketing`, `/opted-out-marketing`, `/ai-policy`, `/profile`
 
 Local dev: `pnpm --filter hipspeak dev` (port 3006). Vercel **Root Directory** = `apps/hipspeak`.
 
