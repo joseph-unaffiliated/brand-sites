@@ -118,7 +118,8 @@ export default function GiveawayLanding({ giveaway }) {
   }, [giveaway.slug, previewEntered, signedIn]);
 
   function renderIntroParagraph(text, key) {
-    const mark = "12 jars of McClure’s Pickles";
+    const mark = giveaway.introEmphasis;
+    if (!mark) return <p key={key}>{text}</p>;
     const at = text.indexOf(mark);
     if (at === -1) return <p key={key}>{text}</p>;
     return (
@@ -206,19 +207,29 @@ export default function GiveawayLanding({ giveaway }) {
               width={1200}
               height={800}
             />
-            <figcaption className={styles.heroDisclaimer}>
-              Disclaimer: Objects in image are larger than they appear. Prize includes 12
-              jars of pickles. Dump truck sold separately.
-            </figcaption>
+            {giveaway.heroDisclaimer ? (
+              <figcaption className={styles.heroDisclaimer}>{giveaway.heroDisclaimer}</figcaption>
+            ) : null}
           </figure>
         ) : null}
-        <p className={styles.photoHeadline}>
-          Start your 2027 off right with a whole year’s worth of briny, salty crunch.
-        </p>
+        {giveaway.photoHeadline ? (
+          <p className={styles.photoHeadline}>{giveaway.photoHeadline}</p>
+        ) : null}
       </header>
 
       <div className={styles.prose}>
         {intro.map((paragraph, i) => renderIntroParagraph(paragraph, `intro-${i}`))}
+
+        {giveaway.prizeItems?.length ? (
+          <div className={styles.prizeItems}>
+            <h2>{giveaway.prizeItemsHeading || "What’s included?"}</h2>
+            <ul>
+              {giveaway.prizeItems.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
 
         {alreadyEntered ? (
           <div className={`${styles.howToEnter} ${styles.entered}`}>
@@ -276,7 +287,7 @@ export default function GiveawayLanding({ giveaway }) {
                   ) : (
                     <form className={styles.form} onSubmit={submitEmail} noValidate>
                       <input
-                        type="email"
+                        type="email" data-clarity-mask="true"
                         name="email"
                         required
                         placeholder="Email address"

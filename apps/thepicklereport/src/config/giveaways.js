@@ -9,6 +9,9 @@
  *   prizeHeadline: string;
  *   prizeBody: string;
  *   intro?: string[];
+ *   introEmphasis?: string;
+ *   prizeItems?: string[];
+ *   prizeItemsHeading?: string;
  *   howToEnter?: string[];
  *   socialHtml?: string;
  *   socialLinks?: { label: string; href: string }[];
@@ -28,6 +31,8 @@
  *   ctaEnterLabel?: string;
  *   heroImage?: string;
  *   heroImageAlt?: string;
+ *   heroDisclaimer?: string;
+ *   photoHeadline?: string;
  *   listed?: boolean;
  * }} GiveawayConfig
  *
@@ -37,6 +42,71 @@
 
 /** @type {GiveawayConfig[]} */
 export const GIVEAWAYS = [
+  {
+    slug: "diy-pickle-party-pack",
+    title: "Win a DIY Pickle Party Pack",
+    prizeHeadline: "Win a DIY Pickle Party Pack",
+    prizeBody:
+      "The Pickle Report is partnering with the OG pickle-tasting influencer, The Pickled Guy, Ryan Lucas, to give one lucky winner all the tools needed to throw an epic Pickle-Making Party.",
+    intro: [
+      "The Pickle Report is partnering with the OG pickle-tasting influencer, The Pickled Guy, Ryan Lucas, to give one lucky winner all the tools needed to throw an epic Pickle-Making Party.",
+      "Gather your friends, pour the vinegar, and start the pickling party.",
+      "This party prize pack includes DIY pickle packets for a myriad of pickle flavors, so every pickle lover has something to cheer for.",
+    ],
+    introEmphasis: "Pickle-Making Party",
+    prizeItemsHeading: "What’s included in the DIY Pickle Party Pack?",
+    prizeItems: [
+      "DIY NYC Deli / Half Sour Pickle Kit",
+      "DIY Whiskey Kit",
+      "DIY Bread + Butter Pickle",
+      "DIY Bloody Mary Pickling Kit",
+      "DIY Hot Dill Pickles Kit",
+      "DIY Mild Dill Pickles Kit",
+      "Brine Time Rubber Jar Opener",
+      "Pickled Guy Pint Glass",
+    ],
+    howToEnter: [
+      "Enter your email to sign up for The Pickle Report’s weekly newsletter and enter the giveaway. Only active subscribers are eligible.",
+      "Click the button below to enter for a chance to win. Our winner will be selected on December 15 so keep an eye on your email.",
+      "Pray to the pickle gods.",
+    ],
+    socialLinks: [
+      {
+        label: "The Pickle Report",
+        href: "https://www.instagram.com/thepicklereport/",
+      },
+      {
+        label: "The Pickled Guy",
+        href: "https://www.instagram.com/thepickledguy/",
+      },
+    ],
+    closing: [
+      "Enter for your chance to win all the tools you need to make and celebrate your own batch of pickles!",
+      "Ready for more opportunities to win? Keep an eye on The Pickle Report page for more giveaways coming down the pickled pipeline.",
+    ],
+    rulesText:
+      "One entry per person / email. Once you submit, you’ll get a personal link to refer friends for additional tickets. Void where prohibited. Winner announced by email after the draw.",
+    // startsAt now so unlisted review URL can exercise enter; lock real late-Nov open before promote
+    startsAt: "2026-11-03T00:00:00.000Z",
+    drawAt: "2026-12-15T23:59:59.000Z",
+    endsAt: "2026-12-15T23:59:59.000Z",
+    drawDateLabel: "December 15",
+    seoTitle: "Win a DIY Pickle Party Pack | The Pickle Report",
+    seoDescription:
+      "Enter The Pickle Report × The Pickled Guy giveaway for a chance to win a DIY Pickle Party Pack. Subscribe to enter. Winner selected December 15.",
+    successHeadline: "You’re entered in the draw!",
+    successBodyNew:
+      "Thanks for subscribing — you’ve been entered to win a DIY Pickle Party Pack.",
+    successBodyExisting: "You’re entered to win a DIY Pickle Party Pack.",
+    ctaSubscribeLabel: "Subscribe and Enter",
+    ctaEnterLabel: "Enter to win",
+    photoHeadline:
+      "Gather your friends, pour the vinegar, and start the pickling party.",
+    // Temporary: reuse prior hero until new art lands
+    heroImage: "/giveaway/years-supply-of-pickles.jpg",
+    heroImageAlt: "Pickles — temporary hero art for the DIY Pickle Party Pack giveaway",
+    listed: false,
+  },
   {
     slug: "years-supply-of-pickles",
     title: "Win a Year’s Worth of Pickles",
@@ -48,6 +118,7 @@ export const GIVEAWAYS = [
       "One lucky winner will be sent 12 jars of McClure’s Pickles right to their door.",
       "When the world turns to chaos, we turn to pickles. And now, so can you.",
     ],
+    introEmphasis: "12 jars of McClure’s Pickles",
     howToEnter: [
       "Enter your email to sign up for The Pickle Report’s weekly newsletter and enter the giveaway. Only active subscribers are eligible.",
       "Click the button below to enter to win pickles for a year. Our winner will be selected on October 6 so keep an eye on your email.",
@@ -81,9 +152,13 @@ export const GIVEAWAYS = [
     successBodyExisting: "You’re entered for a year’s worth of McClure’s Pickles.",
     ctaSubscribeLabel: "Subscribe and Enter",
     ctaEnterLabel: "Enter to win",
+    photoHeadline:
+      "Start your 2027 off right with a whole year’s worth of briny, salty crunch.",
     heroImage: "/giveaway/years-supply-of-pickles.jpg",
     heroImageAlt: "A dump truck dumping a year’s worth of pickles onto a front lawn",
-    listed: true,
+    heroDisclaimer:
+      "Disclaimer: Objects in image are larger than they appear. Prize includes 12 jars of pickles. Dump truck sold separately.",
+    listed: false,
   },
 ];
 

@@ -245,10 +245,9 @@ export default function GiveawayEntered({ giveaway }) {
   }
 
   const successBody = alreadySubscribed
-    ? giveaway.successBodyExisting ||
-      "You’re entered for a year’s worth of McClure’s Pickles."
+    ? giveaway.successBodyExisting || "You’re entered in the draw!"
     : giveaway.successBodyNew ||
-      "Thanks for subscribing — you’ve been entered for a year’s worth of McClure’s Pickles.";
+      "Thanks for subscribing — you’ve been entered in the draw.";
 
   return (
     <article className={styles.page}>
