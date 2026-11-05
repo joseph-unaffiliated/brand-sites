@@ -19,13 +19,36 @@ export async function callGiveawayApi(body, opts = {}) {
   const headers = { "Content-Type": "application/json" };
   if (opts.bearer) {
     const token = getReaderToken();
-    if (token) headers.Authorization = `Bearer ${token}`;
+    if (!token) {
+      const err = new Error("Unauthorized");
+      err.status = 401;
+      err.data = { error: "Unauthorized" };
+      throw err;
+    }
+    headers.Authorization = `Bearer ${token}`;
   }
-  const res = await fetch(giveawayApiUrl(), {
-    method: "POST",
-    headers,
-    body: JSON.stringify(body),
-  });
+  const controller = new AbortController();
+  const timeoutMs = opts.timeoutMs ?? 25000;
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  let res;
+  try {
+    res = await fetch(giveawayApiUrl(), {
+      method: "POST",
+      headers,
+      body: JSON.stringify(body),
+      signal: controller.signal,
+    });
+  } catch (e) {
+    clearTimeout(timer);
+    if (e?.name === "AbortError") {
+      const err = new Error("Giveaway API timed out");
+      err.status = 408;
+      err.data = { error: "timeout" };
+      throw err;
+    }
+    throw e;
+  }
+  clearTimeout(timer);
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
     const err = new Error(data.error || `Giveaway API ${res.status}`);

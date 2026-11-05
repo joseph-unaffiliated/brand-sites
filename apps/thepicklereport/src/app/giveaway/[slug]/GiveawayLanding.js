@@ -81,6 +81,7 @@ export default function GiveawayLanding({ giveaway }) {
     let cancelled = false;
     (async () => {
       try {
+        // Only when a reader token exists — avoids a burst of 401s for unsigned visitors.
         const stats = await callGiveawayApi(
           {
             action: "stats",

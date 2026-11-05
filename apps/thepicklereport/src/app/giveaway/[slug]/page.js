@@ -1,12 +1,7 @@
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { getGiveaway, GIVEAWAYS, giveawayIndexRobots } from "@/config/giveaways";
-import { getArticles } from "@/lib/articles";
-import { pickRandomArticles } from "@/lib/pickRandomArticles";
-import RecommendedArticleCards from "@/components/RecommendedArticleCards";
 import GiveawayLanding from "./GiveawayLanding";
-
-const READ_MORE_COUNT = 3;
 
 export function generateStaticParams() {
   return GIVEAWAYS.map((g) => ({ slug: g.slug }));
@@ -28,15 +23,11 @@ export default async function GiveawayPage({ params }) {
   const giveaway = getGiveaway(slug);
   if (!giveaway) notFound();
 
-  const allArticles = await getArticles();
-  const readMore = pickRandomArticles(allArticles, { count: READ_MORE_COUNT });
-
+  // No Sanity "read more" fetch here — EO/BQ/CIO already make enter heavy, and
+  // Sanity TLS blips were hanging SSR during giveaway QA.
   return (
-    <>
-      <Suspense>
-        <GiveawayLanding giveaway={giveaway} />
-      </Suspense>
-      <RecommendedArticleCards articles={readMore} />
-    </>
+    <Suspense>
+      <GiveawayLanding giveaway={giveaway} />
+    </Suspense>
   );
 }

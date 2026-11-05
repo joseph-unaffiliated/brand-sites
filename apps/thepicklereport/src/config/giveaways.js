@@ -103,7 +103,7 @@ export const GIVEAWAYS = [
       "Gather your friends, pour the vinegar, and start the pickling party.",
     heroImage: "/giveaway/diy-pickle-party-pack.jpg",
     heroImageAlt:
-      "The Pickled Guy DIY dill pickle kit pouch — Licensed to Dill Medium Heat DIY Dill Pickle Factory",
+      "Three The Pickled Guy DIY dill pickle kit pouches — Licensed to Dill Medium Heat DIY Dill Pickle Factory",
     listed: false,
   },
   {
