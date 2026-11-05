@@ -67,7 +67,7 @@ export const GIVEAWAYS = [
     ],
     howToEnter: [
       "Enter your email to sign up for The Pickle Report’s weekly newsletter and enter the giveaway. Only active subscribers are eligible.",
-      "Click the button below to enter for a chance to win. Our winner will be selected on December 15 so keep an eye on your email.",
+      "Click the button below to enter for a chance to win. Our winner will be selected on November 22 so keep an eye on your email.",
       "Pray to the pickle gods.",
     ],
     socialLinks: [
@@ -86,14 +86,13 @@ export const GIVEAWAYS = [
     ],
     rulesText:
       "One entry per person / email. Once you submit, you’ll get a personal link to refer friends for additional tickets. Void where prohibited. Winner announced by email after the draw.",
-    // startsAt now so unlisted review URL can exercise enter; lock real late-Nov open before promote
     startsAt: "2026-11-03T00:00:00.000Z",
-    drawAt: "2026-12-15T23:59:59.000Z",
-    endsAt: "2026-12-15T23:59:59.000Z",
-    drawDateLabel: "December 15",
+    drawAt: "2026-11-22T23:59:59.000Z",
+    endsAt: "2026-11-22T23:59:59.000Z",
+    drawDateLabel: "November 22",
     seoTitle: "Win a DIY Pickle Party Pack | The Pickle Report",
     seoDescription:
-      "Enter The Pickle Report × The Pickled Guy giveaway for a chance to win a DIY Pickle Party Pack. Subscribe to enter. Winner selected December 15.",
+      "Enter The Pickle Report × The Pickled Guy giveaway for a chance to win a DIY Pickle Party Pack. Subscribe to enter. Winner selected November 22.",
     successHeadline: "You’re entered in the draw!",
     successBodyNew:
       "Thanks for subscribing — you’ve been entered to win a DIY Pickle Party Pack.",
@@ -102,9 +101,9 @@ export const GIVEAWAYS = [
     ctaEnterLabel: "Enter to win",
     photoHeadline:
       "Gather your friends, pour the vinegar, and start the pickling party.",
-    // Temporary: reuse prior hero until new art lands
-    heroImage: "/giveaway/years-supply-of-pickles.jpg",
-    heroImageAlt: "Pickles — temporary hero art for the DIY Pickle Party Pack giveaway",
+    heroImage: "/giveaway/diy-pickle-party-pack.jpg",
+    heroImageAlt:
+      "The Pickled Guy DIY dill pickle kit pouch — Licensed to Dill Medium Heat DIY Dill Pickle Factory",
     listed: false,
   },
   {
