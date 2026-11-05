@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { getGiveaway, GIVEAWAYS } from "@/config/giveaways";
 import GiveawayEntered from "./GiveawayEntered";
+import GiveawayReadMore from "../GiveawayReadMore";
 
 export function generateStaticParams() {
   return GIVEAWAYS.map((g) => ({ slug: g.slug }));
@@ -22,10 +23,14 @@ export default async function GiveawayEnteredPage({ params }) {
   const giveaway = getGiveaway(slug);
   if (!giveaway) notFound();
 
-  // Keep /entered free of Sanity so the enter spinner isn't blocked on CMS.
   return (
-    <Suspense>
-      <GiveawayEntered giveaway={giveaway} />
-    </Suspense>
+    <>
+      <Suspense>
+        <GiveawayEntered giveaway={giveaway} />
+      </Suspense>
+      <Suspense fallback={null}>
+        <GiveawayReadMore />
+      </Suspense>
+    </>
   );
 }

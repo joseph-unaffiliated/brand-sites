@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { getGiveaway, GIVEAWAYS, giveawayIndexRobots } from "@/config/giveaways";
 import GiveawayLanding from "./GiveawayLanding";
+import GiveawayReadMore from "./GiveawayReadMore";
 
 export function generateStaticParams() {
   return GIVEAWAYS.map((g) => ({ slug: g.slug }));
@@ -23,11 +24,14 @@ export default async function GiveawayPage({ params }) {
   const giveaway = getGiveaway(slug);
   if (!giveaway) notFound();
 
-  // No Sanity "read more" fetch here — EO/BQ/CIO already make enter heavy, and
-  // Sanity TLS blips were hanging SSR during giveaway QA.
   return (
-    <Suspense>
-      <GiveawayLanding giveaway={giveaway} />
-    </Suspense>
+    <>
+      <Suspense>
+        <GiveawayLanding giveaway={giveaway} />
+      </Suspense>
+      <Suspense fallback={null}>
+        <GiveawayReadMore />
+      </Suspense>
+    </>
   );
 }
