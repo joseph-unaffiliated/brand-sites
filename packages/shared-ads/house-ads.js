@@ -50,6 +50,76 @@ export const BRAND_PROMO_AD_TYPE = "Brand Promo";
 
 const SCHEDULE_TIME_ZONE = "America/New_York";
 
+const CACHE_TIME_ZONE = "America/New_York";
+const CACHE_DAY_START_HOUR = 7;
+const CACHE_DAY_END_HOUR = 19;
+const CACHE_DAY_STEP_SECONDS = 60 * 60;
+
+function etParts(date) {
+  const o = Object.fromEntries(
+    new Intl.DateTimeFormat("en-US", {
+      timeZone: CACHE_TIME_ZONE,
+      hourCycle: "h23",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    })
+      .formatToParts(date)
+      .map((p) => [p.type, p.value])
+  );
+  return {
+    y: Number(o.year),
+    m: Number(o.month),
+    d: Number(o.day),
+    h: Number(o.hour) % 24,
+    mi: Number(o.minute),
+    s: Number(o.second),
+  };
+}
+
+/** UTC instant of wall-clock `h:00` on the given Eastern calendar date. */
+function easternWallTimeToInstant(y, m, d, h) {
+  const wanted = Date.UTC(y, m - 1, d, h);
+  let guess = wanted;
+  for (let i = 0; i < 2; i++) {
+    const p = etParts(new Date(guess));
+    guess += wanted - Date.UTC(p.y, p.m - 1, p.d, p.h, p.mi, p.s);
+  }
+  return guess;
+}
+
+/** Next 7:00 a.m. Eastern strictly after `now`'s Eastern wall clock. */
+function nextDayStartInstant(now) {
+  const p = etParts(now);
+  const dayOffset = p.h < CACHE_DAY_START_HOUR ? 0 : 1;
+  const base = new Date(Date.UTC(p.y, p.m - 1, p.d + dayOffset));
+  return easternWallTimeToInstant(
+    base.getUTCFullYear(),
+    base.getUTCMonth() + 1,
+    base.getUTCDate(),
+    CACHE_DAY_START_HOUR
+  );
+}
+
+/**
+ * Seconds to keep a fetched Airtable response. Daytime (7am–7pm Eastern): refresh once an hour.
+ * A response that would expire during the night (or was fetched at night) stays until 7am
+ * Eastern, so nothing is read from Airtable between 7pm and 7am.
+ * @param {Date} [now]
+ * @returns {number}
+ */
+export function houseAdsCacheSeconds(now = new Date()) {
+  const oneHourLater = new Date(now.getTime() + CACHE_DAY_STEP_SECONDS * 1000);
+  const hourAtExpiry = etParts(oneHourLater).h;
+  const expiresAtNight =
+    hourAtExpiry >= CACHE_DAY_END_HOUR || hourAtExpiry < CACHE_DAY_START_HOUR;
+  const expiry = expiresAtNight ? nextDayStartInstant(now) : oneHourLater.getTime();
+  return Math.max(1, Math.round((expiry - now.getTime()) / 1000));
+}
+
 function todayInScheduleZone() {
   return new Intl.DateTimeFormat("en-CA", {
     timeZone: SCHEDULE_TIME_ZONE,
@@ -192,7 +262,7 @@ async function fetchBrandSlugByRecordId(token) {
     const url = `https://api.airtable.com/v0/${baseId()}/${brandsTableId()}?${params}`;
     const res = await fetch(url, {
       headers: { Authorization: `Bearer ${token}` },
-      next: { revalidate: 600 },
+      next: { revalidate: houseAdsCacheSeconds() },
     });
     if (!res.ok) {
       console.error("[house-ads] All Brands fetch failed", res.status);
@@ -262,7 +332,7 @@ export async function fetchActiveHouseCreatives() {
   const url = `https://api.airtable.com/v0/${baseId()}/${tableId()}?${params}`;
   const res = await fetch(url, {
     headers: { Authorization: `Bearer ${token}` },
-    next: { revalidate: 600 },
+    next: { revalidate: houseAdsCacheSeconds() },
   });
   if (!res.ok) {
     console.error("[house-ads] Airtable fetch failed", res.status);
