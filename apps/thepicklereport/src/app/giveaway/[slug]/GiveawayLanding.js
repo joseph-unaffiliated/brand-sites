@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useSubscriber } from "@/context/SubscriberContext";
-import { getReaderToken } from "@/lib/reader-profile";
+import { clearReaderToken, getReaderToken } from "@/lib/reader-profile";
 import { callGiveawayApi, daysUntilCopy } from "@/lib/giveaway-api";
 import {
   daysUntilDraw,
@@ -30,7 +30,8 @@ export default function GiveawayLanding({ giveaway }) {
   const searchParams = useSearchParams();
   const urlRef = searchParams.get("ref");
   const [ref, setRef] = useState(() => (urlRef ? String(urlRef).toLowerCase().trim() : ""));
-  const { isSubscribed, refresh } = useSubscriber();
+  const { isSubscribed, email: storedEmail, refresh } = useSubscriber();
+  const sessionWaitStarted = useRef(false);
 
   useEffect(() => {
     setRef(readGiveawayRef(giveaway.slug, urlRef));
@@ -52,8 +53,47 @@ export default function GiveawayLanding({ giveaway }) {
   const [credited, setCredited] = useState(null);
   const [tickets, setTickets] = useState(null);
   const [copied, setCopied] = useState(false);
+  /** Valid (non-expired) reader JWT — required for one-click Enter. */
+  const [hasReaderAuth, setHasReaderAuth] = useState(false);
+  /** Give SubscriberSessionBootstrap a beat before showing email fallback. */
+  const [sessionReady, setSessionReady] = useState(false);
 
-  const signedIn = isSubscribed || !!getReaderToken();
+  useEffect(() => {
+    const sync = () => setHasReaderAuth(!!getReaderToken());
+    sync();
+    window.addEventListener("storage", sync);
+    window.addEventListener("magic-reader-token-updated", sync);
+    window.addEventListener("magic-subscriber-updated", sync);
+    return () => {
+      window.removeEventListener("storage", sync);
+      window.removeEventListener("magic-reader-token-updated", sync);
+      window.removeEventListener("magic-subscriber-updated", sync);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (hasReaderAuth || !isSubscribed) {
+      setSessionReady(true);
+      return;
+    }
+    // Only wait once on first paint for bootstrap remint — not again after a 401 fallback.
+    if (sessionWaitStarted.current) {
+      setSessionReady(true);
+      return;
+    }
+    sessionWaitStarted.current = true;
+    setSessionReady(false);
+    const timer = setTimeout(() => setSessionReady(true), 1600);
+    return () => clearTimeout(timer);
+  }, [hasReaderAuth, isSubscribed]);
+
+  useEffect(() => {
+    if (storedEmail && !email) setEmail(storedEmail);
+  }, [storedEmail, email]);
+
+  // One-click Enter only with a usable token. localStorage "subscribed" alone is not enough.
+  const canOneClickEnter = hasReaderAuth;
+  const signedIn = isSubscribed || hasReaderAuth;
   const intro = giveaway.intro?.length ? giveaway.intro : [giveaway.prizeBody];
   const allSteps = giveaway.howToEnter || [];
   const steps = signedIn ? allSteps.slice(1) : allSteps;
@@ -116,7 +156,7 @@ export default function GiveawayLanding({ giveaway }) {
     return () => {
       cancelled = true;
     };
-  }, [giveaway.slug, previewEntered, signedIn]);
+  }, [giveaway.slug, previewEntered, hasReaderAuth]);
 
   function renderIntroParagraph(text, key) {
     const mark = giveaway.introEmphasis;
@@ -143,7 +183,19 @@ export default function GiveawayLanding({ giveaway }) {
     }
   }
 
+  function fallBackToEmailForm(message) {
+    clearReaderToken();
+    setHasReaderAuth(false);
+    setSessionReady(true);
+    if (storedEmail && !email) setEmail(storedEmail);
+    setError(message || "Please enter your email to enter the draw.");
+  }
+
   async function enterSignedIn() {
+    if (!getReaderToken()) {
+      fallBackToEmailForm();
+      return;
+    }
     setBusy(true);
     setError(null);
     try {
@@ -163,8 +215,10 @@ export default function GiveawayLanding({ giveaway }) {
       q.set("entered", "1");
       window.location.href = `/giveaway/${giveaway.slug}/entered?${q.toString()}`;
     } catch (e) {
-      if (e?.data?.action === "subscribe_required") {
-        setError("Subscribe first, then enter the draw.");
+      if (e?.status === 401) {
+        fallBackToEmailForm();
+      } else if (e?.data?.action === "subscribe_required") {
+        fallBackToEmailForm("Subscribe first, then enter the draw.");
       } else {
         setError("Something went wrong. Please try again.");
       }
@@ -276,7 +330,7 @@ export default function GiveawayLanding({ giveaway }) {
 
               {status === "live" && (
                 <div className={styles.enterBlock}>
-                  {signedIn ? (
+                  {canOneClickEnter ? (
                     <button
                       type="button"
                       className="button button-primary"
@@ -284,6 +338,10 @@ export default function GiveawayLanding({ giveaway }) {
                       onClick={enterSignedIn}
                     >
                       {busy ? "Submitting..." : giveaway.ctaEnterLabel || "Enter to win"}
+                    </button>
+                  ) : !sessionReady && isSubscribed ? (
+                    <button type="button" className="button button-primary" disabled>
+                      Checking session...
                     </button>
                   ) : (
                     <form className={styles.form} onSubmit={submitEmail} noValidate>

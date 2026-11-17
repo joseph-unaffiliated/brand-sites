@@ -137,10 +137,59 @@ export async function executeAction(cfg, searchParams, action) {
   return data;
 }
 
+/**
+ * Decode reader-token payload without verifying the HMAC (browser UX only).
+ * Server still verifies signature on every API call.
+ * @param {string} token
+ * @returns {{ e?: string; exp?: number } | null}
+ */
+export function peekReaderTokenPayload(token) {
+  if (!token || typeof token !== "string") return null;
+  const parts = token.split(".");
+  if (parts.length !== 2) return null;
+  try {
+    let b64 = parts[0].replace(/-/g, "+").replace(/_/g, "/");
+    while (b64.length % 4) b64 += "=";
+    const json =
+      typeof atob === "function"
+        ? atob(b64)
+        : typeof Buffer !== "undefined"
+          ? Buffer.from(b64, "base64").toString("utf8")
+          : null;
+    if (!json) return null;
+    const data = JSON.parse(json);
+    if (!data || typeof data !== "object") return null;
+    return /** @type {{ e?: string; exp?: number }} */ (data);
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * True when the stored token's `exp` claim is in the past.
+ * Unparseable tokens are treated as not expired so the server can reject them.
+ * @param {string | null | undefined} token
+ */
+export function isReaderTokenExpired(token) {
+  const payload = peekReaderTokenPayload(token || "");
+  if (!payload || typeof payload.exp !== "number") return false;
+  return payload.exp < Math.floor(Date.now() / 1000);
+}
+
+/**
+ * Return the stored reader token, or null. Clears expired tokens so session
+ * bootstrap can remint and signed-in UI does not pretend auth still works.
+ */
 export function getReaderToken() {
   if (typeof window === "undefined") return null;
   try {
-    return localStorage.getItem(READER_TOKEN_STORAGE_KEY);
+    const token = localStorage.getItem(READER_TOKEN_STORAGE_KEY);
+    if (!token) return null;
+    if (isReaderTokenExpired(token)) {
+      localStorage.removeItem(READER_TOKEN_STORAGE_KEY);
+      return null;
+    }
+    return token;
   } catch {
     return null;
   }
